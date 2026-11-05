@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Quản lý người dùng</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+.role-chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;background:var(--brand-soft);color:var(--brand-strong);font:600 15px/1 var(--font-sans);white-space:nowrap}
+.role-chip.is-temp{background:var(--accent-soft);color:var(--accent)}
+.user-row{cursor:pointer}
+.ovl{position:absolute;inset:0;background:rgba(15,23,42,.32);z-index:20}
+.modal{position:absolute;left:50%;top:120px;transform:translateX(-50%);width:600px;max-width:calc(100% - 32px);z-index:21}
+
+
+
+.xbtn{border:0;background:none;color:var(--ink-muted);cursor:pointer;font-size:24px;line-height:1;padding:4px 8px;border-radius:6px}
+.xbtn:hover{background:var(--surface-2);color:var(--ink)}
+.toastbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.errtext{color:var(--bad);font-size:15px;line-height:20px}
+.mp-input.err{border-color:var(--bad)}
+.is-disabled{opacity:.5;pointer-events:none}
+.lnk{border:0;background:none;padding:0;font:inherit;color:var(--brand);cursor:pointer;text-decoration:none;border-bottom:1px dotted currentColor}
+.user-row td{vertical-align:top}
+.ucol{display:flex;flex-direction:column;gap:2px}
+.rtog{display:flex;flex-wrap:wrap;gap:6px}
+.rtog button{border:1px solid var(--line);background:var(--surface-1);border-radius:999px;padding:4px 10px;font:500 15px/20px var(--font-sans);color:var(--ink);cursor:pointer}
+.rtog button.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-strong);font-weight:600}
+.rtog button.off{opacity:.45;cursor:not-allowed}
+.rsc{display:flex;flex-direction:column;gap:6px}
+.rsc__row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 8px 6px 10px;border:1px solid var(--line);border-radius:6px;flex-wrap:wrap}
+.rsc__row select{width:auto;min-width:220px;height:36px;font-size:16px}
+.btn-del{color:var(--bad)}
+.btn-del:hover{background:var(--bad-soft);color:var(--bad)}
+.is-dim{opacity:.55}
+
+
+.req{color:var(--bad);margin-left:2px}
+.cpage{margin:24px 32px;width:auto;max-width:1200px;box-shadow:none;border:1px solid var(--line)}
+.cp-sec{margin:0;font:600 19px/26px var(--font-sans)}
+.modal--wide{width:880px;top:40px}
+.pm-top{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.pm-sum{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 8px;font-size:16px}
+.pm-split{display:flex;height:520px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.pm-side{flex:0 0 280px;overflow-y:auto;border-right:1px solid var(--line);background:var(--surface-0);padding:6px;display:flex;flex-direction:column;gap:2px}
+.pm-side__i{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:6px 10px;border:0;border-radius:6px;background:none;text-align:left;font:400 16px/22px var(--font-sans);color:var(--ink);cursor:pointer}
+.pm-side__i:hover{background:var(--surface-2)}
+.pm-side__i.has{font-weight:600}
+.pm-side__i.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.pm-side__n{flex:none;font-size:15px;color:var(--ink-muted);font-weight:400}
+.pm-main{flex:1 1 auto;min-width:0;overflow-y:auto}
+.pm-grp__h{position:sticky;top:0;display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:16px}
+.pm-grp__h .lnk{margin-left:auto;font-size:15px}
+.pm-row{display:flex;align-items:center;gap:10px;min-height:44px;padding:4px 12px;border-bottom:1px solid var(--line);font-size:16px;cursor:pointer}
+.pm-row:hover{background:var(--surface-0)}
+.pm-row input{width:20px;height:20px;flex:none;accent-color:var(--brand)}
+.pm-row .mp-doc{margin-left:auto}
+
+
+/* mp-shell v2 */
+.mp-nav{flex:0 0 256px;width:256px;background:var(--surface-1);border-right:1px solid var(--line);padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box}
+.mp-nav__brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;margin-bottom:6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.mp-nav__logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 15px/1 var(--font-sans);letter-spacing:.02em;flex:none}
+.mp-nav__brand b{font-size:19px;line-height:22px;display:block}.mp-nav__brand small{font-size:14px;line-height:18px;color:var(--ink-muted);display:block}
+.mp-nav__sec{font:600 14px/20px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:14px 10px 6px}
+.mp-nav__div{height:1px;background:var(--line);margin:8px 0}
+.mp-nav__item{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--ink);text-decoration:none;font:500 18px/24px var(--font-sans)}
+.mp-nav__item svg{flex:none;color:var(--ink-muted)}
+.mp-nav__item:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__item.is-on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-nav__item.is-on svg{color:var(--brand)}
+.mp-nav__item .mp-nav__count{margin-left:auto;min-width:26px;height:24px;padding:0 8px;border-radius:999px;background:var(--brand);color:var(--on-brand);font:600 15px/24px var(--font-sans);text-align:center;box-sizing:border-box}
+.mp-nav__subs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.mp-nav__subs .snav,.mp-nav__subs .navsub{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:none;border-radius:6px;padding:6px 10px;font:400 16px/22px var(--font-sans);color:var(--ink-muted);text-decoration:none;cursor:pointer;text-align:left;position:relative;box-sizing:border-box}
+.mp-nav__subs .snav:hover,.mp-nav__subs .navsub:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__subs .snav.on,.mp-nav__subs .navsub.on{color:var(--brand-strong);font-weight:600;background:var(--surface-2)}
+.mp-nav__subs .snav.on::before,.mp-nav__subs .navsub.on::before{content:"";position:absolute;left:-11px;top:6px;bottom:6px;width:2px;border-radius:2px;background:var(--brand)}
+.mp-nav__subs .navsub svg{display:none}
+.mp-nav__subs .snav.is-parent{color:var(--brand-strong);font-weight:600}
+.mp-nav__subs .mp-nav__subs{margin:0 0 2px 10px}
+.mp-nav__foot{margin-top:auto;padding:12px 10px 2px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink-muted)}
+.mp-nav__foot button{white-space:nowrap;border:0;background:none;color:var(--ink-muted);display:inline-flex;align-items:center;gap:6px;font:inherit;cursor:pointer;padding:4px;border-radius:6px}
+.mp-nav__foot button:hover{background:var(--surface-2);color:var(--ink)}
+.mp-hd{position:relative;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:10px 24px 10px 32px;background:var(--surface-1);border-bottom:1px solid var(--line);box-sizing:border-box}
+.mp-hd__crumb{font-size:16px;line-height:22px;color:var(--ink-muted);min-width:0;flex:1 1 220px}
+.mp-hd__right{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;flex:0 1 auto;min-width:0}
+.mp-hd__fac{display:inline-flex;align-items:center;gap:6px;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font:500 16px/1 var(--font-sans);color:var(--ink);cursor:pointer}
+.mp-hd__fac svg{color:var(--ink-muted)}
+.mp-hd__sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.mp-hd__right>.seg{height:40px;box-sizing:border-box;border-color:var(--line)}
+.mp-hd__right>.seg .segbtn{display:inline-flex;align-items:center;padding:0 12px}
+.mp-hd__right>.conn{height:40px;box-sizing:border-box;border-radius:8px;padding:0 12px;font-size:16px}
+.mp-pop{position:relative}
+.mp-pop>summary{list-style:none;cursor:pointer}
+.mp-pop>summary::-webkit-details-marker{display:none}
+.mp-bell>summary{position:relative;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.mp-bell>summary:hover,.mp-bell[open]>summary{background:var(--surface-2)}
+.mp-bell__dot{position:absolute;top:3px;left:18px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--bad-solid);color:var(--on-solid);font:600 13px/18px var(--font-sans);text-align:center;box-sizing:border-box;border:2px solid var(--surface-1)}
+.mp-me>summary{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 4px;border-radius:999px;margin-left:4px}
+.mp-me>summary:hover,.mp-me[open]>summary{background:var(--surface-2)}
+.mp-av{width:32px;height:32px;border-radius:999px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 15px/1 var(--font-sans);flex:none}
+.mp-av--lg{width:44px;height:44px;font-size:19px}
+.mp-me__txt{display:flex;flex-direction:column;line-height:20px;max-width:190px}
+.mp-me__txt b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me__txt small{font-size:15px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me>summary>svg{color:var(--ink-muted)}
+.mp-pop__panel{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:30;overflow:hidden;text-align:left}
+.mp-pop__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.mp-pop__head a{font-size:15px}
+.mp-pop a{text-decoration:none}.mp-pop a:hover{text-decoration:underline}
+.mp-pop__foot{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;background:var(--surface-0)}
+.mp-noti{width:380px}
+.mp-noti__tabs{display:flex;gap:4px;padding:8px 12px 0}
+.mp-noti__tabs span{padding:6px 10px;border-radius:6px;font-size:15px;color:var(--ink-muted)}
+.mp-noti__tabs span.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-noti ul{list-style:none;margin:0;padding:6px 0}
+.mp-noti li{display:flex;gap:10px;padding:10px 16px;position:relative}
+.mp-noti li:hover{background:var(--surface-0)}
+.mp-noti li.is-unread::after{content:"";position:absolute;right:14px;top:16px;width:8px;height:8px;border-radius:999px;background:var(--brand)}
+.mp-noti li p{margin:0;font-size:16px;line-height:22px;padding-right:14px}
+.mp-noti li.is-unread p{font-weight:500}
+.mp-noti li time{display:block;font-size:15px;color:var(--ink-muted);margin-top:2px}
+.mp-noti__ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.mp-noti__ic.ok{background:var(--ok-soft);color:var(--ok)}.mp-noti__ic.wait{background:var(--wait-soft);color:var(--wait)}.mp-noti__ic.bad{background:var(--bad-soft);color:var(--bad)}.mp-noti__ic.info{background:var(--brand-soft);color:var(--brand)}
+.mp-me__panel{width:300px}
+.mp-me__who{display:flex;gap:12px;align-items:center;padding:16px}
+.mp-me__who b{display:block;font-size:18px}.mp-me__who small{display:block;font-size:15px;color:var(--ink-muted)}
+.mp-me__roles{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.mp-me__roles span{font-size:15px;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.mp-me__menu{list-style:none;margin:0;padding:6px;border-top:1px solid var(--line)}
+.mp-me__menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:16px;color:var(--ink);text-decoration:none}
+.mp-me__menu a:hover{background:var(--surface-2)}
+.mp-me__menu a svg{color:var(--ink-muted)}
+.mp-me__menu a.bad{color:var(--bad)}.mp-me__menu a.bad svg{color:var(--bad)}
+.mp-hd__as{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 10px;border:1px dashed var(--line-strong);border-radius:8px;font:500 15px/1 var(--font-sans);color:var(--ink-muted);box-sizing:border-box}
+.mp-hd__as select{height:34px;border:0;background:transparent;font:600 16px/1 var(--font-sans);color:var(--ink);padding:0 4px;cursor:pointer}
+.mp-gate{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-0);font-size:15px;line-height:20px;color:var(--ink-muted)}
+.mp-gate b{color:var(--ink);font-weight:600}
+.mp-gate button{border:0;background:none;padding:0;font:600 15px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-decoration:underline}
+a.mp-xlink{color:var(--brand);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+a.mp-xlink:hover{color:var(--brand-strong);border-bottom-style:solid}
+a.mp-xlink.mp-code{font-family:var(--font-mono)}
+.mp-drawer{position:fixed;top:0;right:0;height:100vh;max-height:100vh;width:min(520px,92%);z-index:21;background:var(--surface-1);border-left:1px solid var(--line);box-shadow:-12px 0 32px rgba(15,23,42,.18);display:flex;flex-direction:column;overflow-y:auto}.mp-drawer__x{order:2;flex:none;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:none;color:var(--ink-muted);cursor:pointer}.mp-drawer__x:hover{background:var(--surface-2);color:var(--ink)}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+.mp-pg{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-muted)}
+.mp-pg__nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.mp-pg__n{min-width:40px;height:40px;padding:0 10px;box-sizing:border-box;border:1px solid var(--line);border-radius:var(--radius-md,6px);background:var(--surface-1,#fff);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.mp-pg__n:hover:not(:disabled){border-color:var(--line-strong);background:var(--surface-2)}
+.mp-pg__n.is-on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff)}
+.mp-pg__n:disabled{opacity:.4;cursor:default}
+.mp-pg__n:focus-visible{outline:2px solid var(--focus-ring,var(--brand));outline-offset:2px}
+.mp-pg__n svg{width:16px;height:16px}
+.mp-pg__gap{padding:0 4px}
+.mp-pg__size{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.mp-pg__size select{width:auto;min-width:76px;height:40px;padding:0 8px}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; min-height: 1100px; background: var(--surface-0); display: flex; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line); position: relative">
+<nav aria-label="Phân hệ" class="mp-nav">
+<a href="HopDuyet.dc.html" class="mp-nav__brand"><span class="mp-nav__logo">MP</span><span><b>MES Powder</b><small>Quản lý sản xuất sữa bột</small></span></a>
+<a href="{{vx.m.href.viec}}" onClick="{{vx.m.go.viec}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span>Việc cần làm</span><span class="mp-nav__count">9</span></a>
+<div class="mp-nav__div"></div>
+<sc-if value="{{vx.m.show.ban}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.ban}}" onClick="{{vx.m.go.ban}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><path d="M7 7h.01"></path></svg><span>Bán hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.mua}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.mua}}" onClick="{{vx.m.go.mua}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Mua hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.kt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kt}}" onClick="{{vx.m.go.kt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg><span>Kế toán</span></a></sc-if>
+<sc-if value="{{vx.m.show.kho}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kho}}" onClick="{{vx.m.go.kho}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg><span>Kho</span></a></sc-if>
+<sc-if value="{{vx.m.show.sx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.sx}}" onClick="{{vx.m.go.sx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20V9l6 4V9l6 4V5h3l1 15z"></path><path d="M2 20h20"></path></svg><span>Sản xuất</span></a></sc-if>
+<sc-if value="{{vx.m.show.cl}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.cl}}" onClick="{{vx.m.go.cl}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span>Chất lượng</span></a></sc-if>
+<sc-if value="{{vx.m.show.tx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.tx}}" onClick="{{vx.m.go.tx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg><span>Truy xuất &amp; thu hồi</span></a></sc-if>
+<sc-if value="{{vx.m.show.dm}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.dm}}" onClick="{{vx.m.go.dm}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>Danh mục</span></a></sc-if>
+<sc-if value="{{vx.m.show.qt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.qt}}" onClick="{{vx.m.go.qt}}" class="mp-nav__item is-on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span>Quản trị</span></a>
+<div class="mp-nav__subs">
+<sc-if value="{{vx.m.show.qt_nd}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_nd}}" href="NguoiDung.dc.html" class="snav on">Người dùng &amp; vai trò</a></sc-if>
+<sc-if value="{{vx.m.show.qt_ch}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_ch}}" href="CauHinh-cocg.dc.html" class="snav">Tham số &amp; định dạng mã</a></sc-if>
+<sc-if value="{{vx.m.show.qt_nk}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_nk}}" href="NhatKy-n5jd.dc.html" class="snav">Nhật ký hệ thống</a></sc-if>
+</div></sc-if>
+<div class="mp-nav__foot"><span>MES Powder v1.0</span><button type="button" aria-label="Thu gọn menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l-5-5 5-5"></path><path d="M18 17l-5-5 5-5"></path></svg>Thu gọn</button></div>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header class="mp-hd"><div class="mp-hd__crumb">Quản trị / <span style="color: var(--ink)">Người dùng &amp; vai trò</span></div><div class="mp-hd__right"><span class="mp-site mp-site--cloud" title="Màn chỉ có trên cloud — người ở nhà máy không vào được khi nhà máy mất mạng"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>Chỉ trên cloud</span><label class="mp-hd__as" title="Mô phỏng: đổi vai trò người đang dùng"><span>Xem như</span><select value="{{vx.role}}" onChange="{{vx.set}}" aria-label="Xem như vai trò"><sc-for list="{{vx.optl}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></label><button type="button" class="mp-hd__fac" aria-label="Nhà máy đang xem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{vx.fac}}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button><span class="mp-hd__sep"></span><details class="mp-pop mp-bell"><summary aria-label="Thông báo, 3 chưa đọc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="mp-bell__dot">3</span></summary><div class="mp-pop__panel mp-noti"><div class="mp-pop__head"><b>Thông báo</b><a href="#">Đánh dấu tất cả đã đọc</a></div><div class="mp-noti__tabs"><span class="on">Chưa đọc 3</span><span>Tất cả</span></div><ul><li class="is-unread"><span class="mp-noti__ic ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><p>Phiếu nhập <span class="mp-code">PN-NM1-2610-0031</span> chờ Thủ kho trưởng xác nhận lệch — 1 bao rách đã tách trả NCC</p><time>10 phút trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic wait"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><p>2 lô hết hạn chưa hủy quá 30 ngày ở <span class="mp-code">NM1-TONG</span></p><time>1 giờ trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></span><div><p>Lệnh <span class="mp-code">LSX-2610-0011</span> chưa tới server NM1 quá 10 phút — đang gửi lại</p><time>2 giờ trước · Sản xuất</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"></path></svg></span><div><p>Nhắc nợ: <span class="mp-code">KH-0012</span> có khoản quá hạn 3 ngày</p><time>Hôm qua · Kế toán</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span><div><p>Vai trò ủy quyền QC trưởng của bạn hết hạn ngày 21/10</p><time>Hôm qua · Quản trị</time></div></li></ul><div class="mp-pop__foot"><a href="HopDuyet.dc.html">Việc chờ duyệt ở Việc cần làm →</a><a href="#">Xem tất cả</a></div></div></details><details class="mp-pop mp-me"><summary aria-label="Tài khoản"><span class="mp-av">{{vx.ini}}</span><span class="mp-me__txt"><b>{{vx.name}}</b><small>{{vx.label}}</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></summary><div class="mp-pop__panel mp-me__panel"><div class="mp-me__who"><span class="mp-av mp-av--lg">{{vx.ini}}</span><span><b>{{vx.name}}</b><small>{{vx.label}} · {{vx.fac}}</small></span></div><ul class="mp-me__menu"><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Hồ sơ của tôi</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Vai trò &amp; ủy quyền</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zM15.5 7.5l3 3L22 7l-3-3"></path></svg>Đổi mật khẩu</a></li><li><a href="DangNhap.dc.html" class="bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Đăng xuất</a></li></ul></div></details></div></header>
+<sc-if value="{{vx.m.deny}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0; box-sizing: border-box; width: 100%"><div class="mp-banner mp-banner--warn" role="status"><span><b>Vai trò {{vx.role}} không có quyền vào màn này.</b> <a href="{{vx.m.homeHref}}" onClick="{{vx.m.homeGo}}">Về Việc cần làm</a></span></div></div></sc-if>
+<sc-if value="{{cp.off}}" hint-placeholder-val="{{ true }}"><div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; width: 100%">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 600">Người dùng &amp; vai trò</h1>
+</div>
+<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><sc-if value="{{a.canCreate}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{a.openCreate}}">+ Tạo tài khoản</button></sc-if><sc-if value="{{a.gCreate}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{a.gCreate.who}}</b><sc-if value="{{a.gCreate.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{a.gCreate.why}}</sc-if><button type="button" onClick="{{a.gCreate.sw}}">Xem như {{a.gCreate.who}}</button></span></sc-if></div>
+</div>
+<div style="display: flex; gap: 4px; border-bottom: 1px solid var(--line); flex-wrap: wrap">
+<span style="padding: 8px 12px; text-decoration: none; color: var(--brand); border-bottom: 2px solid var(--brand); font-weight: 600">Tài khoản</span>
+<a class="qtab" href="VaiTroQuyen.dc.html" style="padding: 8px 12px; text-decoration: none; color: var(--ink-muted)" onClick="{{qtTabs.tabVaiTroQuyen}}">Vai trò × quyền</a>
+<a class="qtab" href="UyQuyen.dc.html" style="padding: 8px 12px; text-decoration: none; color: var(--ink-muted)" onClick="{{qtTabs.tabUyQuyen}}">Ủy quyền tạm <span class="mp-doc mp-doc--ok" style="height: 18px">1</span></a>
+</div>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info toastbar"><span>{{toast}}</span><button type="button" class="xbtn" aria-label="Ẩn" onClick="{{closeToast}}">×</button></div></sc-if>
+<sc-if value="{{hasMiss}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn"><span>Không tìm thấy tài khoản <b>{{miss}}</b> trong danh sách đang hiện.</span></div></sc-if>
+<sc-if value="{{viewOnly}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info"><span>Chỉ xem — tài khoản do HR và Admin quản lý.</span></div></sc-if>
+
+<div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end">
+<div class="mp-field" style="flex: 1 1 260px"><label for="q">Tìm</label><input id="q" class="mp-input" value="{{f.q}}" onChange="{{f.setQ}}" placeholder="Mã NV, họ tên, email, mã thẻ…"></div>
+<div class="mp-field" style="flex: 0 1 190px"><label for="nmf">Nhà máy</label><select id="nmf" class="mp-input" value="{{f.fac}}" onChange="{{f.setFac}}"><sc-for list="{{f.facOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div>
+<div class="mp-field" style="flex: 0 1 170px"><label for="bp">Bộ phận</label><select id="bp" class="mp-input" value="{{f.dept}}" onChange="{{f.setDept}}"><sc-for list="{{f.deptOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select></div>
+<div class="mp-field" style="flex: 0 1 190px"><label for="vt">Vai trò</label><select id="vt" class="mp-input" value="{{f.role}}" onChange="{{f.setRole}}"><sc-for list="{{f.roleOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select></div>
+<div class="mp-field" style="flex: 0 1 150px"><label for="tt">Trạng thái</label><select id="tt" class="mp-input" value="{{f.st}}" onChange="{{f.setSt}}"><sc-for list="{{f.stOpts}}" as="o" hint-placeholder-count="3"><option value="{{o}}">{{o}}</option></sc-for></select></div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<div class="mp-card" style="flex: 999 1 640px; min-width: 0; overflow-x: auto">
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 940px">
+<thead><tr><th>Nhân viên</th><th>Bộ phận</th><th>Nhà máy · khu vực làm việc</th><th>Vai trò</th><th>Phạm vi</th><th>Trạng thái</th><th>Đăng nhập cuối</th></tr></thead>
+<tbody>
+<sc-for list="{{users}}" as="u" hint-placeholder-count="8">
+<tr class="{{u.rowClass}}" onClick="{{u.pick}}">
+<td class="mp-nowrap"><span style="font-weight: 600">{{u.name}}</span><span class="mp-sub"><span class="mp-code">{{u.code}}</span> · {{u.title}}</span></td>
+<td class="mp-nowrap">{{u.dept}}</td>
+<td class="mp-nowrap">{{u.facT}}<sc-if value="{{u.hasAreaT}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{u.areaT}}</span></sc-if></td>
+<td><span class="mp-chips mp-chips--wrap"><sc-for list="{{u.roles}}" as="r" hint-placeholder-count="1"><span class="{{r.cls}}">{{r.name}}</span></sc-for></span></td>
+<td class="mp-nowrap">{{u.scope}}</td>
+<td><span class="{{u.statusCls}}">{{u.status}}</span><sc-if value="{{u.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub mp-sub--accent" style="max-width: 180px">{{u.note}}</span></sc-if></td>
+<td class="mp-nowrap">{{u.lastLogin}}<sc-if value="{{u.hasLoginBy}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{u.loginBy}}</span></sc-if></td>
+</tr>
+</sc-for>
+</tbody>
+</table></div></div>
+<sc-if value="{{pg.show}}" hint-placeholder-val="{{ false }}"><nav class="mp-pg" aria-label="Phân trang"><span>Dòng {{pg.info}}</span><div class="mp-pg__nav"><button type="button" class="mp-pg__n" onClick="{{pg.prev}}" disabled="{{pg.atFirst}}" aria-label="Trang trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button><sc-for list="{{pg.nums}}" as="pn" hint-placeholder-count="3"><sc-if value="{{pn.btn}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{pn.cls}}" aria-current="{{pn.cur}}" aria-label="{{pn.aria}}" onClick="{{pn.go}}">{{pn.t}}</button></sc-if><sc-if value="{{pn.gap}}" hint-placeholder-val="{{ false }}"><span class="mp-pg__gap" aria-hidden="true">…</span></sc-if></sc-for><button type="button" class="mp-pg__n" onClick="{{pg.next}}" disabled="{{pg.atLast}}" aria-label="Trang sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button></div><label class="mp-pg__size">Số dòng/trang <select class="mp-input" value="{{pg.size}}" onChange="{{pg.setSize}}"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label></nav></sc-if>
+<sc-if value="{{noUsers}}" hint-placeholder-val="{{ false }}"><div style="padding: 32px 16px; text-align: center; color: var(--ink-muted)">Không có tài khoản nào khớp bộ lọc. <button type="button" class="mp-btn mp-btn--ghost" onClick="{{f.clear}}">Bỏ lọc</button></div></sc-if>
+<div style="display: flex; justify-content: space-between; padding: 12px 16px; font-size: 16px; color: var(--ink-muted); flex-wrap: wrap; gap: 8px"><span>{{countText}}</span></div>
+</div>
+
+
+</div>
+</div>
+</sc-if>
+<sc-if value="{{dlg.open}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{dlg.modal}}" hint-placeholder-val="{{ true }}"><div class="ovl" onClick="{{dlg.close}}"></div></sc-if>
+<div class="{{dlg.cls}}" role="dialog" aria-label="{{dlg.title}}">
+<div class="mp-dlg__head"><h2>{{dlg.title}}</h2><button type="button" class="xbtn" aria-label="Đóng" onClick="{{dlg.close}}">×</button></div>
+<div class="mp-dlg__body">
+<sc-if value="{{dlg.isForm}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{nf.isCreate}}" hint-placeholder-val="{{ false }}"><h3 class="cp-sec">Thông tin tài khoản</h3></sc-if>
+<div class="mp-form">
+<sc-if value="{{nf.isEdit}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><span class="flabel">Mã NV</span><div class="mp-ro"><span class="mp-code">{{nf.code}}</span><span class="mp-muted" style="font-size: 15px; font-weight: 400">{{nf.codeNote}}</span></div></div></sc-if>
+<sc-if value="{{nf.isCreate}}" hint-placeholder-val="{{ true }}"><div class="mp-field"><label for="nf-code">Mã NV<span class="req">*</span></label><input id="nf-code" class="{{nf.codeCls}}" value="{{nf.code}}" onChange="{{nf.setCode}}" placeholder="Mã NV theo hồ sơ nhân sự"><sc-if value="{{nf.hasCodeErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">{{nf.codeErr}}</span></sc-if></div></sc-if>
+<div class="mp-field"><label for="nf-name">Họ tên<span class="req">*</span></label><input id="nf-name" class="mp-input" value="{{nf.name}}" onChange="{{nf.setName}}"></div>
+<div class="mp-field"><label for="nf-dept">Bộ phận<span class="req">*</span></label><select id="nf-dept" class="{{nf.deptCls}}" value="{{nf.dept}}" onChange="{{nf.setDept}}"><option value="">Chọn bộ phận…</option><sc-for list="{{nf.deptOpts}}" as="o" hint-placeholder-count="4"><option value="{{o}}">{{o}}</option></sc-for></select><sc-if value="{{nf.hasDeptErr}}" hint-placeholder-val="{{ false }}"><span class="hint" style="color: var(--bad)">Chọn bộ phận.</span></sc-if></div>
+<sc-if value="{{nf.isEdit}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><label for="nf-title">Chức danh<span class="req">*</span></label><select id="nf-title" class="{{nf.titleCls}}" value="{{nf.title}}" onChange="{{nf.setTitle}}"><option value="">{{nf.titlePh}}</option><sc-for list="{{nf.titleOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><sc-if value="{{nf.hasTitleErr}}" hint-placeholder-val="{{ false }}"><span class="hint" style="color: var(--bad)">Chọn chức danh.</span></sc-if></div></sc-if>
+<sc-if value="{{nf.isCreate}}" hint-placeholder-val="{{ true }}"><div class="mp-field"><label for="nf-role">Vai trò<span class="req">*</span></label><select id="nf-role" class="{{nf.vroleCls}}" value="{{nf.vrole}}" onChange="{{nf.setVrole}}" disabled="{{nf.vroleOff}}"><option value="">{{nf.vrolePh}}</option><sc-for list="{{nf.roleOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><sc-if value="{{nf.hasVroleErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">Chọn vai trò để lấy bộ quyền gốc.</span></sc-if></div></sc-if>
+<div class="mp-field"><label for="nf-email">Email</label><input id="nf-email" class="{{nf.emailCls}}" value="{{nf.email}}" onChange="{{nf.setEmail}}"><sc-if value="{{nf.hasEmailErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">{{nf.emailErr}}</span></sc-if></div>
+<div class="mp-field"><label for="nf-phone">SĐT</label><input id="nf-phone" class="{{nf.phoneCls}}" value="{{nf.phone}}" onChange="{{nf.setPhone}}" placeholder="vd 0903 100 563"><sc-if value="{{nf.hasPhoneErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">{{nf.phoneErr}}</span></sc-if></div>
+<div class="mp-field"><label for="nf-badge">Mã thẻ NV<sc-if value="{{nf.badgeReq}}" hint-placeholder-val="{{ false }}"><span class="req">*</span></sc-if></label><input id="nf-badge" class="{{nf.badgeCls}}" value="{{nf.badge}}" onChange="{{nf.setBadge}}" placeholder="Nhập tay mã in trên thẻ NV" autocomplete="off"><sc-if value="{{nf.hasBadgeErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">{{nf.badgeErr}}</span></sc-if></div>
+<div class="mp-field"><label for="nf-since">Ngày hiệu lực<span class="req">*</span></label><input id="nf-since" class="{{nf.sinceCls}}" value="{{nf.since}}" onChange="{{nf.setSince}}" placeholder="dd/mm/yyyy"><sc-if value="{{nf.hasSinceErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">Nhập ngày hiệu lực dạng dd/mm/yyyy.</span></sc-if></div>
+
+<div class="mp-field"><label for="nf-fac">Nhà máy làm việc<span class="req">*</span></label><select id="nf-fac" class="{{nf.facCls}}" value="{{nf.fac}}" onChange="{{nf.setFac}}"><sc-for list="{{nf.facOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><sc-if value="{{nf.hasFacErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">{{nf.facErr}}</span></sc-if></div>
+<div class="mp-field"><label for="nf-area">Khu vực làm việc<sc-if value="{{nf.areaReq}}" hint-placeholder-val="{{ false }}"><span class="req">*</span></sc-if></label><select id="nf-area" class="{{nf.areaCls}}" value="{{nf.area}}" onChange="{{nf.setArea}}" disabled="{{nf.areaOff}}"><option value="">{{nf.areaPh}}</option><sc-for list="{{nf.areaOpts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><sc-if value="{{nf.hasAreaErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">Công nhân phải gắn một khu vực làm việc.</span></sc-if></div>
+
+</div>
+</sc-if>
+<sc-if value="{{dlg.isPerm}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{pm.isNew}}" hint-placeholder-val="{{ false }}"><h3 class="cp-sec">Phân quyền</h3></sc-if>
+<div class="pm-top">
+<sc-if value="{{pm.notNew}}" hint-placeholder-val="{{ true }}"><dl class="mp-facts" style="margin: 0"><div><dt>Người dùng</dt><dd>{{pm.who}}</dd></div></dl>
+<div class="mp-field" style="flex: 0 1 300px"><label for="pm-role">Vai trò (bộ quyền gốc)</label><select id="pm-role" class="mp-input" value="{{pm.role}}" onChange="{{pm.setRole}}"><sc-for list="{{pm.roleOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><span class="hint">Đổi vai trò thì tick lại theo bộ quyền gốc mới</span></div></sc-if>
+<div class="mp-field" style="flex: 1 1 200px"><label for="pm-q">Tìm quyền</label><input id="pm-q" class="mp-input" value="{{pm.q}}" onChange="{{pm.setQ}}" placeholder="Tên bước, quy trình…"></div>
+</div>
+<div class="pm-sum"><span>{{pm.sum}}</span><button type="button" class="lnk" onClick="{{pm.reset}}">Khôi phục theo vai trò</button></div>
+<div class="pm-split">
+<nav class="pm-side" aria-label="Nhóm quyền"><sc-for list="{{pm.groups}}" as="g" hint-placeholder-count="6"><button type="button" class="{{g.cls}}" aria-pressed="{{g.on}}" onClick="{{g.pick}}"><span>{{g.proc}}</span><span class="pm-side__n">{{g.n}}</span></button></sc-for>
+<sc-if value="{{pm.none}}" hint-placeholder-val="{{ false }}"><div class="mp-muted" style="padding: 12px; font-size: 15px">Không có quyền nào khớp “{{pm.q}}”.</div></sc-if></nav>
+<div class="pm-main"><sc-if value="{{pm.hasCur}}" hint-placeholder-val="{{ true }}"><div class="pm-grp__h"><b>{{pm.cur.proc}}</b><span class="mp-muted">{{pm.cur.n}}</span><button type="button" class="lnk" onClick="{{pm.cur.togAll}}">{{pm.cur.togT}}</button></div>
+<sc-for list="{{pm.cur.rows}}" as="r" hint-placeholder-count="3"><label class="pm-row"><input type="checkbox" checked="{{r.on}}" onChange="{{r.tog}}"><span>{{r.step}}</span><sc-if value="{{r.hasTag}}" hint-placeholder-val="{{ false }}"><span class="{{r.tagCls}}">{{r.tag}}</span></sc-if></label></sc-for></sc-if></div>
+</div>
+</sc-if>
+<sc-if value="{{dlg.isLock}}" hint-placeholder-val="{{ false }}">
+<dl class="mp-facts"><div><dt>Người dùng</dt><dd>{{sel.name}}</dd></div></dl>
+<div class="mp-form">
+<div class="mp-field"><label for="lk-rs">Ngày nghỉ việc<span class="req">*</span></label><input id="lk-rs" class="{{lk.resignCls}}" value="{{lk.resign}}" onChange="{{lk.setResign}}" placeholder="dd/mm/yyyy"><sc-if value="{{lk.hasResignErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">Nhập ngày nghỉ việc dạng dd/mm/yyyy.</span></sc-if></div>
+<div class="mp-field"><label for="lk-mode">Khóa tài khoản<span class="req">*</span></label><select id="lk-mode" class="mp-input" value="{{lk.mode}}" onChange="{{lk.setMode}}"><option value="nghi">Vào ngày nghỉ việc</option><option value="ngay">Khóa ngay khi lưu</option><option value="khac">Chọn ngày khác</option></select></div>
+<div class="mp-field"><label for="lk">Ngày khóa tài khoản<span class="req">*</span><span class="mp-info" tabindex="0" role="img" aria-label="Đến ngày khóa hệ thống tự khóa, đăng xuất mọi phiên, chặn thẻ; báo HR trước 3 ngày. Sửa được trước ngày khóa." title="Đến ngày khóa hệ thống tự khóa, đăng xuất mọi phiên, chặn thẻ; báo HR trước 3 ngày. Sửa được trước ngày khóa."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></label><input id="lk" class="{{lk.dateCls}}" value="{{lk.date}}" onChange="{{lk.set}}" placeholder="dd/mm/yyyy" disabled="{{lk.dateOff}}"><sc-if value="{{lk.hasDateErr}}" hint-placeholder-val="{{ false }}"><span class="hint is-bad">Nhập ngày khóa dạng dd/mm/yyyy.</span></sc-if><sc-if value="{{lk.noDateErr}}" hint-placeholder-val="{{ true }}"><span class="hint">{{lk.hint}}</span></sc-if></div>
+</div>
+<sc-if value="{{lk.now}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Khóa ngay khi lưu:</b> đăng xuất mọi phiên, chặn thẻ NV, không xóa tài khoản. Nhà máy đang mất mạng thì có hiệu lực khi có mạng lại.</span></div></sc-if>
+</sc-if>
+<sc-if value="{{dlg.isDel}}" hint-placeholder-val="{{ false }}">
+<dl class="mp-facts"><div><dt>Tài khoản</dt><dd>{{sel.name}} · <span class="mp-code">{{sel.code}}</span></dd></div><div><dt>Nhà máy làm việc</dt><dd>{{sel.facT}}</dd></div><div><dt>Khu vực làm việc</dt><dd>{{sel.areaShow}}</dd></div><div><dt>Vai trò</dt><dd>{{del.roles}}</dd></div><div><dt>Đăng nhập cuối</dt><dd>{{sel.lastLogin}}</dd></div></dl>
+<sc-if value="{{del.ok}}" hint-placeholder-val="{{ true }}"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Xóa hẳn tài khoản chưa từng dùng.</b> Mã NV {{sel.code}} không cấp lại; thao tác ghi nhật ký hệ thống.</span></div></sc-if>
+<sc-if value="{{del.no}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--bad" style="font-size: 16px"><span><b>Không xóa được:</b> {{del.why}} Dùng <b>Đặt ngày khóa</b> để khóa tài khoản và giữ lịch sử thao tác.</span></div></sc-if>
+</sc-if>
+<sc-if value="{{dlg.isUnlock}}" hint-placeholder-val="{{ false }}">
+<dl class="mp-facts"><div><dt>Tài khoản<span class="mp-info" tabindex="0" role="img" aria-label="Chỉ mở sau khi đã xác minh trực tiếp, đối chiếu thẻ NV." title="Chỉ mở sau khi đã xác minh trực tiếp, đối chiếu thẻ NV."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></dt><dd>{{sel.name}} · <span class="mp-code">{{sel.code}}</span></dd></div><div><dt>Lý do đang khóa</dt><dd>{{sel.lockWhy}}</dd></div><div><dt>Mật khẩu tạm<span class="mp-info" tabindex="0" role="img" aria-label="Bắt đổi khi đăng nhập lần tới." title="Bắt đổi khi đăng nhập lần tới."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></dt><dd><span class="mp-code">Tạm-7Q4m-2610</span></dd></div></dl>
+</sc-if>
+</div>
+<div class="mp-dlg__foot"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{dlg.close}}">Hủy</button><sc-if value="{{dlg.isDel}}" hint-placeholder-val="{{ false }}"><sc-if value="{{del.ok}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--danger" onClick="{{del.go}}">Xóa tài khoản</button></sc-if><sc-if value="{{del.no}}" hint-placeholder-val="{{ false }}"><sc-if value="{{a.canLock}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{a.openLock}}">Đặt ngày khóa thay</button></sc-if></sc-if></sc-if><sc-if value="{{dlg.notDel}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{dlg.saveCls}}" onClick="{{dlg.save}}">{{dlg.saveLabel}}</button></sc-if></div>
+</div>
+</sc-if>
+</main>
+<sc-if value="{{dr.open}}" hint-placeholder-val="{{ true }}"><div class="ovl" style="position: fixed" onClick="{{dr.close}}"></div>
+<aside class="mp-drawer" role="dialog" aria-modal="true" aria-label="Chi tiết tài khoản">
+<div style="padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px"><button type="button" class="mp-drawer__x" aria-label="Đóng" onClick="{{dr.close}}"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<div style="font-size: 22px; line-height: 28px; font-weight: 600">{{sel.name}}</div>
+<div class="mp-muted" style="font-size: 16px"><span class="mp-code">{{sel.code}}</span> · {{sel.title}} · {{sel.dept}}</div>
+</div>
+<span class="{{sel.statusCls}}">{{sel.status}}</span>
+</div>
+<sc-if value="{{sel.isSelf}}" hint-placeholder-val="{{ false }}">
+<div class="mp-banner mp-banner--info" style="font-size: 16px; padding: 8px 12px">Đây là tài khoản của bạn — bạn không tự sửa vai trò của chính mình.</div>
+</sc-if>
+<sc-if value="{{sel.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub mp-sub--accent" style="margin: 0">{{sel.note}}</span></sc-if>
+</div>
+
+<div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px">
+<dl class="mp-kv" style="margin: 0; grid-template-columns: repeat(2, minmax(0, 1fr))">
+<div><dt>Email</dt><dd class="mp-nowrap">{{sel.email}}</dd></div>
+<div><dt>SĐT</dt><dd class="mp-nowrap">{{sel.phoneT}}</dd></div>
+<div><dt>Mã thẻ NV</dt><dd class="mp-nowrap">{{sel.badgeT}}</dd></div>
+<div><dt>Ngày hiệu lực</dt><dd class="mp-nowrap">{{sel.since}}</dd></div>
+<sc-if value="{{sel.hasResign}}" hint-placeholder-val="{{ false }}"><div><dt>Ngày nghỉ việc</dt><dd class="mp-nowrap">{{sel.resign}}</dd></div><div><dt>Ngày khóa tài khoản</dt><dd class="mp-nowrap">{{sel.lockDate}}</dd></div></sc-if>
+<div><dt>Nhà máy làm việc</dt><dd>{{sel.facT}}</dd></div>
+<div style="grid-column: 1 / -1"><dt>Khu vực làm việc</dt><dd><sc-if value="{{sel.hasArea}}" hint-placeholder-val="{{ false }}"><a href="{{sel.areaRef.href}}" class="mp-xlink" onClick="{{sel.areaRef.open}}">{{sel.area}}</a></sc-if><sc-if value="{{sel.areaTxt}}" hint-placeholder-val="{{ false }}">{{sel.area}}</sc-if><sc-if value="{{sel.noArea}}" hint-placeholder-val="{{ true }}">—</sc-if></dd></div>
+</dl>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap"><div class="mp-card__title" style="font-size: 18px">Vai trò</div>
+<sc-if value="{{a.canRoles}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--ghost" style="height: 28px; padding: 0 8px" onClick="{{a.openPerm}}">Phân quyền</button></sc-if>
+<sc-if value="{{a.gRoles}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{a.gRoles.who}}</b><sc-if value="{{a.gRoles.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{a.gRoles.why}}</sc-if><button type="button" onClick="{{a.gRoles.sw}}">Xem như {{a.gRoles.who}}</button></span></sc-if>
+</div>
+<sc-for list="{{sel.roles}}" as="r" hint-placeholder-count="1">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span class="{{r.cls}}" style="align-self: flex-start">{{r.name}}</span><span class="mp-sub" style="margin-top: 2px">{{r.scopeText}}</span></div>
+<sc-if value="{{r.isTemp}}" hint-placeholder-val="{{ false }}"><a href="UyQuyen.dc.html" class="mp-xlink" style="font-size: 15px" onClick="{{r.openUq}}">Ủy quyền tạm</a></sc-if>
+</div>
+</sc-for>
+<span class="mp-sub" style="margin: 0">{{sel.permT}}</span>
+</div>
+
+<sc-if value="{{sel.hasLock}}" hint-placeholder-val="{{ false }}">
+<div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Nghỉ việc {{sel.resign}} · đã đặt ngày khóa {{sel.lockDate}}.</b> Đến ngày tự khóa, đăng xuất mọi phiên, chặn thẻ. HR sửa được trước ngày khóa.</span></div>
+</sc-if>
+
+<section class="mp-log">
+<div class="mp-log__h"><h3 class="mp-log__t">{{sel.log.title}}<span class="mp-log__n">{{sel.log.count}}</span></h3><sc-if value="{{sel.log.hasLink}}" hint-placeholder-val="{{ false }}"><a href="{{sel.log.link.href}}" class="mp-xlink" onClick="{{sel.log.link.open}}">Xem ở Nhật ký hệ thống</a></sc-if></div>
+<sc-if value="{{sel.log.empty}}" hint-placeholder-val="{{ false }}"><span class="mp-log__empty">Chưa có thao tác nào.</span></sc-if>
+<ul class="mp-tl"><sc-for list="{{sel.log.items}}" as="lg" hint-placeholder-count="4"><li class="{{lg.cls}}"><sc-if value="{{lg.hasWho}}" hint-placeholder-val="{{ true }}"><b>{{lg.who}}</b><sc-if value="{{lg.hasRole}}" hint-placeholder-val="{{ false }}"> <span class="mp-tl__role">({{lg.role}})</span></sc-if> · </sc-if>{{lg.what}}<time>{{lg.at}}</time></li></sc-for></ul>
+<sc-if value="{{sel.log.hasMore}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-tl__more" onClick="{{sel.log.toggle}}">{{sel.log.moreT}}</button></sc-if>
+</section>
+</div>
+
+<div style="margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<sc-if value="{{a.canEdit}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{a.openEdit}}">Sửa thông tin</button></sc-if>
+<sc-if value="{{a.canLock}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{a.openLock}}">Đặt ngày khóa</button></sc-if>
+<sc-if value="{{a.gLock}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Đặt ngày khóa: việc của <b>{{a.gLock.who}}</b><button type="button" onClick="{{a.gLock.sw}}">Xem như {{a.gLock.who}}</button></span></sc-if>
+<sc-if value="{{a.canDeleg}}" hint-placeholder-val="{{ true }}"><a href="UyQuyen.dc.html" class="mp-btn mp-btn--secondary" style="text-decoration: none" onClick="{{a.goDeleg}}">Ủy quyền tạm</a></sc-if>
+<sc-if value="{{a.canUnlock}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{a.openUnlock}}">Mở khóa / cấp mật khẩu tạm</button></sc-if>
+<sc-if value="{{a.canDel}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--ghost btn-del" onClick="{{a.openDel}}">Xóa tài khoản</button></sc-if>
+<sc-if value="{{a.gUnlock}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{a.gUnlock.who}}</b><sc-if value="{{a.gUnlock.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{a.gUnlock.why}}</sc-if><button type="button" onClick="{{a.gUnlock.sw}}">Xem như {{a.gUnlock.who}}</button></span></sc-if>
+<sc-if value="{{a.gManage}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{a.gManage.who}}</b><sc-if value="{{a.gManage.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{a.gManage.why}}</sc-if><button type="button" onClick="{{a.gManage.sw}}">Xem như {{a.gManage.who}}</button></span></sc-if>
+</div>
+</aside>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vaitro": {"editor": "enum", "options": ["Admin", "HR", "Giám đốc", "Thủ kho trưởng"], "default": "Admin", "section": "Trạng thái hiển thị"}, "cheDo": {"editor": "enum", "options": ["Danh sách", "Tạo tài khoản", "Sửa — đổi nhà máy", "Xóa tài khoản", "Phân quyền từng người"], "default": "Danh sách", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1100}}'>
+/* mp-xs: thanh cuộn ngang ngay dưới tiêu đề bảng + dưới đáy bảng — đồng bộ 2 thanh, chỉ hiện thanh trên khi bảng tràn */
+(function () {
+  if (typeof window === 'undefined' || window.__mpXs) return; window.__mpXs = true;
+  var lock = false;
+  function fit() {
+    var xs = document.querySelectorAll('.mp-xs');
+    for (var i = 0; i < xs.length; i++) {
+      var x = xs[i], t = x.children[0], b = x.children[1];
+      if (!t || !b || !t.classList.contains('mp-xs__top')) continue;
+      var w = b.scrollWidth, s = t.firstElementChild;
+      if (s && s.style.width !== w + 'px') s.style.width = w + 'px';
+      var over = w > b.clientWidth + 1 ? '1' : '0';
+      if (x.getAttribute('data-over') !== over) x.setAttribute('data-over', over);
+      var th = b.querySelector('table > thead');
+      var top = th ? Math.max(0, th.offsetHeight - 17) + 'px' : '0px';
+      if (x.style.getPropertyValue('--xs-top') !== top) x.style.setProperty('--xs-top', top);
+      if (over === '1' && t.scrollLeft !== b.scrollLeft) t.scrollLeft = b.scrollLeft;
+    }
+  }
+  var queued = false;
+  function later() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fit(); }); }
+  document.addEventListener('scroll', function (e) {
+    var el = e.target, x = el && el.parentElement;
+    if (lock || !x || !x.classList || !x.classList.contains('mp-xs')) return;
+    var other = el === x.children[0] ? x.children[1] : el === x.children[1] ? x.children[0] : null;
+    if (!other) return;
+    lock = true; other.scrollLeft = el.scrollLeft; requestAnimationFrame(function () { lock = false; });
+  }, true);
+  new MutationObserver(later).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+  window.addEventListener('resize', later);
+  setTimeout(fit, 0); setTimeout(fit, 400); setTimeout(fit, 1500);
+})();
+
+const MPX = {
+people: { 'Sales': ['Võ Thị Lan', 'NM1'], 'CSKH': ['Đinh Mỹ Linh', 'Tất cả nhà máy'], 'Kế hoạch': ['Đỗ Minh Khang', 'NM1'], 'Mua hàng': ['Mai Anh Thư', 'Tất cả nhà máy'], 'Trưởng BP Mua hàng': ['Tạ Văn Hùng', 'Tất cả nhà máy'], 'Thủ kho': ['Lê Văn Hải', 'NM1'], 'Thủ kho điều phối': ['Hồ Văn Nam', 'NM1'], 'Thủ kho trưởng': ['Trần Thị Mai', 'NM1'], 'QC': ['Ngô Thu Trang', 'NM1'], 'QC trưởng': ['Trần Thị Mai', 'NM1'], 'Kế toán': ['Ngô Bảo Ngọc', 'Tất cả nhà máy'], 'Kế toán trưởng': ['Bùi Minh Châu', 'Tất cả nhà máy'], 'Giám đốc': ['Lê Quang Minh', 'Tất cả nhà máy'], 'Người truy xuất': ['Ngô Thu Trang', 'NM1'], 'HR': ['Hoàng Thị Lan', 'Tất cả nhà máy'], 'Admin': ['Nguyễn Hoàng Long', 'Tất cả nhà máy'], 'R&D': ['Nguyễn Thị Yến', 'Tất cả nhà máy'], 'Vận chuyển': ['Phan Văn Toàn', 'NM1'] },
+roles: ['Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'QC', 'QC trưởng', 'Kế toán', 'Kế toán trưởng', 'Giám đốc', 'Người truy xuất', 'HR', 'Admin'],
+roleText(r) { return r === 'Thủ kho điều phối' ? 'Thủ kho @ kho điều phối' : r; },
+menu: {"viec": ["*"], "ban_dh": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Sales"], "ban_kh": ["Admin", "CSKH", "Giám đốc", "Sales"], "mua_don": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "mua_ncc": ["Admin", "Giám đốc", "Mua hàng", "Trưởng BP Mua hàng"], "mua_tra": ["Admin", "Giám đốc", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "kt_kh": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng", "Sales"], "kt_ncc": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kt_so": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kho_ton": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_nhap": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_xuat": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_chuyen": ["Admin", "Giám đốc", "Kế hoạch", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Vận chuyển"], "kho_kiem": ["Admin", "Giám đốc", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_huy": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "QC", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "sx_lenh": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho", "Thủ kho điều phối"], "sx_me": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho điều phối"], "sx_ct": ["Admin", "Giám đốc", "Kế hoạch", "QC", "R&D"], "cl_yc": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_pk": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_cn": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Sales"], "cl_ml": ["Admin", "Giám đốc", "QC"], "tx_tx": ["Admin", "Giám đốc", "Người truy xuất", "Thủ kho", "Thủ kho điều phối"], "tx_th": ["Admin", "CSKH", "Giám đốc", "Kế toán trưởng", "Người truy xuất", "QC", "QC trưởng", "Sales"], "dm_nvl": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_sp": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_dv": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_kho": ["Admin", "Giám đốc", "Thủ kho trưởng"], "dm_ncc": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Mua hàng", "QC", "Thủ kho", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_nm": ["Admin", "Giám đốc", "Thủ kho trưởng"], "qt_nd": ["Admin", "Giám đốc", "HR"], "qt_kv": ["Admin", "Giám đốc"], "qt_ch": ["Admin", "Giám đốc"], "qt_nk": ["Admin", "Giám đốc", "HR"]},
+scr: {"viec": ["HopDuyet", "HopDuyet"], "ban_dh": ["BanDonHang-0r5c", "BanHang-wvhq"], "ban_kh": ["BanHang-wvhq", "BanHang-wvhq"], "mua_don": ["MuaPO-3fox", "MuaHang-7mvk"], "mua_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "mua_tra": ["MuaTraHang-e9jn", "MuaHang-7mvk"], "kt_kh": ["KeToan-k2vm", "KeToan-k2vm"], "kt_ncc": ["KeToanNCC-m3pz", "KeToan-k2vm"], "kt_so": ["KeToanSo-v6qe", "KeToan-k2vm"], "kho_ton": ["TonLo", "TonLo"], "kho_nhap": ["KhoVH-xv2s", "KhoVH-xv2s"], "kho_xuat": ["KhoXuat-71ki", "KhoVH-xv2s"], "kho_chuyen": ["KhoChuyen-oq5y", "KhoVH-xv2s"], "kho_kiem": ["KhoKiemKe-23cu", "KhoVH-xv2s"], "kho_huy": ["KhoHuy-br6r", "KhoVH-xv2s"], "sx_lenh": ["LenhSX-hxoc", "LenhSX-hxoc"], "sx_me": ["TheoDoiMe-w4ka", "LenhSX-hxoc"], "sx_ct": ["CongThuc-qdhl", "CongThuc-qdhl"], "cl_yc": ["ChatLuong-q4ls", "ChatLuong-q4ls"], "cl_pk": ["ChatLuongPK-d2xh", "ChatLuong-q4ls"], "cl_cn": ["ChatLuongCN-t9bw", "ChatLuongCN-t9bw"], "cl_ml": ["ChatLuongML-p5ga", "ChatLuongCN-t9bw"], "tx_tx": ["TruyXuat", "TruyXuat"], "tx_th": ["ThuHoi-r8hw", "ThuHoi-r8hw"], "dm_nvl": ["DanhMuc-15tr", "DanhMuc-15tr"], "dm_sp": ["DanhMucSP-zd4p", "DanhMucSP-zd4p"], "dm_dv": ["DonVi-u7dv", "DonVi-u7dv"], "dm_kho": ["NhaMay-qd07", "NhaMay-qd07"], "dm_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "dm_nm": ["NhaMay-qd07", "NhaMay-qd07"], "qt_nd": ["NguoiDung", "NguoiDung"], "qt_kv": ["KhuVuc", "KhuVuc"], "qt_ch": ["CauHinh-cocg", "CauHinh-cocg"], "qt_nk": ["NhatKy-n5jd", "NhatKy-n5jd"]},
+mods: {"ban": ["ban_dh", "ban_kh"], "mua": ["mua_don", "mua_ncc", "mua_tra"], "kt": ["kt_kh", "kt_ncc", "kt_so"], "kho": ["kho_ton", "kho_nhap", "kho_xuat", "kho_chuyen", "kho_kiem", "kho_huy"], "sx": ["sx_lenh", "sx_me"], "cl": ["cl_yc", "cl_pk", "cl_cn", "cl_ml"], "tx": ["tx_tx", "tx_th"], "dm": ["dm_nvl", "sx_ct", "dm_sp", "dm_dv", "dm_kho", "dm_nm", "qt_kv"], "qt": ["qt_nd", "qt_ch", "qt_nk"]},
+sees(r, k) { const a = this.menu[k] || []; return a.indexOf('*') >= 0 || a.indexOf(r) >= 0; },
+nav(r, here) { const show = {}, href = {}, go = {}; const to = (k) => { const x = this.scr[k]; href[k] = x[0] + '.dc.html'; go[k] = () => this.go(x[1], '', r); };
+Object.keys(this.scr).forEach((k) => { show[k] = this.sees(r, k); to(k); });
+Object.keys(this.mods).forEach((m) => { const vis = this.mods[m].filter((k) => show[k]); show[m] = vis.length > 0; const f = vis[0] || this.mods[m][0]; href[m] = href[f]; go[m] = go[f]; });
+const deny = !!here && !show[here]; const home = this.mods[(here || '').split('_')[0]] || [];
+return { show: show, href: href, go: go, deny: deny, homeHref: href.viec, homeGo: go.viec, alt: home.filter((k) => show[k]).length > 0 }; },
+name(r) { return (this.people[r] || [r])[0]; },
+fac(r) { return (this.people[r] || ['', 'NM1'])[1]; },
+roleLabel(r) { return r === 'QC trưởng' ? 'QC trưởng (ủy quyền)' : r; },
+go(board, id, role) { try { localStorage.setItem('mp.open', JSON.stringify({ b: board, id: id || '', r: role || '', t: Date.now() })); } catch (e) {} },
+take(board) { try { const x = JSON.parse(localStorage.getItem('mp.open') || 'null'); if (x && x.b === board && Date.now() - x.t < 20000) { localStorage.removeItem('mp.open'); return x; } } catch (e) {} return null; },
+can(role, allowed) { return allowed.indexOf(role) >= 0; },
+vx(role, setRole, here) { const n = this.name(role); const w = n.split(' '); return { m: this.nav(role, here), role: role, label: this.roleLabel(role), name: n, fac: this.fac(role), ini: (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(), opts: this.roles, optl: this.roles.map((x) => ({ v: x, t: this.roleText(x) })), set: (ev) => setRole(ev.target.value) }; },
+map: [['TH-NCC-', 'MuaHang-7mvk'], ['TH-2', 'ThuHoi-r8hw'], ['ĐH-', 'BanHang-wvhq'], ['KH-', 'BanHang-wvhq'], ['NC-', 'MuaHang-7mvk'], ['PO-', 'MuaHang-7mvk'], ['NCC-', 'MuaHang-7mvk'], ['TC-', 'KeToan-k2vm'], ['PN-', 'KhoVH-xv2s'], ['PX-', 'KhoVH-xv2s'], ['PC-', 'KhoVH-xv2s'], ['PK-', 'KhoVH-xv2s'], ['PH-', 'KhoVH-xv2s'], ['BB-TL-', 'KhoVH-xv2s'], ['L-', 'TonLo'], ['A-BAO-', 'TonLo'], ['LSX-', 'LenhSX-hxoc'], ['me:', 'LenhSX-hxoc'], ['CT-', 'CongThucChiTiet-pji2'], ['YC-NM', 'ChatLuong-q4ls'], ['QC-', 'ChatLuong-q4ls'], ['CN-', 'ChatLuongCN-t9bw'], ['ML-', 'ChatLuongCN-t9bw'], ['BB-ML-', 'ChatLuongCN-t9bw'], ['TX-', 'TruyXuat'], ['NVL-', 'DanhMuc-15tr'], ['SP-', 'DanhMucSP-zd4p'], ['NM1-', 'NhaMay-qd07'], ['NM2-', 'NhaMay-qd07']],
+board(id) { if (/^[AB]\d{6}/.test(id)) return 'TonLo'; for (const m of this.map) { if (id.indexOf(m[0]) === 0) return m[1]; } return ''; },
+ref(id, role, board, file) { const b = board || this.board(id); if (!b) return { id: id, ok: false, href: '#', open: () => {} }; const f = file || (id.indexOf('me:') === 0 ? 'TheoDoiMe-w4ka' : b); return { id: id.replace(/^me:/, ''), ok: true, href: f + '.dc.html', open: () => this.go(b, id, role) }; },
+gate(role, allowed, setRole, why) { if (allowed.indexOf(role) >= 0) return null; const who = allowed[0]; return { who: who, why: why || '', hasWhy: !!why, sw: () => setRole(who) }; }
+};
+
+const ND_USERS = [{"code": "NV0001", "name": "Nguyễn Hoàng Long", "title": "Quản trị hệ thống", "dept": "CNTT", "status": "Hoạt động", "email": "long.nh@nhamay.vn", "login": "web", "since": "01/01/2023", "lastLogin": "18/10 08:05", "loginBy": "web", "roles": [["Admin", "Mọi nhà máy", false]], "log": [{"text": "Mở khóa, cấp mật khẩu tạm cho Ngô Thu Trang (NV0019)", "at": "17/10/2026 09:20"}, {"text": "Tạo tài khoản, gán Admin", "at": "01/01/2023 08:00"}]}, {"code": "NV0008", "name": "Hoàng Thị Lan", "title": "Chuyên viên nhân sự", "dept": "Nhân sự", "status": "Hoạt động", "email": "lan.ht@nhamay.vn", "login": "web", "since": "01/01/2023", "lastLogin": "18/10 08:15", "loginBy": "web", "roles": [["HR", "Mọi nhà máy", false]], "log": [{"text": "Tạo tài khoản, gán HR", "at": "01/01/2023 08:00"}]}, {"code": "NV0005", "name": "Đặng Thị Hạnh", "title": "Trưởng phòng nhân sự", "dept": "Nhân sự", "status": "Hoạt động", "email": "—", "login": "web", "since": "01/01/2023", "lastLogin": "18/10 07:58", "loginBy": "web", "roles": [["HR", "Mọi nhà máy", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "Tạo tài khoản, gán HR, Trưởng bộ phận", "at": "01/01/2023 08:00"}]}, {"code": "NV0002", "name": "Lê Quang Minh", "title": "Giám đốc", "dept": "Ban giám đốc", "status": "Hoạt động", "note": "Công tác 22/10 → 30/10", "email": "minh.lq@nhamay.vn", "login": "web", "since": "01/01/2023", "lastLogin": "18/10 07:52", "loginBy": "web", "roles": [["Giám đốc", "Mọi nhà máy", false]], "log": [{"text": "HR ủy quyền tạm vai trò Giám đốc cho Bùi Minh Châu, 22/10 → 30/10", "at": "17/10/2026 14:10"}]}, {"code": "NV0012", "name": "Bùi Minh Châu", "title": "Kế toán trưởng", "dept": "Kế toán", "status": "Hoạt động", "email": "chau.bm@nhamay.vn", "login": "web", "since": "03/04/2023", "lastLogin": "18/10 08:20", "loginBy": "web", "roles": [["Kế toán trưởng", "Mọi nhà máy", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "HR ủy quyền tạm Giám đốc · tạm, 22/10 → 30/10 (Sắp bắt đầu)", "at": "17/10/2026 14:10"}]}, {"code": "NV0097", "name": "Ngô Bảo Ngọc", "title": "Kế toán", "dept": "Kế toán", "status": "Hoạt động", "email": "ngoc.nb@nhamay.vn", "login": "web", "since": "15/06/2024", "lastLogin": "18/10 08:31", "loginBy": "web", "roles": [["Kế toán", "Mọi nhà máy", false]], "log": [{"text": "Hệ thống tự gỡ Kế toán trưởng · tạm (hết hạn)", "at": "05/10/2026 23:59"}, {"text": "Tạo tài khoản, gán Kế toán", "at": "15/06/2024 08:00"}]}, {"code": "NV0098", "name": "Trịnh Văn Sơn", "title": "Kế toán", "dept": "Kế toán", "status": "Hoạt động", "email": "—", "login": "web", "since": "01/08/2024", "lastLogin": "17/10 08:30", "loginBy": "web", "roles": [["Kế toán", "Mọi nhà máy", false]], "log": [{"text": "Tạo tài khoản, gán Kế toán", "at": "01/08/2024 08:00"}]}, {"code": "NV0015", "name": "Nguyễn Quang Vinh", "title": "Trưởng phòng kinh doanh", "dept": "Kinh doanh", "status": "Hoạt động", "email": "—", "login": "web", "since": "15/02/2023", "lastLogin": "18/10 08:12", "loginBy": "web", "roles": [["Sales", "Mọi nhà máy", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "Tạo tài khoản, gán Sales, Trưởng bộ phận", "at": "15/02/2023 08:00"}]}, {"code": "NV0164", "name": "Võ Thị Lan", "title": "Nhân viên kinh doanh", "dept": "Kinh doanh", "status": "Hoạt động", "email": "lan.vt@nhamay.vn", "login": "web", "since": "02/03/2024", "lastLogin": "18/10 08:02", "loginBy": "web", "roles": [["Sales", "Nhà máy NM1", false]], "log": [{"text": "Admin cấp mật khẩu tạm (quên mật khẩu)", "at": "16/10/2026 07:55"}]}, {"code": "NV0171", "name": "Nguyễn Minh Khoa", "title": "Nhân viên kinh doanh", "dept": "Kinh doanh", "status": "Hoạt động", "email": "khoa.nm@nhamay.vn", "login": "web", "since": "10/07/2024", "lastLogin": "17/10 16:40", "loginBy": "web", "roles": [["Sales", "Mọi nhà máy", false]], "log": [{"text": "Tạo tài khoản, gán Sales", "at": "10/07/2024 08:00"}]}, {"code": "NV0188", "name": "Lâm Thảo Vy", "title": "Nhân viên kinh doanh", "dept": "Kinh doanh", "status": "Hoạt động", "email": "—", "login": "web", "since": "03/09/2024", "lastLogin": "16/10 18:20", "loginBy": "web", "roles": [["Sales", "Mọi nhà máy", false], ["CSKH", "Mọi nhà máy", false]], "log": [{"text": "Tạo tài khoản, gán Sales, CSKH", "at": "03/09/2024 08:00"}]}, {"code": "NV0205", "name": "Đinh Mỹ Linh", "title": "Chăm sóc khách hàng", "dept": "Kinh doanh", "status": "Hoạt động", "email": "linh.dm@nhamay.vn", "login": "web", "since": "12/05/2024", "lastLogin": "17/10 15:05", "loginBy": "web", "roles": [["CSKH", "Mọi nhà máy", false]], "log": [{"text": "Tách vai trò: gỡ Sales, gán CSKH", "at": "17/10/2026 10:00"}, {"text": "Tạo tài khoản, gán Sales", "at": "12/05/2024 08:00"}]}, {"code": "NV0562", "name": "Phùng Thị Hà My", "title": "Nhân viên kinh doanh", "dept": "Kinh doanh", "status": "Hoạt động", "note": "Chờ đăng nhập lần đầu · mật khẩu tạm", "email": "my.pth@nhamay.vn", "login": "web", "since": "17/10/2026", "lastLogin": "Chưa đăng nhập", "loginBy": "", "roles": [["Sales", "Nhà máy NM2", false]], "log": [{"text": "HR Hoàng Thị Lan tạo tài khoản, gán Sales · NM2 — mật khẩu tạm, bắt đổi khi đăng nhập lần đầu", "at": "17/10/2026 15:20"}]}, {"code": "NV0302", "name": "Đỗ Minh Khang", "title": "Nhân viên kế hoạch", "dept": "Kế hoạch", "status": "Hoạt động", "email": "khang.dm@nhamay.vn", "login": "web", "since": "11/11/2024", "lastLogin": "18/10 07:48", "loginBy": "web", "roles": [["Kế hoạch", "Nhà máy NM1", false]], "log": [{"text": "Tạo tài khoản, gán Kế hoạch", "at": "11/11/2024 08:00"}]}, {"code": "NV0033", "name": "Phạm Thu Hương", "title": "Trưởng phòng kế hoạch", "dept": "Kế hoạch", "status": "Hoạt động", "email": "—", "login": "web", "since": "20/04/2023", "lastLogin": "18/10 07:40", "loginBy": "web", "roles": [["Kế hoạch", "Nhà máy NM1", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10) — gán Kế hoạch", "at": "28/10/2026 09:30"}, {"text": "Hệ thống tự gỡ Kế hoạch · tạm (hết hạn)", "at": "26/09/2026 23:59"}, {"text": "HR ủy quyền tạm Kế hoạch (thay Đỗ Minh Khang), 22/09 → 26/09", "at": "21/09/2026 15:00"}]}, {"code": "NV0215", "name": "Nguyễn Thị Yến", "title": "Chuyên viên nghiên cứu công thức", "dept": "R&D", "status": "Hoạt động", "email": "yen.nt@nhamay.vn", "login": "web", "since": "06/03/2024", "lastLogin": "17/10 16:10", "loginBy": "web", "roles": [["R&D", "Mọi nhà máy", false]], "log": [{"text": "Tạo tài khoản, gán R&D", "at": "06/03/2024 08:00"}]}, {"code": "NV0274", "name": "Mai Anh Thư", "title": "Nhân viên mua hàng", "dept": "Mua hàng", "status": "Hoạt động", "email": "thu.ma@nhamay.vn", "login": "web", "since": "20/02/2025", "lastLogin": "18/10 08:41", "loginBy": "web", "roles": [["Mua hàng", "Mọi nhà máy", false]], "log": [{"text": "HR thu hồi sớm Trưởng BP Mua hàng · tạm", "at": "11/10/2026 09:30"}, {"text": "HR ủy quyền tạm Trưởng BP Mua hàng, 08/10 → 14/10", "at": "07/10/2026 15:30"}]}, {"code": "NV0061", "name": "Tạ Văn Hùng", "title": "Trưởng phòng mua hàng", "dept": "Mua hàng", "status": "Hoạt động", "email": "hung.tv@nhamay.vn", "login": "web", "since": "05/05/2023", "lastLogin": "18/10 08:10", "loginBy": "web", "roles": [["Trưởng BP Mua hàng", "Mọi nhà máy", false], ["Mua hàng", "Mọi nhà máy", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "Đi làm lại — HR thu hồi sớm ủy quyền cho Mai Anh Thư", "at": "11/10/2026 09:30"}]}, {"code": "NV0045", "name": "Trần Thị Mai", "title": "Thủ kho trưởng NM1", "dept": "Kho", "sc": "4 kho NM1", "status": "Hoạt động", "email": "mai.tt@nhamay.vn", "login": "web", "since": "02/01/2024", "lastLogin": "18/10 08:02", "loginBy": "web", "roles": [["Thủ kho trưởng", "Kho NM1-TONG, NM1-DP, NM1-BTP, NM1-MAUQC", false], ["QC trưởng", "Nhà máy NM1 · ủy quyền thay Võ Thanh Hà, 15/10 → 21/10/2026", true]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "HR Hoàng Thị Lan ủy quyền tạm vai trò QC trưởng (thay Võ Thanh Hà)", "at": "14/10/2026 16:20"}, {"text": "Tạo tài khoản, gán Thủ kho trưởng", "at": "02/01/2024 08:30"}]}, {"code": "NV0123", "name": "Lê Văn Hải", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "email": "hai.lv@nhamay.vn", "login": "web", "since": "15/03/2024", "lastLogin": "18/10 09:05", "loginBy": "web · máy KHO-NM1-02", "roles": [["Thủ kho", "Kho NM1-TONG", false]], "log": [{"text": "Tạo tài khoản, gán Thủ kho", "at": "15/03/2024 08:00"}]}, {"code": "NV0390", "name": "Nguyễn Văn Tú", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "note": "Khóa ngày 31/10/2026", "lockDate": "31/10/2026", "email": "tu.nv@nhamay.vn", "login": "web", "since": "05/02/2025", "lastLogin": "17/10 15:20", "loginBy": "web · máy KHO-NM1-04", "roles": [["Thủ kho", "Kho NM1-BTP", false]], "log": [{"text": "HR nhập ngày nghỉ 31/10, đặt ngày khóa 31/10/2026", "at": "16/10/2026 14:00"}]}, {"code": "NV0418", "name": "Hồ Văn Nam", "title": "Thủ kho kho điều phối", "dept": "Kho", "status": "Hoạt động", "email": "nam.hv@nhamay.vn", "login": "web", "since": "01/09/2024", "lastLogin": "18/10 07:30", "loginBy": "web · máy KHO-NM1-05", "roles": [["Thủ kho điều phối", "Kho NM1-DP", false]], "log": [{"text": "HR đổi phạm vi: nhận kho điều phối NM1-DP thay Trần Quốc Duy", "at": "15/10/2026 08:30"}, {"text": "Tạo tài khoản, gán Thủ kho", "at": "01/09/2024 08:00"}]}, {"code": "NV0150", "name": "Nguyễn Văn Tùng", "title": "Thủ kho trưởng NM2", "dept": "Kho", "sc": "3 kho NM2", "status": "Hoạt động", "email": "tung.nv@nhamay.vn", "login": "web", "since": "12/08/2023", "lastLogin": "18/10 07:00", "loginBy": "web · máy KHO-NM2-01", "roles": [["Thủ kho trưởng", "Kho NM2-TONG, NM2-DP, NM2-BTP", false]], "log": [{"text": "Tạo tài khoản, gán Thủ kho trưởng", "at": "12/08/2023 08:00"}]}, {"code": "NV0152", "name": "Lê Thị Thu", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "email": "thu.lt@nhamay.vn", "login": "web", "since": "20/09/2023", "lastLogin": "18/10 07:45", "loginBy": "web · máy KHO-NM2-01", "sc": "3 kho NM2", "roles": [["Thủ kho", "Kho NM2-TONG, NM2-DP, NM2-BTP", false]], "log": [{"text": "Tạo tài khoản, gán Thủ kho", "at": "20/09/2023 08:00"}]}, {"code": "NV0233", "name": "Phan Văn Lộc", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "email": "loc.pv@nhamay.vn", "login": "web", "since": "01/12/2024", "lastLogin": "18/10 08:41", "loginBy": "web · máy KHO-NM2-02", "roles": [["Thủ kho", "Kho NM2-TONG", false]], "log": [{"text": "Tạo tài khoản, gán Thủ kho", "at": "01/12/2024 08:00"}]}, {"code": "NV0377", "name": "Lý Thị Ngân", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "email": "—", "login": "web", "since": "10/03/2025", "lastLogin": "17/08 10:12", "loginBy": "web", "roles": [["Thủ kho", "Kho NM1-TONG", false]], "log": [{"text": "Tạo tài khoản, gán Thủ kho", "at": "10/03/2025 08:00"}], "note": "Không đăng nhập từ 17/08"}, {"code": "NV0412", "name": "Đoàn Văn Kiên", "title": "Thủ kho", "dept": "Kho", "status": "Hoạt động", "email": "—", "login": "web", "since": "02/06/2025", "lastLogin": "15/10 16:40", "loginBy": "web", "roles": [["Thủ kho", "Kho NM1-TONG", false], ["Vận chuyển", "Chuyến được giao", false]], "log": [{"text": "HR gán thêm Vận chuyển", "at": "01/09/2026 09:00"}, {"text": "Tạo tài khoản, gán Thủ kho", "at": "02/06/2025 08:00"}]}, {"code": "NV0349", "name": "Phan Văn Toàn", "title": "Nhân viên vận chuyển", "dept": "Kho", "status": "Hoạt động", "email": "—", "login": "web", "since": "12/01/2025", "lastLogin": "18/10 07:30", "loginBy": "web", "roles": [["Vận chuyển", "Nhà máy NM1", false]], "log": [{"text": "Tạo tài khoản, gán Vận chuyển", "at": "12/01/2025 08:00"}]}, {"code": "NV0457", "name": "Trần Quốc Duy", "title": "Thủ kho", "dept": "Kho", "status": "Đã khóa", "note": "Nghỉ việc 15/10/2026", "email": "duy.tq@nhamay.vn", "login": "web", "since": "01/04/2024", "lastLogin": "14/10 17:30", "loginBy": "web", "roles": [["Thủ kho", "Kho NM1-DP", false]], "log": [{"text": "Hệ thống khóa đúng ngày khóa đã đặt, đăng xuất mọi phiên, chặn thẻ", "at": "15/10/2026 00:00"}, {"text": "HR đặt ngày khóa 15/10/2026", "at": "01/10/2026 10:12"}]}, {"code": "NV0088", "name": "Võ Thanh Hà", "title": "QC trưởng", "dept": "QC", "status": "Hoạt động", "note": "Vắng 15/10 → 21/10", "email": "ha.vt@nhamay.vn", "login": "web", "since": "10/05/2023", "lastLogin": "14/10 17:40", "loginBy": "web", "roles": [["QC trưởng", "Nhà máy NM1", false], ["Người truy xuất", "Mọi nhà máy", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10)", "at": "28/10/2026 09:30"}, {"text": "HR ủy quyền tạm QC trưởng cho Trần Thị Mai, 15/10 → 21/10", "at": "14/10/2026 16:20"}, {"text": "Admin Nguyễn Hoàng Long gán Người truy xuất", "at": "20/08/2026 10:00"}]}, {"code": "NV0019", "name": "Ngô Thu Trang", "title": "Nhân viên QC", "dept": "QC", "status": "Hoạt động", "note": "Admin mở khóa 17/10 09:20", "email": "trang.nt@nhamay.vn", "login": "web", "since": "01/09/2023", "lastLogin": "18/10 08:40", "loginBy": "web", "roles": [["QC", "Nhà máy NM1", false], ["Người truy xuất", "Mọi nhà máy", false]], "log": [{"text": "Admin Nguyễn Hoàng Long mở khóa, cấp mật khẩu tạm (đã đổi lúc 09:34)", "at": "17/10/2026 09:20"}, {"text": "Hệ thống khóa tạm: nhập sai mật khẩu 5 lần", "at": "17/10/2026 09:12"}, {"text": "Admin Nguyễn Hoàng Long gán thêm Người truy xuất", "at": "16/10/2026 16:00"}]}, {"code": "NV0201", "name": "Vũ Đức Anh", "title": "Nhân viên QC", "dept": "QC", "status": "Hoạt động", "email": "anh.vd@nhamay.vn", "login": "web", "since": "14/02/2024", "lastLogin": "18/10 07:55", "loginBy": "web", "roles": [["QC", "Nhà máy NM1", false]], "log": [{"text": "Tạo tài khoản, gán QC", "at": "14/02/2024 08:00"}]}, {"code": "NV0226", "name": "Trương Minh Phúc", "title": "Nhân viên QC", "dept": "QC", "status": "Khóa tạm", "note": "Không đăng nhập quá 90 ngày · nghỉ ốm dài ngày tới 19/10", "email": "phuc.tm@nhamay.vn", "login": "web", "since": "11/03/2024", "lastLogin": "06/07 16:30", "loginBy": "web", "roles": [["QC", "Nhà máy NM2", false]], "log": [{"text": "Hệ thống tự khóa tạm: không đăng nhập quá 90 ngày", "at": "04/10/2026 00:05"}], "lockWhy": "Tự khóa 04/10 — không đăng nhập quá 90 ngày"}, {"code": "NV0021", "name": "Đỗ Văn Nam", "title": "Quản đốc sản xuất", "dept": "Sản xuất", "status": "Hoạt động", "email": "—", "login": "web", "since": "01/03/2023", "lastLogin": "18/10 06:30", "loginBy": "web", "roles": [["Kế hoạch", "Nhà máy NM1", false]], "log": [{"text": "Bỏ vai trò Trưởng bộ phận (28/10) — gán Kế hoạch", "at": "28/10/2026 09:30"}, {"text": "Tạo tài khoản, gán Trưởng bộ phận", "at": "01/03/2023 08:00"}]}, {"code": "NV0210", "name": "Phạm Quốc Bảo", "title": "Công nhân", "dept": "Sản xuất", "status": "Hoạt động", "email": "—", "login": "pc", "since": "01/06/2025", "area": "Khu chiết rót & đóng gói NM1", "areaId": "NM1-CR1", "lastLogin": "18/10 06:01", "loginBy": "quét thẻ · PC khu chiết rót & đóng gói", "roles": [["Công nhân", "Khu vực làm việc: khu chiết rót & đóng gói NM1", false]], "log": [{"text": "HR in lại thẻ NV (thẻ cũ báo mất)", "at": "18/10/2026 08:15"}, {"text": "Tạo tài khoản công nhân, gắn khu chiết rót & đóng gói", "at": "01/06/2025 07:30"}]}, {"code": "NV0561", "name": "Lương Văn Tâm", "title": "Công nhân", "dept": "Sản xuất", "status": "Hoạt động", "email": "—", "login": "pc", "since": "16/10/2026", "area": "Khu bán thành phẩm NM1", "areaId": "NM1-KBTP1", "lastLogin": "18/10 05:58", "loginBy": "quét thẻ · PC khu BTP", "roles": [["Công nhân", "Khu vực làm việc: khu BTP NM1", false]], "log": [{"text": "Tạo tài khoản công nhân, gắn khu BTP NM1", "at": "16/10/2026 10:30"}]}, {"code": "NV0518", "name": "Châu Văn Lực", "title": "Công nhân", "dept": "Sản xuất", "status": "Hoạt động", "email": "—", "login": "pc", "since": "15/04/2025", "lastLogin": "11/10 05:48", "loginBy": "pc", "roles": [["Công nhân", "Khu vực làm việc: khu hỗn hợp NM1", false]], "log": [{"text": "Tạo tài khoản công nhân, gắn khu hỗn hợp NM1", "at": "15/04/2025 07:30"}], "area": "Khu hỗn hợp NM1", "areaId": "NM1-KHH1"}, {"code": "NV0533", "name": "Huỳnh Thị Lài", "title": "Công nhân đóng gói", "dept": "Sản xuất", "status": "Khóa tạm", "note": "Không đăng nhập quá 90 ngày", "email": "—", "login": "pc", "since": "03/03/2025", "area": "Khu chiết rót & đóng gói NM1", "areaId": "NM1-CR1", "lastLogin": "14/07 06:00", "loginBy": "quét thẻ", "roles": [["Công nhân", "Khu vực làm việc: khu chiết rót & đóng gói NM1", false]], "log": [{"text": "Hệ thống tự khóa tạm: không đăng nhập quá 90 ngày", "at": "12/10/2026 00:05"}], "lockWhy": "Tự khóa 12/10 — không đăng nhập quá 90 ngày"}];
+// SĐT, mã thẻ NV (bắt buộc với công nhân), ngày nghỉ việc / ngày khóa (QT01 a1, n1)
+const ND_BADGE = { NV0210: 'TNV-0210', NV0561: 'TNV-0561', NV0518: 'TNV-0518', NV0533: 'TNV-0533', NV0021: 'TNV-0021', NV0088: 'TNV-0088-2' };
+const ND_RESIGN = { NV0390: ['31/10/2026', '31/10/2026'], NV0457: ['15/10/2026', '15/10/2026'] };
+ND_USERS.forEach((u) => { const n = u.code.slice(2); u.phone = u.phone || '0903 1' + n.slice(0, 2) + ' ' + n.slice(2) + '0'; u.badge = u.badge || ND_BADGE[u.code] || ''; const r = ND_RESIGN[u.code]; if (r) { u.resign = r[0]; u.lockDate = r[1]; } });
+const ND_DATE = /^\d{2}\/\d{2}\/\d{4}$/;
+const ND_TODAY = '18/10/2026';
+const ND_FAC = [['NM1', 'Nhà máy 1 · Bình Dương'], ['NM2', 'Nhà máy 2 · Long An']];
+const ND_AREAS = { NM1: [['NM1-KHH1', 'Khu hỗn hợp NM1'], ['NM1-KBTP1', 'Khu bán thành phẩm NM1'], ['NM1-CR1', 'Khu chiết rót & đóng gói NM1']], NM2: [['NM2-KHH1', 'Khu hỗn hợp NM2'], ['NM2-KBTP1', 'Khu bán thành phẩm NM2']] };
+const ndArea = (id) => { const f = (id || '').slice(0, 3); const a = (ND_AREAS[f] || []).find((x) => x[0] === id); return a ? a[1] : ''; };
+const ndFac = (u) => (u.fac !== undefined ? u.fac : u.areaId ? u.areaId.slice(0, 3) : ((u.roles || []).map((r) => r[1]).join(' ').match(/NM[12]/) || [''])[0]);
+const ndLc = (t) => (t ? t.charAt(0).toLowerCase() + t.slice(1) : '');
+const ndFacT = (f) => (f ? (ND_FAC.find((x) => x[0] === f) || [f, f])[1] : 'Mọi nhà máy');
+const ND_ROLES_ALL = ['Admin', 'HR', 'Giám đốc', 'Kế toán trưởng', 'Kế toán', 'Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'Công nhân', 'QC', 'QC trưởng', 'Người truy xuất'];
+// danh mục quyền + bộ quyền gốc của từng vai trò — chép từ VT_ROLES (VaiTroQuyen); sửa ở đó thì chép lại
+const ND_PERMS = [["Phân quyền", "Gán / gỡ vai trò Admin và Người truy xuất"], ["Phân quyền", "Xác minh, mở khóa, cấp mật khẩu tạm"], ["Phân quyền", "Ủy quyền tạm"], ["Phân quyền", "Nhật ký hệ thống (mọi loại)"], ["Phân quyền", "Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin, Người truy xuất); đổi vai trò"], ["Phân quyền", "Nhập ngày nghỉ, đặt / sửa ngày khóa"], ["Phân quyền", "Ủy quyền tạm một vai trò (bắt buộc ngày hết hạn)"], ["Phân quyền", "Nhật ký tài khoản"], ["Phân quyền", "Vai trò × quyền (chỉ xem)"], ["Cấu hình", "Tham số mặc định ở mọi quy trình"], ["Cấu hình", "Định dạng mã danh mục và mã chứng từ"], ["Cấu hình", "Thêm đơn vị tính"], ["Danh mục", "Nhà máy, khu vực làm việc, kho: tạo / sửa / ngừng dùng (làm trực tiếp, không qua đề nghị)"], ["Danh mục", "Dàn silo khu HH / BTP: thêm, sửa, bảo trì / ngừng dùng"], ["Danh mục", "Tạo / sửa mã NVL, SP (mã tự sinh theo định dạng)"], ["Danh mục", "Ngừng dùng mã do mình đề nghị — trực tiếp, không qua duyệt (28/10)"], ["Danh mục", "Rút đề nghị khi đang chờ duyệt (chỉ người đề xuất)"], ["Danh mục", "Gửi đề nghị ngừng dùng mã"], ["Danh mục", "Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do Mua hàng đề nghị (người gửi không tự duyệt)"], ["Danh mục", "Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do Kho đề nghị (người gửi không tự duyệt)"], ["Danh mục", "Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do QC đề nghị (người gửi không tự duyệt)"], ["Kiểm công nợ", "Duyệt hạn mức ban đầu (một trong GĐ / KTT)"], ["Kiểm công nợ", "Quyết hạn mức mới khi Sales xin tăng"], ["Kiểm công nợ", "Duyệt hạn mức ban đầu"], ["Kiểm công nợ", "Quyết hạn mức mới"], ["Kiểm công nợ", "Đề xuất hạn mức ban đầu"], ["Kiểm công nợ", "Ghi nhận tiền về, hệ thống tự cấn khoản quá hạn"], ["Kiểm công nợ", "Xem công nợ, lịch sử thanh toán"], ["Kiểm công nợ", "Báo khách, chuyển đơn sang chờ"], ["Kiểm công nợ", "Xin tăng hạn mức"], ["Kiểm công nợ", "Ghi mức cọc mới vào đơn"], ["Hủy đơn", "Quyết số tiền hoàn lại cho khách"], ["Mua nguyên vật liệu", "Duyệt thêm PO trên ngưỡng 100 triệu"], ["Mua nguyên vật liệu", "Ghi nhận đã trả trước theo PO"], ["Mua nguyên vật liệu", "Ghi nhận đã trả NCC khoản trả sau"], ["Mua nguyên vật liệu", "Thêm nhu cầu mua NVL vào Hàng đợi mua (NC-…; nhu cầu theo lệnh SX và tồn tối thiểu do hệ thống tính, không qua Kế hoạch)"], ["Mua nguyên vật liệu", "Xem Hàng đợi mua (nhu cầu gộp theo NVL × kho nhận, sắp theo ngày cần)"], ["Mua nguyên vật liệu", "Bỏ qua nhu cầu trong hàng đợi (bắt buộc lý do)"], ["Mua nguyên vật liệu", "Lập PO từ Hàng đợi mua (cùng NCC gộp 1 PO)"], ["Mua nguyên vật liệu", "Theo dõi PO nhận một phần"], ["Mua nguyên vật liệu", "Duyệt PO"], ["Mua nguyên vật liệu", "Hủy PO đã duyệt (ghi lý do, báo NCC)"], ["Hồ sơ thu hồi", "Ký quyết định thu hồi / khoanh vùng"], ["Hồ sơ thu hồi", "Duyệt số tiền hoàn khi thu hồi"], ["Hồ sơ thu hồi", "Duyệt đóng hồ sơ thu hồi"], ["Hồ sơ thu hồi", "Đổi lô mới / đề nghị hoàn tiền"], ["Hồ sơ thu hồi", "Thông báo khách / đại lý theo danh sách truy xuất"], ["Hồ sơ thu hồi", "Mở hồ sơ thu hồi TH-… (chỉ vai trò này)"], ["Hồ sơ thu hồi", "Đánh giá rủi ro, đề xuất thu hồi / khoanh vùng"], ["Hồ sơ thu hồi", "Báo cơ quan quản lý"], ["Hồ sơ thu hồi", "Duyệt CAPA"], ["Hồ sơ thu hồi", "Truy xuất lô nghi lỗi"], ["Kế toán", "Xem mọi công nợ khách hàng, công nợ NCC, sổ thu chi"], ["Kế toán", "Nhắc nợ, ghi lần liên hệ"], ["Kế toán", "Xem công nợ, hạn mức, lịch sử thanh toán của khách"], ["Đơn hàng › Giao hàng", "Thêm hóa đơn vào đơn: số, ngày, file (một đơn nhiều hóa đơn)"], ["Đơn hàng › Giao hàng", "Ghi nhận tiền thu trước giao của yêu cầu xuất"], ["Đơn hàng › Giao hàng", "Yêu cầu xuất từ đơn: chọn dòng, SL giao lần này; sửa ngày giao dự kiến"], ["Đơn hàng › Giao hàng", "Phiếu xuất bán chờ bên yêu cầu: nhận phần đã lấy / hủy"], ["Đơn hàng › Giao hàng", "Hủy yêu cầu xuất chưa xuất, kể cả yêu cầu bị nhà máy trả về (bắt buộc lý do)"], ["Đơn hàng › Giao hàng", "Ghi nhận giao theo phiếu xuất: SL khách nhận từng lô, ngày nhận, ảnh biên bản"], ["Đơn hàng › Giao hàng", "Ghi khách còn lấy phần trả về hay không"], ["Đơn hàng › Giao hàng", "Nhận thông báo đơn Sẵn sàng giao, xem tab Giao hàng của đơn"], ["Kế toán · thu chi & công nợ", "Ghi nhận tiền về (bản ghi TC-…, ảnh chứng từ)"], ["Kế toán · thu chi & công nợ", "Ghi nhận hoàn tiền theo số GĐ / KTT đã quyết"], ["Kế toán · thu chi & công nợ", "Hủy bản ghi thu / chi nhập sai (bắt buộc lý do, không xóa)"], ["Kế toán · thu chi & công nợ", "Ghi kết quả công nợ quá 90 ngày"], ["Trả hàng NCC", "Ghi giảm trừ khoản phải trả NCC"], ["Trả hàng NCC", "Tạo phiếu trả hàng TH-NCC-…"], ["Trả hàng NCC", "Ghi kết quả NCC: chấp nhận / đổi 1-1 / giảm công nợ"], ["Trả hàng NCC", "Biên bản không thống nhất, kết quả tự giải quyết"], ["Trả hàng NCC", "Gửi yêu cầu xuất trả (Trưởng BP Mua hàng duyệt rồi mới sang kho)"], ["Trả hàng NCC", "Ký xác nhận, gửi giấy tờ cho kế toán"], ["Trả hàng NCC", "Duyệt / từ chối yêu cầu xuất trả NCC (từ chối bắt buộc lý do; người gửi không tự duyệt)"], ["Nhập kho", "Lưu hóa đơn, chứng từ, file đánh giá bên ngoài"], ["Nhập kho", "Phiếu báo lỗi NCR cho bao hư từ SX"], ["Nhập kho", "Báo NCC, tạo phiếu gửi NCC"], ["Nhập kho", "Nhận hàng mua: quét PO → phiếu nhập PN-… điền sẵn theo PO (phiếu nhập loại khác hệ thống tự sinh); hoàn tất nhận — khớp → Đã nhập, lệch → chờ Thủ kho trưởng xác nhận"], ["Nhập kho", "Từ chối ở cửa kho khi thiếu chứng từ"], ["Nhập kho", "Nhập số lô NCC, NSX, HSD, tải file đánh giá bên ngoài (mã lô nội bộ L-… sinh khi phiếu Đã nhập)"], ["Nhập kho", "Kiểm ngoại quan, bao hư, biên bản"], ["Nhập kho", "In / dán / quét tem từng bao"], ["Nhập kho", "Nhận thùng BTP về kho BTP theo phiếu nhập hệ thống tự sinh khi đóng thùng xong (quét tem dán sẵn lúc đóng thùng, không in tem mới)"], ["Nhập kho", "Xác nhận chênh lệch khi nhập (SL nhận khác dự kiến, có bao hư) — nhập theo SL thực, hoặc yêu cầu đếm lại (bắt buộc lý do); phiếu nhập khớp không qua duyệt"], ["Hủy hàng", "Ghi giá trị hàng hủy vào phiếu hủy (không hạch toán)"], ["Hủy hàng", "Tạo phiếu hủy PH-…"], ["Hủy hàng", "Thực hiện hủy, lập biên bản"], ["Hủy hàng", "Xác nhận phiếu hủy"], ["Hủy hàng", "Từ chối phiếu hủy / dời ngày hủy lô hết hạn"], ["Nhận đơn", "Tạo / cập nhật hồ sơ khách, nhập đơn"], ["Nhận đơn", "Hình thức thanh toán, % cọc, số ngày nợ"], ["Nhận đơn", "Tải hợp đồng khách hàng, chốt đơn"], ["Hủy / sửa đơn", "Ghi nhận yêu cầu hủy, lý do"], ["Hủy / sửa đơn", "Tạo phiên bản đơn mới, tải phụ lục"], ["Hủy / sửa đơn", "Hủy lệnh SX chưa chạy theo đơn hủy"], ["Hủy / sửa đơn", "Cập nhật lệnh SX theo đơn mới"], ["Xuất kho", "Yêu cầu xuất bán (phiếu xuất bán do máy chủ nhà máy tự lập)"], ["Xuất kho", "Phiếu Chờ bên yêu cầu: nhận phần đã lấy / hủy"], ["Xuất kho", "Phiếu xuất trả Chờ bên yêu cầu: nhận phần đã lấy / hủy"], ["Xuất kho", "Yêu cầu xuất cho kho khác"], ["Xuất kho", "Lấy hàng theo phiếu, quét từng bao"], ["Xuất kho", "Trả hàng đã lấy về lại kho khi hủy"], ["Xuất kho", "Lập phiếu xuất trả NCC theo yêu cầu đã được Trưởng BP Mua hàng duyệt — lập ra ở Chờ lấy hàng, không qua duyệt"], ["Xuất kho", "Lấy hàng theo phiếu xuất SX máy chủ nhà máy tự lập khi lệnh phát sang khu (từ NM1-DP, nơi nhận là khu của lệnh, lô FEFO còn hạn ≥ ngưỡng SX) — không lập tay, không qua duyệt"], ["Xuất kho", "Lấy hàng, quét từng bao"], ["Khách hàng", "Xem hồ sơ khách"], ["Danh mục sản phẩm", "Dòng sản phẩm · Quy cách đóng gói · Hạng · Thương hiệu: tạo / sửa, ngừng dùng trực tiếp"], ["Công thức", "Nhập / sửa công thức CT-{loại}-{4 số} (lưu phiên bản mới, không duyệt)"], ["Công thức", "Nhập / sửa công thức (lưu phiên bản mới, không duyệt)"], ["Công thức", "Xem công thức của lệnh khu mình"], ["Lệnh sản xuất", "Tạo lệnh theo 9 điều kiện, kế hoạch nhãn hiệu"], ["Lệnh sản xuất", "Phương án dàn silo (gợi ý, kéo thả)"], ["Lệnh sản xuất", "Bổ sung / từ chối khi chưa đủ điều kiện"], ["Lệnh sản xuất", "Đổi thứ tự hàng đợi phát lệnh"], ["Lệnh sản xuất", "Phát lệnh đầu hàng đợi"], ["Lệnh sản xuất", "Sửa lệnh Mới tạo"], ["Lệnh sản xuất", "Hủy lệnh chưa chạy (bắt buộc lý do)"], ["Lệnh sản xuất", "Kết thúc sớm lệnh đang chạy"], ["Lệnh sản xuất", "Kiểm tra lại NVL trên lệnh, cả lệnh Chờ NVL (đủ thì giữ chỗ; so tồn NM1-DP với KG giữ chỗ)"], ["Lệnh sản xuất", "Nhận báo phát lệnh không tới"], ["Lệnh sản xuất", "Xử lý xung đột ngoại tuyến (cùng QC)"], ["Tiến độ lệnh sản xuất", "Nhận báo lệnh chưa phát sang khu được (máy chủ nhà máy tự kiểm)"], ["Tiến độ lệnh sản xuất", "Quyết hủy mẻ do sự cố"], ["Tiến độ lệnh sản xuất", "Thêm 1 mẻ bù"], ["Tiến độ lệnh sản xuất", "Nhận hàng chuyển về NM1-DP theo đề nghị của lệnh (không xác nhận soạn NVL — Kế hoạch kiểm tra lại)"], ["Tiến độ lệnh sản xuất", "Nhận bột dư cuối lệnh theo phiếu nhập NVL dư hệ thống tự sinh"], ["Xuất kho / chuyển kho", "Tạo yêu cầu chuyển kho (mọi yêu cầu chuyển kho)"], ["Xuất kho / chuyển kho", "Phiếu chuyển kho Chờ bên yêu cầu: nhận phần đã lấy / hủy (xuất SX không qua bước này — phiếu tự lập khi lệnh phát sang khu)"], ["Xuất kho / chuyển kho", "Xử lý trễ, tìm hàng thiếu 7 ngày"], ["Xuất kho / chuyển kho", "Lập biên bản thất lạc BB-TL-…"], ["Chất lượng", "Gửi yêu cầu kiểm lô (YC-NM1-…)"], ["Chất lượng", "Tạo lệnh mới để bù đơn"], ["Nhà cung cấp", "Tìm NCC, tạo hồ sơ (Chờ duyệt)"], ["Nhà cung cấp", "Kiểm đủ hồ sơ pháp lý, chứng nhận còn hạn"], ["Nhà cung cấp", "Tìm NCC khác / báo không có NCC"], ["Nhà cung cấp", "Duyệt / từ chối nhà cung cấp"], ["Nhà cung cấp", "Ngừng dùng nhà cung cấp, ghi lý do"], ["Sự cố tem", "Hủy tem: khóa mã, thu tem"], ["Sự cố tem", "Tem hỏng: in lại cùng mã"], ["Sự cố tem", "Tem mất: cấp mã mới cùng lô"], ["Sự cố tem", "Tem lỗi báo từ khu SX: hủy / in lại / cấp mã mới"], ["Chuyển kho", "Xuất hàng, lập phiếu chuyển PC-…"], ["Chuyển kho", "Nhận hàng, quét, ký nhận"], ["Chuyển kho", "Biên bản chênh lệch khi nhận"], ["Chuyển kho", "Nhận hàng chuyển từ kho tổng (đề nghị PC-… do Lệnh SX lập), quét, ký nhận"], ["Chuyển kho", "Chọn hàng hư gửi QC hay hủy (kho nhận)"], ["Chuyển kho", "Xác nhận biên bản thất lạc"], ["Chuyển kho", "Chuyển hàng, truy vết chuyến xe"], ["Kiểm kho", "Đếm, đối chiếu, ghi chênh lệch"], ["Kiểm kho", "In báo cáo gửi các bên"], ["Kiểm kho", "Ra lệnh kiểm toàn kho"], ["Kiểm kho", "Duyệt điều chỉnh tồn"], ["Khác", "Kiểm xuất đủ, đúng lô của đơn"], ["Khác", "Kiểm tồn khả dụng"], ["Khác", "Gửi yêu cầu kiểm lô"], ["Khác", "Biên bản chênh lệch cân bằng khối lượng"], ["Khác", "Hủy mẫu lưu liên quan"], ["Khác", "Xử lý xung đột ngoại tuyến (cùng Kế hoạch)"], ["Khác", "Nguyên nhân gốc, CAPA"], ["Khác", "Xem công thức, theo dõi mẻ"], ["Vận hành mẻ", "Nhấn Start trên PC"], ["Vận hành mẻ", "Quét bao nạp silo, nạp bổ sung"], ["Vận hành mẻ", "Xác nhận silo xả sạch giữa lệnh"], ["Vận hành mẻ", "Bù / bớt bột tới đúng khối lượng"], ["Vận hành mẻ", "Dán QR bao hỗn hợp"], ["Vận hành mẻ", "Báo sự cố không khắc phục được"], ["Vận hành mẻ", "Xả bột dư cuối lệnh, dán QR"], ["Chiết rót & đóng gói", "Quét lon đầu từng nhãn hiệu"], ["Chiết rót & đóng gói", "Loại lon lệch khối lượng"], ["Chiết rót & đóng gói", "Đếm lại thùng thiếu, sửa số lon"], ["Chiết rót & đóng gói", "Dán QR thùng"], ["QC đầu vào", "Lấy 2 mẫu"], ["QC đầu vào", "Tải file đánh giá bên ngoài, đề xuất kết luận"], ["QC đầu vào", "Duyệt / từ chối yêu cầu kiểm"], ["QC đầu vào", "Duyệt kết luận"], ["QC đầu vào", "Mở lại lô NVL Không đạt"], ["QC thành phẩm", "Lấy 2 mẫu"], ["QC thành phẩm", "Tải file đánh giá bên ngoài, đề xuất kết luận"], ["QC thành phẩm", "Duyệt / từ chối / yêu cầu bổ sung"], ["QC thành phẩm", "Duyệt kết luận (BTP → TP)"], ["QC thành phẩm", "Báo Kế hoạch, Kho"], ["Mẫu lưu", "Lấy mẫu, tạo mã mẫu lưu ML-…"], ["Mẫu lưu", "Niêm phong, lưu kho QC"], ["Mẫu lưu", "Thời hạn lưu, điều kiện bảo quản"], ["Mẫu lưu", "Tự hủy mẫu hết hạn, biên bản BB-ML-…"], ["Phiếu chứng nhận", "Ký phiếu chứng nhận chất lượng CN-…"], ["Truy xuất", "Tạo phiếu TX-…, chạy truy xuất ngược / xuôi, xuất báo cáo"]];
+const ND_BASE = {"Admin": [0, 1, 2, 3, 9, 10, 11, 12, 13], "HR": [4, 5, 6, 7, 8], "Giám đốc": [21, 22, 31, 32, 42, 43, 44], "Kế toán trưởng": [23, 24, 31, 43, 52], "Kế toán": [25, 26, 27, 33, 34, 55, 56, 63, 64, 65, 66, 67, 74, 84], "Sales": [28, 29, 30, 45, 53, 54, 57, 58, 59, 60, 61, 89, 90, 91, 92, 93, 96, 97], "CSKH": [46, 105], "Kế hoạch": [14, 15, 16, 35, 62, 75, 94, 95, 106, 107, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 126, 127, 128, 129, 130, 131], "R&D": [108], "Mua hàng": [14, 16, 17, 36, 37, 38, 39, 68, 69, 70, 71, 72, 76, 98, 132, 133, 134], "Trưởng BP Mua hàng": [18, 40, 41, 73, 135, 136], "Thủ kho": [14, 16, 17, 77, 78, 79, 80, 81, 82, 85, 86, 99, 100, 101, 102, 137, 138, 139, 141, 142, 143, 148, 149, 152, 153, 154, 155], "Thủ kho điều phối": [103, 104, 124, 125, 140, 143, 144], "Thủ kho trưởng": [19, 83, 87, 88, 145, 146, 150, 151], "Vận chuyển": [147], "Công nhân": [109, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170], "QC": [14, 16, 17, 156, 157, 158, 159, 171, 172, 176, 177, 181, 182, 183, 184], "QC trưởng": [20, 47, 48, 49, 50, 173, 174, 175, 178, 179, 180, 185], "Người truy xuất": [51, 186]};
+// Nhật ký dùng chung (chốt 23/10)
+const MPLOG = {
+Y: '2026',
+full(t) { t = String(t || '').trim(); const m = t.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?(?:,?\s+(\d{1,2}):(\d{2}))?$/); if (!m) return t; return m[1].padStart(2, '0') + '/' + m[2].padStart(2, '0') + '/' + (m[3] || this.Y) + (m[4] ? ' ' + m[4].padStart(2, '0') + ':' + m[5] : ''); },
+key(t) { const m = String(t || '').match(/^(\d{2})\/(\d{2})\/(\d{4})(?: (\d{2}):(\d{2}))?/); return m ? m[3] + m[2] + m[1] + (m[4] || '00') + (m[5] || '00') : '99999999999999'; },
+kind(what, cls) { const w = String(what || ''); if (/^đang chờ/i.test(w)) return ''; if (/mở khóa/i.test(w)) return 'key'; if (/hủy|từ chối|khóa|lỗi|không đạt|quá hạn|thu hồi|xung đột|thiếu|hỏng|mất/i.test(w) || /is-bad/.test(cls || '')) return 'bad'; if (/duyệt|chốt|ký|đạt|hoàn thành|kích hoạt|phát lệnh|→/i.test(w) || /is-key/.test(cls || '')) return 'key'; return ''; },
+view(list, o) { o = o || {}; const lim0 = o.limit || 5;
+const items = (list || []).map((x, i) => ({ who: x.who || '', role: x.role || '', what: x.what || '', at: this.full(x.at), cls: x.cls || '', i: i }));
+items.sort((a, b) => { const ka = this.key(a.at), kb = this.key(b.at); if (ka === kb) return b.i - a.i; return ka < kb ? 1 : -1; });
+const n = items.length; const lim = o.all ? n : lim0;
+const shown = items.slice(0, lim).map((x) => { const k = this.kind(x.what, x.cls); const sys = /^hệ thống$/i.test(x.who); return { who: x.who, hasWho: !!x.who, role: x.role, hasRole: !!x.role, what: x.what, at: x.at, cls: ((k ? 'is-' + k : '') + (sys ? ' is-sys' : '')).trim() }; });
+return { title: o.title || 'Nhật ký', items: shown, count: String(n), has: n > 0, empty: n === 0, hasMore: n > lim0, moreT: o.all ? 'Thu gọn' : 'Xem tất cả (' + n + ')', toggle: o.toggle || (() => {}), hasLink: !!(o.link && o.link.ok), link: o.link || { href: '#', open: () => {} } }; }
+};
+// Phân trang dùng chung: MPPG(this, 'khóa-bảng', mảngĐãLọc, { sig: chuỗi-bộ-lọc }) → { items, show, info, nums, prev, next, atFirst, atLast, size, setSize }
+function MPPG(self, key, list, opt) {
+  opt = opt || {}; list = list || [];
+  const all = self.state.__pg || {}; const cur = all[key] || {};
+  const size = cur.size || opt.size || 10; const n = list.length;
+  const pages = Math.max(1, Math.ceil(n / size));
+  const sig = String(opt.sig !== undefined ? opt.sig : '') + '#' + n;
+  let p = cur.sig === sig ? (cur.p || 1) : 1; if (p > pages) p = pages;
+  const set = (np, ns) => { const a = Object.assign({}, self.state.__pg || {}); a[key] = { p: np, size: ns || size, sig: sig }; self.setState({ __pg: a }); };
+  const from = (p - 1) * size; const nums = [];
+  const push = (i) => nums.push({ t: String(i), btn: true, gap: false, cur: i === p ? 'page' : 'false', cls: i === p ? 'mp-pg__n is-on' : 'mp-pg__n', aria: 'Trang ' + i, go: () => set(i) });
+  const gap = () => nums.push({ t: '…', btn: false, gap: true, cur: 'false', cls: '', aria: '', go: () => {} });
+  if (pages <= 7) { for (let i = 1; i <= pages; i++) push(i); }
+  else { let a = Math.max(2, p - 1), b = Math.min(pages - 1, p + 1); if (p <= 3) { a = 2; b = 4; } if (p >= pages - 2) { a = pages - 3; b = pages - 1; } push(1); if (a > 2) gap(); for (let i = a; i <= b; i++) push(i); if (b < pages - 1) gap(); push(pages); }
+  return { items: list.slice(from, from + size), show: n > 10, info: (n ? from + 1 : 0) + '–' + Math.min(from + size, n) + ' / ' + n, nums: nums,
+    atFirst: p <= 1, atLast: p >= pages, prev: () => { if (p > 1) set(p - 1); }, next: () => { if (p < pages) set(p + 1); },
+    size: String(size), setSize: (ev) => set(1, +(ev && ev.target ? ev.target.value : 10) || 10) };
+}
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+const it = MPX.take('NguoiDung');
+this.state = { role: (it && it.r) || props.vaitro || 'Admin', picked: 'NV0045', drawer: true, q: '', dept: '', frole: '', st: '', ffac: '', dlg: null, nf: null, pr: null, pq: '', lk: '', lkRs: '', lkMode: 'nghi', lkTried: false, patch: {}, extra: [], removed: [], toast: '', miss: '' };
+const cd = props.cheDo || '';
+if (cd === 'Tạo tài khoản') { this.state.dlg = 'create'; this.state.nf = { code: 'NV0563', name: 'Trịnh Thị Hoa', title: '', dept: 'Sản xuất', email: '', phone: '0903 105 630', badge: 'TNV-0563', since: '01/11/2026', fac: 'NM2', area: 'NM2-KBTP1', vrole: 'Công nhân' }; this.state.drawer = false; }
+if (cd === 'Sửa — đổi nhà máy') { this.state.picked = 'NV0164'; this.state.dlg = 'edit'; this.state.nf = { name: 'Võ Thị Lan', title: 'Nhân viên kinh doanh', dept: 'Kinh doanh', email: 'lan.vt@nhamay.vn', phone: '0903 101 640', badge: '', since: '02/03/2024', fac: 'NM2', area: '' }; }
+if (cd === 'Xóa tài khoản') { this.state.picked = 'NV0562'; this.state.dlg = 'del'; }
+if (cd === 'Phân quyền từng người') { const b = ND_BASE['Sales']; this.state.picked = 'NV0188'; this.state.dlg = 'perm'; this.state.pr = { role: 'Sales', on: b.slice(1).concat(ND_BASE['CSKH'].filter((i) => b.indexOf(i) < 0)) }; }
+if (it && it.id) {
+const id = String(it.id).trim();
+const u = ND_USERS.find((x) => x.code === id || x.name === id);
+if (u) this.state.picked = u.code; else this.state.miss = id;
+}
+}
+renderVals() {
+const s = this.state; const role = s.role; const setRole = (r) => this.setState({ role: r });
+const qtTabs = { tabNguoiDung: () => MPX.go('NguoiDung', '', role), tabVaiTroQuyen: () => MPX.go('VaiTroQuyen', '', role), tabUyQuyen: () => MPX.go('UyQuyen', '', role), tabNk: () => MPX.go('NhatKy-n5jd', 'tab:tk', role) };
+const all = ND_USERS.concat(s.extra).filter((u) => s.removed.indexOf(u.code) < 0).map((u) => Object.assign({}, u, s.patch[u.code] || {}));
+const selfCode = role === 'HR' ? 'NV0008' : role === 'Admin' ? 'NV0001' : '';
+const R = (r) => ({ name: r[2] ? r[0] + ' · tạm' : r[0], scopeText: r[1], cls: r[2] ? 'role-chip is-temp' : 'role-chip', isTemp: !!r[2], openUq: () => MPX.go('UyQuyen', 'NV0045', role) });
+const statusCls = { 'Hoạt động': 'mp-doc mp-doc--ok', 'Khóa tạm': 'mp-doc mp-doc--wait', 'Đã khóa': 'mp-doc mp-doc--void' };
+const ALLD = 'Tất cả bộ phận', ALLR = 'Mọi vai trò', ALLS = 'Mọi trạng thái';
+const ql = s.q.trim().toLowerCase();
+const shown = all.filter((u) => (!ql || [u.code, u.name, u.email, u.phone, u.badge].join(' ').toLowerCase().indexOf(ql) >= 0)
+&& (!s.dept || s.dept === ALLD || u.dept === s.dept)
+&& (!s.frole || s.frole === ALLR || u.roles.some((r) => r[0] === s.frole))
+&& (!s.st || s.st === ALLS || u.status === s.st)
+&& (!s.ffac || (s.ffac === '*' ? !ndFac(u) : ndFac(u) === s.ffac)));
+const users = shown.map((u) => Object.assign({}, u, {
+roles: u.roles.map(R), facT: ndFacT(ndFac(u)), areaT: u.area || '', hasAreaT: !!u.area, scope: u.sc || (u.roles.length ? u.roles[0][1].replace('Khu vực làm việc: k', 'K') : '—'),
+statusCls: statusCls[u.status], hasNote: !!u.note, hasLoginBy: !!u.loginBy,
+rowClass: 'user-row' + (u.code === s.picked ? ' is-selected' : ''),
+pick: () => this.setState({ picked: u.code, miss: '', drawer: true, logAll: false })
+}));
+const pgU = MPPG(this, 'nd-users', users, { sig: [s.q, s.dept, s.frole, s.st, s.ffac].join('|') });
+const s0 = all.find((u) => u.code === s.picked) || all[0];
+const isSelf = s0.code === selfCode;
+const locked = s0.status === 'Đã khóa';
+const logNames = all.map((u) => u.name).concat(Object.keys(MPX.people).map((r) => MPX.people[r][0])).filter((n, i, a) => n && a.indexOf(n) === i).sort((x, y) => y.length - x.length);
+const logRole = (n) => { const rs = Object.keys(MPX.people).filter((r) => MPX.people[r][0] === n); return rs.length === 1 ? rs[0] : ''; };
+const logRow = (l) => { let t = String(l.text || ''); let who = '', rl = '';
+if (/^Hệ thống /.test(t)) return { who: 'Hệ thống', what: t.replace(/^Hệ thống /, ''), at: l.at };
+const pm = t.match(/^(Admin|HR) (.*)$/); if (pm) { rl = pm[1]; t = pm[2]; }
+const n = logNames.find((x) => t.indexOf(x + ' ') === 0);
+if (n) { who = n; t = t.slice(n.length + 1); const rm = t.match(/^\(([^)]+)\) (.*)$/); if (rm) { rl = rm[1]; t = rm[2]; } if (!rl) rl = logRole(n); }
+else if (rl) { who = rl; rl = ''; }
+return { who: who, role: rl, what: t, at: l.at }; };
+const baseOf = (rs) => { const o = []; rs.forEach((n) => (ND_BASE[n] || []).forEach((i) => { if (o.indexOf(i) < 0) o.push(i); })); return o; };
+const permOf = (u) => u.perm || baseOf(u.roles.filter((r) => !r[2]).map((r) => r[0]));
+const permDiff = (on, base) => ({ add: on.filter((i) => base.indexOf(i) < 0).length, del: base.filter((i) => on.indexOf(i) < 0).length });
+const permText = (on, base, rn) => { const d = permDiff(on, base); return on.length + ' quyền · ' + (d.add || d.del ? 'so với vai trò ' + rn + ': thêm ' + d.add + ', bỏ ' + d.del : 'đúng bộ quyền gốc của vai trò ' + rn); };
+const sel = Object.assign({}, s0, {
+roles: s0.roles.map(R), permT: permText(permOf(s0), baseOf(s0.roles.filter((r) => !r[2]).map((r) => r[0])), s0.roles.filter((r) => !r[2]).map((r) => r[0]).join(', ') || '—'), statusCls: statusCls[s0.status], isSelf: isSelf, hasLock: !!s0.lockDate && !locked, hasNote: !!s0.note,
+phoneT: s0.phone || '—', badgeT: s0.badge || '—', hasResign: !!s0.resign, resign: s0.resign || '', lockDate: s0.lockDate || '—',
+loginMethod: s0.login === 'pc' ? 'Quét thẻ NV ở PC xưởng' : 'Mã NV + mật khẩu (web)',
+
+facT: ndFacT(ndFac(s0)), areaShow: s0.area || '—', hasArea: !!s0.areaId, areaTxt: !!s0.area && !s0.areaId, noArea: !s0.area, area: s0.area || '', areaRef: MPX.ref(s0.areaId || '', role, 'KhuVuc'),
+lockWhy: s0.lockWhy || (s0.status === 'Khóa tạm' ? 'Khóa tạm' : '—'),
+log: MPLOG.view((s0.log || []).map(logRow), { all: !!s.logAll, toggle: () => this.setState({ logAll: !this.state.logAll }), link: MPX.ref(s0.code, role, 'NhatKy-n5jd') })
+});
+const MANAGE = ['HR', 'Admin'];
+const holdsAdminOnly = s0.roles.some((r) => r[0] === 'Admin' || r[0] === 'Người truy xuất');
+const gm = MPX.gate(role, MANAGE, setRole, 'HR / Admin quản lý tài khoản');
+const rolesAllowed = holdsAdminOnly ? ['Admin'] : MANAGE;
+const a = {
+canCreate: !gm, gCreate: gm, openCreate: () => this.setState({ dlg: 'create', nfTried: false, pr: null, pq: '', pgrp: '', drawer: false, nf: { code: '', name: 'Trịnh Thị Hoa', title: '', dept: 'Sản xuất', email: '', phone: '', badge: '', since: ND_TODAY, fac: 'NM1', area: 'NM1-CR1', vrole: 'Công nhân' } }),
+canRoles: !isSelf && !locked && MPX.can(role, rolesAllowed), gRoles: (!isSelf && !locked) ? MPX.gate(role, rolesAllowed, setRole, holdsAdminOnly ? 'tài khoản giữ vai trò chỉ Admin gán' : '') : null,
+openPerm: () => { const r0 = s0.roles.find((r) => !r[2]); this.setState({ dlg: 'perm', pq: '', pgrp: '', pr: { role: r0 ? r0[0] : '', on: permOf(s0).slice() } }); },
+canEdit: !gm && !locked, openEdit: () => this.setState({ dlg: 'edit', nfTried: false, nf: { name: s0.name, title: s0.title, dept: s0.dept, email: s0.email === '—' ? '' : s0.email, phone: s0.phone || '', badge: s0.badge || '', since: s0.since || '', fac: ndFac(s0), area: s0.areaId || '' } }),
+canDel: !gm && !isSelf, openDel: () => this.setState({ dlg: 'del' }),
+canLock: role === 'HR' && !locked, gLock: !gm && !locked && role !== 'HR' ? MPX.gate(role, ['HR'], setRole) : null,
+openLock: () => { const rs0 = s0.resign || '31/10/2026'; const lk0 = s0.lockDate || rs0; this.setState({ dlg: 'lock', lkTried: false, lkRs: rs0, lk: lk0, lkMode: lk0 === rs0 ? 'nghi' : 'khac' }); },
+canDeleg: !gm && !locked && !isSelf, goDeleg: () => MPX.go('UyQuyen', s0.code, role),
+canUnlock: role === 'Admin' && s0.status === 'Khóa tạm', openUnlock: () => this.setState({ dlg: 'unlock' }), gUnlock: s0.status === 'Khóa tạm' ? MPX.gate(role, ['Admin'], setRole, 'xác minh, mở khóa, mật khẩu tạm') : null,
+gManage: s0.status !== 'Khóa tạm' && !locked ? gm : null
+};
+const addLog = (code, text) => { const cur = (s.patch[code] && s.patch[code].log) || (all.find((u) => u.code === code) || {}).log || []; return [{ text: text, at: '18/10/2026 ' + ['10:4', '10:5', '11:0'][cur.length % 3] + String(cur.length % 10) }].concat(cur); };
+const patchUser = (code, p, msg) => { const o = Object.assign({}, s.patch); o[code] = Object.assign({}, s.patch[code] || {}, p); this.setState({ patch: o, dlg: null, toast: msg }); };
+const who = MPX.name(role);
+const DEPT_TITLES = { 'Ban giám đốc': ['Giám đốc'], 'CNTT': ['Quản trị hệ thống'], 'Nhân sự': ['Chuyên viên nhân sự', 'Trưởng phòng nhân sự'], 'Kế toán': ['Kế toán', 'Kế toán trưởng'], 'Kinh doanh': ['Nhân viên kinh doanh', 'Chăm sóc khách hàng', 'Trưởng phòng kinh doanh'], 'Kế hoạch': ['Nhân viên kế hoạch', 'Trưởng phòng kế hoạch'], 'Mua hàng': ['Nhân viên mua hàng', 'Trưởng phòng mua hàng'], 'R&D': ['Chuyên viên nghiên cứu công thức'], 'Kho': ['Thủ kho', 'Thủ kho kho điều phối', 'Thủ kho trưởng NM1', 'Thủ kho trưởng NM2', 'Nhân viên vận chuyển'], 'QC': ['Nhân viên QC', 'QC trưởng'], 'Sản xuất': ['Công nhân', 'Công nhân đóng gói', 'Quản đốc sản xuất'] };
+const deptOfTitle = (t) => Object.keys(DEPT_TITLES).find((d) => DEPT_TITLES[d].indexOf(t) >= 0) || '';
+const TITLES = { 'Công nhân': ['Công nhân'], 'Công nhân đóng gói': ['Công nhân'], 'Thủ kho': ['Thủ kho'], 'Thủ kho kho điều phối': ['Thủ kho điều phối'], 'Nhân viên QC': ['QC'], 'Nhân viên kế hoạch': ['Kế hoạch'], 'Nhân viên kinh doanh': ['Sales'], 'Nhân viên mua hàng': ['Mua hàng'], 'Kế toán': ['Kế toán'] };
+const nf0 = Object.assign({ code: '', phone: '', badge: '', since: '', fac: '', area: '' }, s.nf || { name: '', title: 'Công nhân', dept: 'Sản xuất', email: '' });
+const DEPT_ROLES = { 'Ban giám đốc': ['Giám đốc'], 'CNTT': ['Admin', 'Người truy xuất'], 'Nhân sự': ['HR'], 'Kế toán': ['Kế toán', 'Kế toán trưởng'], 'Kinh doanh': ['Sales', 'CSKH'], 'Kế hoạch': ['Kế hoạch'], 'Mua hàng': ['Mua hàng', 'Trưởng BP Mua hàng'], 'R&D': ['R&D'], 'Kho': ['Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển'], 'QC': ['QC', 'QC trưởng', 'Người truy xuất'], 'Sản xuất': ['Công nhân'] };
+const isWorker = s.dlg === 'create' ? nf0.vrole === 'Công nhân' : nf0.title.indexOf('Công nhân') === 0;
+const setNf = (k) => (ev) => { const o = Object.assign({}, nf0); const v = ev && ev.target ? ev.target.value : ''; o[k] = v;
+if (k === 'dept' && o.title && (DEPT_TITLES[v] || []).indexOf(o.title) < 0) o.title = '';
+if (k === 'dept' && s.dlg === 'create') { const rs = DEPT_ROLES[v] || []; if (rs.indexOf(o.vrole) < 0) o.vrole = rs.length === 1 ? rs[0] : ''; }
+if (k === 'title' && v) { const d = deptOfTitle(v); if (d) o.dept = d; if (!o.vrole) o.vrole = (TITLES[v] || [])[0] || ''; }
+if (k === 'fac' && (o.area || '').slice(0, 3) !== v) o.area = '';
+this.setState({ nf: o }); };
+const facBad = isWorker && !nf0.fac; const areaBad = isWorker && !nf0.area;
+const isCreate = s.dlg === 'create';
+const others = all.filter((u) => isCreate || u.code !== s0.code);
+const dupOf = (k, v) => { const t = String(v || '').trim().toLowerCase().replace(/\s+/g, ''); if (!t || t === '—') return null; return others.find((u) => String(u[k] || '').toLowerCase().replace(/\s+/g, '') === t) || null; };
+const dupMsg = (lbl, u) => (u ? lbl + ' đã dùng cho ' + u.code + ' · ' + u.name + '.' : '');
+const dCode = isCreate ? dupOf('code', nf0.code) : null, dEmail = dupOf('email', nf0.email), dPhone = dupOf('phone', nf0.phone), dBadge = dupOf('badge', nf0.badge);
+const codeBad = isCreate && (!nf0.code.trim() || !!dCode); const badgeMiss = isWorker && !nf0.badge.trim(); const sinceBad = !ND_DATE.test(nf0.since.trim());
+const vroleBad = isCreate && !nf0.vrole; const vroleErrOn = vroleBad && !!s.nfTried;
+const codeErrOn = !!dCode || (codeBad && !!s.nfTried); const badgeErrOn = !!dBadge || (badgeMiss && !!s.nfTried); const sinceErrOn = sinceBad && !!s.nfTried;
+const nf = Object.assign({}, nf0, {
+isEdit: s.dlg === 'edit', isCreate: isCreate, code: s.dlg === 'edit' ? s0.code : nf0.code, codeNote: s.dlg === 'edit' ? 'không đổi' : '',
+codeCls: codeErrOn ? 'mp-input err' : 'mp-input', hasCodeErr: codeErrOn, noCodeErr: !codeErrOn, codeErr: dCode ? dupMsg('Mã NV', dCode) : 'Nhập mã NV.',
+emailCls: dEmail ? 'mp-input err' : 'mp-input', hasEmailErr: !!dEmail, emailErr: dupMsg('Email', dEmail),
+phoneCls: dPhone ? 'mp-input err' : 'mp-input', hasPhoneErr: !!dPhone, phoneErr: dupMsg('SĐT', dPhone),
+badgeReq: isWorker, badgeCls: badgeErrOn ? 'mp-input err' : 'mp-input', hasBadgeErr: badgeErrOn, noBadgeErr: !badgeErrOn, badgeErr: dBadge ? dupMsg('Mã thẻ', dBadge) : 'Công nhân phải có mã thẻ NV để đăng nhập PC xưởng.',
+badgeHint: isWorker ? 'Bắt buộc với công nhân — nhập tay mã in trên thẻ, không quét' : 'Không bắt buộc — nhập tay mã in trên thẻ, không quét',
+sinceCls: sinceErrOn ? 'mp-input err' : 'mp-input', hasSinceErr: sinceErrOn,
+titleOpts: nf0.dept ? (DEPT_TITLES[nf0.dept] || []).map((t) => ({ v: t, t: t })) : Object.keys(DEPT_TITLES).reduce((a, d) => a.concat(DEPT_TITLES[d].map((t) => ({ v: t, t: t + ' · ' + d }))), []),
+titlePh: nf0.dept ? 'Chọn chức danh của ' + nf0.dept + '…' : 'Chọn chức danh (tự điền bộ phận)…', titleHint: nf0.dept ? (DEPT_TITLES[nf0.dept] || []).length + ' chức danh thuộc ' + nf0.dept : 'Chọn chức danh trước thì bộ phận được điền tự động.',
+deptOpts: Object.keys(DEPT_TITLES), deptCls: s.nfTried && !nf0.dept ? 'mp-input err' : 'mp-input', titleCls: s.nfTried && !nf0.title ? 'mp-input err' : 'mp-input', hasDeptErr: !!s.nfTried && !nf0.dept, hasTitleErr: !!s.nfTried && !nf0.title,
+isWorker: isWorker, fac: nf0.fac, setFac: setNf('fac'), facOpts: [{ v: '', t: 'Mọi nhà máy (văn phòng công ty)' }].concat(ND_FAC.map((x) => ({ v: x[0], t: x[1] }))),
+facCls: facBad && s.nfTried ? 'mp-input err' : 'mp-input', hasFacErr: facBad && !!s.nfTried, noFacErr: !(facBad && s.nfTried), facErr: 'Công nhân phải thuộc một nhà máy cụ thể.', facHint: nf0.fac ? 'Chứng từ, kho, lệnh SX lọc theo nhà máy này' : 'Thấy dữ liệu mọi nhà máy (tùy quyền vai trò) · NM3 ngừng hoạt động, không gán',
+areaOpts: (ND_AREAS[nf0.fac] || []).map((x) => ({ v: x[0], t: x[1] })), areaOff: !nf0.fac, areaReq: isWorker, areaPh: nf0.fac ? (isWorker ? 'Chọn khu…' : 'Không gắn khu') : 'Chọn nhà máy trước', areaCls: areaBad && s.nfTried ? 'mp-input err' : 'mp-input', hasAreaErr: areaBad && !!s.nfTried, noAreaErr: !(areaBad && s.nfTried),
+areaHint: isWorker ? 'Công nhân chỉ đăng nhập PC xưởng của khu này' : 'Không bắt buộc — gắn khi người này làm tại xưởng',
+
+vrole: nf0.vrole || '', setVrole: setNf('vrole'), vroleOff: !nf0.dept, vrolePh: nf0.dept ? 'Chọn vai trò…' : 'Chọn bộ phận trước',
+roleOpts: (DEPT_ROLES[nf0.dept] || []).filter((n) => role === 'Admin' || (n !== 'Admin' && n !== 'Người truy xuất')).map((n) => ({ v: n, t: n + ' · ' + (ND_BASE[n] || []).length + ' quyền gốc' })), vroleCls: vroleErrOn ? 'mp-input err' : 'mp-input', hasVroleErr: vroleErrOn, noVroleErr: !vroleErrOn,
+setCode: setNf('code'), setPhone: setNf('phone'), setBadge: setNf('badge'), setSince: setNf('since'), setName: setNf('name'), setTitle: setNf('title'), setDept: setNf('dept'), setEmail: setNf('email'), setArea: setNf('area')
+});
+const formBad = vroleBad || !nf0.name.trim() || !nf0.dept || (!isCreate && !nf0.title) || facBad || areaBad || codeBad || badgeMiss || sinceBad || !!dEmail || !!dPhone || !!dBadge;
+const pr0 = s.dlg === 'create' ? (s.pr && s.pr.role === nf0.vrole ? s.pr : { role: nf0.vrole || '', on: baseOf([nf0.vrole]), isNew: true }) : (s.pr || { role: '', on: [] }); const pBase = baseOf([pr0.role]); const pql = String(s.pq || '').trim().toLowerCase();
+const setPr = (p) => this.setState({ pr: Object.assign({}, pr0, p) });
+const pGroups = []; ND_PERMS.forEach((p, i) => { if (pql && (p[0] + ' ' + p[1]).toLowerCase().indexOf(pql) < 0) return; let g = pGroups[pGroups.length - 1]; if (!g || g.proc !== p[0]) { g = { proc: p[0], ids: [] }; pGroups.push(g); } g.ids.push(i); });
+const pHas = (g) => (g.ids.some((i) => pBase.indexOf(i) >= 0) ? 1 : 0); pGroups.sort((x, y) => pHas(y) - pHas(x)); // nhóm có quyền gốc lên đầu; không xếp theo quyền đang tick để nhóm không nhảy chỗ
+const pCur = pGroups.find((g) => g.proc === s.pgrp) || pGroups[0];
+const pm = { isNew: s.dlg === 'create', notNew: s.dlg !== 'create', who: pr0.isNew ? nf0.name + ' · ' + nf0.code + ' (tạo mới)' : s0.name + ' · ' + s0.code, role: pr0.role, q: s.pq || '', setQ: (ev) => this.setState({ pq: ev.target.value }),
+roleOpts: ND_ROLES_ALL.filter((n) => role === 'Admin' || (n !== 'Admin' && n !== 'Người truy xuất')).map((n) => ({ v: n, t: n + ' · ' + (ND_BASE[n] || []).length + ' quyền gốc' })),
+setRole: (ev) => { const v = ev.target.value; setPr({ role: v, on: baseOf([v]) }); },
+reset: () => setPr({ on: pBase.slice() }),
+sum: 'Đang tick ' + permText(pr0.on, pBase, pr0.role || '—'), none: pGroups.length === 0,
+groups: pGroups.map((g) => { const allOn = g.ids.every((i) => pr0.on.indexOf(i) >= 0); const nOn = g.ids.filter((i) => pr0.on.indexOf(i) >= 0).length;
+return { proc: g.proc, n: nOn + '/' + g.ids.length, on: g === pCur, cls: 'pm-side__i' + (g === pCur ? ' on' : '') + (nOn ? ' has' : ''), pick: () => this.setState({ pgrp: g.proc }), togT: allOn ? 'Bỏ cả nhóm' : 'Chọn cả nhóm',
+togAll: () => { const cur = pr0.on; setPr({ on: allOn ? cur.filter((i) => g.ids.indexOf(i) < 0) : cur.concat(g.ids.filter((i) => cur.indexOf(i) < 0)) }); },
+rows: g.ids.map((i) => { const on = pr0.on.indexOf(i) >= 0; const inBase = pBase.indexOf(i) >= 0; const tag = on && !inBase ? 'thêm' : !on && inBase ? 'bỏ' : '';
+return { step: ND_PERMS[i][1], on: on, hasTag: !!tag, tag: tag, tagCls: tag === 'thêm' ? 'mp-doc mp-doc--ok' : 'mp-doc mp-doc--void',
+tog: () => { const cur = pr0.on; setPr({ on: on ? cur.filter((x) => x !== i) : cur.concat([i]) }); } }; }) }; }) };
+pm.cur = pm.groups.find((g) => g.on) || null; pm.hasCur = !!pm.cur;
+const DLG = { del: 'Xóa tài khoản · ' + s0.name, create: 'Tạo tài khoản', edit: 'Sửa thông tin · ' + s0.name, perm: 'Phân quyền · ' + s0.name, lock: 'Đặt ngày khóa · ' + s0.name, unlock: 'Mở khóa / cấp mật khẩu tạm' };
+const lkRs = String(s.lkRs || '').trim(); const lkDate = s.lkMode === 'ngay' ? ND_TODAY : s.lkMode === 'nghi' ? lkRs : String(s.lk || '').trim();
+const lkRsBad = !ND_DATE.test(lkRs); const lkDateBad = s.lkMode === 'khac' && !ND_DATE.test(lkDate); const lkBad = lkRsBad || lkDateBad;
+const lkRsErr = lkRsBad && !!s.lkTried; const lkDateErr = lkDateBad && !!s.lkTried;
+const save = () => {
+if (s.dlg === 'create') { if (formBad) { this.setState({ nfTried: true }); return; } const code = nf0.code.trim(); const d = permDiff(pr0.on, pBase); const u = { code: code, name: nf0.name, title: pr0.role, dept: nf0.dept, status: 'Hoạt động', email: nf0.email || '—', phone: nf0.phone.trim(), badge: nf0.badge.trim(), login: isWorker ? 'pc' : 'web', since: nf0.since.trim(), fac: nf0.fac, area: ndArea(nf0.area), areaId: nf0.area || '', lastLogin: '—', loginBy: '', roles: [[pr0.role, isWorker ? 'Khu vực làm việc: ' + ndLc(ndArea(nf0.area)) : (nf0.fac ? 'Nhà máy ' + nf0.fac : 'Mọi nhà máy'), false]], perm: pr0.on.slice(), log: [{ text: who + ' tạo tài khoản ở ' + ndFacT(nf0.fac) + (nf0.area ? ' · ' + ndArea(nf0.area) : '') + ', vai trò ' + pr0.role + ' · ' + pr0.on.length + ' quyền (thêm ' + d.add + ', bỏ ' + d.del + ')', at: '29/10/2026 10:40' }] };
+this.setState({ extra: s.extra.concat([u]), picked: code, logAll: false, dlg: null, nf: null, pr: null, drawer: true, q: '', dept: '', frole: '', st: '', toast: 'Đã tạo tài khoản ' + code + ' · ' + nf0.name + ' — ' + pr0.on.length + ' quyền. Lần đăng nhập đầu phải đổi mật khẩu.' }); return; }
+if (s.dlg === 'edit') { if (formBad) { this.setState({ nfTried: true }); return; } const f0 = ndFac(s0); const movedF = f0 !== nf0.fac; const an = ndArea(nf0.area);
+const nr = s0.roles.map((r) => /^Nhà máy NM\d$/.test(r[1]) && movedF ? [r[0], nf0.fac ? 'Nhà máy ' + nf0.fac : 'Mọi nhà máy', r[2]] : /^Khu vực làm việc/.test(r[1]) && an ? [r[0], 'Khu vực làm việc: ' + ndLc(an), r[2]] : r);
+const what = movedF || (s0.areaId || '') !== nf0.area ? 'đổi nơi làm việc: ' + ndFacT(f0) + (s0.area ? ' · ' + s0.area : '') + ' → ' + ndFacT(nf0.fac) + (an ? ' · ' + an : '') : 'sửa thông tin tài khoản';
+patchUser(s0.code, { name: nf0.name, title: nf0.title, dept: nf0.dept, email: nf0.email || '—', phone: nf0.phone.trim(), badge: nf0.badge.trim(), since: nf0.since.trim(), fac: nf0.fac, area: an, areaId: nf0.area || '', roles: nr, log: addLog(s0.code, who + ' ' + what) }, 'Đã lưu thông tin ' + s0.code + (movedF ? ' — vai trò theo nhà máy chuyển sang ' + ndFacT(nf0.fac) + '.' : '.')); return; }
+if (s.dlg === 'perm') { if (!pr0.role) return; const d = permDiff(pr0.on, pBase); const keepTemp = s0.roles.filter((r) => r[2]); const r0 = s0.roles.find((r) => !r[2] && r[0] === pr0.role) || s0.roles.find((r) => !r[2]);
+const nr = [[pr0.role, r0 ? r0[1] : (ndFac(s0) ? 'Nhà máy ' + ndFac(s0) : 'Mọi nhà máy'), false]].concat(keepTemp);
+patchUser(s0.code, { roles: nr, perm: pr0.on.slice(), log: addLog(s0.code, who + ' phân quyền: vai trò ' + pr0.role + ' · ' + pr0.on.length + ' quyền (thêm ' + d.add + ', bỏ ' + d.del + ' so với vai trò)') }, 'Đã lưu quyền của ' + s0.name + ' — ' + pr0.on.length + ' quyền.'); return; }
+if (s.dlg === 'lock') { if (lkBad) { this.setState({ lkTried: true }); return; }
+if (s.lkMode === 'ngay') { patchUser(s0.code, { status: 'Đã khóa', resign: lkRs, lockDate: ND_TODAY, note: 'Nghỉ việc ' + lkRs, lockWhy: 'Nghỉ việc — HR khóa ngay ' + ND_TODAY, log: addLog(s0.code, who + ' nhập ngày nghỉ việc ' + lkRs + ', khóa ngay: đăng xuất mọi phiên, chặn thẻ') }, 'Đã khóa ngay tài khoản ' + s0.name + ' — đăng xuất mọi phiên, chặn thẻ NV.'); return; }
+patchUser(s0.code, { resign: lkRs, lockDate: lkDate, note: 'Nghỉ việc ' + lkRs + ' · khóa ' + lkDate, log: addLog(s0.code, who + ' nhập ngày nghỉ việc ' + lkRs + ', đặt ngày khóa ' + lkDate) }, 'Đã đặt ngày khóa ' + lkDate + ' cho ' + s0.name + ' — báo HR trước 3 ngày.'); return; }
+if (s.dlg === 'unlock') { patchUser(s0.code, { status: 'Hoạt động', note: 'Admin mở khóa 18/10', log: addLog(s0.code, 'Admin ' + who + ' mở khóa, cấp mật khẩu tạm') }, 'Đã mở khóa ' + s0.name + ' — mật khẩu tạm, bắt đổi khi đăng nhập.'); }
+};
+const isForm = s.dlg === 'create' || s.dlg === 'edit';
+const bad = (isForm && formBad) || (s.dlg === 'lock' && lkBad);
+const neverUsed = (s0.lastLogin === '—' || s0.lastLogin === 'Chưa đăng nhập') && (s0.log || []).length <= 1;
+const delWhy = isSelf ? 'đây là tài khoản của bạn.' : holdsAdminOnly && role !== 'Admin' ? 'tài khoản giữ vai trò chỉ Admin gán / gỡ.' : !neverUsed ? 'tài khoản đã đăng nhập hoặc đã có thao tác (' + s0.lastLogin + ') — chứng từ, nhật ký phải giữ tên người làm.' : '';
+const del = { ok: !delWhy, no: !!delWhy, why: delWhy, roles: s0.roles.map((r) => r[0] + ' · ' + r[1]).join('; ') || '—',
+go: () => { if (delWhy) return; const rest = all.filter((u) => u.code !== s0.code); this.setState({ removed: s.removed.concat([s0.code]), picked: rest.length ? rest[0].code : '', drawer: false, dlg: null, toast: 'Đã xóa tài khoản ' + s0.code + ' · ' + s0.name + ' (' + ndFacT(ndFac(s0)) + ').' }); } };
+const dlg = { open: !!s.dlg, title: DLG[s.dlg] || '', isForm: isForm, isPerm: s.dlg === 'perm' || (s.dlg === 'create' && !!nf0.vrole), modal: s.dlg !== 'create', cls: s.dlg === 'create' ? 'mp-dlg cpage' : s.dlg === 'perm' ? 'modal modal--wide mp-dlg' : 'modal mp-dlg', isLock: s.dlg === 'lock', isUnlock: s.dlg === 'unlock', isDel: s.dlg === 'del', notDel: s.dlg !== 'del',
+close: () => this.setState(s.dlg === 'create' ? { dlg: null, drawer: true } : { dlg: null }), save: save, saveCls: bad ? 'mp-btn mp-btn--primary is-dim' : 'mp-btn mp-btn--primary',
+saveLabel: s.dlg === 'create' ? 'Tạo tài khoản' : s.dlg === 'perm' ? 'Lưu quyền' : s.dlg === 'unlock' ? 'Mở khóa' : 'Lưu' };
+const setF = (k) => (ev) => { const o = {}; o[k] = ev && ev.target ? ev.target.value : ''; this.setState(o); };
+const f = { q: s.q, dept: s.dept || ALLD, role: s.frole || ALLR, st: s.st || ALLS, fac: s.ffac, setFac: setF('ffac'), facOpts: [{ v: '', t: 'Mọi nhà máy' }].concat(ND_FAC.map((x) => ({ v: x[0], t: x[0] + ' · ' + x[1].split(' · ')[1] }))).concat([{ v: '*', t: 'Chỉ tài khoản mọi nhà máy' }]),
+deptOpts: [ALLD, 'Ban giám đốc', 'CNTT', 'Kho', 'Sản xuất', 'QC', 'Kế hoạch', 'Kinh doanh', 'Kế toán', 'Mua hàng', 'Nhân sự', 'R&D'], roleOpts: [ALLR].concat(ND_ROLES_ALL), stOpts: [ALLS, 'Hoạt động', 'Khóa tạm', 'Đã khóa'],
+setQ: setF('q'), setDept: setF('dept'), setRole: setF('frole'), setSt: setF('st'), clear: () => this.setState({ q: '', dept: '', frole: '', st: '', ffac: '' }) };
+return {
+vx: MPX.vx(role, setRole, 'qt_nd'), qtTabs: qtTabs, dr: { open: !!this.state.drawer, close: () => this.setState({ drawer: false }) }, users: pgU.items, pg: pgU, noUsers: users.length === 0, sel: sel, a: a, f: f, nf: nf, pm: pm, dlg: dlg, cp: { off: s.dlg !== 'create' }, del: del,
+lk: { resign: s.lkRs, setResign: (ev) => this.setState({ lkRs: ev.target.value }), mode: s.lkMode || 'nghi', setMode: (ev) => this.setState({ lkMode: ev.target.value, lk: ev.target.value === 'khac' ? (this.state.lk || this.state.lkRs) : this.state.lk }),
+date: lkDate, set: (ev) => this.setState({ lk: ev.target.value }), dateOff: s.lkMode !== 'khac', now: s.lkMode === 'ngay',
+resignCls: lkRsErr ? 'mp-input err' : 'mp-input', hasResignErr: lkRsErr, dateCls: lkDateErr ? 'mp-input err' : 'mp-input', hasDateErr: lkDateErr, noDateErr: !lkDateErr,
+hint: s.lkMode === 'ngay' ? 'Khóa ngay khi bấm Lưu' : s.lkMode === 'nghi' ? 'Mặc định = ngày nghỉ việc' : 'Sửa được trước ngày khóa' },
+countText: users.length + ' / 143 tài khoản',
+viewOnly: !MPX.can(role, MANAGE), showAdminRule: role !== 'Admin',
+goParam: () => MPX.go('CauHinh-cocg', 'Tài khoản', role),
+hasToast: !!s.toast, toast: s.toast, closeToast: () => this.setState({ toast: '' }),
+hasMiss: !!s.miss, miss: s.miss
+};
+}
+}
+</script>
+</body>
+</html>

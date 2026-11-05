@@ -1,0 +1,1501 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "BanDonHang-0r5c.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "9 · Đơn hàng — danh sách",
+      "w": 1440,
+      "x": 155,
+      "y": 2724
+    },
+    "BanDonHangCapNhatLSX-d3wu.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "21 · Đơn hàng — QT08 Kế hoạch cập nhật lệnh SX",
+      "w": 1440,
+      "x": 18395,
+      "y": 2724
+    },
+    "BanDonHangChiTiet-e8kw.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "11 · Đơn hàng — chi tiết",
+      "w": 1440,
+      "x": 3195,
+      "y": 2724
+    },
+    "BanDonHangChoKhach-p2rx.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "15 · Đơn hàng — QT06 chờ khách (cọc tối thiểu)",
+      "w": 1440,
+      "x": 9275,
+      "y": 2724
+    },
+    "BanDonHangCongNo-q6vt.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "12 · Đơn hàng — QT06 chờ kiểm công nợ (nợ quá hạn)",
+      "w": 1440,
+      "x": 4715,
+      "y": 2724
+    },
+    "BanDonHangDangHuy-k1fs.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "18 · Đơn hàng — QT07 Kế hoạch hủy lệnh SX",
+      "w": 1440,
+      "x": 13835,
+      "y": 2724
+    },
+    "BanDonHangDuyetHuy-v9ta.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "17 · Đơn hàng — QT07 duyệt hủy, quyết số tiền hoàn",
+      "w": 1440,
+      "x": 12315,
+      "y": 2724
+    },
+    "BanDonHangGhiNhanGiao-g8nq.dc.html": {
+      "expand": "fill",
+      "h": 2200,
+      "is_interactive": true,
+      "title": "26 · Đơn hàng — QT09 ghi nhận giao, khách trả một phần",
+      "w": 1440,
+      "x": 25995,
+      "y": 2724
+    },
+    "BanDonHangHanMuc-w8kd.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "14 · Đơn hàng — QT06 chờ duyệt hạn mức",
+      "w": 1440,
+      "x": 7755,
+      "y": 2724
+    },
+    "BanDonHangHoaDon-h3vk.dc.html": {
+      "expand": "fill",
+      "h": 1900,
+      "is_interactive": true,
+      "title": "27 · Đơn hàng — QT10 Kế toán lập hóa đơn (gắn phiếu xuất, in A4)",
+      "w": 1440,
+      "x": 27515,
+      "y": 2724
+    },
+    "BanDonHangHuy-c5jn.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "16 · Đơn hàng — QT07 yêu cầu hủy đơn đang SX",
+      "w": 1440,
+      "x": 10795,
+      "y": 2724
+    },
+    "BanDonHangPhuLuc-r7qe.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "20 · Đơn hàng — QT08 chờ ký phụ lục",
+      "w": 1440,
+      "x": 16875,
+      "y": 2724
+    },
+    "BanDonHangSua-m4yb.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "19 · Đơn hàng — QT08 yêu cầu sửa đơn đã chốt",
+      "w": 1440,
+      "x": 15355,
+      "y": 2724
+    },
+    "BanDonHangTao-8o5y.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "10 · Đơn hàng — tạo / sửa",
+      "w": 1440,
+      "x": 1675,
+      "y": 2724
+    },
+    "BanDonHangXuLyNo-h3mz.dc.html": {
+      "expand": "fill",
+      "h": 2600,
+      "is_interactive": true,
+      "title": "13 · Đơn hàng — QT06 chờ xử lý nợ",
+      "w": 1440,
+      "x": 6235,
+      "y": 2724
+    },
+    "BanDonHangYeuCauXuat-y5xb.dc.html": {
+      "expand": "fill",
+      "h": 2000,
+      "is_interactive": true,
+      "title": "25 · Đơn hàng — QT09 yêu cầu xuất (giao hàng chỉ ghi nhận)",
+      "w": 1440,
+      "x": 24475,
+      "y": 2724
+    },
+    "BanHang-wvhq.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "22 · Khách hàng — danh sách",
+      "w": 1440,
+      "x": 19915,
+      "y": 2724
+    },
+    "BanKhachHangChiTiet-khht.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "24 · Khách hàng — chi tiết",
+      "w": 1440,
+      "x": 22955,
+      "y": 2724
+    },
+    "BanKhachHangTao-xhk5.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "23 · Khách hàng — tạo / sửa",
+      "w": 1440,
+      "x": 21435,
+      "y": 2724
+    },
+    "BienBanKiemKeIn-k7bb.dc.html": {
+      "h": 1123,
+      "paper": "a4",
+      "title": "50c · Biên bản kiểm kê kho — bản in A4 (PK-NM1-2610-0008)",
+      "w": 794,
+      "x": 16457,
+      "y": 11884
+    },
+    "CauHinh-cocg.dc.html": {
+      "expand": "fill",
+      "h": 1579,
+      "is_interactive": true,
+      "title": "119 · Tham số & định dạng mã (sửa được định dạng mã)",
+      "w": 1440,
+      "x": 6235,
+      "y": 31146
+    },
+    "CauHinhSuaMa-m6ta.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "119b · Định dạng mã — Admin sửa định dạng mã Đơn hàng",
+      "w": 1440,
+      "x": 24475,
+      "y": 31146
+    },
+    "ChatLuong-q4ls.dc.html": {
+      "expand": "fill",
+      "h": 1374,
+      "is_interactive": true,
+      "title": "68 · Yêu cầu kiểm — QC trưởng xem YC-NM1-2610-0021",
+      "w": 1440,
+      "x": 155,
+      "y": 17604
+    },
+    "ChatLuongCN-t9bw.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "77 · Chất lượng — Phiếu chứng nhận (danh sách, QC trưởng)",
+      "w": 1440,
+      "x": 12315,
+      "y": 17604
+    },
+    "ChatLuongCNBanIn-k4rv.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "79 · Phiếu chứng nhận — bản in chờ ký, chưa có số (B261013, QC trưởng)",
+      "w": 1440,
+      "x": 15355,
+      "y": 17604
+    },
+    "ChatLuongCNDaKy-m7xe.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "81 · Phiếu chứng nhận — đã ký CN-NM1-2610-0018, dùng khi xuất bán (QC xem)",
+      "w": 1440,
+      "x": 18395,
+      "y": 17604
+    },
+    "ChatLuongCNKy-w2hd.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "80 · Phiếu chứng nhận — hộp ký phiếu chờ ký: QC trưởng ký, cấp số",
+      "w": 1440,
+      "x": 16875,
+      "y": 17604
+    },
+    "ChatLuongML-p5ga.dc.html": {
+      "expand": "fill",
+      "h": 1440,
+      "is_interactive": true,
+      "title": "78 · Chất lượng — Mẫu lưu (danh sách, QC)",
+      "w": 1440,
+      "x": 13835,
+      "y": 17604
+    },
+    "ChatLuongMLCanHuy-b6tn.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "82 · Mẫu lưu — cần hủy (hết hạn lưu + theo phiếu hủy lô)",
+      "w": 1440,
+      "x": 19915,
+      "y": 17604
+    },
+    "ChatLuongMLChiTiet-r9fc.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "84 · Mẫu lưu — chi tiết mẫu đã lấy ra đánh giá",
+      "w": 1440,
+      "x": 22955,
+      "y": 17604
+    },
+    "ChatLuongMLGhi-e8pw.dc.html": {
+      "expand": "fill",
+      "h": 1440,
+      "is_interactive": true,
+      "title": "86 · Mẫu lưu — ghi mẫu lưu mới",
+      "w": 1440,
+      "x": 25995,
+      "y": 17604
+    },
+    "ChatLuongMLHuy-z3qa.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "83 · Mẫu lưu — hủy mẫu hết hạn, lập biên bản",
+      "w": 1440,
+      "x": 21435,
+      "y": 17604
+    },
+    "ChatLuongMLLayRa-h5uj.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "85 · Mẫu lưu — lấy mẫu ra đánh giá",
+      "w": 1440,
+      "x": 24475,
+      "y": 17604
+    },
+    "ChatLuongPK-d2xh.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "72 · Phiếu kiểm — QC trưởng duyệt kết luận QC-NM1-2610-0058",
+      "w": 1440,
+      "x": 6235,
+      "y": 17604
+    },
+    "ChatLuongPK-k4wn.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "73 · Phiếu kiểm — hộp duyệt kết luận Đạt, lập phiếu chứng nhận chờ ký (BTP → TP)",
+      "w": 1440,
+      "x": 7755,
+      "y": 17604
+    },
+    "ChatLuongPK-m2zl.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "75 · Phiếu kiểm — mở lại lô NVL Không đạt (L-BOT-22)",
+      "w": 1440,
+      "x": 10795,
+      "y": 17604
+    },
+    "ChatLuongPK-v8ru.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "74 · Phiếu kiểm — QC tải file đánh giá bên ngoài, kết quả vượt mức → đề xuất Không đạt",
+      "w": 1440,
+      "x": 9275,
+      "y": 17604
+    },
+    "ChatLuongPKKy-c8sn.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "title": "76 · Phiếu kiểm — đã duyệt, phiếu chứng nhận CN-NM1-2610-0018 đã ký riêng, xem / in",
+      "w": 1440,
+      "x": 29035,
+      "y": 17604
+    },
+    "ChatLuongYC-b5qe.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "71 · Yêu cầu kiểm — Kế hoạch bổ sung yêu cầu B261018-02 (xung đột)",
+      "w": 1440,
+      "x": 4715,
+      "y": 17604
+    },
+    "ChatLuongYC-g7mb.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "69 · Yêu cầu kiểm — Thủ kho gửi yêu cầu mới",
+      "w": 1440,
+      "x": 1675,
+      "y": 17604
+    },
+    "ChatLuongYC-t3hc.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "70 · Yêu cầu kiểm — QC trưởng từ chối (L-BOT-01, bắt buộc lý do)",
+      "w": 1440,
+      "x": 3195,
+      "y": 17604
+    },
+    "CongThuc-qdhl.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "title": "65 · Công thức",
+      "w": 1440,
+      "x": 13835,
+      "y": 15136
+    },
+    "CongThucChiTiet-pji2.dc.html": {
+      "expand": "fill",
+      "h": 1060,
+      "title": "66 · Công thức — chi tiết",
+      "w": 1440,
+      "x": 15355,
+      "y": 15136
+    },
+    "CongThucTao-n4ct.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "title": "67 · Công thức — tạo mới",
+      "w": 1440,
+      "x": 16875,
+      "y": 15136
+    },
+    "DangNhap.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "title": "1 · Đăng nhập (web)",
+      "w": 1440,
+      "x": 155,
+      "y": 300
+    },
+    "DanhMuc-15tr.dc.html": {
+      "expand": "fill",
+      "h": 1558,
+      "is_interactive": true,
+      "title": "97 · Nguyên vật liệu — danh sách",
+      "w": 1440,
+      "x": 155,
+      "y": 22044
+    },
+    "DanhMucSP-zd4p.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "99 · Sản phẩm",
+      "w": 1440,
+      "x": 155,
+      "y": 24302
+    },
+    "DonVi-u7dv.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "105b · Đơn vị — danh sách (đơn vị có tham chiếu khóa sửa / xóa)",
+      "w": 1440,
+      "x": 10795,
+      "y": 24302
+    },
+    "DonViSua-b4kp.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "105c · Đơn vị — sửa đơn vị mới tạo (chưa có tham chiếu)",
+      "w": 1440,
+      "x": 12315,
+      "y": 24302
+    },
+    "DonViThamChieu-r2xw.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "105d · Đơn vị — đơn vị đang dùng: xem tham chiếu, khóa sửa / xóa",
+      "w": 1440,
+      "x": 13835,
+      "y": 24302
+    },
+    "GuiCOA-c7ya.dc.html": {
+      "expand": "fill",
+      "h": 1700,
+      "is_interactive": true,
+      "title": "31a · Đơn mua — gửi yêu cầu COA & HSD cho NCC qua email (kèm phiếu yêu cầu)",
+      "w": 1440,
+      "x": 10795,
+      "y": 6024
+    },
+    "GuiPO-r6mx.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "31b · Đơn mua — gửi PO cho NCC qua email (kèm PDF đơn đặt hàng)",
+      "w": 1440,
+      "x": 9275,
+      "y": 6024
+    },
+    "HoSoBieuMau-p7rn.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "8 · Hồ sơ & biểu mẫu in",
+      "w": 1440,
+      "x": 10795,
+      "y": 300
+    },
+    "HoSoPhapLy-h7pl.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "104a · Hồ sơ pháp lý chung — danh sách (tự gắn vào sản phẩm theo phạm vi, cảnh báo hết hạn)",
+      "w": 1440,
+      "x": 7755,
+      "y": 24302
+    },
+    "HoSoPhapLyTao-k3fz.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "104b · Hồ sơ pháp lý chung — thêm mới (toàn bộ SP / theo nơi sản xuất / chọn theo SP)",
+      "w": 1440,
+      "x": 9275,
+      "y": 24302
+    },
+    "HoaDonBanIn-a4hd.dc.html": {
+      "h": 1123,
+      "paper": "a4",
+      "title": "28 · Hóa đơn bán hàng — bản thể hiện in A4 (ĐH-2610-0022)",
+      "w": 794,
+      "x": 29035,
+      "y": 2724
+    },
+    "HopDuyet.dc.html": {
+      "expand": "fill",
+      "h": 1724,
+      "is_interactive": true,
+      "title": "2 · Việc cần làm — chờ tôi duyệt",
+      "w": 1440,
+      "x": 1675,
+      "y": 300
+    },
+    "HopDuyetGiamDoc-r5mz.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "5 · Việc cần làm — Giám đốc (chờ duyệt)",
+      "w": 1440,
+      "x": 6235,
+      "y": 300
+    },
+    "HopDuyetTaiKhoan-q7wd.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "4 · Việc cần làm — tôi đã gửi · menu tài khoản mở",
+      "w": 1440,
+      "x": 4715,
+      "y": 300
+    },
+    "HopDuyetThongBao-k3np.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "3 · Việc cần làm — được giao cho tôi · chuông thông báo mở",
+      "w": 1440,
+      "x": 3195,
+      "y": 300
+    },
+    "HopDuyetThuKho-w8tn.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "6 · Việc cần làm — Thủ kho (được giao)",
+      "w": 1440,
+      "x": 7755,
+      "y": 300
+    },
+    "KeToan-k2vm.dc.html": {
+      "expand": "fill",
+      "h": 2212,
+      "is_interactive": true,
+      "title": "36 · Kế toán — Công nợ khách hàng",
+      "w": 1440,
+      "x": 155,
+      "y": 8972
+    },
+    "KeToanNCC-m3pz.dc.html": {
+      "expand": "fill",
+      "h": 1720,
+      "is_interactive": true,
+      "title": "37 · Kế toán — Công nợ NCC",
+      "w": 1440,
+      "x": 1675,
+      "y": 8972
+    },
+    "KeToanSo-v6qe.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "38 · Kế toán — Sổ thu chi",
+      "w": 1440,
+      "x": 3195,
+      "y": 8972
+    },
+    "KeToanTienVe-r4ha.dc.html": {
+      "expand": "fill",
+      "h": 2160,
+      "is_interactive": true,
+      "title": "39 · Kế toán — Ghi nhận tiền về (KH-0012)",
+      "w": 1440,
+      "x": 4715,
+      "y": 8972
+    },
+    "KeToanTraNCC-x8dw.dc.html": {
+      "expand": "fill",
+      "h": 1720,
+      "is_interactive": true,
+      "title": "40 · Kế toán — Ghi nhận đã trả NCC (PO-2607-0009)",
+      "w": 1440,
+      "x": 6235,
+      "y": 8972
+    },
+    "KhoChoChuyen-h2tq.dc.html": {
+      "h": 1400,
+      "is_interactive": true,
+      "title": "49a · Chuyển kho — tab Yêu cầu chuyển: Kế hoạch NM2 gom yêu cầu cùng đợt & lập phiếu (lập phiếu = chấp nhận)",
+      "w": 1440,
+      "x": 12315,
+      "y": 11884
+    },
+    "KhoChuyen-oq5y.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "49 · Chuyển kho — tab Phiếu chuyển (trạng thái thành bộ lọc), xem PC-NM1-2610-0013",
+      "w": 1440,
+      "x": 7755,
+      "y": 11884
+    },
+    "KhoChuyenQuet-c4qn.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "49b · Chuyển kho — quét nhận (lành / hư, thiếu theo mã)",
+      "w": 1440,
+      "x": 7755,
+      "y": 13104
+    },
+    "KhoHuy-br6r.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "51 · Hủy hàng — phiếu hủy",
+      "w": 1440,
+      "x": 10795,
+      "y": 11884
+    },
+    "KhoKiemKe-23cu.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "50 · Kiểm kho",
+      "w": 1440,
+      "x": 9275,
+      "y": 11884
+    },
+    "KhoKiemQuet-k9qd.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "50b · Kiểm kho — quét đếm (khớp / thiếu / thừa / lạ)",
+      "w": 1440,
+      "x": 9275,
+      "y": 13104
+    },
+    "KhoNhapChiTiet-lk8h.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "43 · Nhập kho — chi tiết & xác nhận lệch",
+      "w": 1440,
+      "x": 3195,
+      "y": 11884
+    },
+    "KhoVH-xv2s.dc.html": {
+      "expand": "fill",
+      "h": 1170,
+      "is_interactive": true,
+      "title": "42 · Nhập kho — danh sách",
+      "w": 1440,
+      "x": 1675,
+      "y": 11884
+    },
+    "KhoXuat-71ki.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "45 · Xuất kho — danh sách",
+      "w": 1440,
+      "x": 4715,
+      "y": 11884
+    },
+    "KhoXuatQuet-q7xs.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "45b · Xuất kho — quét lấy hàng từng bao / thùng",
+      "w": 1440,
+      "x": 4715,
+      "y": 13104
+    },
+    "KhoXuatTao-u8sl.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "48 · Xuất kho — tạo (hệ thống đề xuất lô)",
+      "w": 1440,
+      "x": 6235,
+      "y": 11884
+    },
+    "KhuVuc.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "111 · Khu — sửa khu, kho điều phối & dàn silo (màn riêng)",
+      "w": 1440,
+      "x": 7755,
+      "y": 27202
+    },
+    "KhuVucThem-a8tk.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "112 · Khu — thêm khu (màn riêng)",
+      "w": 1440,
+      "x": 9275,
+      "y": 27202
+    },
+    "LenhSX-hxoc.dc.html": {
+      "expand": "fill",
+      "h": 1768,
+      "is_interactive": true,
+      "title": "52 · Lệnh sản xuất — lệnh đã phát theo thứ tự sản xuất & lệnh chưa phát / đã kết thúc (NM1 ngoại tuyến, lệnh Chờ phát)",
+      "w": 1440,
+      "x": 155,
+      "y": 15136
+    },
+    "LenhSXCachBu-b7cv.dc.html": {
+      "expand": "fill",
+      "h": 1600,
+      "is_interactive": true,
+      "title": "55 · Tạo lệnh — bước Nguyên liệu: nguồn bột hỗn hợp (lệnh HH đã dành hết / còn đủ / còn thiếu) và cách bù phần thiếu (mu",
+      "w": 1440,
+      "x": 21435,
+      "y": 15136
+    },
+    "LenhSXCanDoi-c4nv.dc.html": {
+      "expand": "fill",
+      "h": 1200,
+      "is_interactive": true,
+      "title": "56 · Cân đối NVL — phần thiếu phát sinh sau khi lên lệnh / Mua hàng trả về, chờ Kế hoạch xử lý",
+      "w": 1440,
+      "x": 22955,
+      "y": 15136
+    },
+    "LenhSXChiTiet-tu9p.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "59 · Chi tiết lệnh — Mới tạo, chưa phát được",
+      "w": 1440,
+      "x": 4715,
+      "y": 15136
+    },
+    "LenhSXDongBo-k7qe.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "62 · Lệnh SX — có lại kết nối: lệnh khóa lô L-BOT-01 từ trung tâm tới sau khi đã nạp silo, B261018-02 tự khóa (xung đột)",
+      "w": 1440,
+      "x": 9275,
+      "y": 15136
+    },
+    "LenhSXLocal-tajs.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "61 · Máy chủ nhà máy NM1 (tại nhà máy) — lệnh đã nhận, ngoại tuyến, chỉ xem",
+      "w": 1440,
+      "x": 7755,
+      "y": 15136
+    },
+    "LenhSXNhuCau-n8cq.dc.html": {
+      "expand": "fill",
+      "h": 2200,
+      "is_interactive": true,
+      "title": "53 · Lệnh sản xuất — tab Chờ lên lệnh: dòng đơn đã chốt gom theo sản phẩm, đã chọn 2 dòng SP-0001",
+      "w": 1440,
+      "x": 18395,
+      "y": 15136
+    },
+    "LenhSXPhat-408l.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "60 · Phát lệnh đầu hàng — kiểm lại LSX-2610-0012 (công thức đổi phiên bản; kho điều phối thiếu không chặn phát)",
+      "w": 1440,
+      "x": 6235,
+      "y": 15136
+    },
+    "LenhSXTaoBTP-nan3.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "58 · Tạo lệnh — khu BTP (bị chặn: mẫu nhãn SP-0004 chưa duyệt, thiếu tồn bột hỗn hợp)",
+      "w": 1440,
+      "x": 3195,
+      "y": 15136
+    },
+    "LenhSXTaoHH-isnv.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "57 · Tạo lệnh — khu hỗn hợp, SP-0004 gộp 2 dòng đơn (bị chặn: thiếu tồn bột sữa gầy)",
+      "w": 1440,
+      "x": 1675,
+      "y": 15136
+    },
+    "LenhSXTaoNhuCau-t5pa.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "54 · Tạo lệnh từ nhu cầu — SP-0001 gộp 3 dòng đơn, ĐH-2610-0048 phân bổ một phần",
+      "w": 1440,
+      "x": 19915,
+      "y": 15136
+    },
+    "MuaBaoGia-nksw.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "29 · Đơn mua — hàng đợi mua",
+      "w": 1440,
+      "x": 155,
+      "y": 6024
+    },
+    "MuaHang-7mvk.dc.html": {
+      "expand": "fill",
+      "h": 2248,
+      "is_interactive": true,
+      "title": "33 · Nhà cung cấp — danh sách & duyệt",
+      "w": 1440,
+      "x": 4715,
+      "y": 6024
+    },
+    "MuaNCCChiTiet-x9dk.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "34 · Nhà cung cấp — chi tiết & duyệt",
+      "w": 1440,
+      "x": 6235,
+      "y": 6024
+    },
+    "MuaPO-3fox.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "31 · Đơn mua — PO",
+      "w": 1440,
+      "x": 1675,
+      "y": 6024
+    },
+    "MuaPOTao-9joi.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "32 · Đơn mua — lập PO: nhập đơn giá ở Hàng đợi mua rồi lập PO (không qua báo giá)",
+      "w": 1440,
+      "x": 3195,
+      "y": 6024
+    },
+    "MuaTraHang-e9jn.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "35 · Trả hàng nhà cung cấp",
+      "w": 1440,
+      "x": 7755,
+      "y": 6024
+    },
+    "NguoiDung.dc.html": {
+      "expand": "fill",
+      "h": 2221,
+      "is_interactive": true,
+      "title": "113 · Người dùng & vai trò — tài khoản",
+      "w": 1440,
+      "x": 155,
+      "y": 31146
+    },
+    "NguoiDungSua-k1vb.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "113c · Tài khoản — sửa: đổi nhà máy làm việc (NM1 → NM2)",
+      "w": 1440,
+      "x": 18395,
+      "y": 31146
+    },
+    "NguoiDungTao-f6nm.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "113b · Tài khoản — tạo mới: thông tin, chọn vai trò → bước 2 tick quyền",
+      "w": 1440,
+      "x": 16875,
+      "y": 31146
+    },
+    "NguoiDungVaiTro-s3pf.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "113e · Tài khoản — phân quyền từng người: vai trò cho bộ quyền gốc, tick bỏ / thêm quyền",
+      "w": 1440,
+      "x": 21435,
+      "y": 31146
+    },
+    "NguoiDungXoa-d8zq.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "113d · Tài khoản — xóa tài khoản chưa từng dùng",
+      "w": 1440,
+      "x": 19915,
+      "y": 31146
+    },
+    "NhaMay-qd07.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "106 · Nhà máy — danh sách",
+      "w": 1440,
+      "x": 155,
+      "y": 27202
+    },
+    "NhaMayForm-ldp8.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "109 · Nhà máy — tạo mới, khai báo kho ngay trên form",
+      "w": 1440,
+      "x": 4715,
+      "y": 27202
+    },
+    "NhaMayKho-r3dp.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "107 · Nhà máy — chi tiết · tab Kho (mở kho điều phối, các khu được cấp)",
+      "w": 1440,
+      "x": 1675,
+      "y": 27202
+    },
+    "NhaMayKhu-s7lo.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "108 · Nhà máy — chi tiết · tab Khu vực làm việc & dàn silo (mở khu)",
+      "w": 1440,
+      "x": 3195,
+      "y": 27202
+    },
+    "NhaMaySua-v2qa.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "110 · Nhà máy — sửa nhà máy & kho (khu mở màn riêng)",
+      "w": 1440,
+      "x": 6235,
+      "y": 27202
+    },
+    "NhatKy-n5jd.dc.html": {
+      "expand": "fill",
+      "h": 2889,
+      "is_interactive": true,
+      "title": "120 · Nhật ký hệ thống — thao tác chứng từ (Admin)",
+      "w": 1440,
+      "x": 7755,
+      "y": 31146
+    },
+    "NhatKyHR-t4wq.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "121 · Nhật ký hệ thống — HR chỉ xem nhật ký tài khoản",
+      "w": 1440,
+      "x": 9275,
+      "y": 31146
+    },
+    "NhatKyQuet-k2vd.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "123 · Nhật ký hệ thống — chi tiết: quét bao khi ngoại tuyến, đồng bộ lại",
+      "w": 1440,
+      "x": 12315,
+      "y": 31146
+    },
+    "NhatKyXungDot-8rme.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "122 · Nhật ký hệ thống — chi tiết: khóa lô B261018-02 do xung đột đồng bộ",
+      "w": 1440,
+      "x": 10795,
+      "y": 31146
+    },
+    "PhieuNhapIn-p4nk.dc.html": {
+      "h": 1123,
+      "paper": "a4",
+      "title": "44 · Phiếu nhập kho — bản in A4 (PN-NM1-2610-0031)",
+      "w": 794,
+      "x": 13835,
+      "y": 11884
+    },
+    "PhieuXuatBanIn-b3xk.dc.html": {
+      "h": 1123,
+      "paper": "a4",
+      "title": "47 · Phiếu xuất kho bán hàng — bản in A4 (PX-NM1-2610-0034)",
+      "w": 794,
+      "x": 15583,
+      "y": 11884
+    },
+    "PhieuXuatIn-x6qk.dc.html": {
+      "h": 1123,
+      "paper": "a4",
+      "title": "46 · Phiếu xuất kho sản xuất — bản in A4 (PX-NM1-2610-0042)",
+      "w": 794,
+      "x": 14709,
+      "y": 11884
+    },
+    "QuyCachDongGoi-xq9j.dc.html": {
+      "expand": "fill",
+      "h": 2300,
+      "is_interactive": true,
+      "title": "103 · Sản phẩm — sửa SP-0007: quy cách hộp (túi → hộp → thùng)",
+      "w": 1440,
+      "x": 6235,
+      "y": 24302
+    },
+    "SanPhamChiTiet-okbh.dc.html": {
+      "expand": "fill",
+      "h": 1600,
+      "is_interactive": true,
+      "title": "101 · Sản phẩm — xem chi tiết",
+      "w": 1440,
+      "x": 3195,
+      "y": 24302
+    },
+    "SanPhamTao-vl0t.dc.html": {
+      "expand": "fill",
+      "h": 2300,
+      "is_interactive": true,
+      "title": "100 · Sản phẩm — tạo mới (lựa chọn thêm / sửa / xóa ngay trong ô chọn, quy cách đóng gói nhiều cấp)",
+      "w": 1440,
+      "x": 1675,
+      "y": 24302
+    },
+    "SuaNVL-e5nv.dc.html": {
+      "expand": "fill",
+      "h": 1750,
+      "is_interactive": true,
+      "title": "98c · Nguyên vật liệu — sửa mã đã có giao dịch (sửa nhóm, ĐVT, bộ chỉ tiêu COA)",
+      "w": 1440,
+      "x": 4715,
+      "y": 22044
+    },
+    "SuaNVLMoi-p4bx.dc.html": {
+      "expand": "fill",
+      "h": 1650,
+      "is_interactive": true,
+      "title": "98d · Nguyên vật liệu — sửa mã chưa có giao dịch",
+      "w": 1440,
+      "x": 6235,
+      "y": 22044
+    },
+    "TaoMa-29ia.dc.html": {
+      "expand": "fill",
+      "h": 1450,
+      "title": "98 · Nguyên vật liệu — thêm / ngừng dùng mã (COA bắt buộc, bộ chỉ tiêu sửa được)",
+      "w": 1440,
+      "x": 1675,
+      "y": 22044
+    },
+    "TaoMaChiTieu-n2kq.dc.html": {
+      "expand": "fill",
+      "h": 1550,
+      "is_interactive": true,
+      "title": "98b · Nguyên vật liệu — thêm mã: chưa có chỉ tiêu COA, chưa lưu được",
+      "w": 1440,
+      "x": 3195,
+      "y": 22044
+    },
+    "TheoDoiMe-w4ka.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "63 · Tiến độ lệnh sản xuất — mẻ dừng sự cố",
+      "w": 1440,
+      "x": 10795,
+      "y": 15136
+    },
+    "TheoDoiMeHuy-c7rn.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "64 · Tiến độ lệnh sản xuất — hủy mẻ, mẻ bù",
+      "w": 1440,
+      "x": 12315,
+      "y": 15136
+    },
+    "ThuHoi-r8hw.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "92 · Hồ sơ thu hồi — danh sách",
+      "w": 1440,
+      "x": 6235,
+      "y": 19744
+    },
+    "ThuHoiChoGD-7wna.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "94 · Hồ sơ thu hồi — chờ Giám đốc quyết định",
+      "w": 1440,
+      "x": 9275,
+      "y": 19744
+    },
+    "ThuHoiDangThu-m2xc.dc.html": {
+      "expand": "fill",
+      "h": 1600,
+      "is_interactive": true,
+      "title": "95 · Hồ sơ thu hồi — đang thu hồi theo khách",
+      "w": 1440,
+      "x": 10795,
+      "y": 19744
+    },
+    "ThuHoiDong-z5rd.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "96 · Hồ sơ thu hồi — TH-2609-0003 CAPA đã duyệt, chờ Giám đốc duyệt đóng",
+      "w": 1440,
+      "x": 12315,
+      "y": 19744
+    },
+    "ThuHoiMoTX-k4qe.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "93 · Hồ sơ thu hồi — mở từ kết quả truy xuất",
+      "w": 1440,
+      "x": 7755,
+      "y": 19744
+    },
+    "TonLo.dc.html": {
+      "expand": "fill",
+      "h": 2552,
+      "is_interactive": true,
+      "title": "41 · Tồn kho (lô × kho, trạng thái theo bao, sự cố tem)",
+      "w": 1440,
+      "x": 155,
+      "y": 11884
+    },
+    "TongQuanGiamDoc-g1dx.dc.html": {
+      "expand": "fill",
+      "h": 1900,
+      "is_interactive": true,
+      "title": "7 · Tổng quan — Dashboard Giám đốc",
+      "w": 1440,
+      "x": 9275,
+      "y": 300
+    },
+    "TruyXuat.dc.html": {
+      "expand": "fill",
+      "h": 1133,
+      "is_interactive": true,
+      "title": "87 · Truy xuất — danh sách phiếu",
+      "w": 1440,
+      "x": 155,
+      "y": 19744
+    },
+    "TruyXuatCanBang-h3vd.dc.html": {
+      "expand": "fill",
+      "h": 1200,
+      "is_interactive": true,
+      "title": "89 · Truy xuất — TX-2610-0003 cân bằng khối lượng (lệch B261011)",
+      "w": 1440,
+      "x": 3195,
+      "y": 19744
+    },
+    "TruyXuatDongThoiGian-t1mx.dc.html": {
+      "expand": "fill",
+      "h": 1700,
+      "is_interactive": true,
+      "title": "91 · Truy xuất — TX-2610-0003 dòng thời gian (truy ngược A261011)",
+      "w": 1440,
+      "x": 13835,
+      "y": 19744
+    },
+    "TruyXuatTao-q7mc.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "88 · Truy xuất — tạo phiếu",
+      "w": 1440,
+      "x": 1675,
+      "y": 19744
+    },
+    "TruyXuatXuoi-b8nw.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "90 · Truy xuất — kết quả truy xuôi L-BOT-01",
+      "w": 1440,
+      "x": 4715,
+      "y": 19744
+    },
+    "UyQuyen.dc.html": {
+      "expand": "fill",
+      "h": 1345,
+      "title": "117 · Người dùng & vai trò — ủy quyền tạm",
+      "w": 1440,
+      "x": 3195,
+      "y": 31146
+    },
+    "VaiTroQuyen.dc.html": {
+      "expand": "fill",
+      "h": 1454,
+      "is_interactive": true,
+      "title": "114 · Người dùng & vai trò — vai trò × quyền",
+      "w": 1440,
+      "x": 1675,
+      "y": 31146
+    },
+    "VaiTroQuyenDanhMuc-k8dm.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "116 · Vai trò × quyền — danh mục quyền (thêm / sửa / xóa)",
+      "w": 1440,
+      "x": 15355,
+      "y": 31146
+    },
+    "VaiTroQuyenNhaMay-h5fc.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "115b · Vai trò × quyền — phạm vi nhà máy của vai trò (theo tài khoản / mọi NM / NM cố định)",
+      "w": 1440,
+      "x": 22955,
+      "y": 31146
+    },
+    "VaiTroQuyenSua-p3qe.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "115 · Vai trò × quyền — Admin sửa quyền (tick Xem/Tạo/Sửa/Duyệt/Hủy)",
+      "w": 1440,
+      "x": 13835,
+      "y": 31146
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-30T03:41:16Z",
+    "v": 1
+  },
+  "designSystems": [
+    {
+      "artifact": "https://claude.ai/artifact/1wNfqK29qhK4HHY3px2b8d",
+      "copiedAt": "2026-10-20T09:16:00Z",
+      "namespace": "mespowder",
+      "title": "MES Powder",
+      "version": "1792487703-c1be"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "sec-00": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Chung · đăng nhập, việc cần làm, thông báo & tài khoản",
+      "w": 240,
+      "x": 155,
+      "y": 0
+    },
+    "sec-01": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Bán hàng · đơn hàng, khách hàng, giao hàng (ghi nhận trên đơn)",
+      "w": 240,
+      "x": 155,
+      "y": 2424
+    },
+    "sec-02": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Mua hàng · đơn mua, nhà cung cấp, trả hàng nhà cung cấp",
+      "w": 240,
+      "x": 155,
+      "y": 5724
+    },
+    "sec-03": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Kế toán · công nợ khách hàng, công nợ nhà cung cấp, sổ thu chi",
+      "w": 240,
+      "x": 155,
+      "y": 8672
+    },
+    "sec-04": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Kho · tồn kho, nhập, xuất, chuyển, kiểm kho, hủy hàng",
+      "w": 240,
+      "x": 155,
+      "y": 11584
+    },
+    "sec-05": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Sản xuất · lệnh sản xuất, theo dõi mẻ, công thức",
+      "w": 240,
+      "x": 155,
+      "y": 14836
+    },
+    "sec-06": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Chất lượng · yêu cầu kiểm, phiếu kiểm, phiếu chứng nhận, mẫu lưu",
+      "w": 240,
+      "x": 155,
+      "y": 17304
+    },
+    "sec-07": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Truy xuất & thu hồi · truy xuất, hồ sơ thu hồi",
+      "w": 240,
+      "x": 155,
+      "y": 19444
+    },
+    "sec-08": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Danh mục · nguyên vật liệu",
+      "w": 240,
+      "x": 155,
+      "y": 21744
+    },
+    "sec-09": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Danh mục · sản phẩm & đơn vị",
+      "w": 240,
+      "x": 155,
+      "y": 24002
+    },
+    "sec-10": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Danh mục · nhà máy, kho & khu vực làm việc",
+      "w": 240,
+      "x": 155,
+      "y": 26902
+    },
+    "sec-12": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Quản trị · người dùng & vai trò, tham số, nhật ký",
+      "w": 240,
+      "x": 155,
+      "y": 30846
+    }
+  },
+  "order": [
+    "DangNhap.dc.html",
+    "HopDuyet.dc.html",
+    "HopDuyetThongBao-k3np.dc.html",
+    "HopDuyetTaiKhoan-q7wd.dc.html",
+    "HopDuyetGiamDoc-r5mz.dc.html",
+    "HopDuyetThuKho-w8tn.dc.html",
+    "BanDonHang-0r5c.dc.html",
+    "BanDonHangTao-8o5y.dc.html",
+    "BanDonHangChiTiet-e8kw.dc.html",
+    "BanDonHangCongNo-q6vt.dc.html",
+    "BanDonHangXuLyNo-h3mz.dc.html",
+    "BanDonHangHanMuc-w8kd.dc.html",
+    "BanDonHangChoKhach-p2rx.dc.html",
+    "BanDonHangHuy-c5jn.dc.html",
+    "BanDonHangDuyetHuy-v9ta.dc.html",
+    "BanDonHangDangHuy-k1fs.dc.html",
+    "BanDonHangSua-m4yb.dc.html",
+    "BanDonHangPhuLuc-r7qe.dc.html",
+    "BanDonHangCapNhatLSX-d3wu.dc.html",
+    "BanHang-wvhq.dc.html",
+    "BanKhachHangTao-xhk5.dc.html",
+    "BanKhachHangChiTiet-khht.dc.html",
+    "MuaBaoGia-nksw.dc.html",
+    "MuaPO-3fox.dc.html",
+    "GuiCOA-c7ya.dc.html",
+    "GuiPO-r6mx.dc.html",
+    "MuaPOTao-9joi.dc.html",
+    "MuaHang-7mvk.dc.html",
+    "MuaNCCChiTiet-x9dk.dc.html",
+    "MuaTraHang-e9jn.dc.html",
+    "KeToan-k2vm.dc.html",
+    "KeToanNCC-m3pz.dc.html",
+    "KeToanSo-v6qe.dc.html",
+    "KeToanTienVe-r4ha.dc.html",
+    "KeToanTraNCC-x8dw.dc.html",
+    "TonLo.dc.html",
+    "KhoVH-xv2s.dc.html",
+    "KhoNhapChiTiet-lk8h.dc.html",
+    "KhoXuat-71ki.dc.html",
+    "KhoXuatTao-u8sl.dc.html",
+    "KhoChuyen-oq5y.dc.html",
+    "KhoKiemKe-23cu.dc.html",
+    "KhoHuy-br6r.dc.html",
+    "LenhSX-hxoc.dc.html",
+    "LenhSXNhuCau-n8cq.dc.html",
+    "LenhSXTaoNhuCau-t5pa.dc.html",
+    "LenhSXCachBu-b7cv.dc.html",
+    "LenhSXCanDoi-c4nv.dc.html",
+    "LenhSXTaoHH-isnv.dc.html",
+    "LenhSXTaoBTP-nan3.dc.html",
+    "LenhSXChiTiet-tu9p.dc.html",
+    "LenhSXPhat-408l.dc.html",
+    "LenhSXLocal-tajs.dc.html",
+    "LenhSXDongBo-k7qe.dc.html",
+    "TheoDoiMe-w4ka.dc.html",
+    "TheoDoiMeHuy-c7rn.dc.html",
+    "CongThuc-qdhl.dc.html",
+    "CongThucChiTiet-pji2.dc.html",
+    "CongThucTao-n4ct.dc.html",
+    "ChatLuong-q4ls.dc.html",
+    "ChatLuongYC-g7mb.dc.html",
+    "ChatLuongYC-t3hc.dc.html",
+    "ChatLuongYC-b5qe.dc.html",
+    "ChatLuongPK-d2xh.dc.html",
+    "ChatLuongPK-k4wn.dc.html",
+    "ChatLuongPKKy-c8sn.dc.html",
+    "ChatLuongPK-v8ru.dc.html",
+    "ChatLuongPK-m2zl.dc.html",
+    "ChatLuongCN-t9bw.dc.html",
+    "ChatLuongML-p5ga.dc.html",
+    "ChatLuongCNBanIn-k4rv.dc.html",
+    "ChatLuongCNKy-w2hd.dc.html",
+    "ChatLuongCNDaKy-m7xe.dc.html",
+    "ChatLuongMLCanHuy-b6tn.dc.html",
+    "ChatLuongMLHuy-z3qa.dc.html",
+    "ChatLuongMLChiTiet-r9fc.dc.html",
+    "ChatLuongMLLayRa-h5uj.dc.html",
+    "ChatLuongMLGhi-e8pw.dc.html",
+    "TruyXuat.dc.html",
+    "TruyXuatTao-q7mc.dc.html",
+    "TruyXuatCanBang-h3vd.dc.html",
+    "TruyXuatXuoi-b8nw.dc.html",
+    "TruyXuatDongThoiGian-t1mx.dc.html",
+    "ThuHoi-r8hw.dc.html",
+    "ThuHoiMoTX-k4qe.dc.html",
+    "ThuHoiChoGD-7wna.dc.html",
+    "ThuHoiDangThu-m2xc.dc.html",
+    "ThuHoiDong-z5rd.dc.html",
+    "DanhMuc-15tr.dc.html",
+    "TaoMa-29ia.dc.html",
+    "DanhMucSP-zd4p.dc.html",
+    "SanPhamTao-vl0t.dc.html",
+    "SanPhamChiTiet-okbh.dc.html",
+    "QuyCachDongGoi-xq9j.dc.html",
+    "HoSoPhapLy-h7pl.dc.html",
+    "HoSoPhapLyTao-k3fz.dc.html",
+    "NhaMay-qd07.dc.html",
+    "NhaMayForm-ldp8.dc.html",
+    "NguoiDung.dc.html",
+    "VaiTroQuyen.dc.html",
+    "VaiTroQuyenSua-p3qe.dc.html",
+    "VaiTroQuyenDanhMuc-k8dm.dc.html",
+    "UyQuyen.dc.html",
+    "KhuVuc.dc.html",
+    "CauHinh-cocg.dc.html",
+    "NhatKy-n5jd.dc.html",
+    "NhatKyHR-t4wq.dc.html",
+    "NhatKyXungDot-8rme.dc.html",
+    "NhatKyQuet-k2vd.dc.html",
+    "BanDonHangYeuCauXuat-y5xb.dc.html",
+    "BanDonHangGhiNhanGiao-g8nq.dc.html",
+    "BanDonHangHoaDon-h3vk.dc.html",
+    "HoaDonBanIn-a4hd.dc.html",
+    "PhieuNhapIn-p4nk.dc.html",
+    "PhieuXuatIn-x6qk.dc.html",
+    "PhieuXuatBanIn-b3xk.dc.html",
+    "BienBanKiemKeIn-k7bb.dc.html",
+    "TongQuanGiamDoc-g1dx.dc.html",
+    "HoSoBieuMau-p7rn.dc.html",
+    "NhaMayKho-r3dp.dc.html",
+    "NhaMayKhu-s7lo.dc.html",
+    "NhaMaySua-v2qa.dc.html",
+    "KhuVucThem-a8tk.dc.html",
+    "KhoXuatQuet-q7xs.dc.html",
+    "KhoChuyenQuet-c4qn.dc.html",
+    "KhoKiemQuet-k9qd.dc.html",
+    "DonViSua-b4kp.dc.html",
+    "DonViThamChieu-r2xw.dc.html",
+    "NguoiDungTao-f6nm.dc.html",
+    "NguoiDungSua-k1vb.dc.html",
+    "NguoiDungXoa-d8zq.dc.html",
+    "NguoiDungVaiTro-s3pf.dc.html",
+    "VaiTroQuyenNhaMay-h5fc.dc.html",
+    "CauHinhSuaMa-m6ta.dc.html",
+    "DonVi-u7dv.dc.html",
+    "TaoMaChiTieu-n2kq.dc.html",
+    "SuaNVL-e5nv.dc.html",
+    "SuaNVLMoi-p4bx.dc.html",
+    "KhoChoChuyen-h2tq.dc.html"
+  ],
+  "pages": [],
+  "title": "MES Powder — khuôn màn hình"
+}

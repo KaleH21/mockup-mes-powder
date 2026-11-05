@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Sửa nguyên vật liệu — mã chưa có giao dịch</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+</style>
+</helmet>
+<div style="width: 100%">
+<dc-import name="SuaNVL-e5nv" ma="{{ma}}" vaitro="{{vaitro}}" hint-size="100%,1650px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ma": {"editor": "enum", "options": ["NVL-BBI-0002", "NVL-BBI-0004", "NVL-PGA-0003", "NVL-PGA-0002"], "default": "NVL-BBI-0002", "section": "Trạng thái hiển thị"}, "vaitro": {"editor": "enum", "options": ["Mua hàng", "Thủ kho", "Kế hoạch", "QC", "Thủ kho trưởng", "Admin"], "default": "Mua hàng", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1650}}'>
+class Component extends DCLogic {
+renderVals() {
+return { ma: this.props.ma ?? 'NVL-BBI-0002', vaitro: this.props.vaitro ?? 'Mua hàng' };
+}
+}
+</script>
+</body>
+</html>

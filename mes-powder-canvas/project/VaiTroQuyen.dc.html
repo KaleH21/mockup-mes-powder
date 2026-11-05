@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Vai trò × quyền</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+.req{color:var(--bad);margin-left:2px}
+.ck{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-weight:700;font-size:16px;line-height:1}
+.pick-row{cursor:pointer}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-muted);font:500 14px/1 var(--font-sans);white-space:nowrap}
+.err{border-color:var(--bad)!important}
+.errtext{font-size:15px;line-height:20px;color:var(--bad)}
+.mp-table td.c{text-align:center}
+.mp-table th.mp-num{text-align:right}
+.mp-table th.c{text-align:center}
+.is-picked{background:var(--brand-soft)}
+.ovl{position:absolute;inset:0;background:rgba(15,23,42,.32);z-index:20}
+.modal{position:absolute;left:50%;top:120px;transform:translateX(-50%);width:560px;max-width:calc(100% - 32px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:21;display:flex;flex-direction:column}
+.modal__head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal__body{padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+.modal__foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;background:var(--surface-0);border-radius:0 0 12px 12px}
+.xbtn{border:0;background:none;color:var(--ink-muted);cursor:pointer;font-size:24px;line-height:1;padding:4px 8px;border-radius:6px}
+.xbtn:hover{background:var(--surface-2);color:var(--ink)}
+.toastbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.errtext{color:var(--bad);font-size:15px;line-height:20px}
+.mp-input.err{border-color:var(--bad)}
+.is-disabled{opacity:.5;pointer-events:none}
+.lnk{border:0;background:none;padding:0;font:inherit;color:var(--brand);cursor:pointer;text-decoration:none;border-bottom:1px dotted currentColor}
+.rl-item{padding:8px 10px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.rl-item:hover{background:var(--surface-2)}
+.hold{display:inline-flex;flex-wrap:wrap;gap:4px 10px}
+
+
+/* mp-shell v2 */
+.mp-nav{flex:0 0 256px;width:256px;background:var(--surface-1);border-right:1px solid var(--line);padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box}
+.mp-nav__brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;margin-bottom:6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.mp-nav__logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 15px/1 var(--font-sans);letter-spacing:.02em;flex:none}
+.mp-nav__brand b{font-size:19px;line-height:22px;display:block}.mp-nav__brand small{font-size:14px;line-height:18px;color:var(--ink-muted);display:block}
+.mp-nav__sec{font:600 14px/20px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:14px 10px 6px}
+.mp-nav__div{height:1px;background:var(--line);margin:8px 0}
+.mp-nav__item{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--ink);text-decoration:none;font:500 18px/24px var(--font-sans)}
+.mp-nav__item svg{flex:none;color:var(--ink-muted)}
+.mp-nav__item:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__item.is-on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-nav__item.is-on svg{color:var(--brand)}
+.mp-nav__item .mp-nav__count{margin-left:auto;min-width:26px;height:24px;padding:0 8px;border-radius:999px;background:var(--brand);color:var(--on-brand);font:600 15px/24px var(--font-sans);text-align:center;box-sizing:border-box}
+.mp-nav__subs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.mp-nav__subs .snav,.mp-nav__subs .navsub{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:none;border-radius:6px;padding:6px 10px;font:400 16px/22px var(--font-sans);color:var(--ink-muted);text-decoration:none;cursor:pointer;text-align:left;position:relative;box-sizing:border-box}
+.mp-nav__subs .snav:hover,.mp-nav__subs .navsub:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__subs .snav.on,.mp-nav__subs .navsub.on{color:var(--brand-strong);font-weight:600;background:var(--surface-2)}
+.mp-nav__subs .snav.on::before,.mp-nav__subs .navsub.on::before{content:"";position:absolute;left:-11px;top:6px;bottom:6px;width:2px;border-radius:2px;background:var(--brand)}
+.mp-nav__subs .navsub svg{display:none}
+.mp-nav__subs .snav.is-parent{color:var(--brand-strong);font-weight:600}
+.mp-nav__subs .mp-nav__subs{margin:0 0 2px 10px}
+.mp-nav__foot{margin-top:auto;padding:12px 10px 2px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink-muted)}
+.mp-nav__foot button{white-space:nowrap;border:0;background:none;color:var(--ink-muted);display:inline-flex;align-items:center;gap:6px;font:inherit;cursor:pointer;padding:4px;border-radius:6px}
+.mp-nav__foot button:hover{background:var(--surface-2);color:var(--ink)}
+.mp-hd{position:relative;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:10px 24px 10px 32px;background:var(--surface-1);border-bottom:1px solid var(--line);box-sizing:border-box}
+.mp-hd__crumb{font-size:16px;line-height:22px;color:var(--ink-muted);min-width:0;flex:1 1 220px}
+.mp-hd__right{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;flex:0 1 auto;min-width:0}
+.mp-hd__fac{display:inline-flex;align-items:center;gap:6px;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font:500 16px/1 var(--font-sans);color:var(--ink);cursor:pointer}
+.mp-hd__fac svg{color:var(--ink-muted)}
+.mp-hd__sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.mp-hd__right>.seg{height:40px;box-sizing:border-box;border-color:var(--line)}
+.mp-hd__right>.seg .segbtn{display:inline-flex;align-items:center;padding:0 12px}
+.mp-hd__right>.conn{height:40px;box-sizing:border-box;border-radius:8px;padding:0 12px;font-size:16px}
+.mp-pop{position:relative}
+.mp-pop>summary{list-style:none;cursor:pointer}
+.mp-pop>summary::-webkit-details-marker{display:none}
+.mp-bell>summary{position:relative;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.mp-bell>summary:hover,.mp-bell[open]>summary{background:var(--surface-2)}
+.mp-bell__dot{position:absolute;top:3px;left:18px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--bad-solid);color:var(--on-solid);font:600 13px/18px var(--font-sans);text-align:center;box-sizing:border-box;border:2px solid var(--surface-1)}
+.mp-me>summary{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 4px;border-radius:999px;margin-left:4px}
+.mp-me>summary:hover,.mp-me[open]>summary{background:var(--surface-2)}
+.mp-av{width:32px;height:32px;border-radius:999px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 15px/1 var(--font-sans);flex:none}
+.mp-av--lg{width:44px;height:44px;font-size:19px}
+.mp-me__txt{display:flex;flex-direction:column;line-height:20px;max-width:190px}
+.mp-me__txt b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me__txt small{font-size:15px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me>summary>svg{color:var(--ink-muted)}
+.mp-pop__panel{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:30;overflow:hidden;text-align:left}
+.mp-pop__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.mp-pop__head a{font-size:15px}
+.mp-pop a{text-decoration:none}.mp-pop a:hover{text-decoration:underline}
+.mp-pop__foot{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;background:var(--surface-0)}
+.mp-noti{width:380px}
+.mp-noti__tabs{display:flex;gap:4px;padding:8px 12px 0}
+.mp-noti__tabs span{padding:6px 10px;border-radius:6px;font-size:15px;color:var(--ink-muted)}
+.mp-noti__tabs span.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-noti ul{list-style:none;margin:0;padding:6px 0}
+.mp-noti li{display:flex;gap:10px;padding:10px 16px;position:relative}
+.mp-noti li:hover{background:var(--surface-0)}
+.mp-noti li.is-unread::after{content:"";position:absolute;right:14px;top:16px;width:8px;height:8px;border-radius:999px;background:var(--brand)}
+.mp-noti li p{margin:0;font-size:16px;line-height:22px;padding-right:14px}
+.mp-noti li.is-unread p{font-weight:500}
+.mp-noti li time{display:block;font-size:15px;color:var(--ink-muted);margin-top:2px}
+.mp-noti__ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.mp-noti__ic.ok{background:var(--ok-soft);color:var(--ok)}.mp-noti__ic.wait{background:var(--wait-soft);color:var(--wait)}.mp-noti__ic.bad{background:var(--bad-soft);color:var(--bad)}.mp-noti__ic.info{background:var(--brand-soft);color:var(--brand)}
+.mp-me__panel{width:300px}
+.mp-me__who{display:flex;gap:12px;align-items:center;padding:16px}
+.mp-me__who b{display:block;font-size:18px}.mp-me__who small{display:block;font-size:15px;color:var(--ink-muted)}
+.mp-me__roles{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.mp-me__roles span{font-size:15px;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.mp-me__menu{list-style:none;margin:0;padding:6px;border-top:1px solid var(--line)}
+.mp-me__menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:16px;color:var(--ink);text-decoration:none}
+.mp-me__menu a:hover{background:var(--surface-2)}
+.mp-me__menu a svg{color:var(--ink-muted)}
+.mp-me__menu a.bad{color:var(--bad)}.mp-me__menu a.bad svg{color:var(--bad)}
+.mp-hd__as{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 10px;border:1px dashed var(--line-strong);border-radius:8px;font:500 15px/1 var(--font-sans);color:var(--ink-muted);box-sizing:border-box}
+.mp-hd__as select{height:34px;border:0;background:transparent;font:600 16px/1 var(--font-sans);color:var(--ink);padding:0 4px;cursor:pointer}
+.mp-gate{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-0);font-size:15px;line-height:20px;color:var(--ink-muted)}
+.mp-gate b{color:var(--ink);font-weight:600}
+.mp-gate button{border:0;background:none;padding:0;font:600 15px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-decoration:underline}
+a.mp-xlink{color:var(--brand);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+a.mp-xlink:hover{color:var(--brand-strong);border-bottom-style:solid}
+a.mp-xlink.mp-code{font-family:var(--font-mono)}
+.rl-item{width:100%;border:0;background:none;font:inherit;color:inherit;text-align:left}
+.rl-item.is-picked{background:var(--brand-soft)}
+.seg-v{display:inline-grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.seg-b{border:0;background:var(--surface-1);padding:8px 16px;font:500 16px/22px var(--font-sans);color:var(--ink-muted);cursor:pointer;text-align:center;white-space:nowrap}.seg-b+.seg-b{border-left:1px solid var(--line-strong)}.seg-b.on{background:var(--brand);color:var(--on-brand);font-weight:600}
+.flt{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;padding:12px 20px;border-bottom:1px solid var(--line)}
+.chkl{display:inline-flex;align-items:center;gap:8px;font-size:16px;height:40px;cursor:pointer}.chkl input{width:18px;height:18px;accent-color:var(--brand)}
+.pck{width:20px;height:20px;accent-color:var(--brand);cursor:pointer;margin:0}
+tr.is-off td{color:var(--ink-muted)}
+.sc-sel{height:34px;min-width:210px;font-size:15px}
+.fsc{display:flex;flex-direction:column;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--surface-0)}
+.fsc__h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.seg3{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;align-self:flex-start}
+.seg3 .seg-b+.seg-b{border-left:1px solid var(--line-strong)}
+.gchip.off{opacity:.45;cursor:not-allowed}
+.fsc .hint{font-size:15px;line-height:20px;color:var(--ink-muted)}
+.ed-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 20px;background:var(--brand-soft);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.row-btn{height:32px;padding:0 10px;font-size:16px;font-weight:500}
+.ovl{position:absolute;inset:0;background:rgba(22,33,43,0.45);display:flex;justify-content:center;align-items:flex-start;padding:64px 16px 32px;box-sizing:border-box;z-index:20}
+.gchips{display:flex;flex-wrap:wrap;gap:6px}.gchip{border:1px solid var(--line);background:var(--surface-1);border-radius:999px;padding:4px 12px;font:500 15px/22px var(--font-sans);color:var(--ink-muted);cursor:pointer}.gchip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.req{color:var(--bad);margin-left:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.dl-warn{padding:10px 12px;border-radius:8px;background:var(--wait-soft);color:var(--wait);font-size:15px}.dl-ok{padding:10px 12px;border-radius:8px;background:var(--surface-0);color:var(--ink-muted);font-size:15px}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+.mp-pg{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-muted)}
+.mp-pg__nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.mp-pg__n{min-width:40px;height:40px;padding:0 10px;box-sizing:border-box;border:1px solid var(--line);border-radius:var(--radius-md,6px);background:var(--surface-1,#fff);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.mp-pg__n:hover:not(:disabled){border-color:var(--line-strong);background:var(--surface-2)}
+.mp-pg__n.is-on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff)}
+.mp-pg__n:disabled{opacity:.4;cursor:default}
+.mp-pg__n:focus-visible{outline:2px solid var(--focus-ring,var(--brand));outline-offset:2px}
+.mp-pg__n svg{width:16px;height:16px}
+.mp-pg__gap{padding:0 4px}
+.mp-pg__size{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.mp-pg__size select{width:auto;min-width:76px;height:40px;padding:0 8px}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; min-height: 1400px; background: var(--surface-0); display: flex; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line); position: relative">
+<nav aria-label="Phân hệ" class="mp-nav">
+<a href="HopDuyet.dc.html" class="mp-nav__brand"><span class="mp-nav__logo">MP</span><span><b>MES Powder</b><small>Quản lý sản xuất sữa bột</small></span></a>
+<a href="{{vx.m.href.viec}}" onClick="{{vx.m.go.viec}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span>Việc cần làm</span><span class="mp-nav__count">9</span></a>
+<div class="mp-nav__div"></div>
+<sc-if value="{{vx.m.show.ban}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.ban}}" onClick="{{vx.m.go.ban}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><path d="M7 7h.01"></path></svg><span>Bán hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.mua}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.mua}}" onClick="{{vx.m.go.mua}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Mua hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.kt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kt}}" onClick="{{vx.m.go.kt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg><span>Kế toán</span></a></sc-if>
+<sc-if value="{{vx.m.show.kho}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kho}}" onClick="{{vx.m.go.kho}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg><span>Kho</span></a></sc-if>
+<sc-if value="{{vx.m.show.sx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.sx}}" onClick="{{vx.m.go.sx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20V9l6 4V9l6 4V5h3l1 15z"></path><path d="M2 20h20"></path></svg><span>Sản xuất</span></a></sc-if>
+<sc-if value="{{vx.m.show.cl}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.cl}}" onClick="{{vx.m.go.cl}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span>Chất lượng</span></a></sc-if>
+<sc-if value="{{vx.m.show.tx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.tx}}" onClick="{{vx.m.go.tx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg><span>Truy xuất &amp; thu hồi</span></a></sc-if>
+<sc-if value="{{vx.m.show.dm}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.dm}}" onClick="{{vx.m.go.dm}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>Danh mục</span></a></sc-if>
+<sc-if value="{{vx.m.show.qt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.qt}}" onClick="{{vx.m.go.qt}}" class="mp-nav__item is-on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span>Quản trị</span></a>
+<div class="mp-nav__subs">
+<sc-if value="{{vx.m.show.qt_nd}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_nd}}" href="NguoiDung.dc.html" class="snav on">Người dùng &amp; vai trò</a></sc-if>
+<sc-if value="{{vx.m.show.qt_ch}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_ch}}" href="CauHinh-cocg.dc.html" class="snav">Tham số &amp; định dạng mã</a></sc-if>
+<sc-if value="{{vx.m.show.qt_nk}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.qt_nk}}" href="NhatKy-n5jd.dc.html" class="snav">Nhật ký hệ thống</a></sc-if>
+</div></sc-if>
+<div class="mp-nav__foot"><span>MES Powder v1.0</span><button type="button" aria-label="Thu gọn menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l-5-5 5-5"></path><path d="M18 17l-5-5 5-5"></path></svg>Thu gọn</button></div>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header class="mp-hd"><div class="mp-hd__crumb">Quản trị / <span style="color: var(--ink)">Vai trò × quyền</span></div><div class="mp-hd__right"><span class="mp-site mp-site--cloud" title="Màn chỉ có trên cloud — người ở nhà máy không vào được khi nhà máy mất mạng"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>Chỉ trên cloud</span><label class="mp-hd__as" title="Mô phỏng: đổi vai trò người đang dùng"><span>Xem như</span><select value="{{vx.role}}" onChange="{{vx.set}}" aria-label="Xem như vai trò"><sc-for list="{{vx.optl}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></label><button type="button" class="mp-hd__fac" aria-label="Nhà máy đang xem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{vx.fac}}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button><span class="mp-hd__sep"></span><details class="mp-pop mp-bell"><summary aria-label="Thông báo, 3 chưa đọc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="mp-bell__dot">3</span></summary><div class="mp-pop__panel mp-noti"><div class="mp-pop__head"><b>Thông báo</b><a href="#">Đánh dấu tất cả đã đọc</a></div><div class="mp-noti__tabs"><span class="on">Chưa đọc 3</span><span>Tất cả</span></div><ul><li class="is-unread"><span class="mp-noti__ic ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><p>Phiếu nhập <span class="mp-code">PN-NM1-2610-0031</span> chờ Thủ kho trưởng xác nhận lệch — 1 bao rách đã tách trả NCC</p><time>10 phút trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic wait"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><p>2 lô hết hạn chưa hủy quá 30 ngày ở <span class="mp-code">NM1-TONG</span></p><time>1 giờ trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></span><div><p>Lệnh <span class="mp-code">LSX-2610-0011</span> chưa tới server NM1 quá 10 phút — đang gửi lại</p><time>2 giờ trước · Sản xuất</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"></path></svg></span><div><p>Nhắc nợ: <span class="mp-code">KH-0012</span> có khoản quá hạn 3 ngày</p><time>Hôm qua · Kế toán</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span><div><p>Vai trò ủy quyền QC trưởng của bạn hết hạn ngày 21/10</p><time>Hôm qua · Quản trị</time></div></li></ul><div class="mp-pop__foot"><a href="HopDuyet.dc.html">Việc chờ duyệt ở Việc cần làm →</a><a href="#">Xem tất cả</a></div></div></details><details class="mp-pop mp-me"><summary aria-label="Tài khoản"><span class="mp-av">{{vx.ini}}</span><span class="mp-me__txt"><b>{{vx.name}}</b><small>{{vx.label}}</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></summary><div class="mp-pop__panel mp-me__panel"><div class="mp-me__who"><span class="mp-av mp-av--lg">{{vx.ini}}</span><span><b>{{vx.name}}</b><small>{{vx.label}} · {{vx.fac}}</small></span></div><ul class="mp-me__menu"><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Hồ sơ của tôi</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Vai trò &amp; ủy quyền</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zM15.5 7.5l3 3L22 7l-3-3"></path></svg>Đổi mật khẩu</a></li><li><a href="DangNhap.dc.html" class="bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Đăng xuất</a></li></ul></div></details></div></header>
+<sc-if value="{{vx.m.deny}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0; box-sizing: border-box; width: 100%"><div class="mp-banner mp-banner--warn" role="status"><span><b>Vai trò {{vx.role}} không có quyền vào màn này.</b> <a href="{{vx.m.homeHref}}" onClick="{{vx.m.homeGo}}">Về Việc cần làm</a></span></div></div></sc-if>
+<div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; width: 100%">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 600">Người dùng &amp; vai trò</h1>
+</div>
+
+</div>
+<div style="display: flex; gap: 4px; border-bottom: 1px solid var(--line); flex-wrap: wrap">
+<a class="qtab" href="NguoiDung.dc.html" style="padding: 8px 12px; text-decoration: none; color: var(--ink-muted)" onClick="{{qtTabs.tabNguoiDung}}">Tài khoản</a>
+<span style="padding: 8px 12px; text-decoration: none; color: var(--brand); border-bottom: 2px solid var(--brand); font-weight: 600">Vai trò × quyền</span>
+<a class="qtab" href="UyQuyen.dc.html" style="padding: 8px 12px; text-decoration: none; color: var(--ink-muted)" onClick="{{qtTabs.tabUyQuyen}}">Ủy quyền tạm <span class="mp-doc mp-doc--ok" style="height: 18px">1</span></a>
+</div>
+<sc-if value="{{hasMiss}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn"><span>Không tìm thấy vai trò <b>{{miss}}</b>.</span></div></sc-if>
+<sc-if value="{{limited}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap"><span class="mp-muted" style="font-size: 16px">Quyền của vai trò <b style="color: var(--ink)">{{vx.label}}</b>.</span><span class="mp-gate">Việc của <b>{{gAll.who}}</b><sc-if value="{{gAll.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{gAll.why}}</sc-if><button type="button" onClick="{{gAll.sw}}">Xem như {{gAll.who}}</button></span></div></sc-if>
+
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" role="status" style="font-size: 16px">{{toast}}</div></sc-if>
+<sc-if value="{{showViewTabs}}" hint-placeholder-val="{{ true }}"><div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap"><div class="seg-v" role="group" aria-label="Cách xem"><button type="button" class="{{vRoleCls}}" aria-pressed="{{vRoleOn}}" onClick="{{toRole}}">Quyền theo vai trò</button><button type="button" class="{{vCatCls}}" aria-pressed="{{vCatOn}}" onClick="{{toCat}}">Danh mục quyền</button></div>
+<sc-if value="{{isCatView}}" hint-placeholder-val="{{ false }}"><sc-if value="{{canCat}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{addPerm}}">+ Thêm quyền</button></sc-if><sc-if value="{{gCat}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{gCat.who}}</b><sc-if value="{{gCat.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{gCat.why}}</sc-if><button type="button" onClick="{{gCat.sw}}">Xem như {{gCat.who}}</button></span></sc-if></sc-if></div></sc-if>
+
+<sc-if value="{{isRoleView}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<div class="mp-card" style="flex: 1 1 300px; max-width: 360px; min-width: 260px">
+<div class="mp-card__head"><h2 class="mp-card__title">Vai trò</h2><span class="mp-muted" style="font-size: 15px">{{roleCount}}</span></div>
+<div style="display: flex; flex-direction: column; padding: 6px">
+<sc-for list="{{roles}}" as="r" hint-placeholder-count="20">
+<button type="button" class="{{r.itemCls}}" onClick="{{r.pick}}" aria-label="{{r.label}}">
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="{{r.nameStyle}}">{{r.name}}</span>
+<span class="mp-muted" style="font-size: 15px; line-height: 20px">{{r.n}} người · {{r.nPerm}}</span>
+</span>
+<span class="mp-chips">
+<sc-if value="{{r.adminOnly}}" hint-placeholder-val="{{ false }}"><span class="tag">Chỉ Admin gán</span></sc-if>
+<sc-if value="{{r.deleg}}" hint-placeholder-val="{{ false }}"><span class="tag">Ủy quyền được</span></sc-if>
+</span>
+</button>
+</sc-for>
+</div>
+</div>
+
+<div class="mp-card" style="flex: 999 1 640px; min-width: 0">
+<div style="padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 360px">
+<div style="font-size: 22px; line-height: 28px; font-weight: 600">{{sel.name}}</div>
+<div class="mp-muted" style="font-size: 16px; line-height: 24px">{{sel.desc}}</div>
+</div>
+<div class="acts"><sc-if value="{{canEdit}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{startEdit}}">Sửa quyền</button></sc-if><sc-if value="{{gEdit}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{gEdit.who}}</b><sc-if value="{{gEdit.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{gEdit.why}}</sc-if><button type="button" onClick="{{gEdit.sw}}">Xem như {{gEdit.who}}</button></span></sc-if></div>
+</div>
+<dl class="mp-kv" style="margin: 0; grid-template-columns: repeat(4, auto); gap: 4px 24px; justify-content: start">
+<div><dt>Người giữ</dt><dd class="mp-num" style="text-align: left">{{sel.n}}</dd></div>
+<div><dt>Đang có</dt><dd class="mp-nowrap">{{sel.actCount}}</dd></div>
+<div><dt>Phạm vi mặc định</dt><dd class="mp-nowrap">{{sel.scope}}</dd></div>
+<div><dt>Nhà máy</dt><dd class="mp-nowrap">{{sel.facT}}</dd></div>
+</dl>
+<div style="font-size: 16px; color: var(--ink-muted); display: flex; gap: 6px; flex-wrap: wrap">Đang giữ: <span class="hold"><sc-for list="{{sel.holders}}" as="h" hint-placeholder-count="2"><sc-if value="{{h.ok}}" hint-placeholder-val="{{ true }}"><a href="{{h.ref.href}}" class="mp-xlink" onClick="{{h.ref.open}}">{{h.n}}</a></sc-if><sc-if value="{{h.no}}" hint-placeholder-val="{{ false }}"><span style="color: var(--ink)">{{h.n}}</span></sc-if></sc-for></span></div>
+</div>
+
+<sc-if value="{{sel.isAdmin}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 16px 20px 0"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Toàn quyền ở mọi nhà máy</b> — bảng dưới chỉ liệt kê việc riêng của Admin. Không sửa quyền vai trò Admin; không tự duyệt phiếu mình tạo.</span></div></div>
+</sc-if>
+
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><div class="ed-bar"><div><b>Đang sửa quyền của {{sel.name}}</b><span class="mp-muted"> · tick Xem / Tạo / Sửa / Duyệt / Hủy cho từng quyền, chọn phạm vi · {{changed}}</span></div>
+<div class="acts"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{cancelEdit}}">Hủy</button><button type="button" class="mp-btn mp-btn--primary" onClick="{{saveEdit}}">Lưu quyền</button></div></div></sc-if>
+
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><div class="fsc"><div class="fsc__h"><b>Phạm vi nhà máy của vai trò</b><span class="mp-muted" style="font-size: 15px">áp cho các quyền để phạm vi “Theo vai trò”</span></div>
+<div class="seg3" role="group" aria-label="Phạm vi nhà máy"><sc-for list="{{fs.modes}}" as="m" hint-placeholder-count="3"><button type="button" class="{{m.cls}}" aria-pressed="{{m.on}}" onClick="{{m.pick}}">{{m.t}}</button></sc-for></div>
+<sc-if value="{{fs.isFixed}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span style="font-size: 16px">Nhà máy được làm:</span><div class="gchips"><sc-for list="{{fs.facs}}" as="f" hint-placeholder-count="3"><button type="button" class="{{f.cls}}" aria-pressed="{{f.on}}" onClick="{{f.tog}}" title="{{f.tip}}">{{f.t}}</button></sc-for></div></div><sc-if value="{{fs.noFac}}" hint-placeholder-val="{{ false }}"><span class="errtext">Chọn ít nhất 1 nhà máy.</span></sc-if></sc-if>
+<span class="hint">{{fs.note}}</span></div></sc-if>
+<div class="flt"><div class="mp-field" style="flex: 1 1 260px"><label for="vq-q">Tìm quyền</label><input id="vq-q" class="mp-input" value="{{fq}}" onChange="{{setFq}}" placeholder="Tên bước, quy trình…"></div>
+<div class="mp-field" style="flex: 0 1 260px"><label for="vq-p">Quy trình</label><select id="vq-p" class="mp-input" value="{{fp}}" onChange="{{setFp}}"><option value="">Mọi quy trình</option><sc-for list="{{procOpts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div>
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><label class="chkl"><input type="checkbox" checked="{{onlyOn}}" onChange="{{togOnly}}"> Chỉ hiện quyền đã tick</label></sc-if></div>
+
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 760px">
+<thead><tr><th>Quyền / bước</th><th class="c" style="width: 64px">Xem</th><th class="c" style="width: 64px">Tạo</th><th class="c" style="width: 64px">Sửa</th><th class="c" style="width: 64px">Duyệt</th><th class="c" style="width: 64px">Hủy</th><th style="width: 190px">Phạm vi</th></tr></thead>
+<tbody>
+<sc-for list="{{sel.groups}}" as="g" hint-placeholder-count="3">
+<tr class="is-group"><td colspan="7">{{g.proc}}</td></tr>
+<sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2">
+<tr class="{{r.rowCls}}">
+<td>{{r.step}}</td>
+<sc-for list="{{r.cks}}" as="k" hint-placeholder-count="5"><td class="c"><sc-if value="{{viewing}}" hint-placeholder-val="{{ true }}"><sc-if value="{{k.on}}" hint-placeholder-val="{{ false }}"><span class="ck" aria-label="có">✓</span></sc-if></sc-if><sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><input type="checkbox" class="pck" checked="{{k.on}}" onChange="{{k.tog}}" aria-label="{{k.label}}"></sc-if></td></sc-for>
+<td class="mp-nowrap"><sc-if value="{{viewing}}" hint-placeholder-val="{{ true }}">{{r.scopeT}}</sc-if><sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><select class="mp-input sc-sel" value="{{r.scope}}" onChange="{{r.setScope}}" aria-label="Phạm vi"><sc-for list="{{r.scopeOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></sc-if></td>
+</tr>
+</sc-for>
+</sc-for>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}"><tr><td colspan="7" class="mp-muted" style="text-align: center; padding: 24px">Không có quyền nào khớp bộ lọc.</td></tr></sc-if>
+</tbody>
+</table></div></div>
+<sc-if value="{{sel.pg.show}}" hint-placeholder-val="{{ false }}"><nav class="mp-pg" aria-label="Phân trang"><span>Dòng {{sel.pg.info}}</span><div class="mp-pg__nav"><button type="button" class="mp-pg__n" onClick="{{sel.pg.prev}}" disabled="{{sel.pg.atFirst}}" aria-label="Trang trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button><sc-for list="{{sel.pg.nums}}" as="pn" hint-placeholder-count="3"><sc-if value="{{pn.btn}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{pn.cls}}" aria-current="{{pn.cur}}" aria-label="{{pn.aria}}" onClick="{{pn.go}}">{{pn.t}}</button></sc-if><sc-if value="{{pn.gap}}" hint-placeholder-val="{{ false }}"><span class="mp-pg__gap" aria-hidden="true">…</span></sc-if></sc-for><button type="button" class="mp-pg__n" onClick="{{sel.pg.next}}" disabled="{{sel.pg.atLast}}" aria-label="Trang sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button></div><label class="mp-pg__size">Số dòng/trang <select class="mp-input" value="{{sel.pg.size}}" onChange="{{sel.pg.setSize}}"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label></nav></sc-if>
+<div style="padding: 12px 16px; font-size: 16px; color: var(--ink-muted); display: flex; flex-direction: column; gap: 4px">
+<span>Tick Tạo / Sửa / Duyệt / Hủy thì tự có Xem. Bỏ Xem là bỏ cả quyền.</span>
+<span>Phạm vi từng quyền: <b style="color: var(--ink)">Theo vai trò</b> (dùng phạm vi nhà máy của vai trò), <b style="color: var(--ink)">Mọi nhà máy</b>, <b style="color: var(--ink)">Nhà máy của tài khoản</b>, hoặc cố định <b style="color: var(--ink)">Chỉ NM1 / Chỉ NM2</b>. Đây là <b style="color: var(--ink)">bộ quyền gốc</b> của vai trò — khi tạo tài khoản, quyền được tick sẵn theo vai trò rồi bỏ / thêm riêng cho từng người ở <a href="NguoiDung.dc.html" class="mp-xlink" onClick="{{qtTabs.tabNguoiDung}}">Tài khoản › Phân quyền</a>. Sửa bộ quyền gốc không đổi quyền đã cấp cho từng người.</span>
+<sc-if value="{{sel.deleg}}" hint-placeholder-val="{{ false }}"><span><b style="color: var(--ink)">Ủy quyền tạm được</b> khi vắng — <a href="UyQuyen.dc.html" class="mp-xlink" onClick="{{qtTabs.tabUyQuyen}}">Ủy quyền tạm</a>.</span></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isCatView}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card">
+<div class="mp-card__head"><h2 class="mp-card__title">Danh mục quyền</h2><span class="mp-muted" style="font-size: 15px">{{catCount}}</span></div>
+<div class="flt"><div class="mp-field" style="flex: 1 1 260px"><label for="vc-q">Tìm quyền</label><input id="vc-q" class="mp-input" value="{{fq}}" onChange="{{setFq}}" placeholder="Tên bước, quy trình…"></div>
+<div class="mp-field" style="flex: 0 1 260px"><label for="vc-p">Quy trình</label><select id="vc-p" class="mp-input" value="{{fp}}" onChange="{{setFp}}"><option value="">Mọi quy trình</option><sc-for list="{{procOpts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 860px">
+<thead><tr><th>Quyền / bước</th><th style="width: 190px">Phạm vi mặc định</th><th style="min-width: 260px">Đang cấp cho</th><th class="mp-actions"><span class="sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{catGroups}}" as="g" hint-placeholder-count="3">
+<tr class="is-group"><td colspan="4">{{g.proc}} <span class="mp-muted" style="font-weight: 400">· {{g.n}}</span></td></tr>
+<sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2"><tr><td>{{r.step}}</td><td class="mp-nowrap">{{r.scopeT}}</td><td>{{r.n}}<span class="mp-sub">{{r.roles}}</span></td>
+<td class="mp-actions mp-nowrap"><div class="mp-rowact"><sc-if value="{{canCat}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-iconbtn" aria-label="{{r.editLabel}}" title="Sửa" onClick="{{r.edit}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><button type="button" class="mp-iconbtn mp-iconbtn--danger" aria-label="{{r.delLabel}}" title="Xóa" onClick="{{r.del}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"></path></svg></button></sc-if></div></td></tr></sc-for>
+</sc-for>
+<sc-if value="{{noCat}}" hint-placeholder-val="{{ false }}"><tr><td colspan="4" class="mp-muted" style="text-align: center; padding: 24px">Không có quyền nào khớp bộ lọc.</td></tr></sc-if>
+</tbody></table></div></div>
+<sc-if value="{{pgCat.show}}" hint-placeholder-val="{{ false }}"><nav class="mp-pg" aria-label="Phân trang"><span>Dòng {{pgCat.info}}</span><div class="mp-pg__nav"><button type="button" class="mp-pg__n" onClick="{{pgCat.prev}}" disabled="{{pgCat.atFirst}}" aria-label="Trang trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button><sc-for list="{{pgCat.nums}}" as="pn" hint-placeholder-count="3"><sc-if value="{{pn.btn}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{pn.cls}}" aria-current="{{pn.cur}}" aria-label="{{pn.aria}}" onClick="{{pn.go}}">{{pn.t}}</button></sc-if><sc-if value="{{pn.gap}}" hint-placeholder-val="{{ false }}"><span class="mp-pg__gap" aria-hidden="true">…</span></sc-if></sc-for><button type="button" class="mp-pg__n" onClick="{{pgCat.next}}" disabled="{{pgCat.atLast}}" aria-label="Trang sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button></div><label class="mp-pg__size">Số dòng/trang <select class="mp-input" value="{{pgCat.size}}" onChange="{{pgCat.setSize}}"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label></nav></sc-if>
+</div>
+</sc-if>
+</div>
+</main>
+<sc-if value="{{dg.on}}" hint-placeholder-val="{{ false }}"><div class="ovl"><div class="mp-dlg" role="dialog" aria-modal="true" aria-labelledby="vq-dt" style="max-width: 640px; width: 100%">
+<div class="mp-dlg__head"><h2 id="vq-dt">{{dg.title}}</h2><button type="button" class="mp-btn mp-btn--ghost row-btn" aria-label="Đóng" onClick="{{dg.close}}">✕</button></div>
+<div class="mp-dlg__body" style="display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{dg.isDel}}" hint-placeholder-val="{{ false }}"><div style="font-size: 17px">Xóa quyền <b>{{dg.step}}</b> khỏi quy trình <b>{{dg.proc}}</b>?</div><div class="{{dg.delCls}}">{{dg.used}}</div></sc-if>
+<sc-if value="{{dg.isForm}}" hint-placeholder-val="{{ true }}">
+<div class="mp-field"><label for="vq-proc">Quy trình<span class="req">*</span></label><select id="vq-proc" class="mp-input" value="{{dg.proc}}" onChange="{{dg.setProc}}"><sc-for list="{{dg.procOpts}}" as="o" hint-placeholder-count="5"><option value="{{o.v}}">{{o.t}}</option></sc-for><option value="__new">+ Quy trình mới…</option></select></div>
+<sc-if value="{{dg.isNewProc}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><label for="vq-np">Tên quy trình mới<span class="req">*</span></label><input id="vq-np" class="mp-input" value="{{dg.newProc}}" onChange="{{dg.setNewProc}}" placeholder="VD: Bảo trì thiết bị"></div></sc-if>
+<div class="mp-field"><label for="vq-step">Tên quyền / bước<span class="req">*</span></label><input id="vq-step" class="mp-input" value="{{dg.step}}" onChange="{{dg.setStep}}" placeholder="VD: Duyệt phiếu bảo trì"></div>
+<div class="mp-field"><label for="vq-sc">Phạm vi mặc định</label><select id="vq-sc" class="mp-input" value="{{dg.scope}}" onChange="{{dg.setScope}}"><sc-for list="{{dg.scopeOpts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div>
+<sc-if value="{{dg.isAdd}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><span class="flabel">Cấp ngay cho vai trò <span class="mp-muted" style="font-weight: 400">· không bắt buộc, cấp quyền Xem; chỉnh chi tiết ở “Quyền theo vai trò”</span></span><div class="gchips"><sc-for list="{{dg.grants}}" as="g" hint-placeholder-count="6"><button type="button" class="{{g.cls}}" aria-pressed="{{g.onT}}" onClick="{{g.tog}}">{{g.name}}</button></sc-for></div></div></sc-if>
+<sc-if value="{{dg.hasErr}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--bad" style="font-size: 15px">{{dg.err}}</div></sc-if>
+</sc-if>
+</div>
+<div class="mp-dlg__foot"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{dg.close}}">Hủy</button><sc-if value="{{dg.isDel}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--danger" onClick="{{dg.ok}}">Xóa quyền</button></sc-if><sc-if value="{{dg.isForm}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{dg.ok}}">{{dg.okLabel}}</button></sc-if></div>
+</div></div></sc-if>
+
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vaitro": {"editor": "enum", "options": ["Admin", "HR", "Giám đốc", "Kế toán trưởng", "Kế toán", "Sales", "CSKH", "Kế hoạch", "Mua hàng", "Trưởng BP Mua hàng", "Thủ kho", "Thủ kho điều phối", "Thủ kho trưởng", "QC", "QC trưởng", "Người truy xuất"], "default": "Admin", "section": "Trạng thái hiển thị"}, "chedo": {"editor": "enum", "options": ["xem", "sua-quyen", "pham-vi-nha-may", "danh-muc-quyen"], "default": "xem", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1400}}'>
+/* mp-xs: thanh cuộn ngang ngay dưới tiêu đề bảng + dưới đáy bảng — đồng bộ 2 thanh, chỉ hiện thanh trên khi bảng tràn */
+(function () {
+  if (typeof window === 'undefined' || window.__mpXs) return; window.__mpXs = true;
+  var lock = false;
+  function fit() {
+    var xs = document.querySelectorAll('.mp-xs');
+    for (var i = 0; i < xs.length; i++) {
+      var x = xs[i], t = x.children[0], b = x.children[1];
+      if (!t || !b || !t.classList.contains('mp-xs__top')) continue;
+      var w = b.scrollWidth, s = t.firstElementChild;
+      if (s && s.style.width !== w + 'px') s.style.width = w + 'px';
+      var over = w > b.clientWidth + 1 ? '1' : '0';
+      if (x.getAttribute('data-over') !== over) x.setAttribute('data-over', over);
+      var th = b.querySelector('table > thead');
+      var top = th ? Math.max(0, th.offsetHeight - 17) + 'px' : '0px';
+      if (x.style.getPropertyValue('--xs-top') !== top) x.style.setProperty('--xs-top', top);
+      if (over === '1' && t.scrollLeft !== b.scrollLeft) t.scrollLeft = b.scrollLeft;
+    }
+  }
+  var queued = false;
+  function later() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fit(); }); }
+  document.addEventListener('scroll', function (e) {
+    var el = e.target, x = el && el.parentElement;
+    if (lock || !x || !x.classList || !x.classList.contains('mp-xs')) return;
+    var other = el === x.children[0] ? x.children[1] : el === x.children[1] ? x.children[0] : null;
+    if (!other) return;
+    lock = true; other.scrollLeft = el.scrollLeft; requestAnimationFrame(function () { lock = false; });
+  }, true);
+  new MutationObserver(later).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+  window.addEventListener('resize', later);
+  setTimeout(fit, 0); setTimeout(fit, 400); setTimeout(fit, 1500);
+})();
+
+const MPX = {
+people: { 'Sales': ['Võ Thị Lan', 'NM1'], 'CSKH': ['Đinh Mỹ Linh', 'Tất cả nhà máy'], 'Kế hoạch': ['Đỗ Minh Khang', 'NM1'], 'Mua hàng': ['Mai Anh Thư', 'Tất cả nhà máy'], 'Trưởng BP Mua hàng': ['Tạ Văn Hùng', 'Tất cả nhà máy'], 'Thủ kho': ['Lê Văn Hải', 'NM1'], 'Thủ kho điều phối': ['Hồ Văn Nam', 'NM1'], 'Thủ kho trưởng': ['Trần Thị Mai', 'NM1'], 'QC': ['Ngô Thu Trang', 'NM1'], 'QC trưởng': ['Trần Thị Mai', 'NM1'], 'Kế toán': ['Ngô Bảo Ngọc', 'Tất cả nhà máy'], 'Kế toán trưởng': ['Bùi Minh Châu', 'Tất cả nhà máy'], 'Giám đốc': ['Lê Quang Minh', 'Tất cả nhà máy'], 'Người truy xuất': ['Ngô Thu Trang', 'NM1'], 'HR': ['Hoàng Thị Lan', 'Tất cả nhà máy'], 'Admin': ['Nguyễn Hoàng Long', 'Tất cả nhà máy'], 'R&D': ['Nguyễn Thị Yến', 'Tất cả nhà máy'], 'Vận chuyển': ['Phan Văn Toàn', 'NM1'] },
+roles: ['Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'QC', 'QC trưởng', 'Kế toán', 'Kế toán trưởng', 'Giám đốc', 'Người truy xuất', 'HR', 'Admin'],
+roleText(r) { return r === 'Thủ kho điều phối' ? 'Thủ kho @ kho điều phối' : r; },
+menu: {"viec": ["*"], "ban_dh": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Sales"], "ban_kh": ["Admin", "CSKH", "Giám đốc", "Sales"], "mua_don": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "mua_ncc": ["Admin", "Giám đốc", "Mua hàng", "Trưởng BP Mua hàng"], "mua_tra": ["Admin", "Giám đốc", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "kt_kh": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng", "Sales"], "kt_ncc": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kt_so": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kho_ton": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_nhap": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_xuat": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_chuyen": ["Admin", "Giám đốc", "Kế hoạch", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Vận chuyển"], "kho_kiem": ["Admin", "Giám đốc", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_huy": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "QC", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "sx_lenh": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho", "Thủ kho điều phối"], "sx_me": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho điều phối"], "sx_ct": ["Admin", "Giám đốc", "Kế hoạch", "QC", "R&D"], "cl_yc": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_pk": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_cn": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Sales"], "cl_ml": ["Admin", "Giám đốc", "QC"], "tx_tx": ["Admin", "Giám đốc", "Người truy xuất", "Thủ kho", "Thủ kho điều phối"], "tx_th": ["Admin", "CSKH", "Giám đốc", "Kế toán trưởng", "Người truy xuất", "QC", "QC trưởng", "Sales"], "dm_nvl": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_sp": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_dv": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_kho": ["Admin", "Giám đốc", "Thủ kho trưởng"], "dm_ncc": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Mua hàng", "QC", "Thủ kho", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_nm": ["Admin", "Giám đốc", "Thủ kho trưởng"], "qt_nd": ["Admin", "Giám đốc", "HR"], "qt_kv": ["Admin", "Giám đốc"], "qt_ch": ["Admin", "Giám đốc"], "qt_nk": ["Admin", "Giám đốc", "HR"]},
+scr: {"viec": ["HopDuyet", "HopDuyet"], "ban_dh": ["BanDonHang-0r5c", "BanHang-wvhq"], "ban_kh": ["BanHang-wvhq", "BanHang-wvhq"], "mua_don": ["MuaPO-3fox", "MuaHang-7mvk"], "mua_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "mua_tra": ["MuaTraHang-e9jn", "MuaHang-7mvk"], "kt_kh": ["KeToan-k2vm", "KeToan-k2vm"], "kt_ncc": ["KeToanNCC-m3pz", "KeToan-k2vm"], "kt_so": ["KeToanSo-v6qe", "KeToan-k2vm"], "kho_ton": ["TonLo", "TonLo"], "kho_nhap": ["KhoVH-xv2s", "KhoVH-xv2s"], "kho_xuat": ["KhoXuat-71ki", "KhoVH-xv2s"], "kho_chuyen": ["KhoChuyen-oq5y", "KhoVH-xv2s"], "kho_kiem": ["KhoKiemKe-23cu", "KhoVH-xv2s"], "kho_huy": ["KhoHuy-br6r", "KhoVH-xv2s"], "sx_lenh": ["LenhSX-hxoc", "LenhSX-hxoc"], "sx_me": ["TheoDoiMe-w4ka", "LenhSX-hxoc"], "sx_ct": ["CongThuc-qdhl", "CongThuc-qdhl"], "cl_yc": ["ChatLuong-q4ls", "ChatLuong-q4ls"], "cl_pk": ["ChatLuongPK-d2xh", "ChatLuong-q4ls"], "cl_cn": ["ChatLuongCN-t9bw", "ChatLuongCN-t9bw"], "cl_ml": ["ChatLuongML-p5ga", "ChatLuongCN-t9bw"], "tx_tx": ["TruyXuat", "TruyXuat"], "tx_th": ["ThuHoi-r8hw", "ThuHoi-r8hw"], "dm_nvl": ["DanhMuc-15tr", "DanhMuc-15tr"], "dm_sp": ["DanhMucSP-zd4p", "DanhMucSP-zd4p"], "dm_dv": ["DonVi-u7dv", "DonVi-u7dv"], "dm_kho": ["NhaMay-qd07", "NhaMay-qd07"], "dm_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "dm_nm": ["NhaMay-qd07", "NhaMay-qd07"], "qt_nd": ["NguoiDung", "NguoiDung"], "qt_kv": ["KhuVuc", "KhuVuc"], "qt_ch": ["CauHinh-cocg", "CauHinh-cocg"], "qt_nk": ["NhatKy-n5jd", "NhatKy-n5jd"]},
+mods: {"ban": ["ban_dh", "ban_kh"], "mua": ["mua_don", "mua_ncc", "mua_tra"], "kt": ["kt_kh", "kt_ncc", "kt_so"], "kho": ["kho_ton", "kho_nhap", "kho_xuat", "kho_chuyen", "kho_kiem", "kho_huy"], "sx": ["sx_lenh", "sx_me"], "cl": ["cl_yc", "cl_pk", "cl_cn", "cl_ml"], "tx": ["tx_tx", "tx_th"], "dm": ["dm_nvl", "sx_ct", "dm_sp", "dm_dv", "dm_kho", "dm_nm", "qt_kv"], "qt": ["qt_nd", "qt_ch", "qt_nk"]},
+sees(r, k) { const a = this.menu[k] || []; return a.indexOf('*') >= 0 || a.indexOf(r) >= 0; },
+nav(r, here) { const show = {}, href = {}, go = {}; const to = (k) => { const x = this.scr[k]; href[k] = x[0] + '.dc.html'; go[k] = () => this.go(x[1], '', r); };
+Object.keys(this.scr).forEach((k) => { show[k] = this.sees(r, k); to(k); });
+Object.keys(this.mods).forEach((m) => { const vis = this.mods[m].filter((k) => show[k]); show[m] = vis.length > 0; const f = vis[0] || this.mods[m][0]; href[m] = href[f]; go[m] = go[f]; });
+const deny = !!here && !show[here]; const home = this.mods[(here || '').split('_')[0]] || [];
+return { show: show, href: href, go: go, deny: deny, homeHref: href.viec, homeGo: go.viec, alt: home.filter((k) => show[k]).length > 0 }; },
+name(r) { return (this.people[r] || [r])[0]; },
+fac(r) { return (this.people[r] || ['', 'NM1'])[1]; },
+roleLabel(r) { return r === 'QC trưởng' ? 'QC trưởng (ủy quyền)' : r; },
+go(board, id, role) { try { localStorage.setItem('mp.open', JSON.stringify({ b: board, id: id || '', r: role || '', t: Date.now() })); } catch (e) {} },
+take(board) { try { const x = JSON.parse(localStorage.getItem('mp.open') || 'null'); if (x && x.b === board && Date.now() - x.t < 20000) { localStorage.removeItem('mp.open'); return x; } } catch (e) {} return null; },
+can(role, allowed) { return allowed.indexOf(role) >= 0; },
+vx(role, setRole, here) { const n = this.name(role); const w = n.split(' '); return { m: this.nav(role, here), role: role, label: this.roleLabel(role), name: n, fac: this.fac(role), ini: (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(), opts: this.roles, optl: this.roles.map((x) => ({ v: x, t: this.roleText(x) })), set: (ev) => setRole(ev.target.value) }; },
+map: [['TH-NCC-', 'MuaHang-7mvk'], ['TH-2', 'ThuHoi-r8hw'], ['ĐH-', 'BanHang-wvhq'], ['KH-', 'BanHang-wvhq'], ['NC-', 'MuaHang-7mvk'], ['PO-', 'MuaHang-7mvk'], ['NCC-', 'MuaHang-7mvk'], ['TC-', 'KeToan-k2vm'], ['PN-', 'KhoVH-xv2s'], ['PX-', 'KhoVH-xv2s'], ['PC-', 'KhoVH-xv2s'], ['PK-', 'KhoVH-xv2s'], ['PH-', 'KhoVH-xv2s'], ['BB-TL-', 'KhoVH-xv2s'], ['L-', 'TonLo'], ['A-BAO-', 'TonLo'], ['LSX-', 'LenhSX-hxoc'], ['me:', 'LenhSX-hxoc'], ['CT-', 'CongThucChiTiet-pji2'], ['YC-NM', 'ChatLuong-q4ls'], ['QC-', 'ChatLuong-q4ls'], ['CN-', 'ChatLuongCN-t9bw'], ['ML-', 'ChatLuongCN-t9bw'], ['BB-ML-', 'ChatLuongCN-t9bw'], ['TX-', 'TruyXuat'], ['NVL-', 'DanhMuc-15tr'], ['SP-', 'DanhMucSP-zd4p'], ['NM1-', 'NhaMay-qd07'], ['NM2-', 'NhaMay-qd07']],
+board(id) { if (/^[AB]\d{6}/.test(id)) return 'TonLo'; for (const m of this.map) { if (id.indexOf(m[0]) === 0) return m[1]; } return ''; },
+ref(id, role, board, file) { const b = board || this.board(id); if (!b) return { id: id, ok: false, href: '#', open: () => {} }; const f = file || (id.indexOf('me:') === 0 ? 'TheoDoiMe-w4ka' : b); return { id: id.replace(/^me:/, ''), ok: true, href: f + '.dc.html', open: () => this.go(b, id, role) }; },
+gate(role, allowed, setRole, why) { if (allowed.indexOf(role) >= 0) return null; const who = allowed[0]; return { who: who, why: why || '', hasWhy: !!why, sw: () => setRole(who) }; }
+};
+
+const VT_ROLES = [{"name": "Admin", "desc": "Quản trị hệ thống: toàn quyền mọi thao tác ở mọi nhà máy; chỉ Admin gán vai trò Admin và Người truy xuất; mở khóa, cấp mật khẩu tạm; tham số, định dạng mã, đơn vị tính; nhà máy, khu vực làm việc, dàn silo, kho.", "n": 1, "scope": "Mọi nhà máy", "adminOnly": true, "deleg": false, "holders": [{"n": "Nguyễn Hoàng Long"}], "groups": [["Phân quyền", [["Gán / gỡ vai trò Admin và Người truy xuất", "S", "Mọi nhà máy"], ["Xác minh, mở khóa, cấp mật khẩu tạm", "S", "Mọi nhà máy"], ["Ủy quyền tạm", "T", "Mọi nhà máy"], ["Nhật ký hệ thống (mọi loại)", "X", "Mọi nhà máy"]]], ["Cấu hình", [["Tham số mặc định ở mọi quy trình", "S", "Mọi nhà máy"], ["Định dạng mã danh mục và mã chứng từ", "S", "Mọi nhà máy"], ["Thêm đơn vị tính", "T", "Mọi nhà máy"]]], ["Danh mục", [["Nhà máy, khu vực làm việc, kho: tạo / sửa / ngừng dùng (làm trực tiếp, không qua đề nghị)", "TSH", "Mọi nhà máy"], ["Dàn silo khu HH / BTP: thêm, sửa, bảo trì / ngừng dùng", "TSH", "Mọi nhà máy"]]]]}, {"name": "HR", "desc": "Tạo / sửa tài khoản, gán vai trò trực tiếp (trừ Admin và Người truy xuất); đặt ngày khóa khi nghỉ việc; ủy quyền tạm khi vắng.", "n": 2, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Hoàng Thị Lan"}, {"n": "Đặng Thị Hạnh"}], "groups": [["Phân quyền", [["Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin, Người truy xuất); đổi vai trò", "TS", "Mọi nhà máy"], ["Nhập ngày nghỉ, đặt / sửa ngày khóa", "S", "Mọi nhà máy"], ["Ủy quyền tạm một vai trò (bắt buộc ngày hết hạn)", "T", "Mọi nhà máy"], ["Nhật ký tài khoản", "X", "Mọi nhà máy"], ["Vai trò × quyền (chỉ xem)", "X", "Mọi nhà máy"]]]]}, {"name": "Giám đốc", "desc": "Duyệt hạn mức, số tiền hoàn khi hủy đơn và khi thu hồi (cùng Kế toán trưởng, một người là đủ); duyệt thêm PO trên ngưỡng; ký quyết định thu hồi, duyệt đóng hồ sơ thu hồi.", "n": 1, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": true, "holders": [{"n": "Lê Quang Minh"}], "groups": [["Kiểm công nợ", [["Duyệt hạn mức ban đầu (một trong GĐ / KTT)", "D", "Mọi nhà máy"], ["Quyết hạn mức mới khi Sales xin tăng", "D", "Mọi nhà máy"]]], ["Hủy đơn", [["Quyết số tiền hoàn lại cho khách", "D", "Mọi nhà máy"]]], ["Mua nguyên vật liệu", [["Duyệt thêm PO trên ngưỡng 100 triệu", "D", "Mọi nhà máy"]]], ["Hồ sơ thu hồi", [["Ký quyết định thu hồi / khoanh vùng", "D", "Mọi nhà máy"], ["Duyệt số tiền hoàn khi thu hồi", "D", "Mọi nhà máy"], ["Duyệt đóng hồ sơ thu hồi", "D", "Mọi nhà máy"]]]]}, {"name": "Kế toán trưởng", "desc": "Duyệt hạn mức và số tiền hoàn (cùng Giám đốc, một người là đủ); xem mọi công nợ khách hàng, nhà cung cấp và sổ thu chi.", "n": 1, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": true, "holders": [{"n": "Bùi Minh Châu"}], "groups": [["Kiểm công nợ", [["Duyệt hạn mức ban đầu", "D", "Mọi nhà máy"], ["Quyết hạn mức mới", "D", "Mọi nhà máy"]]], ["Hủy đơn", [["Quyết số tiền hoàn lại cho khách", "D", "Mọi nhà máy"]]], ["Kế toán", [["Xem mọi công nợ khách hàng, công nợ NCC, sổ thu chi", "X", "Mọi nhà máy"]]], ["Hồ sơ thu hồi", [["Duyệt số tiền hoàn khi thu hồi", "D", "Mọi nhà máy"]]]]}, {"name": "Kế toán", "desc": "Đề xuất hạn mức; ghi nhận tiền về / hoàn tiền (không duyệt); thêm hóa đơn (số, ngày, file) vào đơn — một đơn nhiều hóa đơn; ghi nhận đã trả NCC, giảm trừ khi trả hàng; ghi kết quả công nợ quá 90 ngày; ghi giá trị hàng hủy.", "n": 4, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Ngô Bảo Ngọc"}, {"n": "Trịnh Văn Sơn"}], "groups": [["Kiểm công nợ", [["Đề xuất hạn mức ban đầu", "T", "Mọi nhà máy"], ["Ghi nhận tiền về, hệ thống tự cấn khoản quá hạn", "T", "Mọi nhà máy"], ["Xem công nợ, lịch sử thanh toán", "X", "Mọi nhà máy"]]], ["Đơn hàng › Giao hàng", [["Thêm hóa đơn vào đơn: số, ngày, file (một đơn nhiều hóa đơn)", "T", "Mọi nhà máy"], ["Ghi nhận tiền thu trước giao của yêu cầu xuất", "T", "Mọi nhà máy"]]], ["Kế toán · thu chi & công nợ", [["Ghi nhận tiền về (bản ghi TC-…, ảnh chứng từ)", "T", "Mọi nhà máy"], ["Ghi nhận hoàn tiền theo số GĐ / KTT đã quyết", "T", "Mọi nhà máy"], ["Hủy bản ghi thu / chi nhập sai (bắt buộc lý do, không xóa)", "H", "Mọi nhà máy"], ["Ghi kết quả công nợ quá 90 ngày", "S", "Mọi nhà máy"]]], ["Mua nguyên vật liệu", [["Ghi nhận đã trả trước theo PO", "T", "Mọi nhà máy"], ["Ghi nhận đã trả NCC khoản trả sau", "T", "Mọi nhà máy"]]], ["Trả hàng NCC", [["Ghi giảm trừ khoản phải trả NCC", "S", "Mọi nhà máy"]]], ["Nhập kho", [["Lưu hóa đơn, chứng từ, file đánh giá bên ngoài", "T", "Mọi nhà máy"]]], ["Hủy hàng", [["Ghi giá trị hàng hủy vào phiếu hủy (không hạch toán)", "S", "Mọi nhà máy"]]]]}, {"name": "Sales", "desc": "Khách hàng, nhận / sửa / hủy đơn, xin tăng hạn mức, yêu cầu xuất từ đơn và ghi nhận kết quả giao, nhắc nợ; xem công nợ khách (chỉ xem); đổi lô / đề nghị hoàn tiền khi thu hồi.", "n": 7, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Võ Thị Lan"}, {"n": "Nguyễn Minh Khoa"}, {"n": "Nguyễn Quang Vinh"}, {"n": "Lâm Thảo Vy"}, {"n": "Phùng Thị Hà My"}], "groups": [["Nhận đơn", [["Tạo / cập nhật hồ sơ khách, nhập đơn", "TS", "Mọi nhà máy"], ["Hình thức thanh toán, % cọc, số ngày nợ", "S", "Mọi nhà máy"], ["Tải hợp đồng khách hàng, chốt đơn", "S", "Mọi nhà máy"]]], ["Kiểm công nợ", [["Báo khách, chuyển đơn sang chờ", "S", "Mọi nhà máy"], ["Xin tăng hạn mức", "T", "Mọi nhà máy"], ["Ghi mức cọc mới vào đơn", "S", "Mọi nhà máy"]]], ["Hủy / sửa đơn", [["Ghi nhận yêu cầu hủy, lý do", "H", "Mọi nhà máy"], ["Tạo phiên bản đơn mới, tải phụ lục", "S", "Mọi nhà máy"]]], ["Đơn hàng › Giao hàng", [["Yêu cầu xuất từ đơn: chọn dòng, SL giao lần này; sửa ngày giao dự kiến", "T", "Mọi nhà máy"], ["Phiếu xuất bán chờ bên yêu cầu: nhận phần đã lấy / hủy", "S", "Mọi nhà máy"], ["Hủy yêu cầu xuất chưa xuất, kể cả yêu cầu bị nhà máy trả về (bắt buộc lý do)", "H", "Mọi nhà máy"], ["Ghi nhận giao theo phiếu xuất: SL khách nhận từng lô, ngày nhận, ảnh biên bản", "T", "Mọi nhà máy"], ["Ghi khách còn lấy phần trả về hay không", "S", "Mọi nhà máy"]]], ["Kế toán", [["Nhắc nợ, ghi lần liên hệ", "T", "Mọi nhà máy"], ["Xem công nợ, hạn mức, lịch sử thanh toán của khách", "X", "Mọi nhà máy"]]], ["Xuất kho", [["Yêu cầu xuất bán (phiếu xuất bán do máy chủ nhà máy tự lập)", "T", "Mọi nhà máy"], ["Phiếu Chờ bên yêu cầu: nhận phần đã lấy / hủy", "SH", "Mọi nhà máy"]]], ["Hồ sơ thu hồi", [["Đổi lô mới / đề nghị hoàn tiền", "T", "Mọi nhà máy"]]]]}, {"name": "CSKH", "desc": "Thông báo khách / đại lý khi thu hồi; xem khách hàng; không tạo / sửa / hủy đơn.", "n": 2, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Đinh Mỹ Linh"}, {"n": "Lâm Thảo Vy"}], "groups": [["Hồ sơ thu hồi", [["Thông báo khách / đại lý theo danh sách truy xuất", "S", "Mọi nhà máy"]]], ["Khách hàng", [["Xem hồ sơ khách", "X", "Mọi nhà máy"]]]]}, {"name": "Kế hoạch", "desc": "Công thức; tạo / phát lệnh SX; gửi đề nghị chuyển kho cho kho điều phối do Lệnh SX tự lập và mọi yêu cầu chuyển kho; kiểm tra lại NVL trên lệnh khi hàng về (cả lệnh Chờ NVL); chỉ thêm tay nhu cầu mua vào Hàng đợi mua ngoài nhu cầu hệ thống tính (nhu cầu theo lệnh SX và tồn tối thiểu do hệ thống tự đưa vào hàng đợi); yêu cầu QC (phiếu xuất SX do máy chủ nhà máy tự lập khi lệnh phát sang khu — không gửi / hủy yêu cầu xuất SX riêng); NCR; hủy mẻ, mẻ bù; xem tình trạng giao của đơn.", "n": 4, "scope": "Nhà máy", "adminOnly": false, "deleg": true, "holders": [{"n": "Đỗ Minh Khang"}, {"n": "1 người ở NM2"}, {"n": "Phạm Thu Hương"}, {"n": "Đỗ Văn Nam"}], "groups": [["Danh mục", [["Tạo / sửa mã NVL, SP (mã tự sinh theo định dạng)", "TS", "Danh mục chung"], ["Ngừng dùng mã do mình đề nghị — trực tiếp, không qua duyệt (28/10)", "H", "Danh mục chung"], ["Rút đề nghị khi đang chờ duyệt (chỉ người đề xuất)", "H", "Danh mục chung"]]], ["Danh mục sản phẩm", [["Dòng sản phẩm · Quy cách đóng gói · Hạng · Thương hiệu: tạo / sửa, ngừng dùng trực tiếp", "TSH", "Danh mục chung"]]], ["Công thức", [["Nhập / sửa công thức CT-{loại}-{4 số} (lưu phiên bản mới, không duyệt)", "TS", "Mọi nhà máy"]]], ["Lệnh sản xuất", [["Tạo lệnh theo 9 điều kiện, kế hoạch nhãn hiệu", "T", "Nhà máy"], ["Phương án dàn silo (gợi ý, kéo thả)", "TS", "Nhà máy"], ["Bổ sung / từ chối khi chưa đủ điều kiện", "S", "Nhà máy"], ["Đổi thứ tự hàng đợi phát lệnh", "S", "Nhà máy"], ["Phát lệnh đầu hàng đợi", "D", "Nhà máy"], ["Sửa lệnh Mới tạo", "S", "Nhà máy"], ["Hủy lệnh chưa chạy (bắt buộc lý do)", "H", "Nhà máy"], ["Kết thúc sớm lệnh đang chạy", "S", "Nhà máy"], ["Kiểm tra lại NVL trên lệnh, cả lệnh Chờ NVL (đủ thì giữ chỗ; so tồn NM1-DP với KG giữ chỗ)", "S", "Nhà máy"], ["Nhận báo phát lệnh không tới", "X", "Nhà máy"], ["Xử lý xung đột ngoại tuyến (cùng QC)", "S", "Nhà máy"]]], ["Tiến độ lệnh sản xuất", [["Nhận báo lệnh chưa phát sang khu được (máy chủ nhà máy tự kiểm)", "X", "Nhà máy"], ["Quyết hủy mẻ do sự cố", "H", "Nhà máy"], ["Thêm 1 mẻ bù", "S", "Nhà máy"]]], ["Mua nguyên vật liệu", [["Thêm nhu cầu mua NVL vào Hàng đợi mua (NC-…; nhu cầu theo lệnh SX và tồn tối thiểu do hệ thống tính, không qua Kế hoạch)", "T", "Nhà máy"]]], ["Xuất kho / chuyển kho", [["Tạo yêu cầu chuyển kho (mọi yêu cầu chuyển kho)", "T", "Nhà máy"], ["Phiếu chuyển kho Chờ bên yêu cầu: nhận phần đã lấy / hủy (xuất SX không qua bước này — phiếu tự lập khi lệnh phát sang khu)", "SH", "Nhà máy"], ["Xử lý trễ, tìm hàng thiếu 7 ngày", "S", "Nhà máy"], ["Lập biên bản thất lạc BB-TL-…", "T", "Nhà máy"]]], ["Nhập kho", [["Phiếu báo lỗi NCR cho bao hư từ SX", "T", "Nhà máy"]]], ["Đơn hàng › Giao hàng", [["Nhận thông báo đơn Sẵn sàng giao, xem tab Giao hàng của đơn", "X", "Nhà máy"]]], ["Hủy / sửa đơn", [["Hủy lệnh SX chưa chạy theo đơn hủy", "H", "Nhà máy"], ["Cập nhật lệnh SX theo đơn mới", "S", "Nhà máy"]]], ["Chất lượng", [["Gửi yêu cầu kiểm lô (YC-NM1-…)", "TS", "Nhà máy"], ["Tạo lệnh mới để bù đơn", "T", "Nhà máy"]]]]}, {"name": "R&D", "desc": "Nhập / sửa công thức, không duyệt.", "n": 2, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Nguyễn Thị Yến"}], "groups": [["Công thức", [["Nhập / sửa công thức (lưu phiên bản mới, không duyệt)", "TS", "Mọi nhà máy"]]]]}, {"name": "Mua hàng", "desc": "Hồ sơ NCC, lập PO từ Hàng đợi mua (gộp nhu cầu SX, tồn tối thiểu, yêu cầu Kế hoạch lập tay theo NVL × kho), phiếu trả hàng NCC, gửi yêu cầu xuất trả cho kho.", "n": 3, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Mai Anh Thư"}, {"n": "Tạ Văn Hùng"}], "groups": [["Danh mục", [["Tạo / sửa mã NVL, SP (mã tự sinh theo định dạng)", "TS", "Danh mục chung"], ["Gửi đề nghị ngừng dùng mã", "T", "Danh mục chung"], ["Rút đề nghị khi đang chờ duyệt (chỉ người đề xuất)", "H", "Danh mục chung"]]], ["Nhà cung cấp", [["Tìm NCC, tạo hồ sơ (Chờ duyệt)", "T", "Mọi nhà máy"], ["Kiểm đủ hồ sơ pháp lý, chứng nhận còn hạn", "S", "Mọi nhà máy"], ["Tìm NCC khác / báo không có NCC", "S", "Mọi nhà máy"]]], ["Mua nguyên vật liệu", [["Xem Hàng đợi mua (nhu cầu gộp theo NVL × kho nhận, sắp theo ngày cần)", "X", "Mọi nhà máy"], ["Bỏ qua nhu cầu trong hàng đợi (bắt buộc lý do)", "H", "Mọi nhà máy"], ["Lập PO từ Hàng đợi mua (cùng NCC gộp 1 PO)", "TS", "Mọi nhà máy"], ["Theo dõi PO nhận một phần", "X", "Mọi nhà máy"]]], ["Nhập kho", [["Báo NCC, tạo phiếu gửi NCC", "T", "Mọi nhà máy"]]], ["Trả hàng NCC", [["Tạo phiếu trả hàng TH-NCC-…", "T", "Mọi nhà máy"], ["Ghi kết quả NCC: chấp nhận / đổi 1-1 / giảm công nợ", "S", "Mọi nhà máy"], ["Biên bản không thống nhất, kết quả tự giải quyết", "TS", "Mọi nhà máy"], ["Gửi yêu cầu xuất trả (Trưởng BP Mua hàng duyệt rồi mới sang kho)", "S", "Mọi nhà máy"], ["Ký xác nhận, gửi giấy tờ cho kế toán", "S", "Mọi nhà máy"]]], ["Xuất kho", [["Phiếu xuất trả Chờ bên yêu cầu: nhận phần đã lấy / hủy", "SH", "Mọi nhà máy"]]]]}, {"name": "Trưởng BP Mua hàng", "desc": "Duyệt nhà cung cấp, ngừng dùng nhà cung cấp, duyệt PO, hủy PO đã duyệt, duyệt yêu cầu xuất trả NCC; duyệt ngừng dùng mã danh mục do Mua hàng đề nghị (Việc cần làm).", "n": 1, "scope": "Mọi nhà máy", "adminOnly": false, "deleg": true, "holders": [{"n": "Tạ Văn Hùng"}], "groups": [["Nhà cung cấp", [["Duyệt / từ chối nhà cung cấp", "D", "Mọi nhà máy"], ["Ngừng dùng nhà cung cấp, ghi lý do", "H", "Mọi nhà máy"]]], ["Mua nguyên vật liệu", [["Duyệt PO", "D", "Mọi nhà máy"], ["Hủy PO đã duyệt (ghi lý do, báo NCC)", "H", "Mọi nhà máy"]]], ["Trả hàng NCC", [["Duyệt / từ chối yêu cầu xuất trả NCC (từ chối bắt buộc lý do; người gửi không tự duyệt)", "D", "Mọi nhà máy"]]], ["Danh mục", [["Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do Mua hàng đề nghị (người gửi không tự duyệt)", "D", "Danh mục chung"]]]]}, {"name": "Thủ kho", "desc": "Nhập / xuất / chuyển / đếm / tem ở kho được gán; lập phiếu xuất trả NCC (không lập phiếu xuất bán — máy chủ nhà máy tự lập); tạo và thực hiện phiếu hủy; gửi yêu cầu QC; biên bản chênh lệch khi truy xuất.", "n": 14, "scope": "Kho được gán", "adminOnly": false, "deleg": false, "holders": [{"n": "Lê Văn Hải"}, {"n": "Nguyễn Văn Tú"}, {"n": "Lê Thị Thu"}, {"n": "Phan Văn Lộc"}, {"n": "Lý Thị Ngân"}, {"n": "Đoàn Văn Kiên"}, {"n": "Trần Quốc Duy (đã khóa)"}], "groups": [["Danh mục", [["Tạo / sửa mã NVL, SP (mã tự sinh theo định dạng)", "TS", "Danh mục chung"], ["Gửi đề nghị ngừng dùng mã", "T", "Danh mục chung"], ["Rút đề nghị khi đang chờ duyệt (chỉ người đề xuất)", "H", "Danh mục chung"]]], ["Sự cố tem", [["Hủy tem: khóa mã, thu tem", "H", "Kho được gán"], ["Tem hỏng: in lại cùng mã", "S", "Kho được gán"], ["Tem mất: cấp mã mới cùng lô", "T", "Kho được gán"]]], ["Nhập kho", [["Nhận hàng mua: quét PO → phiếu nhập PN-… điền sẵn theo PO (phiếu nhập loại khác hệ thống tự sinh); hoàn tất nhận — khớp → Đã nhập, lệch → chờ Thủ kho trưởng xác nhận", "T", "Kho được gán"], ["Từ chối ở cửa kho khi thiếu chứng từ", "H", "Kho được gán"], ["Nhập số lô NCC, NSX, HSD, tải file đánh giá bên ngoài (mã lô nội bộ L-… sinh khi phiếu Đã nhập)", "T", "Kho được gán"], ["Kiểm ngoại quan, bao hư, biên bản", "T", "Kho được gán"], ["In / dán / quét tem từng bao", "TS", "Kho được gán"], ["Nhận thùng BTP về kho BTP theo phiếu nhập hệ thống tự sinh khi đóng thùng xong (quét tem dán sẵn lúc đóng thùng, không in tem mới)", "T", "Kho BTP"]]], ["Xuất kho", [["Yêu cầu xuất cho kho khác", "T", "Kho được gán"], ["Lấy hàng theo phiếu, quét từng bao", "S", "Kho được gán"], ["Trả hàng đã lấy về lại kho khi hủy", "H", "Kho được gán"], ["Lập phiếu xuất trả NCC theo yêu cầu đã được Trưởng BP Mua hàng duyệt — lập ra ở Chờ lấy hàng, không qua duyệt", "T", "Kho được gán"]]], ["Chuyển kho", [["Xuất hàng, lập phiếu chuyển PC-…", "T", "Kho được gán"], ["Nhận hàng, quét, ký nhận", "S", "Kho được gán"], ["Biên bản chênh lệch khi nhận", "T", "Kho được gán"]]], ["Kiểm kho", [["Đếm, đối chiếu, ghi chênh lệch", "T", "Kho được gán"], ["In báo cáo gửi các bên", "X", "Kho được gán"]]], ["Hủy hàng", [["Tạo phiếu hủy PH-…", "T", "Kho được gán"], ["Thực hiện hủy, lập biên bản", "H", "Kho được gán"]]], ["Khác", [["Kiểm xuất đủ, đúng lô của đơn", "X", "Kho được gán"], ["Kiểm tồn khả dụng", "X", "Kho được gán"], ["Gửi yêu cầu kiểm lô", "T", "Kho được gán"], ["Biên bản chênh lệch cân bằng khối lượng", "T", "Kho được gán"]]]]}, {"name": "Thủ kho điều phối", "desc": "Thủ kho được gán kho điều phối (NM1-DP): nhận chuyển kho từ kho tổng theo đề nghị của Lệnh SX, lấy hàng theo phiếu xuất SX máy chủ nhà máy tự lập khi lệnh phát sang khu (không lập tay), nhập bột dư cuối lệnh, xử lý tem lỗi ở khu SX. Kho điều phối chỉ phục vụ sản xuất — không chứa thành phẩm, không xuất bán / nhận khách trả. Quyền Thủ kho chung vẫn áp dụng trong kho này.", "n": 1, "scope": "Kho điều phối", "adminOnly": false, "deleg": false, "holders": [{"n": "Hồ Văn Nam"}], "groups": [["Chuyển kho", [["Nhận hàng chuyển từ kho tổng (đề nghị PC-… do Lệnh SX lập), quét, ký nhận", "S", "Kho điều phối"], ["Biên bản chênh lệch khi nhận", "T", "Kho điều phối"]]], ["Tiến độ lệnh sản xuất", [["Nhận hàng chuyển về NM1-DP theo đề nghị của lệnh (không xác nhận soạn NVL — Kế hoạch kiểm tra lại)", "S", "Kho điều phối"], ["Nhận bột dư cuối lệnh theo phiếu nhập NVL dư hệ thống tự sinh", "T", "Kho điều phối"]]], ["Xuất kho", [["Lấy hàng theo phiếu xuất SX máy chủ nhà máy tự lập khi lệnh phát sang khu (từ NM1-DP, nơi nhận là khu của lệnh, lô FEFO còn hạn ≥ ngưỡng SX) — không lập tay, không qua duyệt", "T", "Kho điều phối"], ["Lấy hàng, quét từng bao", "S", "Kho điều phối"]]], ["Sự cố tem", [["Tem lỗi báo từ khu SX: hủy / in lại / cấp mã mới", "TSH", "Kho điều phối"]]]]}, {"name": "Thủ kho trưởng", "desc": "Xác nhận chênh lệch khi nhập (phiếu nhập khớp và phiếu xuất không qua duyệt), xác nhận phiếu chuyển, duyệt hủy hàng, ra lệnh kiểm kho và duyệt điều chỉnh; xác nhận biên bản thất lạc; duyệt ngừng dùng mã danh mục do Kho đề nghị (Việc cần làm).", "n": 2, "scope": "Kho được gán", "adminOnly": false, "deleg": true, "holders": [{"n": "Trần Thị Mai"}, {"n": "Nguyễn Văn Tùng"}], "groups": [["Nhập kho", [["Xác nhận chênh lệch khi nhập (SL nhận khác dự kiến, có bao hư) — nhập theo SL thực, hoặc yêu cầu đếm lại (bắt buộc lý do); phiếu nhập khớp không qua duyệt", "D", "Kho được gán"]]], ["Chuyển kho", [["Chọn hàng hư gửi QC hay hủy (kho nhận)", "D", "Kho được gán"], ["Xác nhận biên bản thất lạc", "D", "Kho được gán"]]], ["Kiểm kho", [["Ra lệnh kiểm toàn kho", "T", "Kho được gán"], ["Duyệt điều chỉnh tồn", "D", "Kho được gán"]]], ["Hủy hàng", [["Xác nhận phiếu hủy", "D", "Kho được gán"], ["Từ chối phiếu hủy / dời ngày hủy lô hết hạn", "DS", "Kho được gán"]]], ["Danh mục", [["Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do Kho đề nghị (người gửi không tự duyệt)", "D", "Danh mục chung"]]]]}, {"name": "Vận chuyển", "desc": "Chuyến xe chuyển kho giữa 2 nhà máy. Không còn giao hàng cho khách — giao hàng chỉ ghi nhận, Sales ghi (24/10).", "n": 5, "scope": "Chuyến được giao", "adminOnly": false, "deleg": false, "holders": [{"n": "Phan Văn Toàn"}, {"n": "Đoàn Văn Kiên"}], "groups": [["Chuyển kho", [["Chuyển hàng, truy vết chuyến xe", "S", "Chuyến được giao"]]]]}, {"name": "Công nhân", "desc": "Tài khoản riêng, đăng nhập PC xưởng bằng quét thẻ; chỉ thao tác lệnh của khu mình.", "n": 76, "scope": "Khu vực làm việc", "adminOnly": false, "deleg": false, "holders": [{"n": "Phạm Quốc Bảo"}, {"n": "Lương Văn Tâm"}, {"n": "74 người khác"}], "groups": [["Vận hành mẻ", [["Nhấn Start trên PC", "S", "Khu vực làm việc"], ["Quét bao nạp silo, nạp bổ sung", "T", "Khu vực làm việc"], ["Xác nhận silo xả sạch giữa lệnh", "S", "Khu vực làm việc"], ["Bù / bớt bột tới đúng khối lượng", "S", "Khu vực làm việc"], ["Dán QR bao hỗn hợp", "T", "Khu vực làm việc"], ["Báo sự cố không khắc phục được", "T", "Khu vực làm việc"], ["Xả bột dư cuối lệnh, dán QR", "T", "Khu vực làm việc"]]], ["Chiết rót & đóng gói", [["Quét lon đầu từng nhãn hiệu", "TS", "Khu vực làm việc"], ["Loại lon lệch khối lượng", "H", "Khu vực làm việc"], ["Đếm lại thùng thiếu, sửa số lon", "S", "Khu vực làm việc"], ["Dán QR thùng", "T", "Khu vực làm việc"]]], ["Công thức", [["Xem công thức của lệnh khu mình", "X", "Khu vực làm việc"]]]]}, {"name": "QC", "desc": "Lấy mẫu, gửi kiểm nghiệm, tải file đánh giá bên ngoài, đề xuất kết luận; tự quyết thời hạn lưu mẫu; quản lý và tự hủy mẫu lưu hết hạn; CAPA; xử lý xung đột ngoại tuyến cùng Kế hoạch.", "n": 6, "scope": "Nhà máy", "adminOnly": false, "deleg": false, "holders": [{"n": "Ngô Thu Trang"}, {"n": "Vũ Đức Anh"}], "groups": [["Danh mục", [["Tạo / sửa mã NVL, SP (mã tự sinh theo định dạng)", "TS", "Danh mục chung"], ["Gửi đề nghị ngừng dùng mã", "T", "Danh mục chung"], ["Rút đề nghị khi đang chờ duyệt (chỉ người đề xuất)", "H", "Danh mục chung"]]], ["QC đầu vào", [["Lấy 2 mẫu", "T", "Nhà máy"], ["Tải file đánh giá bên ngoài, đề xuất kết luận", "T", "Nhà máy"]]], ["QC thành phẩm", [["Lấy 2 mẫu", "T", "Nhà máy"], ["Tải file đánh giá bên ngoài, đề xuất kết luận", "T", "Nhà máy"]]], ["Mẫu lưu", [["Lấy mẫu, tạo mã mẫu lưu ML-…", "TS", "Nhà máy"], ["Niêm phong, lưu kho QC", "S", "Nhà máy"], ["Thời hạn lưu, điều kiện bảo quản", "TS", "Nhà máy"], ["Tự hủy mẫu hết hạn, biên bản BB-ML-…", "H", "Nhà máy"]]], ["Khác", [["Hủy mẫu lưu liên quan", "H", "Nhà máy"], ["Xử lý xung đột ngoại tuyến (cùng Kế hoạch)", "S", "Nhà máy"], ["Nguyên nhân gốc, CAPA", "T", "Nhà máy"], ["Xem công thức, theo dõi mẻ", "X", "Nhà máy"]]]]}, {"name": "QC trưởng", "desc": "Duyệt yêu cầu kiểm và kết luận QC, ký phiếu chứng nhận; mở lại lô NVL Không đạt; mở hồ sơ thu hồi, đánh giá rủi ro, báo cơ quan, duyệt CAPA; duyệt ngừng dùng mã danh mục do QC đề nghị (Việc cần làm).", "n": 2, "scope": "Nhà máy", "adminOnly": false, "deleg": true, "holders": [{"n": "Võ Thanh Hà (vắng 15–21/10)"}, {"n": "Trần Thị Mai (tạm 15–21/10)"}], "groups": [["QC đầu vào", [["Duyệt / từ chối yêu cầu kiểm", "D", "Nhà máy"], ["Duyệt kết luận", "D", "Nhà máy"], ["Mở lại lô NVL Không đạt", "S", "Nhà máy"]]], ["QC thành phẩm", [["Duyệt / từ chối / yêu cầu bổ sung", "D", "Nhà máy"], ["Duyệt kết luận (BTP → TP)", "D", "Nhà máy"], ["Báo Kế hoạch, Kho", "X", "Nhà máy"]]], ["Phiếu chứng nhận", [["Ký phiếu chứng nhận chất lượng CN-…", "D", "Nhà máy"]]], ["Hồ sơ thu hồi", [["Mở hồ sơ thu hồi TH-… (chỉ vai trò này)", "T", "Nhà máy"], ["Đánh giá rủi ro, đề xuất thu hồi / khoanh vùng", "T", "Nhà máy"], ["Báo cơ quan quản lý", "T", "Nhà máy"], ["Duyệt CAPA", "D", "Nhà máy"]]], ["Danh mục", [["Duyệt ngừng dùng mã NVL / SP / dòng SP / quy cách / hạng / thương hiệu do QC đề nghị (người gửi không tự duyệt)", "D", "Danh mục chung"]]]]}, {"name": "Người truy xuất", "desc": "Tạo phiếu và chạy truy xuất — chỉ vai trò này; do Admin gán.", "n": 2, "scope": "Mọi nhà máy", "adminOnly": true, "deleg": false, "holders": [{"n": "Võ Thanh Hà"}, {"n": "Ngô Thu Trang"}], "groups": [["Truy xuất", [["Tạo phiếu TX-…, chạy truy xuất ngược / xuôi, xuất báo cáo", "T", "Mọi nhà máy"]]], ["Hồ sơ thu hồi", [["Truy xuất lô nghi lỗi", "T", "Mọi nhà máy"]]]]}];
+const VT_ND = ["Nguyễn Hoàng Long", "Hoàng Thị Lan", "Lê Quang Minh", "Bùi Minh Châu", "Ngô Bảo Ngọc", "Võ Thị Lan", "Nguyễn Minh Khoa", "Đinh Mỹ Linh", "Đỗ Minh Khang", "Mai Anh Thư", "Tạ Văn Hùng", "Trần Thị Mai", "Lê Văn Hải", "Nguyễn Văn Tú", "Hồ Văn Nam", "Nguyễn Văn Tùng", "Phan Văn Lộc", "Trần Quốc Duy", "Võ Thanh Hà", "Ngô Thu Trang", "Vũ Đức Anh", "Phạm Quốc Bảo", "Lương Văn Tâm", "Nguyễn Thị Yến", "Lê Thị Thu", "Đặng Thị Hạnh", "Trịnh Văn Sơn", "Nguyễn Quang Vinh", "Lâm Thảo Vy", "Phạm Thu Hương", "Lý Thị Ngân", "Đoàn Văn Kiên", "Phan Văn Toàn", "Đỗ Văn Nam", "Châu Văn Lực", "Trương Minh Phúc", "Phùng Thị Hà My"];
+// Phân trang dùng chung: MPPG(this, 'khóa-bảng', mảngĐãLọc, { sig: chuỗi-bộ-lọc }) → { items, show, info, nums, prev, next, atFirst, atLast, size, setSize }
+function MPPG(self, key, list, opt) {
+  opt = opt || {}; list = list || [];
+  const all = self.state.__pg || {}; const cur = all[key] || {};
+  const size = cur.size || opt.size || 10; const n = list.length;
+  const pages = Math.max(1, Math.ceil(n / size));
+  const sig = String(opt.sig !== undefined ? opt.sig : '') + '#' + n;
+  let p = cur.sig === sig ? (cur.p || 1) : 1; if (p > pages) p = pages;
+  const set = (np, ns) => { const a = Object.assign({}, self.state.__pg || {}); a[key] = { p: np, size: ns || size, sig: sig }; self.setState({ __pg: a }); };
+  const from = (p - 1) * size; const nums = [];
+  const push = (i) => nums.push({ t: String(i), btn: true, gap: false, cur: i === p ? 'page' : 'false', cls: i === p ? 'mp-pg__n is-on' : 'mp-pg__n', aria: 'Trang ' + i, go: () => set(i) });
+  const gap = () => nums.push({ t: '…', btn: false, gap: true, cur: 'false', cls: '', aria: '', go: () => {} });
+  if (pages <= 7) { for (let i = 1; i <= pages; i++) push(i); }
+  else { let a = Math.max(2, p - 1), b = Math.min(pages - 1, p + 1); if (p <= 3) { a = 2; b = 4; } if (p >= pages - 2) { a = pages - 3; b = pages - 1; } push(1); if (a > 2) gap(); for (let i = a; i <= b; i++) push(i); if (b < pages - 1) gap(); push(pages); }
+  return { items: list.slice(from, from + size), show: n > 10, info: (n ? from + 1 : 0) + '–' + Math.min(from + size, n) + ' / ' + n, nums: nums,
+    atFirst: p <= 1, atLast: p >= pages, prev: () => { if (p > 1) set(p - 1); }, next: () => { if (p < pages) set(p + 1); },
+    size: String(size), setSize: (ev) => set(1, +(ev && ev.target ? ev.target.value : 10) || 10) };
+}
+const VT_FAC = [['NM1', 'NM1 · Bình Dương', true], ['NM2', 'NM2 · Long An', true], ['NM3', 'NM3 · Đồng Nai', false]];
+const VT_FM = [['acct', 'Theo nhà máy của tài khoản'], ['all', 'Mọi nhà máy'], ['fixed', 'Nhà máy cố định']];
+const vtFacT = (f) => !f ? '—' : f.mode === 'all' ? 'Mọi nhà máy' : f.mode === 'fixed' ? 'Cố định: ' + (f.facs.length ? f.facs.join(', ') : 'chưa chọn') : 'Theo nhà máy của tài khoản';
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+const it = MPX.take('VaiTroQuyen');
+const cat = []; const perm = {};
+VT_ROLES.forEach((r) => { perm[r.name] = {}; r.groups.forEach((g) => g[1].forEach((x) => { const id = g[0] + '|' + x[0]; if (!cat.some((c) => c.id === id)) cat.push({ id: id, proc: g[0], step: x[0], scope: x[2] }); perm[r.name][id] = { a: x[1], sc: x[2] }; })); });
+const fsc = {}; VT_ROLES.forEach((r) => { fsc[r.name] = { mode: r.scope === 'Mọi nhà máy' ? 'all' : 'acct', facs: [] }; });
+this.state = { role: (it && it.r) || props.vaitro || 'Admin', picked: 'Thủ kho trưởng', miss: '', view: 'role', cat: cat, perm: perm, fsc: fsc, editF: null, edit: null, fq: '', fp: '', onlyOn: false, dlg: null, toast: '', seq: 1 };
+if (props.chedo === 'sua-quyen') { this.state.edit = JSON.parse(JSON.stringify(perm['Thủ kho trưởng'])); this.state.editF = Object.assign({}, fsc['Thủ kho trưởng']); }
+if (props.chedo === 'pham-vi-nha-may') { this.state.picked = 'Kế hoạch'; const e = JSON.parse(JSON.stringify(perm['Kế hoạch'])); const k = Object.keys(e)[0]; if (k) e[k] = { a: e[k].a, sc: 'Chỉ NM1' }; this.state.edit = e; this.state.editF = { mode: 'fixed', facs: ['NM1', 'NM2'] }; this.state.onlyOn = true; }
+if (props.chedo === 'danh-muc-quyen') this.state.view = 'cat';
+if (it && it.id) { const r = VT_ROLES.find((x) => x.name === it.id); if (r) this.state.picked = r.name; else this.state.miss = it.id; }
+}
+scopes() { const S = []; this.state.cat.forEach((c) => { if (S.indexOf(c.scope) < 0) S.push(c.scope); }); ['Nhà máy', 'Mọi nhà máy', 'Bộ phận mình'].forEach((x) => { if (S.indexOf(x) < 0) S.push(x); }); const F = ['Theo vai trò', 'Mọi nhà máy', 'Nhà máy', 'Chỉ NM1', 'Chỉ NM2']; return F.concat(S.filter((x) => F.indexOf(x) < 0)); }
+procs() { const P = []; this.state.cat.forEach((c) => { if (P.indexOf(c.proc) < 0) P.push(c.proc); }); return P; }
+usedBy(id) { return VT_ROLES.filter((r) => { const p = this.state.perm[r.name][id]; return p && p.a; }).map((r) => r.name); }
+openDlg(kind, c) { const P = this.procs(); this.setState({ dlg: kind === 'del' ? { kind: 'del', id: c.id } : { kind: kind, id: c ? c.id : '', proc: c ? c.proc : (this.state.fp || P[0]), newProc: '', step: c ? c.step : '', scope: c ? c.scope : 'Nhà máy', grant: {}, err: '' }, toast: '' }); }
+saveDlg() { const d = this.state.dlg; const s = this.state;
+if (d.kind === 'del') { const cat = s.cat.filter((c) => c.id !== d.id); const perm = {}; Object.keys(s.perm).forEach((k) => { perm[k] = Object.assign({}, s.perm[k]); delete perm[k][d.id]; }); const c0 = s.cat.find((c) => c.id === d.id); this.setState({ cat: cat, perm: perm, dlg: null, toast: 'Đã xóa quyền "' + c0.step + '" khỏi danh mục và khỏi mọi vai trò.' }); return; }
+const proc = d.proc === '__new' ? String(d.newProc).trim() : d.proc; const step = String(d.step).trim();
+if (!proc) { this.setState({ dlg: Object.assign({}, d, { err: 'Nhập tên quy trình mới.' }) }); return; }
+if (!step) { this.setState({ dlg: Object.assign({}, d, { err: 'Nhập tên quyền / bước.' }) }); return; }
+const id = proc + '|' + step;
+if (s.cat.some((c) => c.id === id && c.id !== d.id)) { this.setState({ dlg: Object.assign({}, d, { err: 'Quy trình "' + proc + '" đã có quyền này.' }) }); return; }
+let cat = s.cat.slice(); const perm = {}; Object.keys(s.perm).forEach((k) => { perm[k] = Object.assign({}, s.perm[k]); });
+if (d.kind === 'add') { const at = cat.map((c) => c.proc).lastIndexOf(proc); const item = { id: id, proc: proc, step: step, scope: d.scope }; if (at >= 0) cat.splice(at + 1, 0, item); else cat.push(item);
+Object.keys(d.grant).forEach((r) => { if (d.grant[r]) perm[r][id] = { a: d.grant[r], sc: d.scope }; });
+this.setState({ cat: cat, perm: perm, dlg: null, toast: 'Đã thêm quyền "' + step + '" vào ' + proc + (Object.keys(d.grant).filter((r) => d.grant[r]).length ? ' và cấp cho ' + Object.keys(d.grant).filter((r) => d.grant[r]).join(', ') : '') + '.' }); return; }
+cat = cat.map((c) => c.id === d.id ? { id: id, proc: proc, step: step, scope: d.scope } : c);
+Object.keys(perm).forEach((k) => { if (perm[k][d.id]) { const v = perm[k][d.id]; delete perm[k][d.id]; perm[k][id] = v; } });
+this.setState({ cat: cat, perm: perm, dlg: null, toast: 'Đã lưu quyền "' + step + '".' }); }
+renderVals() {
+const s = this.state; const role = s.role; const setRole = (r) => this.setState({ role: r });
+const qtTabs = { tabNguoiDung: () => MPX.go('NguoiDung', '', role), tabVaiTroQuyen: () => MPX.go('VaiTroQuyen', '', role), tabUyQuyen: () => MPX.go('UyQuyen', '', role) };
+const full = MPX.can(role, ['Admin', 'HR']); const isAdm = role === 'Admin';
+const gEdit = isAdm ? null : MPX.gate(role, ['Admin'], setRole, 'chỉ Admin thêm / xóa / sửa quyền');
+const own = VT_ROLES.find((x) => x.name === role);
+const list = full ? VT_ROLES : (own ? [own] : []);
+const picked = full ? s.picked : (own ? own.name : s.picked);
+const s0 = VT_ROLES.find((r) => r.name === picked) || VT_ROLES[0];
+const P = s.perm[s0.name] || {};
+const editing = !!s.edit && isAdm && s0.name !== 'Admin';
+const src = editing ? s.edit : P;
+const roles = list.map((r) => { const pr = s.perm[r.name] || {}; const n = Object.keys(pr).filter((k) => pr[k].a).length; return Object.assign({}, r, { itemCls: 'rl-item' + (r.name === picked ? ' is-picked' : ''), nameStyle: r.name === picked ? 'font-weight: 600; color: var(--brand)' : 'font-weight: 500', nPerm: r.name === 'Admin' ? 'toàn quyền' : n + ' quyền',
+pick: () => { if (this.state.edit) return; this.setState({ picked: r.name, miss: '', toast: '' }); }, label: 'Chọn vai trò ' + r.name }); });
+const q = s.fq.trim().toLowerCase();
+const ACT = [['X', 'Xem'], ['T', 'Tạo'], ['S', 'Sửa'], ['D', 'Duyệt'], ['H', 'Hủy']];
+const SC = this.scopes();
+const F0 = s.fsc[s0.name] || { mode: 'acct', facs: [] }; const FS = editing && s.editF ? s.editF : F0;
+const scT = (x) => x === 'Nhà máy' ? 'Nhà máy của tài khoản' : x === 'Theo vai trò' ? 'Theo vai trò (' + vtFacT(FS).replace('Theo nhà máy của tài khoản', 'nhà máy của TK') + ')' : x;
+let act = 0;
+const rowsOf = (cs) => cs.map((c) => { const v = src[c.id] || { a: '', sc: c.scope }; act += (v.a || '').length;
+const tog = (k) => () => { const e = Object.assign({}, this.state.edit); const cur = Object.assign({ a: '', sc: c.scope }, e[c.id] || {}); let a = cur.a || ''; if (a.indexOf(k) >= 0) { a = a.replace(k, ''); if (k === 'X') a = ''; } else { a = a + k; if (k !== 'X' && a.indexOf('X') < 0) a = 'X' + a; } a = ['X', 'T', 'S', 'D', 'H'].filter((x) => a.indexOf(x) >= 0).join(''); e[c.id] = { a: a, sc: cur.sc }; this.setState({ edit: e }); };
+return { id: c.id, step: c.step, on: !!v.a, rowCls: editing && !v.a ? 'is-off' : '', scope: v.sc || c.scope, scopeT: scT(v.sc || c.scope),
+cks: ACT.map((x) => ({ k: x[0], on: (v.a || '').indexOf(x[0]) >= 0, onT: (v.a || '').indexOf(x[0]) >= 0 ? 'true' : 'false', tog: tog(x[0]), label: x[1] + ' — ' + c.step })),
+scopeOpts: SC.map((x) => ({ v: x, t: scT(x) })), setScope: (ev) => { const e = Object.assign({}, this.state.edit); const cur = Object.assign({ a: '', sc: c.scope }, e[c.id] || {}); e[c.id] = { a: cur.a, sc: ev && ev.target ? ev.target.value : cur.sc }; this.setState({ edit: e }); } }; });
+const visCat = s.cat.filter((c) => (!s.fp || c.proc === s.fp) && (!q || (c.proc + ' ' + c.step).toLowerCase().indexOf(q) >= 0) && (editing ? (!s.onlyOn || (src[c.id] && src[c.id].a)) : (src[c.id] && src[c.id].a)));
+const groups = []; visCat.forEach((c) => { let g = groups.find((x) => x.proc === c.proc); if (!g) { g = { proc: c.proc, cs: [] }; groups.push(g); } g.cs.push(c); });
+const G = groups.map((g) => ({ proc: g.proc, rows: rowsOf(g.cs) }));
+const regroup = (fl) => { const o = []; fl.forEach((x) => { let g = o[o.length - 1]; if (!g || g.proc !== x.g.proc) { g = Object.assign({}, x.g, { rows: [] }); o.push(g); } g.rows.push(x.r); }); return o; };
+const pgR = MPPG(this, 'vtq-role', [].concat(...G.map((g) => g.rows.map((r) => ({ g: g, r: r })))), { sig: [s0.name, editing, s.onlyOn, q, s.fp].join('|') });
+const nOn = Object.keys(src).filter((k) => src[k] && src[k].a).length;
+const holders = s0.holders.map((h) => { const base = h.n.replace(/ \(.*\)$/, ''); const ok = VT_ND.indexOf(base) >= 0; return { n: h.n, ok: ok, no: !ok, ref: MPX.ref(base, role, 'NguoiDung') }; });
+const fChg = editing && s.editF && (s.editF.mode !== F0.mode || s.editF.facs.join(',') !== F0.facs.join(',')) ? 1 : 0;
+const changed = fChg + (editing ? s.cat.filter((c) => { const a = (P[c.id] || {}).a || ''; const b = (s.edit[c.id] || {}).a || ''; const sa = (P[c.id] || {}).sc || ''; const sb = (s.edit[c.id] || {}).sc || ''; return a !== b || (b && sa !== sb); }).length : 0);
+const sel = Object.assign({}, s0, { groups: regroup(pgR.items), pg: pgR, holders: holders, isAdmin: s0.name === 'Admin', actCount: s0.name === 'Admin' ? 'Tất cả' : nOn + ' quyền · ' + act + ' thao tác', facT: s0.name === 'Admin' ? 'Mọi nhà máy' : vtFacT(F0) });
+const setFS = (p) => this.setState({ editF: Object.assign({}, this.state.editF || F0, p) });
+const fs = { modes: VT_FM.map((m) => ({ t: m[1], on: FS.mode === m[0] ? 'true' : 'false', cls: FS.mode === m[0] ? 'seg-b on' : 'seg-b', pick: () => setFS({ mode: m[0], facs: m[0] === 'fixed' && !FS.facs.length ? ['NM1'] : FS.facs }) })),
+isFixed: FS.mode === 'fixed', noFac: FS.mode === 'fixed' && !FS.facs.length,
+facs: VT_FAC.map((f) => { const on = FS.facs.indexOf(f[0]) >= 0; return { t: f[1] + (f[2] ? '' : ' (ngừng)'), on: on ? 'true' : 'false', cls: 'gchip' + (on ? ' on' : '') + (f[2] ? '' : ' off'), tip: f[2] ? '' : 'Nhà máy đang ngừng hoạt động', tog: () => { if (!f[2]) return; setFS({ facs: on ? FS.facs.filter((x) => x !== f[0]) : FS.facs.concat([f[0]]).sort() }); } }; }),
+note: FS.mode === 'all' ? 'Người giữ vai trò thấy và thao tác ở mọi nhà máy, kể cả nhà máy mở sau này.' : FS.mode === 'fixed' ? 'Chỉ thao tác ở nhà máy đã chọn, dù tài khoản gán nhà máy nào. Nhà máy mở sau phải tick thêm.' : 'Mỗi người chỉ thao tác ở nhà máy gán cho tài khoản của họ (Tài khoản › Nhà máy làm việc).' };
+// danh mục
+const catRows = s.cat.filter((c) => (!s.fp || c.proc === s.fp) && (!q || (c.proc + ' ' + c.step).toLowerCase().indexOf(q) >= 0));
+const cg = []; catRows.forEach((c) => { let g = cg.find((x) => x.proc === c.proc); if (!g) { g = { proc: c.proc, rows: [] }; cg.push(g); } const u = this.usedBy(c.id);
+g.rows.push({ step: c.step, scope: c.scope, scopeT: scT(c.scope), n: u.length + ' vai trò', roles: u.length ? u.slice(0, 3).join(', ') + (u.length > 3 ? ' +' + (u.length - 3) : '') : 'chưa cấp cho vai trò nào', edit: () => this.openDlg('edit', c), del: () => this.openDlg('del', c), editLabel: 'Sửa quyền ' + c.step, delLabel: 'Xóa quyền ' + c.step }); });
+cg.forEach((g) => { g.n = g.rows.length + ' quyền'; });
+const pgC = MPPG(this, 'vtq-cat', [].concat(...cg.map((g) => g.rows.map((r) => ({ g: g, r: r })))), { sig: [q, s.fp].join('|') });
+// dialog
+let dg = { on: false };
+if (s.dlg) { const d = s.dlg; const set = (k) => (ev) => this.setState({ dlg: Object.assign({}, this.state.dlg, { [k]: ev && ev.target ? ev.target.value : '', err: '' }) });
+if (d.kind === 'del') { const c = s.cat.find((x) => x.id === d.id) || {}; const u = this.usedBy(d.id); dg = { on: true, isDel: true, isForm: false, delCls: u.length ? 'dl-warn' : 'dl-ok', title: 'Xóa quyền', step: c.step, proc: c.proc, used: u.length ? 'Đang cấp cho ' + u.length + ' vai trò: ' + u.join(', ') + '. Xóa sẽ gỡ quyền này khỏi tất cả.' : 'Chưa cấp cho vai trò nào.', hasUsed: u.length > 0, close: () => this.setState({ dlg: null }), ok: () => this.saveDlg() }; }
+else dg = { on: true, isDel: false, isForm: true, title: d.kind === 'add' ? 'Thêm quyền' : 'Sửa quyền', isAdd: d.kind === 'add', proc: d.proc, procOpts: this.procs().map((x) => ({ v: x, t: x })), isNewProc: d.proc === '__new', newProc: d.newProc, step: d.step, scope: d.scope, scopeOpts: SC.map((x) => ({ v: x, t: scT(x) })),
+setProc: set('proc'), setNewProc: set('newProc'), setStep: set('step'), setScope: set('scope'), hasErr: !!d.err, err: d.err,
+grants: VT_ROLES.filter((r) => r.name !== 'Admin').map((r) => { const a = d.grant[r.name] || ''; return { name: r.name, on: !!a, cls: a ? 'gchip on' : 'gchip', onT: a ? 'true' : 'false', tog: () => { const g = Object.assign({}, this.state.dlg.grant); g[r.name] = g[r.name] ? '' : 'X'; this.setState({ dlg: Object.assign({}, this.state.dlg, { grant: g }) }); } }; }),
+close: () => this.setState({ dlg: null }), ok: () => this.saveDlg(), okLabel: d.kind === 'add' ? 'Thêm quyền' : 'Lưu' }; }
+return { vx: MPX.vx(role, setRole, 'qt_nd'), qtTabs: qtTabs, roles: roles, sel: sel, roleCount: full ? String(VT_ROLES.length) : 'của bạn',
+limited: !full, gAll: full ? null : MPX.gate(role, ['Admin', 'HR'], setRole, 'xem cả bảng quyền'),
+hasMiss: !!s.miss, miss: s.miss, hasToast: !!s.toast, toast: s.toast,
+isRoleView: s.view !== 'cat' || !full, isCatView: s.view === 'cat' && full, showViewTabs: full,
+vRoleCls: s.view !== 'cat' ? 'seg-b on' : 'seg-b', vCatCls: s.view === 'cat' ? 'seg-b on' : 'seg-b', vRoleOn: s.view !== 'cat' ? 'true' : 'false', vCatOn: s.view === 'cat' ? 'true' : 'false',
+toRole: () => this.setState({ view: 'role' }), toCat: () => { if (this.state.edit) return; this.setState({ view: 'cat' }); },
+fq: s.fq, setFq: (ev) => this.setState({ fq: ev && ev.target ? ev.target.value : '' }), fp: s.fp, setFp: (ev) => this.setState({ fp: ev && ev.target ? ev.target.value : '' }), procOpts: this.procs().map((x) => ({ v: x, t: x })),
+editing: editing, viewing: !editing, canEdit: isAdm && s0.name !== 'Admin' && !s.edit, gEdit: !isAdm && full ? gEdit : null, adminLock: isAdm && s0.name === 'Admin',
+startEdit: () => this.setState({ edit: JSON.parse(JSON.stringify(P)), editF: Object.assign({}, F0, { facs: F0.facs.slice() }), onlyOn: false, toast: '' }), cancelEdit: () => this.setState({ edit: null, editF: null }), fs: fs,
+saveEdit: () => { if (fs.noFac) return; const fsc = Object.assign({}, this.state.fsc); if (this.state.editF) fsc[s0.name] = this.state.editF; const perm = Object.assign({}, this.state.perm); const e = {}; Object.keys(this.state.edit).forEach((k) => { if (this.state.edit[k].a) e[k] = this.state.edit[k]; }); perm[s0.name] = e; this.setState({ perm: perm, fsc: fsc, editF: null, edit: null, toast: 'Đã lưu quyền của vai trò ' + s0.name + ' (' + changed + ' thay đổi) — áp dụng từ lần đăng nhập tới của người giữ vai trò, ghi nhật ký.' }); },
+changed: changed + ' thay đổi', hasChanged: changed > 0, onlyOn: s.onlyOn, togOnly: () => this.setState({ onlyOn: !this.state.onlyOn }), noRows: !G.length,
+catGroups: regroup(pgC.items), pgCat: pgC, catCount: s.cat.length + ' quyền · ' + this.procs().length + ' quy trình', noCat: !cg.length, canCat: isAdm, gCat: !isAdm ? gEdit : null, addPerm: () => this.openDlg('add'),
+dg: dg };
+}
+}
+</script>
+</body>
+</html>

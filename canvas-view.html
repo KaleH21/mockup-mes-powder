@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MES Powder mockup</title>
+<style>
+  :root { --bg:#f4f5f7; --panel:#fff; --ink:#1d2330; --muted:#6b7280; --line:#e3e6eb; --sel:#e8f0ff; --accent:#2457d6; }
+  * { box-sizing: border-box; }
+  body { margin:0; display:flex; height:100vh; font:15px/1.4 "Segoe UI", system-ui, sans-serif; color:var(--ink); background:var(--bg); }
+  aside { width:320px; display:flex; flex-direction:column; border-right:1px solid var(--line); background:var(--panel); }
+  aside input { margin:10px; padding:10px; font:inherit; border:1px solid var(--line); border-radius:6px; }
+  nav { overflow:auto; flex:1; }
+  nav a { display:block; padding:8px 12px; color:inherit; text-decoration:none; border-bottom:1px solid var(--line); }
+  nav a.on { background:var(--sel); color:var(--accent); font-weight:600; }
+  main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  header { display:flex; gap:12px; align-items:center; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel); }
+  header b { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  header a { color:var(--accent); }
+  #stage { flex:1; overflow:auto; padding:16px; }
+  #frame { border:1px solid var(--line); background:#fff; transform-origin:0 0; display:block; }
+</style>
+</head>
+<body>
+<aside>
+  <input id="q" placeholder="Lọc màn…" aria-label="Lọc màn">
+  <nav id="list"></nav>
+</aside>
+<main>
+  <header>
+    <b id="title">Chọn một màn</b>
+    <label><input type="checkbox" id="fit" checked> Vừa khung</label>
+    <a id="open" target="_blank">Mở riêng ↗</a>
+  </header>
+  <div id="stage"><iframe id="frame" title="Màn mockup"></iframe></div>
+</main>
+<script>
+(async () => {
+  const c = await (await fetch('canvas.json')).json();
+  const items = c.order.filter(f => c.boards[f]).map(f => ({ f, ...c.boards[f] }));
+  const $ = id => document.getElementById(id);
+  const list = $('list'), frame = $('frame'), stage = $('stage');
+  let cur;
+
+  list.innerHTML = items.map(b => `<a href="#${b.f}" data-f="${b.f}">${b.title || b.f}</a>`).join('');
+  $('q').oninput = e => {
+    const q = e.target.value.toLowerCase();
+    for (const a of list.children) a.hidden = !a.textContent.toLowerCase().includes(q) && !a.dataset.f.toLowerCase().includes(q);
+  };
+
+  function layout() {
+    if (!cur) return;
+    const s = $('fit').checked ? Math.min(1, (stage.clientWidth - 32) / cur.w) : 1;
+    frame.style.width = cur.w + 'px';
+    frame.style.height = cur.h + 'px';
+    frame.style.transform = `scale(${s})`;
+    frame.parentElement.style.height = '';
+  }
+  function show() {
+    const f = decodeURIComponent(location.hash.slice(1)) || items[0].f;
+    cur = items.find(b => b.f === f) || items[0];
+    for (const a of list.children) a.classList.toggle('on', a.dataset.f === cur.f);
+    $('title').textContent = cur.title || cur.f;
+    $('open').href = cur.f;
+    if (frame.getAttribute('src') !== cur.f) frame.src = cur.f;
+    layout();
+  }
+  addEventListener('hashchange', show);
+  addEventListener('resize', layout);
+  $('fit').onchange = layout;
+  show();
+})();
+</script>
+</body>
+</html>

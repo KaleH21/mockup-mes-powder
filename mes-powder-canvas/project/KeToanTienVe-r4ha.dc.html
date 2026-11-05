@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Kế toán — Ghi nhận tiền về (KH-0012)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+</style>
+</helmet>
+<div style="width: 100%">
+<dc-import name="KeToan-k2vm" screen="{{screen}}" vaitro="{{vaitro}}" hopthoai="{{hopthoai}}" hint-size="100%,2160px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"screen": {"editor": "enum", "options": ["cnkh", "cnncc", "so"], "default": "cnkh", "section": "Trạng thái hiển thị"}, "vaitro": {"editor": "enum", "options": ["Kế toán", "Kế toán trưởng", "Sales", "Mua hàng", "Giám đốc"], "default": "Kế toán", "section": "Trạng thái hiển thị"}, "hopthoai": {"editor": "enum", "options": ["khong", "tien-ve", "hoan-tien", "ket-qua-90", "lien-he", "tra-ncc", "giam-tru", "huy"], "default": "tien-ve", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 2160}}'>
+class Component extends DCLogic {
+renderVals() {
+return { screen: this.props.screen ?? 'cnkh', vaitro: this.props.vaitro ?? 'Kế toán', hopthoai: this.props.hopthoai ?? 'tien-ve' };
+}
+}
+</script>
+</body>
+</html>

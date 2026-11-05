@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Truy xuất nguồn gốc</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+.req{color:var(--bad);margin-left:2px}
+.hint{font-size:15px;line-height:20px;color:var(--ink-muted)}
+
+.note{margin:0;font-size:15px;line-height:22px;color:var(--ink-muted)}
+.icon-btn{width:36px;height:36px;display:inline-grid;place-items:center;border:0;border-radius:8px;background:transparent;color:var(--ink-muted);cursor:pointer;flex:none}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink)}
+.row-btn{height:32px;padding:0 10px;font-size:16px;font-weight:500}
+.linkbtn{border:0;background:none;padding:0;font:600 18px/24px var(--font-mono);color:var(--ink);cursor:pointer;text-align:left;white-space:nowrap}
+.linkbtn:hover{color:var(--brand);text-decoration:underline}
+.linkbtn:focus-visible,.opt:focus-visible,.tab:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+.tabs{display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{border:0;background:none;padding:10px 14px;font:500 18px/24px var(--font-sans);color:var(--ink-muted);border-bottom:2px solid transparent;margin-bottom:-1px;display:inline-flex;gap:8px;align-items:center;cursor:pointer}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--brand-strong);border-bottom-color:var(--brand);font-weight:600}
+.tab .n{min-width:22px;height:20px;border-radius:999px;background:var(--surface-2);color:var(--ink);font:600 15px/24px var(--font-sans);text-align:center;padding:0 7px;box-sizing:border-box}
+.tab.on .n{background:var(--brand);color:var(--on-brand)}
+.tab .n.bad{background:var(--bad-soft);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stats .mp-card{padding:0}
+.qt{font:500 14px/20px var(--font-mono);color:var(--ink-muted);background:var(--surface-2);border-radius:4px;padding:2px 6px;white-space:nowrap}
+.box{border:1px solid var(--line);border-radius:10px;background:var(--surface-1)}
+.box .mp-table tr:last-child td{border-bottom:0}
+.frm{display:flex;flex-direction:column;gap:16px;padding:20px;border:1px solid var(--line);border-radius:10px;background:var(--surface-1)}
+.frm-sec{display:flex;flex-direction:column;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.frm-sec:last-of-type{border-bottom:0;padding-bottom:0}
+.frm-h{font:600 19px/24px var(--font-sans);margin:0;display:flex;gap:8px;align-items:baseline}
+.frm-h .qt{font-weight:500}
+
+
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--line-strong);background:var(--surface-1);border-radius:8px;padding:7px 12px;font:500 16px/22px var(--font-sans);cursor:pointer;color:var(--ink);text-align:left}
+.opt small{font-size:14px;line-height:18px;color:var(--ink-muted);font-weight:400}
+.opt:hover{border-color:var(--brand)}
+.opt.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-strong);font-weight:600;box-shadow:0 0 0 1px var(--brand)}
+.opt .mp-code{font-weight:600}
+.ta{height:auto;min-height:64px;padding:8px 12px;resize:vertical;font:inherit;line-height:24px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip-ex{border:1px dashed var(--line-strong);background:var(--surface-0);border-radius:999px;padding:2px 10px;font:500 15px/22px var(--font-mono);color:var(--ink);cursor:pointer}
+.chip-ex:hover{border-color:var(--brand);color:var(--brand)}
+.errbox{color:var(--bad);font-size:16px;line-height:22px}
+.txt-bad{color:var(--bad);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.kpis>div{padding:12px 20px;border-left:1px solid var(--line)}
+.kpis>div:first-child{border-left:0}
+.kpis b{display:block;font:700 22px/28px var(--font-sans);white-space:nowrap}
+.kpis .lbl{font:500 15px/20px var(--font-sans);color:var(--ink-muted)}
+.mp-tree th{color:var(--ink);background:var(--surface-2);border-bottom:2px solid var(--line-strong)}
+.mp-tree tr.lv0 td{background:var(--surface-0)}
+.mp-tree tr.lv0 td:first-child .mp-code{font-weight:700}
+.mp-tree tr.lv1 td:first-child .mp-code{font-weight:600}
+.mp-tree tr.lv3 td:first-child .mp-code{color:var(--ink-muted)}
+.mp-tree tr.is-node td:first-child .mp-code{color:var(--ink-muted);font-weight:500}
+.mp-tree tr.is-me td:first-child .mp-code{color:var(--ink)}
+.kind{display:block;font-size:15px;line-height:20px;color:var(--ink-muted);margin-top:2px}
+.chev{width:24px;height:24px;padding:0;border:0;border-radius:4px;background:transparent;color:inherit;display:inline-grid;place-items:center;cursor:pointer;flex:none}
+.chev:hover{background:var(--surface-2)}
+.cnt{font-size:14px;line-height:20px;padding:0 6px;border-radius:999px;background:var(--surface-2);color:var(--ink-muted);white-space:nowrap}
+.mp-table td .mp-sub{white-space:normal}
+.mp-table td.mp-nowrap .mp-sub{white-space:nowrap}
+tr.row-bad td{background:var(--bad-soft)}
+.side{display:flex;flex-direction:column;gap:12px}
+.res{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface-0)}
+.res-row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:16px;line-height:22px}
+.wait{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px dashed var(--line-strong);border-radius:8px;color:var(--ink-muted);font-size:16px;line-height:22px;background:var(--surface-0)}
+.doclist{display:flex;flex-wrap:wrap;gap:4px 10px}
+
+
+
+
+/* mp-shell v2 */
+.mp-nav{flex:0 0 256px;width:256px;background:var(--surface-1);border-right:1px solid var(--line);padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box}
+.mp-nav__brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;margin-bottom:6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.mp-nav__logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 15px/1 var(--font-sans);letter-spacing:.02em;flex:none}
+.mp-nav__brand b{font-size:19px;line-height:22px;display:block}.mp-nav__brand small{font-size:14px;line-height:18px;color:var(--ink-muted);display:block}
+.mp-nav__sec{font:600 14px/20px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:14px 10px 6px}
+.mp-nav__div{height:1px;background:var(--line);margin:8px 0}
+.mp-nav__item{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--ink);text-decoration:none;font:500 18px/24px var(--font-sans)}
+.mp-nav__item svg{flex:none;color:var(--ink-muted)}
+.mp-nav__item:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__item.is-on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-nav__item.is-on svg{color:var(--brand)}
+.mp-nav__item .mp-nav__count{margin-left:auto;min-width:26px;height:24px;padding:0 8px;border-radius:999px;background:var(--brand);color:var(--on-brand);font:600 15px/24px var(--font-sans);text-align:center;box-sizing:border-box}
+.mp-nav__subs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.mp-nav__subs .snav,.mp-nav__subs .navsub{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:none;border-radius:6px;padding:6px 10px;font:400 16px/22px var(--font-sans);color:var(--ink-muted);text-decoration:none;cursor:pointer;text-align:left;position:relative;box-sizing:border-box}
+.mp-nav__subs .snav:hover,.mp-nav__subs .navsub:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__subs .snav.on,.mp-nav__subs .navsub.on{color:var(--brand-strong);font-weight:600;background:var(--surface-2)}
+.mp-nav__subs .snav.on::before,.mp-nav__subs .navsub.on::before{content:"";position:absolute;left:-11px;top:6px;bottom:6px;width:2px;border-radius:2px;background:var(--brand)}
+.mp-nav__subs .navsub svg{display:none}
+.mp-nav__subs .snav.is-parent{color:var(--brand-strong);font-weight:600}
+.mp-nav__subs .mp-nav__subs{margin:0 0 2px 10px}
+.mp-nav__foot{margin-top:auto;padding:12px 10px 2px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink-muted)}
+.mp-nav__foot button{white-space:nowrap;border:0;background:none;color:var(--ink-muted);display:inline-flex;align-items:center;gap:6px;font:inherit;cursor:pointer;padding:4px;border-radius:6px}
+.mp-nav__foot button:hover{background:var(--surface-2);color:var(--ink)}
+.mp-hd{position:relative;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:10px 24px 10px 32px;background:var(--surface-1);border-bottom:1px solid var(--line);box-sizing:border-box}
+.mp-hd__crumb{font-size:16px;line-height:22px;color:var(--ink-muted);min-width:0;flex:1 1 220px}
+.mp-hd__right{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;flex:0 1 auto;min-width:0}
+.mp-hd__fac{display:inline-flex;align-items:center;gap:6px;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font:500 16px/1 var(--font-sans);color:var(--ink);cursor:pointer}
+.mp-hd__fac svg{color:var(--ink-muted)}
+.mp-hd__sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.mp-hd__right>.seg{height:40px;box-sizing:border-box;border-color:var(--line)}
+.mp-hd__right>.seg .segbtn{display:inline-flex;align-items:center;padding:0 12px}
+.mp-hd__right>.conn{height:40px;box-sizing:border-box;border-radius:8px;padding:0 12px;font-size:16px}
+.mp-pop{position:relative}
+.mp-pop>summary{list-style:none;cursor:pointer}
+.mp-pop>summary::-webkit-details-marker{display:none}
+.mp-bell>summary{position:relative;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.mp-bell>summary:hover,.mp-bell[open]>summary{background:var(--surface-2)}
+.mp-bell__dot{position:absolute;top:3px;left:18px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--bad-solid);color:var(--on-solid);font:600 13px/18px var(--font-sans);text-align:center;box-sizing:border-box;border:2px solid var(--surface-1)}
+.mp-me>summary{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 4px;border-radius:999px;margin-left:4px}
+.mp-me>summary:hover,.mp-me[open]>summary{background:var(--surface-2)}
+.mp-av{width:32px;height:32px;border-radius:999px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 15px/1 var(--font-sans);flex:none}
+.mp-av--lg{width:44px;height:44px;font-size:19px}
+.mp-me__txt{display:flex;flex-direction:column;line-height:20px;max-width:190px}
+.mp-me__txt b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me__txt small{font-size:15px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me>summary>svg{color:var(--ink-muted)}
+.mp-pop__panel{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:30;overflow:hidden;text-align:left}
+.mp-pop__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.mp-pop__head a{font-size:15px}
+.mp-pop a{text-decoration:none}.mp-pop a:hover{text-decoration:underline}
+.mp-pop__foot{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;background:var(--surface-0)}
+.mp-noti{width:380px}
+.mp-noti__tabs{display:flex;gap:4px;padding:8px 12px 0}
+.mp-noti__tabs span{padding:6px 10px;border-radius:6px;font-size:15px;color:var(--ink-muted)}
+.mp-noti__tabs span.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-noti ul{list-style:none;margin:0;padding:6px 0}
+.mp-noti li{display:flex;gap:10px;padding:10px 16px;position:relative}
+.mp-noti li:hover{background:var(--surface-0)}
+.mp-noti li.is-unread::after{content:"";position:absolute;right:14px;top:16px;width:8px;height:8px;border-radius:999px;background:var(--brand)}
+.mp-noti li p{margin:0;font-size:16px;line-height:22px;padding-right:14px}
+.mp-noti li.is-unread p{font-weight:500}
+.mp-noti li time{display:block;font-size:15px;color:var(--ink-muted);margin-top:2px}
+.mp-noti__ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.mp-noti__ic.ok{background:var(--ok-soft);color:var(--ok)}.mp-noti__ic.wait{background:var(--wait-soft);color:var(--wait)}.mp-noti__ic.bad{background:var(--bad-soft);color:var(--bad)}.mp-noti__ic.info{background:var(--brand-soft);color:var(--brand)}
+.mp-me__panel{width:300px}
+.mp-me__who{display:flex;gap:12px;align-items:center;padding:16px}
+.mp-me__who b{display:block;font-size:18px}.mp-me__who small{display:block;font-size:15px;color:var(--ink-muted)}
+.mp-me__roles{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.mp-me__roles span{font-size:15px;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.mp-me__menu{list-style:none;margin:0;padding:6px;border-top:1px solid var(--line)}
+.mp-me__menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:16px;color:var(--ink);text-decoration:none}
+.mp-me__menu a:hover{background:var(--surface-2)}
+.mp-me__menu a svg{color:var(--ink-muted)}
+.mp-me__menu a.bad{color:var(--bad)}.mp-me__menu a.bad svg{color:var(--bad)}
+.mp-hd__as{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 10px;border:1px dashed var(--line-strong);border-radius:8px;font:500 15px/1 var(--font-sans);color:var(--ink-muted);box-sizing:border-box}
+.mp-hd__as select{height:34px;border:0;background:transparent;font:600 16px/1 var(--font-sans);color:var(--ink);padding:0 4px;cursor:pointer}
+.mp-gate{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-0);font-size:15px;line-height:20px;color:var(--ink-muted)}
+.mp-gate b{color:var(--ink);font-weight:600}
+.mp-gate button{border:0;background:none;padding:0;font:600 15px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-decoration:underline}
+a.mp-xlink{color:var(--brand);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+a.mp-xlink:hover{color:var(--brand-strong);border-bottom-style:solid}
+a.mp-xlink.mp-code{font-family:var(--font-mono)}
+.tl-wrap{overflow:hidden}
+.tl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 16px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.tl-chips{display:flex;gap:6px;flex-wrap:wrap}
+.tl-chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface-1);font:500 15px/1 var(--font-sans);color:var(--ink-muted);cursor:pointer}
+.tl-chip .n{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--surface-2);color:var(--ink);font:600 13px/20px var(--font-sans);text-align:center;box-sizing:border-box}
+.tl-chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-strong);font-weight:600}.tl-chip.on .n{background:var(--brand);color:var(--on-brand)}
+.tl{padding:8px 20px 20px}
+.tl-day{display:grid;grid-template-columns:92px minmax(0,1fr);gap:0 12px;padding-top:16px}
+.tl-date{position:sticky;top:0;align-self:start;display:flex;flex-direction:column;align-items:flex-end;text-align:right;padding-top:4px}
+.tl-date b{font:700 28px/30px var(--font-sans);color:var(--ink)}.tl-date span{font-size:15px;font-weight:600;color:var(--ink-muted);text-transform:uppercase}.tl-date small{font-size:13px;color:var(--ink-muted);margin-top:2px}
+.tl-list{position:relative;display:flex;flex-direction:column;gap:10px;padding-left:28px}
+.tl-list::before{content:"";position:absolute;left:13px;top:6px;bottom:-16px;width:2px;background:var(--line)}
+.tl-day:last-child .tl-list::before{bottom:12px}
+.tl-ev{position:relative;display:flex;gap:12px;align-items:flex-start}
+.tl-dot{position:absolute;left:-28px;top:6px;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:var(--surface-1);border:2px solid var(--line-strong);color:var(--ink-muted);box-sizing:border-box}
+.tl-dot svg{width:15px;height:15px}
+.tl-card{flex:1;min-width:0;margin-left:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-1);padding:10px 14px;display:flex;flex-direction:column;gap:4px}
+.tl-top{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-muted)}.tl-type{font-weight:600;text-transform:uppercase;letter-spacing:.04em}.tl-time{margin-left:auto;font-family:var(--font-mono);font-size:14px;color:var(--ink-muted)}
+.tl-root{padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:13px}
+.tl-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tl-code{font-size:18px;font-weight:600}.tl-kind{font-size:15px;color:var(--ink-muted)}
+.tl-qty{margin-left:auto;padding:2px 10px;border-radius:999px;background:var(--surface-2);font:600 15px/22px var(--font-sans);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-item{font-size:16px}.tl-meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:15px;color:var(--ink-muted)}.tl-meta>span{position:relative}
+.tl-why{font-size:15px;color:var(--ink-muted);padding:6px 10px;background:var(--surface-0);border-radius:6px}
+.tl-ev--nhap .tl-dot{border-color:#2563eb;color:#2563eb}.tl-ev--nhap .tl-card{border-left:3px solid #2563eb}
+.tl-ev--nap .tl-dot,.tl-ev--me .tl-dot,.tl-ev--qc .tl-dot{border-color:var(--accent);color:var(--accent)}.tl-ev--nap .tl-card,.tl-ev--me .tl-card,.tl-ev--qc .tl-card{border-left:3px solid var(--accent)}
+.tl-ev--ra .tl-dot,.tl-ev--goc .tl-dot{border-color:var(--brand);color:var(--brand)}.tl-ev--ra .tl-card,.tl-ev--goc .tl-card{border-left:3px solid var(--brand)}
+.tl-ev--giao .tl-dot,.tl-ev--xe .tl-dot{border-color:var(--ok);color:var(--ok)}.tl-ev--giao .tl-card,.tl-ev--xe .tl-card{border-left:3px solid var(--ok)}
+.tl-ev.is-root .tl-dot{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}.tl-ev.is-root .tl-card{background:var(--brand-soft);border-color:var(--brand)}
+.tl-now{border-top:1px solid var(--line);background:var(--surface-0);padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px}
+.tl-now__h{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tl-now__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.tl-pos{border:1px dashed var(--line-strong);border-radius:10px;background:var(--surface-1);padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+@media (max-width:720px){.tl-day{grid-template-columns:1fr}.tl-date{position:static;flex-direction:row;align-items:baseline;gap:6px}}
+.tl-wrap{position:relative}
+.seg-v{display:inline-grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.seg-b{border:0;background:var(--surface-1);padding:6px 14px;font:500 15px/22px var(--font-sans);color:var(--ink-muted);cursor:pointer;text-align:center}.seg-b+.seg-b{border-left:1px solid var(--line-strong)}.seg-b.on{background:var(--brand);color:var(--on-brand)}
+.hl-scroll{overflow-x:auto;padding:0 0 4px}
+.hl-grid{display:grid;min-width:max-content;gap:0;background:var(--surface-1)}
+.hl-corner{position:sticky;left:0;z-index:3;background:var(--surface-1);border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:14px 16px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);display:flex;align-items:flex-end}
+.hl-hd{position:relative;padding:14px 14px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;align-items:flex-start;gap:0;background:linear-gradient(var(--surface-1),var(--surface-1))}
+.hl-hd::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--line)}
+.hl-hd b{font:700 26px/28px var(--font-sans);font-variant-numeric:tabular-nums}.hl-mon{font-size:14px;font-weight:600;color:var(--ink-muted);text-transform:uppercase}.hl-hd small{font-size:13px;color:var(--ink-muted)}
+.hl-dot{position:absolute;left:14px;bottom:-6px;width:12px;height:12px;border-radius:999px;background:var(--brand);border:2px solid var(--surface-1);z-index:1}
+.hl-hd--gap{justify-content:center;align-items:center;background:repeating-linear-gradient(135deg,var(--surface-0) 0 6px,var(--surface-1) 6px 12px)}
+.hl-hd--gap::after{background:repeating-linear-gradient(90deg,var(--line-strong) 0 4px,transparent 4px 8px)}
+.hl-gap{writing-mode:vertical-rl;transform:rotate(180deg);font-size:13px;font-weight:600;color:var(--ink-muted);white-space:nowrap}
+.hl-lab{position:sticky;left:0;z-index:2;background:var(--surface-1);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 14px 12px 18px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.hl-lab::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:var(--lane)}
+.hl-lab b{font-size:15px}.hl-lab small{font-size:13px;color:var(--ink-muted)}
+.hl-cell{border-bottom:1px solid var(--line);padding:10px;display:flex;flex-direction:column;gap:8px;min-height:64px;background:var(--lane-bg)}
+.hl-cell.is-empty{background:transparent}
+.hl-cell--gap{background:repeating-linear-gradient(135deg,var(--surface-0) 0 6px,var(--surface-1) 6px 12px)}
+.hl-lane--nap{--lane:var(--accent);--lane-bg:color-mix(in srgb,var(--accent) 5%,transparent)}
+.hl-lane--me{--lane:#b45309;--lane-bg:color-mix(in srgb,#b45309 5%,transparent)}
+.hl-lane--ra{--lane:var(--brand);--lane-bg:color-mix(in srgb,var(--brand) 5%,transparent)}
+.hl-lane--qc{--lane:#7c3aed;--lane-bg:color-mix(in srgb,#7c3aed 5%,transparent)}
+.hl-lane--giao{--lane:var(--ok);--lane-bg:color-mix(in srgb,var(--ok) 6%,transparent)}
+.hl-ev{display:flex;flex-direction:column;align-items:stretch;gap:2px;text-align:left;width:100%;padding:8px 10px 8px 12px;border:1px solid var(--line);border-left:3px solid var(--lane);border-radius:8px;background:var(--surface-1);font:inherit;color:var(--ink);cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.05);transition:box-shadow .12s,transform .12s}
+.hl-ev:hover{box-shadow:0 4px 12px rgba(15,23,42,.12);transform:translateY(-1px)}
+.hl-ev:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+.hl-ev__t{display:flex;gap:6px;align-items:center;font-family:var(--font-mono);font-size:13px;color:var(--ink-muted);min-height:18px}
+.hl-ev__c{font-size:16px;font-weight:600;line-height:20px;overflow-wrap:anywhere}
+.hl-ev__s{font-size:13px;color:var(--ink-muted);line-height:18px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.hl-ev__q{align-self:flex-start;margin-top:2px;padding:1px 8px;border-radius:999px;background:var(--surface-2);font:600 13px/20px var(--font-sans);font-variant-numeric:tabular-nums}
+.hl-legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:10px 20px 14px;font-size:14px}
+.lg{display:inline-flex;align-items:center;gap:6px}.lg::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--lane)}
+.lg--nap{--lane:var(--accent)}.lg--me{--lane:#b45309}.lg--ra{--lane:var(--brand)}.lg--qc{--lane:#7c3aed}.lg--giao{--lane:var(--ok)}
+.hl-ovl{position:absolute;inset:0;z-index:30;background:rgba(22,33,43,.35);display:flex;justify-content:center;align-items:flex-start;padding:80px 16px}
+.hl-pop{width:100%;max-width:520px;background:var(--surface-1);border-radius:12px;box-shadow:var(--shadow-pop);padding:16px 20px 20px;display:flex;flex-direction:column;gap:12px}
+.hl-pop__h{display:flex;align-items:center;gap:10px;color:var(--ink-muted);font-size:14px}.hl-pop__h .tl-time{margin-left:auto}
+.hl-kv{display:grid;grid-template-columns:130px minmax(0,1fr);gap:6px 12px;margin:0;font-size:15px}.hl-kv dt{color:var(--ink-muted)}.hl-kv dd{margin:0}
+.hl-more{border:1px dashed var(--line-strong);background:var(--surface-1);border-radius:8px;padding:6px 10px;font:600 14px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-align:center}.hl-more:hover{background:var(--brand-soft)}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+.txh{display:flex;justify-content:space-between;gap:12px 24px;padding:16px 20px;flex-wrap:wrap;align-items:flex-start}
+.txh__l{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1 1 520px}
+.txh__t{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.txh__s{font-size:18px;line-height:26px}
+.txh__m{font-size:16px;line-height:22px;color:var(--ink-muted)}
+.txh__r{display:flex;flex-direction:column;gap:8px;align-items:flex-end;max-width:100%}
+.txh__done{display:flex;gap:4px 16px;flex-wrap:wrap;justify-content:flex-end;font-size:16px;line-height:22px;color:var(--ink-muted)}
+.kpis>div.is-warn{background:var(--wait-soft)}
+.kpis>div.is-warn b,.kpis>div.is-warn .lbl,.kpis>div.is-warn .mp-sub{color:var(--wait)}
+.kpis>div.is-bad{background:var(--bad-soft)}
+.kpis>div.is-bad b,.kpis>div.is-bad .lbl,.kpis>div.is-bad .mp-sub{color:var(--bad)}
+.pc3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.pc3{grid-template-columns:1fr}}
+.pc{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.pc__h{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.pc__t{display:flex;align-items:center;gap:8px;margin:0;font:600 18px/24px var(--font-sans);color:var(--ink)}
+.pc__t svg{color:var(--brand)}
+.pc__go{border:0;background:none;padding:4px 0;font:500 16px/22px var(--font-sans);color:var(--brand-strong);cursor:pointer;white-space:nowrap}
+.pc__go:hover{text-decoration:underline}
+.pc__big{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pc__big b{font:700 26px/32px var(--font-sans);white-space:nowrap}
+.pc__big span{font-size:16px;line-height:22px;color:var(--ink-muted)}
+.pc__kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:16px;line-height:22px}
+.pc__kv dt{color:var(--ink-muted)}
+.pc__kv dd{margin:0;text-align:right;font-weight:500;min-width:0}
+.pc__kv dd.bad{color:var(--bad)}
+.pc__kv dd.ok{color:var(--ok)}
+.pc__bar{display:flex;flex-direction:column;gap:4px;margin-top:auto}
+.pc__bl{display:flex;justify-content:space-between;font-size:15px;line-height:20px;color:var(--ink-muted)}
+.pc__bl b{color:var(--ink)}
+.pc__track{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.pc__fill{height:100%;border-radius:999px;background:var(--ok-solid)}
+.pc__fill.is-bad{background:var(--bad-solid)}
+.pc__fill.is-warn{background:var(--wait)}
+.cd-tot td{font-weight:600;background:var(--surface-2)}
+.cd-note{padding:10px 20px 14px;font-size:15px;line-height:20px;color:var(--ink-muted)}
+.chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--line)}
+.chain__l{font:500 15px/20px var(--font-sans);color:var(--ink-muted);margin-right:4px}
+.chain__a{color:var(--ink-muted);font-size:18px}
+.chip-l{border:1px solid var(--line-strong);background:var(--surface-1);border-radius:8px;padding:6px 12px;font:500 16px/22px var(--font-sans);color:var(--ink);cursor:pointer}
+.chip-l:hover{border-color:var(--brand);color:var(--brand-strong)}
+.chip-l.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-strong)}
+.chip-l.is-root{font-family:var(--font-mono);font-weight:600}
+.subh{display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.subh h2{margin:0}
+.flt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.flt-on{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 20px;background:var(--brand-soft);color:var(--brand-strong);font-size:16px;line-height:22px;border-bottom:1px solid var(--line)}
+.sec-h{display:flex;align-items:baseline;gap:10px;padding:14px 20px 6px}
+.sec-h h3{margin:0;font:600 18px/24px var(--font-sans)}
+.foot-log{opacity:1}
+.tlm{padding:4px 20px 16px}
+.tlm-day{padding-top:10px}
+.tlm-d{display:flex;gap:10px;align-items:baseline;margin:0;padding:6px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:22px;font-weight:400}
+.tlm-d b{font-weight:600;font-size:17px}.tlm-d span{color:var(--ink-muted);font-size:15px}
+.tlm-ev{border-bottom:1px solid var(--surface-2)}.tlm-ev.is-root{background:var(--brand-soft)}
+.tlm-r{display:grid;grid-template-columns:28px 56px 112px minmax(170px,max-content) 110px minmax(0,1fr);gap:12px;align-items:center;padding:6px 0;font-size:16px;line-height:22px}
+.tlm-dbtn{display:flex;gap:10px;align-items:baseline;width:100%;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.tlm-dbtn svg{align-self:center;transition:transform 120ms}
+.tlm-det{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px 20px;margin:0 0 10px 40px;padding:10px 14px;background:var(--surface-0);border-radius:8px;font-size:15px;line-height:21px}
+.tlm-det dt{color:var(--ink-muted);font-size:14px}.tlm-det dd{margin:0}.tlm-det .full{grid-column:1/-1}
+.tlm-t{color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.tlm-ty{color:var(--ink-muted)}
+.tlm-c{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
+.tlm-q{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tlm-x{color:var(--ink-muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:720px){.tlm-r{grid-template-columns:28px 48px minmax(0,1fr) auto}.tlm-det{margin-left:0}.tlm-ty,.tlm-x{display:none}}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; min-height: 1100px; background: var(--surface-0); display: flex; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line); position: relative">
+<nav aria-label="Phân hệ" class="mp-nav">
+<a href="HopDuyet.dc.html" class="mp-nav__brand"><span class="mp-nav__logo">MP</span><span><b>MES Powder</b><small>Quản lý sản xuất sữa bột</small></span></a>
+<a href="{{vx.m.href.viec}}" onClick="{{vx.m.go.viec}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span>Việc cần làm</span><span class="mp-nav__count">9</span></a>
+<div class="mp-nav__div"></div>
+<sc-if value="{{vx.m.show.ban}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.ban}}" onClick="{{vx.m.go.ban}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><path d="M7 7h.01"></path></svg><span>Bán hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.mua}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.mua}}" onClick="{{vx.m.go.mua}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Mua hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.kt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kt}}" onClick="{{vx.m.go.kt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg><span>Kế toán</span></a></sc-if>
+<sc-if value="{{vx.m.show.kho}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kho}}" onClick="{{vx.m.go.kho}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg><span>Kho</span></a></sc-if>
+<sc-if value="{{vx.m.show.sx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.sx}}" onClick="{{vx.m.go.sx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20V9l6 4V9l6 4V5h3l1 15z"></path><path d="M2 20h20"></path></svg><span>Sản xuất</span></a></sc-if>
+<sc-if value="{{vx.m.show.cl}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.cl}}" onClick="{{vx.m.go.cl}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span>Chất lượng</span></a></sc-if>
+<sc-if value="{{vx.m.show.tx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.tx}}" onClick="{{vx.m.go.tx}}" class="mp-nav__item is-on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg><span>Truy xuất &amp; thu hồi</span></a>
+<div class="mp-nav__subs">
+<sc-if value="{{vx.m.show.tx_tx}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.tx_tx}}" href="TruyXuat.dc.html" class="snav on">Truy xuất</a></sc-if>
+<sc-if value="{{vx.m.show.tx_th}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.tx_th}}" href="ThuHoi-r8hw.dc.html" class="snav">Hồ sơ thu hồi</a></sc-if>
+</div></sc-if>
+<sc-if value="{{vx.m.show.dm}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.dm}}" onClick="{{vx.m.go.dm}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>Danh mục</span></a></sc-if>
+<sc-if value="{{vx.m.show.qt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.qt}}" onClick="{{vx.m.go.qt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span>Quản trị</span></a></sc-if>
+<div class="mp-nav__foot"><span>MES Powder v1.0</span><button type="button" aria-label="Thu gọn menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l-5-5 5-5"></path><path d="M18 17l-5-5 5-5"></path></svg>Thu gọn</button></div>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header class="mp-hd"><div class="mp-hd__crumb">Truy xuất &amp; thu hồi / <span style="color: var(--ink)">Truy xuất</span><sc-if value="{{hasCrumb}}" hint-placeholder-val="{{ false }}"> / <span class="mp-code" style="color: var(--ink)">{{crumbCode}}</span></sc-if></div><div class="mp-hd__right"><span class="mp-site mp-site--cloud" title="Màn chỉ có trên cloud — người ở nhà máy không vào được khi nhà máy mất mạng"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>Chỉ trên cloud</span><label class="mp-hd__as" title="Mô phỏng: đổi vai trò người đang dùng"><span>Xem như</span><select value="{{vx.role}}" onChange="{{vx.set}}" aria-label="Xem như vai trò"><sc-for list="{{vx.optl}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></label><button type="button" class="mp-hd__fac" aria-label="Nhà máy đang xem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{vx.fac}}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button><span class="mp-hd__sep"></span><details class="mp-pop mp-bell"><summary aria-label="Thông báo, 3 chưa đọc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="mp-bell__dot">3</span></summary><div class="mp-pop__panel mp-noti"><div class="mp-pop__head"><b>Thông báo</b><a href="#">Đánh dấu tất cả đã đọc</a></div><div class="mp-noti__tabs"><span class="on">Chưa đọc 3</span><span>Tất cả</span></div><ul><li class="is-unread"><span class="mp-noti__ic ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><p>Phiếu nhập <span class="mp-code">PN-NM1-2610-0031</span> chờ Thủ kho trưởng xác nhận lệch — 1 bao rách đã tách trả NCC</p><time>10 phút trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic wait"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><p>2 lô hết hạn chưa hủy quá 30 ngày ở <span class="mp-code">NM1-TONG</span></p><time>1 giờ trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></span><div><p>Lệnh <span class="mp-code">LSX-2610-0011</span> chưa tới server NM1 quá 10 phút — đang gửi lại</p><time>2 giờ trước · Sản xuất</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"></path></svg></span><div><p>Nhắc nợ: <span class="mp-code">KH-0012</span> có khoản quá hạn 4 ngày</p><time>Hôm qua · Kế toán</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span><div><p>Vai trò ủy quyền QC trưởng của bạn hết hạn ngày 21/10</p><time>Hôm qua · Quản trị</time></div></li></ul><div class="mp-pop__foot"><a href="HopDuyet.dc.html">Việc chờ duyệt ở Việc cần làm →</a><a href="#">Xem tất cả</a></div></div></details><details class="mp-pop mp-me"><summary aria-label="Tài khoản"><span class="mp-av">{{vx.ini}}</span><span class="mp-me__txt"><b>{{vx.name}}</b><small>{{vx.label}}</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></summary><div class="mp-pop__panel mp-me__panel"><div class="mp-me__who"><span class="mp-av mp-av--lg">{{vx.ini}}</span><span><b>{{vx.name}}</b><small>{{vx.label}} · {{vx.fac}}</small></span></div><ul class="mp-me__menu"><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Hồ sơ của tôi</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Vai trò &amp; ủy quyền</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zM15.5 7.5l3 3L22 7l-3-3"></path></svg>Đổi mật khẩu</a></li><li><a href="DangNhap.dc.html" class="bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Đăng xuất</a></li></ul></div></details></div></header>
+<sc-if value="{{vx.m.deny}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0; box-sizing: border-box; width: 100%"><div class="mp-banner mp-banner--warn" role="status"><span><b>Vai trò {{vx.role}} không có quyền vào màn này.</b> <a href="{{vx.m.homeHref}}" onClick="{{vx.m.homeGo}}">Về Việc cần làm</a></span></div></div></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0"><div class="{{toastCls}}" role="status" style="display: flex; justify-content: space-between; align-items: center; gap: 12px"><span>{{toast}}</span><button type="button" class="icon-btn" aria-label="Đóng thông báo" onClick="{{closeToast}}"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></div></div></sc-if>
+<sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; width: 100%">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div><h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 600">Truy xuất nguồn gốc</h1>
+<p style="margin: 4px 0 0; color: var(--ink-muted); max-width: 900px">Truy chuỗi lô ngược / xuôi và trả kết quả cho bên yêu cầu</p></div>
+<div class="acts"><sc-if value="{{L.canNew}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{L.goNew}}">+ Tạo phiếu truy xuất</button></sc-if><sc-if value="{{L.g}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{L.g.who}}</b><sc-if value="{{L.g.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{L.g.why}}</sc-if><button type="button" onClick="{{L.g.sw}}">Xem như {{L.g.who}}</button></span></sc-if></div>
+</div>
+<div class="stats"><sc-for list="{{L.stats}}" as="x" hint-placeholder-count="4"><div class="mp-card"><div class="mp-stat"><span class="mp-stat__label">{{x.label}}</span><span class="mp-stat__value">{{x.value}}</span><span class="mp-stat__note">{{x.note}}</span></div></div></sc-for></div>
+<div class="tabs" role="tablist"><sc-for list="{{L.tabs}}" as="t" hint-placeholder-count="5"><button type="button" role="tab" class="{{t.cls}}" onClick="{{t.go}}">{{t.t}} <span class="n">{{t.n}}</span></button></sc-for></div>
+<div class="mp-card" style="overflow-x: auto">
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 1000px">
+<thead><tr><th>Phiếu · hướng</th><th>Nguồn · lý do</th><th>Mã đầu vào → lô</th><th>Người · bắt đầu</th><th>Tra chuỗi</th><th>Kết quả</th><th>Trạng thái</th></tr></thead>
+<tbody>
+<sc-for list="{{L.rows}}" as="r" hint-placeholder-count="6"><tr>
+<td class="mp-nowrap"><button type="button" class="linkbtn" onClick="{{r.open}}">{{r.code}}</button><div style="margin-top: 4px"><span class="{{r.dirCls}}">{{r.dir}}</span></div></td>
+<td style="min-width: 200px; max-width: 280px">{{r.src}}<sc-if value="{{r.hasSrcDoc}}" hint-placeholder-val="{{ true }}"> · <sc-if value="{{r.srcDoc.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.srcDoc.href}}" class="mp-xlink mp-code" onClick="{{r.srcDoc.open}}">{{r.srcDoc.id}}</a></sc-if><sc-if value="{{r.srcDoc.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.srcDoc.cls}}">{{r.srcDoc.id}}</span></sc-if></sc-if><span class="mp-sub">{{r.reason}}</span></td>
+<td class="mp-nowrap"><span class="mp-code">{{r.inp}}</span></td>
+<td class="mp-nowrap">{{r.by}}<span class="mp-sub">{{r.at}}</span></td>
+<td class="mp-nowrap">{{r.dur}}</td>
+<td style="min-width: 220px">{{r.sum}}<sc-if value="{{r.hasCl}}" hint-placeholder-val="{{ false }}"><span class="mp-sub txt-bad">Lệch cân bằng → biên bản + kiểm kho</span></sc-if><sc-if value="{{r.hasTh}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">Hồ sơ thu hồi <sc-if value="{{r.th.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.th.href}}" class="mp-xlink mp-code" onClick="{{r.th.open}}">{{r.th.id}}</a></sc-if><sc-if value="{{r.th.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.th.cls}}">{{r.th.id}}</span></sc-if></span></sc-if></td>
+<td><span class="{{r.stCls}}">{{r.st}}</span></td>
+</tr></sc-for>
+<sc-if value="{{L.noRows}}" hint-placeholder-val="{{ false }}"><tr><td colspan="7" style="text-align: center; color: var(--ink-muted); padding: 32px">Không có phiếu nào ở mục này.</td></tr></sc-if>
+</tbody></table></div></div></div>
+</div>
+</sc-if>
+<sc-if value="{{isTao}}" hint-placeholder-val="{{ false }}">
+<div class="ovl" style="position: absolute; inset: 0; z-index: 40; background: rgba(22,33,43,0.45); display: flex; justify-content: center; align-items: flex-start; padding: 56px 16px 32px; box-sizing: border-box">
+<div class="mp-dlg" role="dialog" aria-modal="true" aria-labelledby="tx-new-title" style="width: 100%; max-width: 920px; max-height: none">
+<div class="mp-dlg__head"><h2 id="tx-new-title" style="display: flex; align-items: center">Tạo phiếu truy xuất<span class="mp-info" tabindex="0" role="img" aria-label="Bên yêu cầu (hồ sơ thu hồi, QC, cơ quan, kiểm tra nội bộ) không tự chạy — Người truy xuất lập phiếu, chạy và trả kết quả." title="Bên yêu cầu (hồ sơ thu hồi, QC, cơ quan, kiểm tra nội bộ) không tự chạy — Người truy xuất lập phiếu, chạy và trả kết quả."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></h2><button type="button" class="icon-btn" aria-label="Đóng" onClick="{{F.cancel}}">×</button></div>
+<div class="mp-dlg__body" style="display: flex; flex-direction: column; gap: 16px">
+<div class="frm-sec"><h2 class="frm-h">1. Yêu cầu</h2>
+<div class="mp-field" style="max-width: 360px"><label class="flabel" for="tx-src">Nguồn yêu cầu <span class="req">*</span></label><select id="tx-src" class="mp-input" value="{{F.src}}" onChange="{{F.setSrc}}"><option value="">Chọn nguồn</option><sc-for list="{{F.srcs}}" as="o" hint-placeholder-count="3"><option value="{{o.t}}">{{o.t}}</option></sc-for></select></div>
+<div class="mp-form">
+<sc-if value="{{F.isAuto}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><span class="flabel">Chứng từ gốc</span><sc-if value="{{F.hasDoc}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; align-items: center; min-height: 40px"><span class="mp-code" style="font-size: 16px; font-weight: 600">{{F.srcDoc}}</span><span class="mp-muted" style="font-size: 15px">tự gắn từ {{F.docFrom}}</span></div></sc-if><sc-if value="{{F.noDoc}}" hint-placeholder-val="{{ true }}"><span class="mp-muted" style="font-size: 15px; min-height: 40px; display: flex; align-items: center">{{F.autoHint}}</span></sc-if></div></sc-if>
+<sc-if value="{{F.isCq}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><label class="flabel" for="tx-cv">Công văn của cơ quan</label><div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; min-height: 40px"><label class="mp-btn mp-btn--secondary row-btn" style="cursor: pointer">Chọn tệp<input id="tx-cv" type="file" accept=".pdf,image/*" onChange="{{F.pickCv}}" style="position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden"></label><sc-if value="{{F.hasCv}}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px">{{F.cvName}}</span><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{F.clearCv}}">Bỏ</button></sc-if><sc-if value="{{F.noCv}}" hint-placeholder-val="{{ true }}"><span class="mp-muted" style="font-size: 15px">Ảnh hoặc PDF công văn yêu cầu truy xuất</span></sc-if></div></div></sc-if>
+<div class="mp-field full"><label class="flabel" for="tx-reason">Lý do <span class="req">*</span></label><textarea id="tx-reason" class="mp-input ta" rows="2" value="{{F.reason}}" onChange="{{F.setReason}}" placeholder="Vì sao cần truy xuất — ghi vào phiếu làm bằng chứng"></textarea></div>
+</div></div>
+<div class="frm-sec"><h2 class="frm-h">2. Mã đầu vào → lô</h2>
+<div class="mp-field" style="max-width: 360px"><label class="flabel" for="tx-kind">Loại mã</label><select id="tx-kind" class="mp-input" value="{{F.inKind}}" onChange="{{F.setKind}}"><sc-for list="{{F.kinds}}" as="o" hint-placeholder-count="3"><option value="{{o.t}}">{{o.t}}</option></sc-for></select></div>
+<div class="mp-field"><label class="flabel" for="tx-code">Mã <span class="req">*</span></label>
+<div class="acts" style="flex-wrap: nowrap"><input id="tx-code" class="mp-input" style="font-family: var(--font-mono); max-width: 360px" value="{{F.code}}" onChange="{{F.setCode}}" placeholder="Quét QR hoặc nhập mã"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{F.lookup}}">Tra mã</button></div>
+<div class="acts"><span class="hint">Mã mẫu:</span><sc-for list="{{F.ex}}" as="e" hint-placeholder-count="3"><button type="button" class="chip-ex" onClick="{{e.go}}">{{e.t}}</button></sc-for></div></div>
+<sc-if value="{{F.resBad}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span>{{F.resMsg}}</span></div></sc-if>
+<sc-if value="{{F.resOk}}" hint-placeholder-val="{{ false }}"><div class="mp-field"><span class="flabel">Lô tìm được — chọn lô để truy</span>
+<div class="opts"><sc-for list="{{F.lots}}" as="o" hint-placeholder-count="1"><button type="button" class="{{o.cls}}" onClick="{{o.go}}"><span class="mp-code">{{o.lot}}</span><small>{{o.sub}}</small><small>{{o.how}}</small></button></sc-for></div></div></sc-if>
+</div>
+<div class="frm-sec"><h2 class="frm-h">3. Hướng truy<span class="mp-info" tabindex="0" role="img" aria-label="Cả hai hướng đều gom hồ sơ QC / file đánh giá bên ngoài / mẫu lưu / NCR của mọi lô trong chuỗi và cân bằng khối lượng từng lô. Truy ngược ra cả lô bao bì (lon, thùng)." title="Cả hai hướng đều gom hồ sơ QC / file đánh giá bên ngoài / mẫu lưu / NCR của mọi lô trong chuỗi và cân bằng khối lượng từng lô. Truy ngược ra cả lô bao bì (lon, thùng)."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></h2>
+<div class="opts" role="group"><sc-for list="{{F.dirs}}" as="o" hint-placeholder-count="3"><button type="button" class="{{o.cls}}" onClick="{{o.go}}">{{o.t}}<sc-if value="{{o.hasSub}}" hint-placeholder-val="{{ false }}"><small>{{o.sub}}</small></sc-if></button></sc-for></div>
+</div>
+<sc-if value="{{F.hasErr}}" hint-placeholder-val="{{ false }}"><div class="errbox" role="alert">{{F.err}}</div></sc-if>
+</div>
+<div class="mp-dlg__foot"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{F.cancel}}">Hủy</button><sc-if value="{{F.can}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{F.run}}">Tạo phiếu &amp; chạy truy xuất</button></sc-if><sc-if value="{{F.g}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{F.g.who}}</b><sc-if value="{{F.g.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{F.g.why}}</sc-if><button type="button" onClick="{{F.g.sw}}">Xem như {{F.g.who}}</button></span></sc-if></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isCt}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; width: 100%">
+<div><button type="button" class="mp-btn mp-btn--ghost" style="padding-left: 0" onClick="{{D.back}}">← Danh sách phiếu</button></div>
+<div class="mp-card">
+<div class="txh">
+<div class="txh__l">
+<div class="txh__t"><h1 class="mp-code" style="margin: 0; font-size: 26px; line-height: 34px; font-weight: 600">{{D.code}}</h1><span class="mp-doc mp-doc--draft">{{D.dir}}</span><span class="{{D.stCls}}">{{D.st}}</span></div>
+<div class="txh__s">Lô <sc-if value="{{D.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{D.lot.href}}" class="mp-xlink mp-code" onClick="{{D.lot.open}}">{{D.lot.id}}</a></sc-if><sc-if value="{{D.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{D.lot.cls}}">{{D.lot.id}}</span></sc-if> · {{D.src}}<sc-if value="{{D.hasSrcDoc}}" hint-placeholder-val="{{ true }}"> <sc-if value="{{D.srcDoc.ok}}" hint-placeholder-val="{{ true }}"><a href="{{D.srcDoc.href}}" class="mp-xlink mp-code" onClick="{{D.srcDoc.open}}">{{D.srcDoc.id}}</a></sc-if><sc-if value="{{D.srcDoc.no}}" hint-placeholder-val="{{ false }}"><span class="{{D.srcDoc.cls}}">{{D.srcDoc.id}}</span></sc-if></sc-if> · {{D.reason}}</div>
+<div class="txh__m">{{D.inp}} · {{D.by}} · tạo phiếu {{D.at}} · có kết quả {{D.end}}</div>
+</div>
+<div class="txh__r">
+<div class="acts"><sc-if value="{{D.noTh}}" hint-placeholder-val="{{ false }}"><a href="{{D.toTh.href}}" class="mp-btn mp-btn--secondary" style="text-decoration: none" onClick="{{D.toTh.open}}">Mở hồ sơ thu hồi</a></sc-if><sc-if value="{{D.canRet}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{D.doRet}}">Trả kết quả</button></sc-if><sc-if value="{{D.canReport}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{D.doReport}}">Xuất báo cáo</button></sc-if></div>
+<sc-if value="{{D.gRep}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{D.gRep.who}}</b><sc-if value="{{D.gRep.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{D.gRep.why}}</sc-if><button type="button" onClick="{{D.gRep.sw}}">Xem như {{D.gRep.who}}</button></span></sc-if><sc-if value="{{D.gRet}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{D.gRet.who}}</b><sc-if value="{{D.gRet.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{D.gRet.why}}</sc-if><button type="button" onClick="{{D.gRet.sw}}">Xem như {{D.gRet.who}}</button></span></sc-if>
+<div class="txh__done"><sc-if value="{{D.hasReport}}" hint-placeholder-val="{{ true }}"><span>Báo cáo: <span class="mp-code">{{D.report}}</span></span></sc-if><sc-if value="{{D.hasRet}}" hint-placeholder-val="{{ true }}"><span>Đã trả: {{D.ret}}</span></sc-if><sc-if value="{{D.hasTh}}" hint-placeholder-val="{{ true }}"><span>Hồ sơ thu hồi <sc-if value="{{D.th.ok}}" hint-placeholder-val="{{ true }}"><a href="{{D.th.href}}" class="mp-xlink mp-code" onClick="{{D.th.open}}">{{D.th.id}}</a></sc-if><sc-if value="{{D.th.no}}" hint-placeholder-val="{{ false }}"><span class="{{D.th.cls}}">{{D.th.id}}</span></sc-if></span></sc-if></div>
+</div>
+</div>
+<div class="kpis"><sc-for list="{{D.kpis}}" as="x" hint-placeholder-count="4"><div class="{{x.box}}"><span class="lbl">{{x.k}}</span><b>{{x.v}}</b><span class="mp-sub">{{x.sub}}</span></div></sc-for></div>
+<div class="chain"><span class="chain__l">Chuỗi</span><sc-for list="{{D.chips}}" as="c" hint-placeholder-count="5"><sc-if value="{{c.arr}}" hint-placeholder-val="{{ true }}"><span class="chain__a" aria-hidden="true">→</span></sc-if><button type="button" class="{{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.go}}">{{c.t}}</button></sc-for></div>
+</div>
+<sc-if value="{{D.hasProd}}" hint-placeholder-val="{{ false }}">
+<section class="pc3" aria-label="Tóm tắt lô sản xuất {{D.P.lot}}">
+<div class="pc"><div class="pc__h"><h2 class="pc__t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg>Sản lượng</h2><button type="button" class="pc__go" onClick="{{D.P.goCd}}">Xem công đoạn ›</button></div><div class="pc__big"><b>{{D.P.sl.big}}</b><span>{{D.P.sl.bigSub}}</span></div><dl class="pc__kv"><sc-for list="{{D.P.sl.kv}}" as="k" hint-placeholder-count="4"><dt>{{k.k}}</dt><dd class="{{k.cls}}">{{k.v}}</dd></sc-for></dl><div class="pc__bar"><div class="pc__bl"><span>{{D.P.sl.barL}}</span><b>{{D.P.sl.barV}}</b></div><div class="pc__track"><div class="{{D.P.sl.barCls}}" style="{{D.P.sl.barW}}"></div></div></div></div>
+<div class="pc"><div class="pc__h"><h2 class="pc__t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>Chất lượng<span class="{{D.P.cl.stCls}}">{{D.P.cl.st}}</span></h2><button type="button" class="pc__go" onClick="{{D.P.goHs}}">Xem hồ sơ ›</button></div><div class="pc__big"><b>{{D.P.cl.big}}</b><span>{{D.P.cl.bigSub}}</span></div><dl class="pc__kv"><sc-for list="{{D.P.cl.kv}}" as="k" hint-placeholder-count="4"><dt>{{k.k}}</dt><dd class="{{k.cls}}">{{k.v}}</dd></sc-for></dl><div class="pc__bar"><div class="pc__bl"><span>{{D.P.cl.barL}}</span><b>{{D.P.cl.barV}}</b></div><div class="pc__track"><div class="{{D.P.cl.barCls}}" style="{{D.P.cl.barW}}"></div></div></div></div>
+<div class="pc"><div class="pc__h"><h2 class="pc__t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Thời gian sản xuất</h2><button type="button" class="pc__go" onClick="{{D.P.goCd}}">Xem công đoạn ›</button></div><div class="pc__big"><b>{{D.P.tg.big}}</b><span>{{D.P.tg.bigSub}}</span></div><dl class="pc__kv"><sc-for list="{{D.P.tg.kv}}" as="k" hint-placeholder-count="4"><dt>{{k.k}}</dt><dd class="{{k.cls}}">{{k.v}}</dd></sc-for></dl><div class="pc__bar"><div class="pc__bl"><span>{{D.P.tg.barL}}</span><b>{{D.P.tg.barV}}</b></div><div class="pc__track"><div class="{{D.P.tg.barCls}}" style="{{D.P.tg.barW}}"></div></div></div></div>
+</section>
+</sc-if>
+<sc-if value="{{D.offline}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Server nhà máy NM1 ngoại tuyến từ 08:12.</b> Sự kiện nạp silo / mẻ sau 08:12 chưa về cloud — kết quả có thể thiếu; chạy lại khi có kết nối.</span></div></sc-if>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<div class="tabs" role="tablist"><sc-for list="{{D.tabs}}" as="t" hint-placeholder-count="5"><button type="button" role="tab" class="{{t.cls}}" onClick="{{t.go}}">{{t.t}}<sc-if value="{{t.hasN}}" hint-placeholder-val="{{ false }}"> <span class="n bad">{{t.n}}</span></sc-if></button></sc-for></div>
+<sc-if value="{{D.isCd}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="overflow: hidden">
+<div class="sec-h"><h3>Công đoạn tạo ra lô {{D.P.lot}}</h3><span class="mp-muted" style="font-size: 16px"><sc-if value="{{D.P.lsx.ok}}" hint-placeholder-val="{{ false }}"><a href="{{D.P.lsx.href}}" class="mp-xlink mp-code" onClick="{{D.P.lsx.open}}">{{D.P.lsx.id}}</a></sc-if><sc-if value="{{D.P.lsx.no}}" hint-placeholder-val="{{ true }}"><span class="{{D.P.lsx.cls}}">{{D.P.lsx.id}}</span></sc-if> · {{D.P.cdSum}}</span></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 1240px"><thead><tr><th>Công đoạn</th><th>Trạng thái</th><th class="mp-num">SL yêu cầu</th><th class="mp-num">SL sản xuất</th><th class="mp-num">Đạt</th><th class="mp-num">Lỗi</th><th>Bắt đầu thực tế</th><th>Kết thúc thực tế</th><th>Gián đoạn</th><th class="mp-num">Thời gian chạy</th></tr></thead>
+<tbody><sc-for list="{{D.P.cd}}" as="r" hint-placeholder-count="4"><tr><td style="min-width: 240px"><b>{{r.name}}</b><span class="mp-sub">{{r.sub}}</span></td><td class="mp-nowrap"><span class="{{r.stCls}}">{{r.st}}</span></td><td class="mp-num mp-nowrap">{{r.yc}}</td><td class="mp-num mp-nowrap">{{r.sx}}</td><td class="mp-num mp-nowrap">{{r.dat}}</td><td class="mp-num mp-nowrap"><span class="{{r.loiCls}}">{{r.loi}}</span></td><td class="mp-nowrap">{{r.bd}}</td><td class="mp-nowrap">{{r.kt}}</td><td style="min-width: 220px"><span class="{{r.gdCls}}">{{r.gd}}</span><sc-if value="{{r.hasGdWhy}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{r.gdWhy}}</span></sc-if></td><td class="mp-num mp-nowrap">{{r.tl}}</td></tr></sc-for>
+<tr class="cd-tot"><td colspan="6">Tổng {{D.P.cdN}} công đoạn</td><td class="mp-nowrap">{{D.P.tot.bd}}</td><td class="mp-nowrap">{{D.P.tot.kt}}</td><td>{{D.P.tot.gd}}</td><td class="mp-num mp-nowrap">{{D.P.tot.tl}}</td></tr>
+</tbody></table></div></div>
+<p class="cd-note" style="margin: 0">Số lượng ghi theo đơn vị của từng công đoạn (kg bột, lon, thùng) nên không cộng dồn giữa các công đoạn. Gián đoạn lấy từ nhật ký dừng máy của mẻ / line chiết.</p>
+</div>
+</sc-if>
+<sc-if value="{{D.isChuoi}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="overflow: hidden">
+<div class="subh"><div style="display: flex; flex-direction: column; gap: 2px"><h2 class="mp-card__title">{{D.treeTitle}}</h2><sc-if value="{{D.isTlv}}" hint-placeholder-val="{{ false }}"><span class="mp-muted" style="font-size: 15px">{{D.TL.span}} · {{D.TL.nEv}}</span></sc-if></div>
+<div class="flt"><div class="seg-v" role="group" aria-label="Kiểu xem"><button type="button" class="{{D.cvCay.cls}}" aria-pressed="{{D.cvCay.on}}" onClick="{{D.cvCay.go}}">Cây</button><button type="button" class="{{D.cvTl.cls}}" aria-pressed="{{D.cvTl.on}}" onClick="{{D.cvTl.go}}">Dòng thời gian</button></div>
+<sc-if value="{{D.isCay}}" hint-placeholder-val="{{ true }}"><sc-if value="{{D.noLayer}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.expandAll}}">Mở hết</button><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.collapseAll}}">Thu gọn</button></sc-if></sc-if>
+<sc-if value="{{D.isTlv}}" hint-placeholder-val="{{ false }}"><label class="mp-muted" for="tl-f" style="font-size: 16px">Hiện</label><select id="tl-f" class="mp-input" style="width: auto; min-width: 220px" value="{{D.TL.fval}}" onChange="{{D.TL.setF}}"><sc-for list="{{D.TL.fopts}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.TL.flip}}">⇅ {{D.TL.dirT}}</button><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.TL.openAll}}">Mở hết</button><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.TL.closeAll}}">Thu gọn</button></sc-if>
+</div></div>
+<sc-if value="{{D.isCay}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{D.hasLayer}}" hint-placeholder-val="{{ false }}"><div class="flt-on"><span>Đang xem: <b>{{D.layerT}}</b></span><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.clearLayer}}">Bỏ lọc, xem cả cây</button></div></sc-if>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table mp-tree" style="min-width: 1060px">
+<thead><tr><th>Đối tượng</th><th>Mặt hàng</th><th>Liên kết · thời điểm</th><th class="mp-num">Số lượng</th><th>Nhà cung cấp · PO · file đánh giá</th><th>Trạng thái lô hiện tại</th></tr></thead>
+<tbody>
+<sc-for list="{{D.tree}}" as="r" hint-placeholder-count="10"><tr class="{{r.rowCls}}">
+<td style="{{r.indent}}; min-width: 230px"><span style="display: inline-flex; align-items: flex-start; gap: 6px">
+<sc-if value="{{r.hasKids}}" hint-placeholder-val="{{ true }}"><button type="button" class="chev" onClick="{{r.toggle}}" aria-expanded="{{r.open}}" aria-label="Mở / thu gọn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="{{r.chevStyle}}"><path d="M5 8.5h14l-7 8z"></path></svg></button></sc-if>
+<sc-if value="{{r.isLeaf}}" hint-placeholder-val="{{ false }}"><span style="width: 24px; display: inline-block; flex: none"></span></sc-if>
+<span style="padding-top: 2px"><span class="mp-nowrap"><sc-if value="{{r.c.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.c.href}}" class="mp-xlink mp-code" onClick="{{r.c.open}}">{{r.c.id}}</a></sc-if><sc-if value="{{r.c.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.c.cls}}">{{r.c.id}}</span></sc-if></span><span class="kind">{{r.kind}}<sc-if value="{{r.showCount}}" hint-placeholder-val="{{ false }}"> · <span class="cnt">{{r.countLabel}}</span></sc-if></span></span></span></td>
+<td style="min-width: 150px"><sc-if value="{{r.item.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.item.href}}" class="mp-xlink mp-code" onClick="{{r.item.open}}">{{r.item.id}}</a></sc-if><sc-if value="{{r.item.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.item.cls}}">{{r.item.id}}</span></sc-if><sc-if value="{{r.hasItemSub}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{r.itemSub}}</span></sc-if></td>
+<td style="min-width: 150px">{{r.via}}<span class="mp-sub">{{r.at}}</span><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{r.note}}</span></sc-if></td>
+<td class="mp-num mp-nowrap">{{r.qty}}</td>
+<td style="min-width: 170px"><sc-if value="{{r.hasSrc}}" hint-placeholder-val="{{ false }}"><sc-if value="{{r.ncc.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.ncc.href}}" class="mp-xlink mp-code" onClick="{{r.ncc.open}}">{{r.ncc.id}}</a></sc-if><sc-if value="{{r.ncc.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.ncc.cls}}">{{r.ncc.id}}</span></sc-if> · {{r.nccName}}<span class="mp-sub">lô NCC <span class="mp-code">{{r.lotNcc}}</span> · <span class="mp-code">{{r.po}}</span></span><span class="mp-sub">{{r.coa}}</span></sc-if><sc-if value="{{r.noSrc}}" hint-placeholder-val="{{ true }}"><span class="mp-muted">—</span></sc-if></td>
+<td style="min-width: 130px"><sc-if value="{{r.hasSt}}" hint-placeholder-val="{{ false }}"><span class="{{r.stCls}}">{{r.st}}</span><sc-if value="{{r.hasWhy}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{r.why}}</span></sc-if></sc-if><sc-if value="{{r.noSt}}" hint-placeholder-val="{{ true }}"><span class="mp-muted">—</span></sc-if></td>
+</tr></sc-for>
+</tbody></table></div></div>
+</sc-if>
+<sc-if value="{{D.isTlv}}" hint-placeholder-val="{{ false }}">
+<div class="tlm"><sc-for list="{{D.TL.days}}" as="d" hint-placeholder-count="3"><section class="tlm-day"><h3 class="tlm-d"><button type="button" class="tlm-dbtn" aria-expanded="{{d.ariaOpen}}" onClick="{{d.toggle}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="{{d.chev}}"><path d="M5 8.5h14l-7 8z"></path></svg><b>{{d.day}} {{d.mon}}</b><span>{{d.wd}} · {{d.n}}</span></button></h3><sc-if value="{{d.isOpen}}" hint-placeholder-val="{{ true }}"><sc-for list="{{d.evs}}" as="e" hint-placeholder-count="3"><div class="{{e.mCls}}"><div class="tlm-r"><button type="button" class="chev" aria-expanded="{{e.ariaExp}}" aria-label="Xem chi tiết" onClick="{{e.toggle}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="{{e.chev}}"><path d="M5 8.5h14l-7 8z"></path></svg></button><span class="tlm-t">{{e.time}}</span><span class="tlm-ty">{{e.short}}</span><span class="tlm-c"><sc-if value="{{e.code.ok}}" hint-placeholder-val="{{ true }}"><a href="{{e.code.href}}" class="mp-xlink mp-code" onClick="{{e.code.open}}">{{e.code.id}}</a></sc-if><sc-if value="{{e.code.no}}" hint-placeholder-val="{{ false }}"><span class="mp-code">{{e.code.id}}</span></sc-if><sc-if value="{{e.isRoot}}" hint-placeholder-val="{{ false }}"><span class="tl-root">lô truy xuất</span></sc-if></span><span class="tlm-q">{{e.qty}}</span><span class="tlm-x">{{e.fromT}}<sc-if value="{{e.stBad}}" hint-placeholder-val="{{ false }}"> <span class="{{e.stCls}}">{{e.st}}</span></sc-if></span></div><sc-if value="{{e.exp}}" hint-placeholder-val="{{ false }}"><dl class="tlm-det"><div><dt>Loại</dt><dd>{{e.label}} · {{e.kind}}</dd></div><div><dt>Thời điểm</dt><dd>{{e.atRaw}}</dd></div><sc-if value="{{e.hasItem}}" hint-placeholder-val="{{ true }}"><div><dt>Mặt hàng</dt><dd><sc-if value="{{e.item.ok}}" hint-placeholder-val="{{ true }}"><a href="{{e.item.href}}" class="mp-xlink mp-code" onClick="{{e.item.open}}">{{e.item.id}}</a></sc-if><sc-if value="{{e.item.no}}" hint-placeholder-val="{{ false }}"><span class="mp-code">{{e.item.id}}</span></sc-if><sc-if value="{{e.hasItemSub}}" hint-placeholder-val="{{ true }}"> · {{e.itemSub}}</sc-if></dd></div></sc-if><sc-if value="{{e.hasVia}}" hint-placeholder-val="{{ true }}"><div><dt>Thao tác</dt><dd>{{e.via}}<sc-if value="{{e.hasVia2}}" hint-placeholder-val="{{ false }}"> · {{e.via2}}</sc-if></dd></div></sc-if><sc-if value="{{e.hasSrc}}" hint-placeholder-val="{{ false }}"><div><dt>Nhà cung cấp</dt><dd><sc-if value="{{e.ncc.ok}}" hint-placeholder-val="{{ true }}"><a href="{{e.ncc.href}}" class="mp-xlink mp-code" onClick="{{e.ncc.open}}">{{e.ncc.id}}</a></sc-if><sc-if value="{{e.ncc.no}}" hint-placeholder-val="{{ false }}"><span class="mp-code">{{e.ncc.id}}</span></sc-if> {{e.nccName}}<sc-if value="{{e.hasLotNcc}}" hint-placeholder-val="{{ false }}"> · lô NCC <span class="mp-code">{{e.lotNcc}}</span></sc-if><sc-if value="{{e.hasPo}}" hint-placeholder-val="{{ false }}"> · <span class="mp-code">{{e.po}}</span></sc-if></dd></div></sc-if><sc-if value="{{e.hasCoa}}" hint-placeholder-val="{{ false }}"><div><dt>File đánh giá</dt><dd>{{e.coa}}</dd></div></sc-if><sc-if value="{{e.hasSt}}" hint-placeholder-val="{{ false }}"><div><dt>Trạng thái lô</dt><dd><span class="{{e.stCls}}">{{e.st}}</span><sc-if value="{{e.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{e.why}}</sc-if></dd></div></sc-if><sc-if value="{{e.hasNote}}" hint-placeholder-val="{{ false }}"><div class="full"><dt>Ghi chú</dt><dd>{{e.note}}</dd></div></sc-if></dl></sc-if></div></sc-for></sc-if></section></sc-for></div>
+<sc-if value="{{D.TL.noDays}}" hint-placeholder-val="{{ false }}"><div class="wait" style="margin: 20px">Không có sự kiện nào khớp bộ lọc.</div></sc-if>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{D.isKqX}}" hint-placeholder-val="{{ true }}">
+<div class="mp-card" style="overflow: hidden">
+<sc-if value="{{D.hasKqF}}" hint-placeholder-val="{{ false }}"><div class="flt-on"><span><b>{{D.kqFT}}</b></span><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.clearKqF}}">Xem cả khách và tồn</button></div></sc-if>
+<sc-if value="{{D.showCust}}" hint-placeholder-val="{{ true }}">
+<div class="sec-h"><h3>Khách đã nhận</h3><span class="mp-muted" style="font-size: 16px">{{D.custSum}}</span></div>
+<sc-if value="{{D.hasCust}}" hint-placeholder-val="{{ true }}">
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 820px"><thead><tr><th>Khách</th><th>Lô</th><th class="mp-num">Số lượng</th><th>Phiếu xuất · đơn hàng</th><th>Ngày ký nhận</th></tr></thead>
+<tbody><sc-for list="{{D.cust}}" as="x" hint-placeholder-count="3"><tr>
+<td style="min-width: 220px"><sc-if value="{{x.kh.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.kh.href}}" class="mp-xlink mp-code" onClick="{{x.kh.open}}">{{x.kh.id}}</a></sc-if><sc-if value="{{x.kh.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.kh.cls}}">{{x.kh.id}}</span></sc-if><span class="mp-sub">{{x.name}}</span></td><td class="mp-nowrap"><sc-if value="{{x.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.lot.href}}" class="mp-xlink mp-code" onClick="{{x.lot.open}}">{{x.lot.id}}</a></sc-if><sc-if value="{{x.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.lot.cls}}">{{x.lot.id}}</span></sc-if></td><td class="mp-num mp-nowrap">{{x.qty}}</td><td class="mp-nowrap"><sc-if value="{{x.px.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.px.href}}" class="mp-xlink mp-code" onClick="{{x.px.open}}">{{x.px.id}}</a></sc-if><sc-if value="{{x.px.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.px.cls}}">{{x.px.id}}</span></sc-if><span class="mp-sub"><sc-if value="{{x.dh.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.dh.href}}" class="mp-xlink mp-code" onClick="{{x.dh.open}}">{{x.dh.id}}</a></sc-if><sc-if value="{{x.dh.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.dh.cls}}">{{x.dh.id}}</span></sc-if></span></td><td class="mp-nowrap">{{x.at}}</td>
+</tr></sc-for></tbody></table></div></div>
+</sc-if>
+<sc-if value="{{D.noCust}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 20px 16px"><div class="wait">Chưa giao khách nào.</div></div></sc-if>
+</sc-if>
+<sc-if value="{{D.showStock}}" hint-placeholder-val="{{ true }}">
+<div class="sec-h" style="border-top: 1px solid var(--line); margin-top: 4px"><h3>Còn trong nhà máy</h3><span class="mp-muted" style="font-size: 16px">{{D.stockSum}}</span></div>
+<sc-if value="{{D.hasStock}}" hint-placeholder-val="{{ true }}">
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 820px"><thead><tr><th>Ở đâu</th><th>Lô</th><th class="mp-num">Số lượng</th><th>Ghi chú</th><th>Tính đến</th></tr></thead>
+<tbody><sc-for list="{{D.stock}}" as="x" hint-placeholder-count="2"><tr>
+<td style="min-width: 220px"><sc-if value="{{x.c.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.c.href}}" class="mp-xlink mp-code" onClick="{{x.c.open}}">{{x.c.id}}</a></sc-if><sc-if value="{{x.c.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.c.cls}}">{{x.c.id}}</span></sc-if><span class="mp-sub">{{x.where}}</span></td><td class="mp-nowrap"><sc-if value="{{x.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.lot.href}}" class="mp-xlink mp-code" onClick="{{x.lot.open}}">{{x.lot.id}}</a></sc-if><sc-if value="{{x.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.lot.cls}}">{{x.lot.id}}</span></sc-if></td><td class="mp-num mp-nowrap">{{x.qty}}</td><td style="min-width: 200px">{{x.note}}</td><td class="mp-nowrap">{{x.at}}</td>
+</tr></sc-for></tbody></table></div></div>
+</sc-if>
+<sc-if value="{{D.noStock}}" hint-placeholder-val="{{ false }}"><div style="padding: 0 20px 16px"><div class="wait">Không còn phần nào trong nhà máy.</div></div></sc-if>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{D.isKqN}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="overflow: hidden">
+<div class="sec-h"><h3>Nguyên liệu và bao bì đã dùng</h3><span class="mp-muted" style="font-size: 16px">{{D.inSum}}</span></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 980px"><thead><tr><th>Lô</th><th>Mặt hàng</th><th>Dùng vào · thời điểm</th><th class="mp-num">Số lượng</th><th>Nhà cung cấp · lô NCC · PO</th><th>Trạng thái lô</th></tr></thead>
+<tbody><sc-for list="{{D.inputs}}" as="r" hint-placeholder-count="4"><tr>
+<td class="mp-nowrap"><sc-if value="{{r.c.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.c.href}}" class="mp-xlink mp-code" onClick="{{r.c.open}}">{{r.c.id}}</a></sc-if><sc-if value="{{r.c.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.c.cls}}">{{r.c.id}}</span></sc-if><span class="mp-sub">{{r.kind}}</span></td>
+<td style="min-width: 160px"><sc-if value="{{r.item.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.item.href}}" class="mp-xlink mp-code" onClick="{{r.item.open}}">{{r.item.id}}</a></sc-if><sc-if value="{{r.item.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.item.cls}}">{{r.item.id}}</span></sc-if><sc-if value="{{r.hasItemSub}}" hint-placeholder-val="{{ true }}"><span class="mp-sub">{{r.itemSub}}</span></sc-if></td>
+<td style="min-width: 170px"><span class="mp-code">{{r.par}}</span><span class="mp-sub">{{r.via}} · {{r.at}}</span></td>
+<td class="mp-num mp-nowrap">{{r.qty}}</td>
+<td style="min-width: 190px"><sc-if value="{{r.hasSrc}}" hint-placeholder-val="{{ true }}"><sc-if value="{{r.ncc.ok}}" hint-placeholder-val="{{ true }}"><a href="{{r.ncc.href}}" class="mp-xlink mp-code" onClick="{{r.ncc.open}}">{{r.ncc.id}}</a></sc-if><sc-if value="{{r.ncc.no}}" hint-placeholder-val="{{ false }}"><span class="{{r.ncc.cls}}">{{r.ncc.id}}</span></sc-if> · {{r.nccName}}<span class="mp-sub">lô NCC <span class="mp-code">{{r.lotNcc}}</span> · <span class="mp-code">{{r.po}}</span></span></sc-if><sc-if value="{{r.noSrc}}" hint-placeholder-val="{{ false }}"><span class="mp-muted">làm trong nhà máy</span></sc-if></td>
+<td style="min-width: 130px"><sc-if value="{{r.hasSt}}" hint-placeholder-val="{{ false }}"><span class="{{r.stCls}}">{{r.st}}</span><sc-if value="{{r.hasWhy}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{r.why}}</span></sc-if></sc-if><sc-if value="{{r.noSt}}" hint-placeholder-val="{{ true }}"><span class="mp-muted">—</span></sc-if></td>
+</tr></sc-for></tbody></table></div></div>
+</div>
+</sc-if>
+<sc-if value="{{D.isHoso}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="overflow-x: auto">
+<div class="mp-card__head"><div style="display: flex; align-items: baseline; gap: 10px"><h2 class="mp-card__title">Hồ sơ từng lô trong chuỗi</h2></div></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 980px"><thead><tr><th>Lô</th><th>Phiếu QC · chứng nhận</th><th>Mẫu lưu</th><th>File đánh giá bên ngoài</th><th>NCR</th><th>Trạng thái hiện tại</th><th>Kho / tồn</th></tr></thead>
+<tbody><sc-for list="{{D.docs}}" as="x" hint-placeholder-count="5"><tr>
+<td class="mp-nowrap"><sc-if value="{{x.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{x.lot.href}}" class="mp-xlink mp-code" onClick="{{x.lot.open}}">{{x.lot.id}}</a></sc-if><sc-if value="{{x.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{x.lot.cls}}">{{x.lot.id}}</span></sc-if><span class="mp-sub">{{x.kind}}</span></td>
+<td style="min-width: 150px"><sc-if value="{{x.hasQc}}" hint-placeholder-val="{{ true }}"><span class="doclist"><sc-for list="{{x.qc}}" as="q" hint-placeholder-count="1"><sc-if value="{{q.ok}}" hint-placeholder-val="{{ true }}"><a href="{{q.href}}" class="mp-xlink mp-code" onClick="{{q.open}}">{{q.id}}</a></sc-if><sc-if value="{{q.no}}" hint-placeholder-val="{{ false }}"><span class="{{q.cls}}">{{q.id}}</span></sc-if></sc-for></span></sc-if><sc-if value="{{x.noQc}}" hint-placeholder-val="{{ false }}"><span class="mp-muted">Kiểm đầu vào khi nhập</span></sc-if></td>
+<td class="mp-nowrap"><sc-if value="{{x.hasMl}}" hint-placeholder-val="{{ false }}"><sc-for list="{{x.ml}}" as="q" hint-placeholder-count="1"><sc-if value="{{q.ok}}" hint-placeholder-val="{{ true }}"><a href="{{q.href}}" class="mp-xlink mp-code" onClick="{{q.open}}">{{q.id}}</a></sc-if><sc-if value="{{q.no}}" hint-placeholder-val="{{ false }}"><span class="{{q.cls}}">{{q.id}}</span></sc-if></sc-for></sc-if><sc-if value="{{x.noMl}}" hint-placeholder-val="{{ true }}"><span class="mp-muted">—</span></sc-if></td>
+<td class="mp-nowrap" style="font-size: 16px">{{x.coa}}</td>
+<td style="min-width: 110px; font-size: 16px">{{x.ncr}}</td>
+<td style="min-width: 130px"><span class="{{x.stCls}}">{{x.st}}</span><sc-if value="{{x.hasWhy}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{x.why}}</span></sc-if></td>
+<td style="min-width: 200px; font-size: 16px">{{x.pos}}</td>
+</tr></sc-for></tbody></table></div></div>
+</div>
+<div class="mp-card" style="overflow-x: auto">
+<div class="subh"><div style="display: flex; flex-direction: column; gap: 2px"><h2 class="mp-card__title">Cân bằng khối lượng</h2><span class="mp-muted" style="font-size: 15px">SL vào = các phần đã đi ra + còn lại · chỉ hiện cột có số</span></div><sc-if value="{{D.balT.has}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{D.balT.go}}">{{D.balT.t}}</button></sc-if></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 760px"><thead><tr><th>Lô</th><th>ĐVT</th><sc-for list="{{D.balCols}}" as="h" hint-placeholder-count="4"><th class="mp-num">{{h.t}}</th></sc-for><th class="mp-num">Lệch</th><th>Xử lý</th></tr></thead>
+<tbody><sc-for list="{{D.bal}}" as="b" hint-placeholder-count="3"><tr class="{{b.rowCls}}">
+<td class="mp-nowrap"><sc-if value="{{b.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{b.lot.href}}" class="mp-xlink mp-code" onClick="{{b.lot.open}}">{{b.lot.id}}</a></sc-if><sc-if value="{{b.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{b.lot.cls}}">{{b.lot.id}}</span></sc-if><span class="mp-sub">{{b.kind}}</span></td><td>{{b.unit}}</td>
+<sc-for list="{{b.cells}}" as="v" hint-placeholder-count="4"><td class="mp-num">{{v.v}}</td></sc-for>
+<td class="{{b.lechCls}}">{{b.lech}}</td>
+<td style="min-width: 170px"><sc-if value="{{b.ok}}" hint-placeholder-val="{{ true }}"><span class="mp-muted">Khớp</span></sc-if><sc-if value="{{b.hasCl}}" hint-placeholder-val="{{ false }}"><span class="mp-doc mp-doc--bad">Lệch</span> <sc-if value="{{b.kk.ok}}" hint-placeholder-val="{{ true }}"><a href="{{b.kk.href}}" class="mp-xlink mp-code" onClick="{{b.kk.open}}">{{b.kk.id}}</a></sc-if><sc-if value="{{b.kk.no}}" hint-placeholder-val="{{ false }}"><span class="{{b.kk.cls}}">{{b.kk.id}}</span></sc-if><span class="mp-sub">biên bản: {{b.clBy}}</span></sc-if><sc-if value="{{b.noCl}}" hint-placeholder-val="{{ false }}"><span class="mp-doc mp-doc--bad">Lệch</span><span class="mp-sub">chờ Thủ kho lập biên bản</span></sc-if></td>
+</tr></sc-for></tbody></table></div></div>
+</div>
+<sc-if value="{{D.cl.has}}" hint-placeholder-val="{{ true }}">
+<div class="mp-card"><div class="mp-card__head"><div style="display: flex; align-items: baseline; gap: 10px"><h2 class="mp-card__title">Biên bản chênh lệch</h2></div></div>
+<div class="mp-card__body" style="display: flex; flex-direction: column; gap: 10px">
+<dl class="mp-kv" style="margin: 0; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))"><div><dt>Lô</dt><dd><sc-if value="{{D.cl.lot.ok}}" hint-placeholder-val="{{ true }}"><a href="{{D.cl.lot.href}}" class="mp-xlink mp-code" onClick="{{D.cl.lot.open}}">{{D.cl.lot.id}}</a></sc-if><sc-if value="{{D.cl.lot.no}}" hint-placeholder-val="{{ false }}"><span class="{{D.cl.lot.cls}}">{{D.cl.lot.id}}</span></sc-if></dd></div><div><dt>SL lệch</dt><dd class="txt-bad">{{D.cl.qty}}</dd></div><div><dt>Thủ kho lập</dt><dd>{{D.cl.by}}</dd></div><div><dt>Kiểm kho lô lệch</dt><dd><sc-if value="{{D.cl.kk.ok}}" hint-placeholder-val="{{ true }}"><a href="{{D.cl.kk.href}}" class="mp-xlink mp-code" onClick="{{D.cl.kk.open}}">{{D.cl.kk.id}}</a></sc-if><sc-if value="{{D.cl.kk.no}}" hint-placeholder-val="{{ false }}"><span class="{{D.cl.kk.cls}}">{{D.cl.kk.id}}</span></sc-if></dd></div><div style="grid-column: 1 / -1"><dt>Nguyên nhân (nếu rõ)</dt><dd>{{D.cl.why}}</dd></div></dl>
+<sc-if value="{{D.cl.reuse}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" style="font-size: 16px"><span>Lô đang kiểm theo phiếu kiểm kho có sẵn — đã gắn phiếu truy xuất này vào.</span></div></sc-if>
+</div></div>
+</sc-if>
+<sc-if value="{{D.cl.none}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card"><div class="mp-card__head"><div style="display: flex; align-items: baseline; gap: 10px"><h2 class="mp-card__title">Lập biên bản chênh lệch</h2></div></div>
+<div class="mp-card__body" style="display: flex; flex-direction: column; gap: 12px">
+<sc-if value="{{D.cl.can}}" hint-placeholder-val="{{ true }}"><div class="mp-field"><label class="flabel" for="cl-why">Nguyên nhân nếu đã rõ <span class="req">*</span></label><textarea id="cl-why" class="mp-input ta" rows="2" value="{{D.cl.val}}" onChange="{{D.cl.set}}" placeholder="vd đếm trùng ở chiết rót; chưa rõ"></textarea></div>
+<sc-if value="{{D.cl.hasErr}}" hint-placeholder-val="{{ false }}"><div class="errbox" role="alert">{{D.cl.err}}</div></sc-if>
+<div class="acts"><button type="button" class="mp-btn mp-btn--primary" onClick="{{D.cl.save}}">Lập biên bản &amp; mở kiểm kho</button></div></sc-if>
+<sc-if value="{{D.cl.g}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{D.cl.g.who}}</b><sc-if value="{{D.cl.g.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{D.cl.g.why}}</sc-if><button type="button" onClick="{{D.cl.g.sw}}">Xem như {{D.cl.g.who}}</button></span></sc-if>
+</div></div>
+</sc-if>
+</sc-if>
+<div class="mp-card">
+<div class="mp-card__body"><section class="mp-log">
+<div class="mp-log__h"><h3 class="mp-log__t">{{D.log.title}}<span class="mp-log__n">{{D.log.count}}</span></h3><sc-if value="{{D.log.hasLink}}" hint-placeholder-val="{{ false }}"><a href="{{D.log.link.href}}" class="mp-xlink" onClick="{{D.log.link.open}}">Xem ở Nhật ký hệ thống</a></sc-if></div>
+<sc-if value="{{D.log.empty}}" hint-placeholder-val="{{ false }}"><span class="mp-log__empty">Chưa có thao tác nào.</span></sc-if>
+<ul class="mp-tl"><sc-for list="{{D.log.items}}" as="lg" hint-placeholder-count="4"><li class="{{lg.cls}}"><sc-if value="{{lg.hasWho}}" hint-placeholder-val="{{ true }}"><b>{{lg.who}}</b><sc-if value="{{lg.hasRole}}" hint-placeholder-val="{{ false }}"> <span class="mp-tl__role">({{lg.role}})</span></sc-if> · </sc-if>{{lg.what}}<time>{{lg.at}}</time></li></sc-for></ul>
+<sc-if value="{{D.log.hasMore}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-tl__more" onClick="{{D.log.toggle}}">{{D.log.moreT}}</button></sc-if>
+</section></div></div>
+</div>
+</div>
+</sc-if>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"man": {"editor": "enum", "options": ["Danh sách", "Tạo phiếu", "TX-2610-0003 · dòng thời gian", "TX-2610-0003 · chuỗi ngược", "TX-2610-0003 · cân bằng khối lượng", "TX-2610-0003 · công đoạn sản xuất", "Kết quả truy xuôi L-BOT-01"], "default": "Danh sách", "section": "Trạng thái hiển thị"}, "vaitro": {"editor": "enum", "options": ["Người truy xuất", "QC trưởng", "QC", "Thủ kho trưởng", "Thủ kho điều phối", "Thủ kho", "Giám đốc", "Admin"], "default": "Người truy xuất", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1100}}'>
+/* mp-xs: thanh cuộn ngang ngay dưới tiêu đề bảng + dưới đáy bảng — đồng bộ 2 thanh, chỉ hiện thanh trên khi bảng tràn */
+(function () {
+  if (typeof window === 'undefined' || window.__mpXs) return; window.__mpXs = true;
+  var lock = false;
+  function fit() {
+    var xs = document.querySelectorAll('.mp-xs');
+    for (var i = 0; i < xs.length; i++) {
+      var x = xs[i], t = x.children[0], b = x.children[1];
+      if (!t || !b || !t.classList.contains('mp-xs__top')) continue;
+      var w = b.scrollWidth, s = t.firstElementChild;
+      if (s && s.style.width !== w + 'px') s.style.width = w + 'px';
+      var over = w > b.clientWidth + 1 ? '1' : '0';
+      if (x.getAttribute('data-over') !== over) x.setAttribute('data-over', over);
+      var th = b.querySelector('table > thead');
+      var top = th ? Math.max(0, th.offsetHeight - 17) + 'px' : '0px';
+      if (x.style.getPropertyValue('--xs-top') !== top) x.style.setProperty('--xs-top', top);
+      if (over === '1' && t.scrollLeft !== b.scrollLeft) t.scrollLeft = b.scrollLeft;
+    }
+  }
+  var queued = false;
+  function later() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fit(); }); }
+  document.addEventListener('scroll', function (e) {
+    var el = e.target, x = el && el.parentElement;
+    if (lock || !x || !x.classList || !x.classList.contains('mp-xs')) return;
+    var other = el === x.children[0] ? x.children[1] : el === x.children[1] ? x.children[0] : null;
+    if (!other) return;
+    lock = true; other.scrollLeft = el.scrollLeft; requestAnimationFrame(function () { lock = false; });
+  }, true);
+  new MutationObserver(later).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+  window.addEventListener('resize', later);
+  setTimeout(fit, 0); setTimeout(fit, 400); setTimeout(fit, 1500);
+})();
+
+const MPX = {
+people: { 'Sales': ['Võ Thị Lan', 'NM1'], 'CSKH': ['Đinh Mỹ Linh', 'Tất cả nhà máy'], 'Kế hoạch': ['Đỗ Minh Khang', 'NM1'], 'Mua hàng': ['Mai Anh Thư', 'Tất cả nhà máy'], 'Trưởng BP Mua hàng': ['Tạ Văn Hùng', 'Tất cả nhà máy'], 'Thủ kho': ['Lê Văn Hải', 'NM1'], 'Thủ kho điều phối': ['Hồ Văn Nam', 'NM1'], 'Thủ kho trưởng': ['Trần Thị Mai', 'NM1'], 'QC': ['Ngô Thu Trang', 'NM1'], 'QC trưởng': ['Trần Thị Mai', 'NM1'], 'Kế toán': ['Ngô Bảo Ngọc', 'Tất cả nhà máy'], 'Kế toán trưởng': ['Bùi Minh Châu', 'Tất cả nhà máy'], 'Giám đốc': ['Lê Quang Minh', 'Tất cả nhà máy'], 'Người truy xuất': ['Ngô Thu Trang', 'NM1'], 'HR': ['Hoàng Thị Lan', 'Tất cả nhà máy'], 'Admin': ['Nguyễn Hoàng Long', 'Tất cả nhà máy'], 'R&D': ['Nguyễn Thị Yến', 'Tất cả nhà máy'], 'Vận chuyển': ['Phan Văn Toàn', 'NM1'] },
+roles: ['Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'QC', 'QC trưởng', 'Kế toán', 'Kế toán trưởng', 'Giám đốc', 'Người truy xuất', 'HR', 'Admin'],
+roleText(r) { return r === 'Thủ kho điều phối' ? 'Thủ kho @ kho điều phối' : r; },
+menu: {"viec": ["*"], "ban_dh": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Sales"], "ban_kh": ["Admin", "CSKH", "Giám đốc", "Sales"], "mua_don": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "mua_ncc": ["Admin", "Giám đốc", "Mua hàng", "Trưởng BP Mua hàng"], "mua_tra": ["Admin", "Giám đốc", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "kt_kh": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng", "Sales"], "kt_ncc": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kt_so": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kho_ton": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_nhap": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_xuat": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_chuyen": ["Admin", "Giám đốc", "Kế hoạch", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Vận chuyển"], "kho_kiem": ["Admin", "Giám đốc", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_huy": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "QC", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "sx_lenh": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho", "Thủ kho điều phối"], "sx_me": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho điều phối"], "sx_ct": ["Admin", "Giám đốc", "Kế hoạch", "QC", "R&D"], "cl_yc": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_pk": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_cn": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Sales"], "cl_ml": ["Admin", "Giám đốc", "QC"], "tx_tx": ["Admin", "Giám đốc", "Người truy xuất", "Thủ kho", "Thủ kho điều phối"], "tx_th": ["Admin", "CSKH", "Giám đốc", "Kế toán trưởng", "Người truy xuất", "QC", "QC trưởng", "Sales"], "dm_nvl": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_sp": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_dv": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_kho": ["Admin", "Giám đốc", "Thủ kho trưởng"], "dm_ncc": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Mua hàng", "QC", "Thủ kho", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_nm": ["Admin", "Giám đốc", "Thủ kho trưởng"], "qt_nd": ["Admin", "Giám đốc", "HR"], "qt_kv": ["Admin", "Giám đốc"], "qt_ch": ["Admin", "Giám đốc"], "qt_nk": ["Admin", "Giám đốc", "HR"]},
+scr: {"viec": ["HopDuyet", "HopDuyet"], "ban_dh": ["BanDonHang-0r5c", "BanHang-wvhq"], "ban_kh": ["BanHang-wvhq", "BanHang-wvhq"], "mua_don": ["MuaPO-3fox", "MuaHang-7mvk"], "mua_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "mua_tra": ["MuaTraHang-e9jn", "MuaHang-7mvk"], "kt_kh": ["KeToan-k2vm", "KeToan-k2vm"], "kt_ncc": ["KeToanNCC-m3pz", "KeToan-k2vm"], "kt_so": ["KeToanSo-v6qe", "KeToan-k2vm"], "kho_ton": ["TonLo", "TonLo"], "kho_nhap": ["KhoVH-xv2s", "KhoVH-xv2s"], "kho_xuat": ["KhoXuat-71ki", "KhoVH-xv2s"], "kho_chuyen": ["KhoChuyen-oq5y", "KhoVH-xv2s"], "kho_kiem": ["KhoKiemKe-23cu", "KhoVH-xv2s"], "kho_huy": ["KhoHuy-br6r", "KhoVH-xv2s"], "sx_lenh": ["LenhSX-hxoc", "LenhSX-hxoc"], "sx_me": ["TheoDoiMe-w4ka", "LenhSX-hxoc"], "sx_ct": ["CongThuc-qdhl", "CongThuc-qdhl"], "cl_yc": ["ChatLuong-q4ls", "ChatLuong-q4ls"], "cl_pk": ["ChatLuongPK-d2xh", "ChatLuong-q4ls"], "cl_cn": ["ChatLuongCN-t9bw", "ChatLuongCN-t9bw"], "cl_ml": ["ChatLuongML-p5ga", "ChatLuongCN-t9bw"], "tx_tx": ["TruyXuat", "TruyXuat"], "tx_th": ["ThuHoi-r8hw", "ThuHoi-r8hw"], "dm_nvl": ["DanhMuc-15tr", "DanhMuc-15tr"], "dm_sp": ["DanhMucSP-zd4p", "DanhMucSP-zd4p"], "dm_dv": ["DonVi-u7dv", "DonVi-u7dv"], "dm_kho": ["NhaMay-qd07", "NhaMay-qd07"], "dm_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "dm_nm": ["NhaMay-qd07", "NhaMay-qd07"], "qt_nd": ["NguoiDung", "NguoiDung"], "qt_kv": ["KhuVuc", "KhuVuc"], "qt_ch": ["CauHinh-cocg", "CauHinh-cocg"], "qt_nk": ["NhatKy-n5jd", "NhatKy-n5jd"]},
+mods: {"ban": ["ban_dh", "ban_kh"], "mua": ["mua_don", "mua_ncc", "mua_tra"], "kt": ["kt_kh", "kt_ncc", "kt_so"], "kho": ["kho_ton", "kho_nhap", "kho_xuat", "kho_chuyen", "kho_kiem", "kho_huy"], "sx": ["sx_lenh", "sx_me"], "cl": ["cl_yc", "cl_pk", "cl_cn", "cl_ml"], "tx": ["tx_tx", "tx_th"], "dm": ["dm_nvl", "sx_ct", "dm_sp", "dm_dv", "dm_kho", "dm_nm", "qt_kv"], "qt": ["qt_nd", "qt_ch", "qt_nk"]},
+sees(r, k) { const a = this.menu[k] || []; return a.indexOf('*') >= 0 || a.indexOf(r) >= 0; },
+nav(r, here) { const show = {}, href = {}, go = {}; const to = (k) => { const x = this.scr[k]; href[k] = x[0] + '.dc.html'; go[k] = () => this.go(x[1], '', r); };
+Object.keys(this.scr).forEach((k) => { show[k] = this.sees(r, k); to(k); });
+Object.keys(this.mods).forEach((m) => { const vis = this.mods[m].filter((k) => show[k]); show[m] = vis.length > 0; const f = vis[0] || this.mods[m][0]; href[m] = href[f]; go[m] = go[f]; });
+const deny = !!here && !show[here]; const home = this.mods[(here || '').split('_')[0]] || [];
+return { show: show, href: href, go: go, deny: deny, homeHref: href.viec, homeGo: go.viec, alt: home.filter((k) => show[k]).length > 0 }; },
+name(r) { return (this.people[r] || [r])[0]; },
+fac(r) { return (this.people[r] || ['', 'NM1'])[1]; },
+roleLabel(r) { return r === 'QC trưởng' ? 'QC trưởng (ủy quyền)' : r; },
+go(board, id, role) { try { localStorage.setItem('mp.open', JSON.stringify({ b: board, id: id || '', r: role || '', t: Date.now() })); } catch (e) {} },
+take(board) { try { const x = JSON.parse(localStorage.getItem('mp.open') || 'null'); if (x && x.b === board && Date.now() - x.t < 20000) { localStorage.removeItem('mp.open'); return x; } } catch (e) {} return null; },
+can(role, allowed) { return allowed.indexOf(role) >= 0; },
+vx(role, setRole, here) { const n = this.name(role); const w = n.split(' '); return { m: this.nav(role, here), role: role, label: this.roleLabel(role), name: n, fac: this.fac(role), ini: (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(), opts: this.roles, optl: this.roles.map((x) => ({ v: x, t: this.roleText(x) })), set: (ev) => setRole(ev.target.value) }; },
+map: [['TH-NCC-', 'MuaHang-7mvk'], ['TH-2', 'ThuHoi-r8hw'], ['ĐH-', 'BanHang-wvhq'], ['KH-', 'BanHang-wvhq'], ['NC-', 'MuaHang-7mvk'], ['PO-', 'MuaHang-7mvk'], ['NCC-', 'MuaHang-7mvk'], ['TC-', 'KeToan-k2vm'], ['PN-', 'KhoVH-xv2s'], ['PX-', 'KhoVH-xv2s'], ['PC-', 'KhoVH-xv2s'], ['PK-', 'KhoVH-xv2s'], ['PH-', 'KhoVH-xv2s'], ['BB-TL-', 'KhoVH-xv2s'], ['L-', 'TonLo'], ['A-BAO-', 'TonLo'], ['LSX-', 'LenhSX-hxoc'], ['me:', 'LenhSX-hxoc'], ['CT-', 'CongThucChiTiet-pji2'], ['YC-NM', 'ChatLuong-q4ls'], ['QC-', 'ChatLuong-q4ls'], ['CN-', 'ChatLuongCN-t9bw'], ['ML-', 'ChatLuongCN-t9bw'], ['BB-ML-', 'ChatLuongCN-t9bw'], ['TX-', 'TruyXuat'], ['NVL-', 'DanhMuc-15tr'], ['SP-', 'DanhMucSP-zd4p'], ['NM1-', 'NhaMay-qd07'], ['NM2-', 'NhaMay-qd07']],
+board(id) { if (/^[AB]\d{6}/.test(id)) return 'TonLo'; for (const m of this.map) { if (id.indexOf(m[0]) === 0) return m[1]; } return ''; },
+ref(id, role, board, file) { const b = board || this.board(id); if (!b) return { id: id, ok: false, href: '#', open: () => {} }; const f = file || (id.indexOf('me:') === 0 ? 'TheoDoiMe-w4ka' : b); return { id: id.replace(/^me:/, ''), ok: true, href: f + '.dc.html', open: () => this.go(b, id, role) }; },
+gate(role, allowed, setRole, why) { if (allowed.indexOf(role) >= 0) return null; const who = allowed[0]; return { who: who, why: why || '', hasWhy: !!why, sw: () => setRole(who) }; }
+};
+
+// Nhật ký dùng chung (chốt 23/10)
+const MPLOG = {
+Y: '2026',
+full(t) { t = String(t || '').trim(); const m = t.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?(?:,?\s+(\d{1,2}):(\d{2}))?$/); if (!m) return t; return m[1].padStart(2, '0') + '/' + m[2].padStart(2, '0') + '/' + (m[3] || this.Y) + (m[4] ? ' ' + m[4].padStart(2, '0') + ':' + m[5] : ''); },
+key(t) { const m = String(t || '').match(/^(\d{2})\/(\d{2})\/(\d{4})(?: (\d{2}):(\d{2}))?/); return m ? m[3] + m[2] + m[1] + (m[4] || '00') + (m[5] || '00') : '99999999999999'; },
+kind(what, cls) { const w = String(what || ''); if (/^đang chờ/i.test(w)) return ''; if (/mở khóa/i.test(w)) return 'key'; if (/hủy|từ chối|khóa|lỗi|không đạt|quá hạn|thu hồi|xung đột|thiếu|hỏng|mất/i.test(w) || /is-bad/.test(cls || '')) return 'bad'; if (/duyệt|chốt|ký|đạt|hoàn thành|kích hoạt|phát lệnh|→/i.test(w) || /is-key/.test(cls || '')) return 'key'; return ''; },
+view(list, o) { o = o || {}; const lim0 = o.limit || 5;
+const items = (list || []).map((x, i) => ({ who: x.who || '', role: x.role || '', what: x.what || '', at: this.full(x.at), cls: x.cls || '', i: i }));
+items.sort((a, b) => { const ka = this.key(a.at), kb = this.key(b.at); if (ka === kb) return b.i - a.i; return ka < kb ? 1 : -1; });
+const n = items.length; const lim = o.all ? n : lim0;
+const shown = items.slice(0, lim).map((x) => { const k = this.kind(x.what, x.cls); const sys = /^hệ thống$/i.test(x.who); return { who: x.who, hasWho: !!x.who, role: x.role, hasRole: !!x.role, what: x.what, at: x.at, cls: ((k ? 'is-' + k : '') + (sys ? ' is-sys' : '')).trim() }; });
+return { title: o.title || 'Nhật ký', items: shown, count: String(n), has: n > 0, empty: n === 0, hasMore: n > lim0, moreT: o.all ? 'Thu gọn' : 'Xem tất cả (' + n + ')', toggle: o.toggle || (() => {}), hasLink: !!(o.link && o.link.ok), link: o.link || { href: '#', open: () => {} } }; }
+};
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+const it = MPX.take('TruyXuat');
+const MAN = {
+'Danh sách': { scr: 'list' },
+'Tạo phiếu': { scr: 'tao' },
+'TX-2610-0003 · dòng thời gian': { scr: 'ct', sel: 'TX-2610-0003', tab: 'chuoi', cview: 'tl' },
+'TX-2610-0003 · chuỗi ngược': { scr: 'ct', sel: 'TX-2610-0003', tab: 'chuoi' },
+'TX-2610-0003 · cân bằng khối lượng': { scr: 'ct', sel: 'TX-2610-0003', tab: 'hoso' },
+'TX-2610-0003 · công đoạn sản xuất': { scr: 'ct', sel: 'TX-2610-0003', tab: 'cd' },
+'Kết quả truy xuôi L-BOT-01': { scr: 'ct', sim: true, tab: 'kq' }
+};
+const m = MAN[props.man] || MAN['Danh sách'];
+const RMAP = { 'Thủ kho kho điều phối': 'Thủ kho điều phối', 'Thủ kho trưởng NM1': 'Thủ kho trưởng' };
+const r0 = (it && it.r) || props.vaitro || 'Người truy xuất';
+this.state = { role: RMAP[r0] || r0, scr: m.scr, sel: m.sel || null, tab: m.tab || 'kq', cview: m.cview || 'cay', txs: this.seed(), f: this.blankF(), closed: {}, toast: '', toastKind: 'info', ltab: 'all', bb: { qty: '', why: '' }, err: '' };
+if (m.sim) {
+const t = this.build({ src: 'QC nghi lỗi', srcDoc: 'YC-NM1-2610-0022', reason: 'QC nghi lô L-BOT-01 vón cục (YC-NM1-2610-0022) — tìm mọi lô đã dùng L-BOT-01 và phần còn tồn', inKind: 'Số lô', inCode: 'L-BOT-01', lot: 'L-BOT-01', dir: 'Xuôi' }, 'Ngô Thu Trang', '18/10/2026 09:20', 'TX-2610-0004');
+this.state.txs = [t].concat(this.state.txs); this.state.sel = t.code;
+}
+if (it && it.id) {
+const id = String(it.id).trim();
+if (/^TX-/.test(id)) {
+if (this.state.txs.some((t) => t.code === id)) Object.assign(this.state, { scr: 'ct', sel: id, tab: 'kq' });
+else Object.assign(this.state, { scr: 'list', toast: 'Không tìm thấy phiếu truy xuất ' + id + '.', toastKind: 'warn' });
+} else {
+const kind = /^ĐH-/.test(id) ? 'Đơn hàng' : (/^KH-/.test(id) ? 'Khách hàng' : (/^NVL-/.test(id) ? 'Mã NVL' : 'Số lô'));
+const f = Object.assign(this.blankF(), { inKind: kind, inCode: id });
+const r = this.resolve(kind, id);
+f.res = r; if (r.ok && r.lots.length === 1) { f.lot = r.lots[0].lot; f.dir = this.defDir(r.lots[0].lot); }
+Object.assign(this.state, { scr: 'tao', f: f, toast: r.ok ? 'Mở truy xuất cho ' + id + ' — chọn nguồn, lý do, hướng rồi chạy.' : 'Không tìm thấy ' + id + ' trong dữ liệu truy xuất.', toastKind: r.ok ? 'info' : 'warn' });
+}
+}
+}
+T() { return '18/10/2026'; }
+now() { const d = new Date(); const p = (x) => String(x).padStart(2, '0'); return '18/10/2026 ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+fn(n, dg) { if (n === '' || n === null || n === undefined || isNaN(+n)) return '—'; return (+n).toLocaleString('vi-VN', { maximumFractionDigits: dg === undefined ? 3 : dg }); }
+blankF() { return { src: '', srcDoc: '', cvName: '', reason: '', inKind: 'Số lô', inCode: '', res: null, lot: '', dir: '', err: '' }; }
+
+// ---------- mã có thật ở board đích ----------
+LINKS() { return ['A261011', 'B261011', 'B261015', 'B261017', 'B261018-01', 'B261018-02', 'A241205', 'A260928', 'A260920', 'A250710', 'L-BOT-01', 'L-BOT-27', 'L-BOT-28', 'L-BOT-19', 'L-BOT-31', 'L-BOT-33', 'L-BOT-35', 'L-BOT-34', 'L-BOT-30', 'L-BOT-22', 'L-WHE-05', 'L-WHE-06', 'L-PGA-09', 'L-PGA-12', 'L-PGA-07', 'L-LEC-03', 'L-CAC-04', 'L-CAC-05', 'L-DHA-02', 'L-VD3-01', 'L-LON-12', 'HH-261015', 'HH-261012',
+'PX-NM1-2610-0035', 'PC-NM1-2610-0009', 'PC-NM1-2610-0005', 'PH-NM1-2610-0010', 'PH-NM1-2610-0013', 'PK-NM1-2610-0006', 'ĐH-2610-0019', 'ĐH-2609-0030', 'ĐH-2610-0029', 'KH-0007', 'KH-0012', 'KH-0031', 'KH-0044', 'KH-0052', 'KH-0058', 'NCC-0001', 'NCC-0002', 'NCC-0003', 'NCC-0004', 'NCC-0005', 'NCC-0006', 'NCC-0007', 'NCC-0008',
+'SP-0001', 'SP-0002', 'SP-0003', 'SP-0004', 'SP-0005', 'NVL-BOT-0001', 'NVL-BOT-0002', 'NVL-BOT-0003', 'NVL-PGA-0001', 'NVL-PGA-0004', 'NVL-BBI-0001', 'NVL-BBI-0004',
+'QC-NM1-2610-0055', 'QC-NM1-2610-0058', 'QC-NM1-2610-0052', 'QC-NM1-2610-0044', 'QC-NM1-2610-0049', 'QC-NM1-2610-0060', 'YC-NM1-2610-0010', 'ML-NM1-2610-0030', 'ML-NM1-2608-0018', 'YC-NM1-2610-0021', 'YC-NM1-2610-0022', 'YC-NM1-2610-0023', 'CN-NM1-2610-0018', 'ML-NM1-2610-0027', 'me:LSX-2610-0009',
+'TH-2610-0001', 'TH-2610-0002', 'TH-2610-0003', 'TH-2609-0001', 'TH-2609-0003', 'TH-2609-0004', 'TH-2609-0005',
+'ĐH-2609-0018', 'ĐH-2609-0022', 'QC-NM1-2609-0048', 'QC-NM1-2609-0049', 'QC-NM1-2609-0050', 'CN-NM1-2609-0015', 'CN-NM1-2609-0017', 'ML-NM1-2609-0027', 'ML-NM1-2609-0028',
+'L-BOT-32', 'A260912', 'A260914', 'PX-NM1-2609-0048', 'PX-NM1-2609-0050', 'PN-NM1-2609-0052', 'PN-NM1-2609-0053', 'PH-NM1-2609-0009', 'PN-NM1-2610-0032']; }
+X(id, label, board, file) {
+const role = this.state ? this.state.role : 'Người truy xuất';
+if (!id) return { id: label || '', ok: false, no: true, href: '', open: () => {}, cls: /^[A-ZĐ]{1,4}[-0-9]/.test(label || '') ? 'mp-code' : '' };
+const ok = this.LINKS().indexOf(id) >= 0 || /^TX-/.test(id);
+if (!ok) return { id: label || id, ok: false, no: true, href: '', open: () => {}, cls: 'mp-code' };
+const b = board || (/^HH-/.test(id) ? 'TonLo' : '');
+const r = MPX.ref(id, role, b, file);
+return { id: label || r.id, ok: r.ok, no: !r.ok, href: r.href, open: r.open, cls: 'mp-code' };
+}
+
+// ---------- hồ sơ lô sản xuất (lô TP / BTP gốc) ----------
+// cd: [công đoạn, mô tả, SL yêu cầu, SL sản xuất, đạt, lỗi, đơn vị, bắt đầu, kết thúc, gián đoạn (phút), lý do gián đoạn, thời gian chạy (phút)]
+PROD() { return {
+'A261011': { lsx: 'LSX-2610-0004', big: '24 lon', bigSub: 'lô TP · nhãn A · 800 g',
+sl: [['Mẻ', 'LSX-2610-0004 · mẻ 1 · 960 kg'], ['Chiết rót', '1.181 / 1.200 lon'], ['Lon lỗi ở line', '0 lon'], ['Cùng mẻ', 'B261011 · 1.157 lon BTP']], barL: 'Hiệu suất bột (944,8 / 960 kg)', bar: 98.4,
+cl: { st: 'Khóa', big: 'Đạt lúc xuất xưởng', bigSub: 'QC-NM1-2610-0055 · 12/10', mau: [1, 1, 0], kv: [['Mẫu kiểm / đạt / không đạt', '1 / 1 / 0'], ['Mẫu lưu ML-NM1-2610-0027', 'đo lại 17/10: ẩm 5,4 %', 'bad'], ['NCR', 'theo TH-2610-0003', 'bad']] },
+cd: [['Nạp silo', '4 nút silo · khu BTP NM1', 960, 960, 960, 0, 'kg', '10/10/2026 15:40', '11/10/2026 05:55', 0, '', 40],
+['Trộn mẻ 1', 'Bồn trộn #1 · CT-BTP-0002 v4 · Châu Văn Lực', 960, 960, 960, 0, 'kg', '11/10/2026 06:20', '11/10/2026 07:15', 0, '', 55],
+['Chiết rót & ghép mí', 'Line chiết #1 · lon L-LON-12', 1200, 1181, 1181, 0, 'lon', '11/10/2026 07:30', '11/10/2026 10:05', 18, 'Kẹt lon ở băng tải vào máy ghép mí · 08:42–09:00', 137],
+['Dán nhãn A & đóng thùng', 'Thùng AT000001 · L-THU-05', 24, 24, 24, 0, 'lon', '11/10/2026 13:10', '11/10/2026 13:25', 0, '', 15]] },
+'A260820': { lsx: 'LSX-2608-0031', big: '602 lon', bigSub: 'lô TP · nhãn C · 900 g',
+sl: [['Mẻ', 'LSX-2608-0031 · mẻ 1 · 960 kg'], ['Chiết rót', '602 / 602 lon'], ['Lon lỗi ở line', '0 lon'], ['Sau giao', 'khách báo 6 lon phồng nắp', 'bad']], barL: 'Đạt ở line (602 / 602 lon)', bar: 100,
+cl: { st: 'Hủy', big: 'Chưa có phiếu QC lô', bigSub: 'xuất xưởng không qua QC lô TP', mau: [0, 0, 0], kv: [['Mẫu kiểm / đạt / không đạt', '0 / 0 / 0'], ['NCR', 'hở mí ghép', 'bad'], ['Nguyên nhân', 'lô lon L-LON-09 (DA-2608-B)', 'bad']] },
+cd: [['Trộn mẻ 1', 'Bồn trộn #1 · CT-BTP-0003 v3', 960, 960, 960, 0, 'kg', '20/08/2026 06:10', '20/08/2026 07:05', 0, '', 55],
+['Chiết rót & ghép mí', 'Line chiết #2 · lon L-LON-09', 602, 602, 602, 0, 'lon', '20/08/2026 07:20', '20/08/2026 08:40', 25, 'Chỉnh con lăn ghép mí · 07:55–08:20', 55],
+['Dán nhãn C & đóng thùng', 'Nhãn C · thùng 24 lon', 602, 602, 602, 0, 'lon', '20/08/2026 10:00', '20/08/2026 10:40', 0, '', 40]] },
+'A260914': { lsx: 'LSX-2609-0026', big: '1.154 lon', bigSub: 'lô TP · nhãn A · 800 g',
+sl: [['Mẻ', 'LSX-2609-0026 · mẻ 1 · 960 kg'], ['Chiết rót', '1.154 / 1.200 lon'], ['Lon lỗi ở line', '0 lon']], barL: 'Hiệu suất bột (923,2 / 960 kg)', bar: 96.2,
+cl: { st: 'Hết', big: 'Đạt', bigSub: 'QC-NM1-2609-0049 · 14/09', mau: [1, 1, 0], kv: [['Mẫu kiểm / đạt / không đạt', '1 / 1 / 0'], ['Mẫu lưu', 'ML-NM1-2609-0027'], ['NCR', 'không có']] },
+cd: [['Trộn mẻ 1', 'Bồn trộn #1 · CT-BTP-0002 v4', 960, 960, 960, 0, 'kg', '14/09/2026 06:30', '14/09/2026 07:25', 0, '', 55],
+['Chiết rót & ghép mí', 'Line chiết #1', 1200, 1154, 1154, 0, 'lon', '14/09/2026 07:40', '14/09/2026 10:00', 0, '', 140],
+['Dán nhãn A & đóng thùng', 'Nhãn A · thùng 24 lon', 1154, 1154, 1154, 0, 'lon', '14/09/2026 10:20', '14/09/2026 11:30', 0, '', 70]] }
+}; }
+// ---------- trạng thái lô hiện tại & hồ sơ ----------
+LS() { return {
+'A261011': ['Khóa', 'Khoanh vùng · TH-2610-0003'], 'B261011': ['Chờ kiểm', 'QC-NM1-2610-0058 chờ duyệt'], 'L-BOT-01': ['Chờ kiểm', 'YC-NM1-2610-0022 · từ 18/10 10:30'], 'L-BOT-27': ['Hết', 'nạp hết vào LSX-2610-0009 · 17/10 12:55'], 'L-BOT-28': ['Đạt', ''], 'L-WHE-05': ['Đạt', ''],
+'HH-261010': ['Hết', 'đã dùng hết'], 'L-CAC-04': ['Đạt', ''], 'L-LEC-03': ['Đạt', 'đang kiểm kho'], 'L-PGA-09': ['Chờ kiểm', 'YC-NM1-2610-0021'], 'L-DHA-02': ['Đạt', ''], 'L-LON-12': ['Đạt', ''], 'L-THU-05': ['Hết', 'đã dùng hết'],
+'L-PGA-05': ['Khóa', 'Thu hồi · TH-2610-0001'], 'HH-260916': ['Hết', 'dùng hết 03/10 · Thu hồi'], 'A260918': ['Khóa', 'Thu hồi'], 'A260922': ['Khóa', 'Thu hồi'], 'B261003': ['Khóa', 'Thu hồi · chờ hủy PH-NM1-2610-0010 (21/10)'],
+'L-BOT-19': ['Khóa', 'Khoanh vùng · TH-2610-0002'], 'A261007': ['Đạt', 'QC-NM1-2610-0052 · mở khóa 12/10'], 'A260902': ['Hủy', 'PH-NM1-2609-0007'], 'A260820': ['Hủy', 'PH-NM1-2610-0002'], 'A260821': ['Hủy', 'PH-NM1-2610-0002'], 'L-LON-09': ['Hết', 'trả NCC 15/09'],
+'B261018-02': ['Khóa', 'Xung đột mất kết nối'],
+'L-BOT-32': ['Hủy', 'PH-NM1-2609-0009'], 'A260914': ['Hết', 'giao hết KH-0052 25/09'], 'A260912': ['Khóa', 'Thu hồi · TH-2609-0005']
+}; }
+LOTCLS() { return { 'Đạt': 'mp-lot mp-lot--dat', 'Chờ kiểm': 'mp-lot mp-lot--cho-kiem', 'Khóa': 'mp-lot mp-lot--khoa', 'Không đạt': 'mp-lot mp-lot--khong-dat', 'Hủy': 'mp-lot mp-lot--huy', 'Hết': 'mp-lot' }; }
+DOCS() { return {
+'A261011': { qc: ['QC-NM1-2610-0055'], cn: ['CN-NM1-2610-0018'], ml: ['ML-NM1-2610-0027'], coa: '', ncr: 'NCR theo TH-2610-0003', pos: '2 lon NM1-DP · 2 lon mẫu lưu NM1-MAUQC' },
+'B261011': { qc: ['YC-NM1-2610-0010', 'QC-NM1-2610-0058'], cn: [], ml: ['ML-NM1-2610-0030'], coa: '', ncr: '', pos: '672 lon NM1-BTP · 480 lon NM1-DP' },
+'L-BOT-01': { qc: ['YC-NM1-2610-0022'], cn: [], ml: [], coa: 'DGN-S-111.pdf', ncr: '', pos: '925 kg NM1-TONG (900 kg Chờ kiểm · 1 bao 25 kg Khóa chờ hủy PH-NM1-2610-0013) · 300 kg đang chuyển (PC-NM1-2610-0009)' },
+'L-BOT-27': { qc: ['QC-NM1-2610-0049'], cn: [], ml: [], coa: 'DGN-S-1287.pdf', ncr: '', pos: 'đã nạp hết 1.000 kg vào silo LSX-2610-0009 (17/10 12:55)' },
+'L-BOT-28': { qc: [], cn: [], ml: [], coa: 'DGN-S-1279.pdf', ncr: '', pos: '416 kg đang chuyển (PC-NM1-2610-0013) · 25 kg đang chuyển (PC-NM1-2610-0005, thất lạc) · 175 kg đang chuyển (PC-NM2-2610-0012, NM2-TONG → NM1-TONG)' },
+'L-WHE-05': { qc: [], cn: [], ml: [], coa: 'DGN-EW-2506-11.pdf', ncr: '', pos: '350 kg NM1-TONG (450 kg nạp LSX-2610-0009 · 17/10 13:05)' },
+'HH-261010': { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: 'Hồ sơ mẻ LSX-2610-0003 · đã dùng hết' },
+'L-CAC-04': { qc: [], cn: [], ml: [], coa: 'DGN-MK-0926.pdf', ncr: '', pos: '300 kg NM1-TONG' },
+'L-LEC-03': { qc: [], cn: [], ml: [], coa: 'DGN-MK-0302.pdf', ncr: '', pos: '200 kg NM1-TONG' },
+'L-PGA-09': { qc: ['YC-NM1-2610-0021', 'QC-NM1-2610-0060'], cn: [], ml: [], coa: 'DGN-PV-2510-07.pdf', ncr: '', pos: '150 kg NM1-TONG' },
+'L-DHA-02': { qc: [], cn: [], ml: [], coa: 'DGN-LI-24-881.pdf', ncr: '', pos: '5 kg NM1-TONG' },
+'L-LON-12': { qc: [], cn: [], ml: [], coa: 'DGN-DA-2609-A.pdf', ncr: '', pos: '18.000 cái NM1-TONG' },
+'L-THU-05': { qc: [], cn: [], ml: [], coa: 'DGN-CSG-0726.pdf', ncr: '', pos: 'đã dùng hết' },
+'L-PGA-05': { qc: [], cn: [], ml: ['ML-NM1-2608-0018'], coa: 'DGN-PV-2608-12.pdf', ncr: 'Thông báo lỗi của NCC 01/10', pos: '30 kg NM1-TONG (khóa)' },
+'HH-260916': { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: '80 kg NM1-DP lúc truy xuất' },
+'A260918': { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: '24 lon NM1-BTP · 408 lon thu về NM1-TONG (96 lon theo PN-NM1-2610-0032)' },
+'A260922': { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: '240 lon NM1-BTP' },
+'L-BOT-19': { qc: [], cn: [], ml: [], coa: 'DGN-S-904.pdf', ncr: 'Phản ánh mùi lạ 06/10', pos: '1.000 kg NM1-TONG' },
+'A261007': { qc: ['QC-NM1-2610-0052'], cn: [], ml: ['ML-NM1-2610-0024'], coa: '', ncr: '', pos: '480 lon NM1-BTP' },
+'A260902': { qc: [], cn: [], ml: [], coa: '', ncr: 'NCR in sai HSD', pos: 'đã hủy · PH-NM1-2609-0007' },
+'A260820': { qc: [], cn: [], ml: [], coa: '', ncr: 'NCR hở mí ghép', pos: 'đã hủy 588 lon · PH-NM1-2610-0002 (NM1-TONG)' },
+'A260821': { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: 'đã hủy 360 lon · PH-NM1-2610-0002 (NM1-TONG)' },
+'L-LON-09': { qc: [], cn: [], ml: [], coa: 'DGN-DA-2608-B.pdf', ncr: 'NCR mí ghép không kín', pos: 'đã trả NCC 15/09 (1.036 cái)' },
+'L-BOT-32': { qc: ['QC-NM1-2609-0048'], cn: [], ml: [], coa: 'DGN-S-1207.pdf', ncr: 'NCR theo TH-2609-0004', pos: 'đã hủy 950 kg · PH-NM1-2609-0009 (xác nhận 22/09, hủy 23/09)' },
+'A260914': { qc: ['QC-NM1-2609-0049'], cn: ['CN-NM1-2609-0015'], ml: ['ML-NM1-2609-0027'], coa: '', ncr: '', pos: 'đã giao hết 1.152 lon KH-0052 (25/09) · 2 lon mẫu lưu NM1-MAUQC' },
+'A260912': { qc: ['QC-NM1-2609-0050'], cn: ['CN-NM1-2609-0017'], ml: ['ML-NM1-2609-0028'], coa: '', ncr: 'NCR theo TH-2609-0005', pos: '576 lon NM1-DP · 384 lon thu về NM1-TONG' }
+}; }
+
+// ---------- dựng chuỗi ----------
+N(id, p, code, kind, o) { return Object.assign({ id: id, p: p, code: code, lk: code, kind: kind, item: '', itemSub: '', via: '', at: '', qty: '', ncc: '', nccName: '', lotNcc: '', po: '', coa: '' }, o || {}); }
+me4(pid, opt) {
+const N = this.N.bind(this); const o = opt || {};
+const out = [N('me4', pid, 'LSX-2610-0004 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'Khu BTP NM1 · Bồn trộn #1', via: o.via || 'Ra mẻ', at: '11/10 06:20–07:15', qty: '960 kg', note: 'Châu Văn Lực · cân BTR-NM1-001 · ra A261011 24 lon + B261011 1.157 lon' })];
+if (o.sib) out.push(N('sib', 'me4', o.sib, o.sib === 'B261011' ? 'Lô BTP' : 'Lô TP', { item: 'SP-0001', itemSub: o.sib === 'B261011' ? 'Nhãn A · Số 3 · 800 g · BTP' : 'Nhãn A · Số 3 · 800 g', via: 'Cùng mẻ', at: '11/10', qty: o.sib === 'B261011' ? '1.157 lon' : '24 lon' }));
+out.push(
+N('b1', 'me4', 'Nút 0004-B1', 'Nút silo', { lk: '', item: 'NVL-BOT-0001', itemSub: 'Silo 1 · gán cứng', via: 'Xả vào mẻ', at: '10/10 15:40 → 11/10 07:15', qty: '544 kg' }),
+N('bot01', 'b1', 'L-BOT-01', 'Lô NVL', { item: 'NVL-BOT-0001', itemSub: 'Bột sữa nguyên kem 26% béo', via: 'Nạp lần 1 · 16 bao', at: '10/10 15:40', qty: '400 kg', ncc: 'NCC-0003', nccName: 'Southland Milk', lotNcc: 'S-111', po: 'PO-2510-0012', coa: 'DGN-S-111.pdf' }),
+N('bot27', 'b1', 'L-BOT-27', 'Lô NVL', { item: 'NVL-BOT-0001', itemSub: 'Bột sữa nguyên kem 26% béo', via: 'Nạp bổ sung · 5 bao × 25 kg + 19 kg', at: '11/10 05:50', qty: '144 kg', ncc: 'NCC-0001', nccName: 'Phương Nam', lotNcc: 'S-1287', po: 'PO-2609-0006', coa: 'DGN-S-1287.pdf' }),
+N('b2', 'me4', 'Nút 0004-B2', 'Nút silo', { lk: '', item: 'NVL-BOT-0002', itemSub: 'Silo 2', via: 'Xả vào mẻ', at: '10/10 15:45', qty: '192 kg' }),
+N('bot28', 'b2', 'L-BOT-28', 'Lô NVL', { item: 'NVL-BOT-0002', itemSub: 'Bột sữa gầy', via: 'Nạp · 7 bao × 25 kg + 17 kg', at: '10/10 15:45', qty: '192 kg', ncc: 'NCC-0002', nccName: 'Lacto Ingredients', lotNcc: 'S-1279', po: 'PO-2609-0008', coa: 'DGN-S-1279.pdf' }),
+N('b3', 'me4', 'Nút 0004-B3', 'Nút silo', { lk: '', item: 'NVL-BOT-0003', itemSub: 'Silo 3', via: 'Xả vào mẻ', at: '10/10 15:50', qty: '144 kg' }),
+N('whe05', 'b3', 'L-WHE-05', 'Lô NVL', { item: 'NVL-BOT-0003', itemSub: 'Whey protein cô đặc 80%', via: 'Nạp · 5 bao × 25 kg + 19 kg', at: '10/10 15:50', qty: '144 kg', ncc: 'NCC-0002', nccName: 'Lacto Ingredients', lotNcc: 'EW-2506-11', po: 'PO-2606-0004', coa: 'DGN-EW-2506-11.pdf' }),
+N('b4', 'me4', 'Nút 0004-B4', 'Nút silo', { lk: '', item: 'NVL-HHP-0003', itemSub: 'Silo 4 · bột hỗn hợp', via: 'Xả vào mẻ', at: '10/10 16:00', qty: '80 kg' }),
+N('hh10', 'b4', 'HH-261010', 'Lô hỗn hợp', { lk: '', item: 'NVL-HHP-0003', itemSub: 'Bột hỗn hợp vi lượng Số 3', via: 'Nạp · 3 bao HH × 24 kg + 8 kg', at: '10/10 16:00', qty: '80 kg' }),
+N('me3', 'hh10', 'LSX-2610-0003 · mẻ 1', 'Mẻ HH', { lk: '', item: 'CT-HH-0003 v2', itemSub: 'Khu HH NM1 · Robot nạp bao #1', via: 'Ra mẻ', at: '10/10 08:30–10:00', qty: '240 kg', note: 'PC khu HH · 10 bao HH-261010-01 … 10' }),
+N('h1', 'me3', 'Nút 0003-H1', 'Nút silo', { lk: '', item: 'NVL-BOT-0002', itemSub: 'Silo 1', via: 'Xả vào mẻ', at: '10/10 08:10', qty: '192 kg' }),
+N('bot28b', 'h1', 'L-BOT-28', 'Lô NVL', { item: 'NVL-BOT-0002', itemSub: 'Bột sữa gầy', via: 'Nạp · 7 bao × 25 kg + 17 kg', at: '10/10 08:10', qty: '192 kg', ncc: 'NCC-0002', nccName: 'Lacto Ingredients', lotNcc: 'S-1279', po: 'PO-2609-0008', coa: 'DGN-S-1279.pdf' }),
+N('h3', 'me3', 'Nút 0003-H3', 'Nút silo', { lk: '', item: 'NVL-PGA-0007', itemSub: 'Silo 3 · gán cứng', via: 'Xả vào mẻ', at: '10/10 08:12', qty: '19,286 kg' }),
+N('cac04', 'h3', 'L-CAC-04', 'Lô NVL', { item: 'NVL-PGA-0007', itemSub: 'Canxi cacbonat', via: 'Nạp', at: '10/10 08:12', qty: '19,286 kg', ncc: 'NCC-0007', nccName: 'TM Minh Khang', lotNcc: 'MK-0926', po: 'PO-2512-0006', coa: 'DGN-MK-0926.pdf' }),
+N('h2', 'me3', 'Nút 0003-H2', 'Nút silo', { lk: '', item: 'NVL-PGA-0004', itemSub: 'Silo 2', via: 'Xả vào mẻ', at: '10/10 08:14', qty: '16,596 kg' }),
+N('lec03', 'h2', 'L-LEC-03', 'Lô NVL', { item: 'NVL-PGA-0004', itemSub: 'Lecithin đậu nành', via: 'Nạp', at: '10/10 08:14', qty: '16,596 kg', ncc: 'NCC-0007', nccName: 'TM Minh Khang', lotNcc: 'MK-0302', po: 'PO-2603-0011', coa: 'DGN-MK-0302.pdf' }),
+N('h4', 'me3', 'Nút 0003-H4', 'Nút silo', { lk: '', item: 'NVL-PGA-0001', itemSub: 'Silo 4', via: 'Xả vào mẻ', at: '10/10 08:16', qty: '12 kg' }),
+N('pga09', 'h4', 'L-PGA-09', 'Lô NVL', { item: 'NVL-PGA-0001', itemSub: 'Premix vitamin & khoáng', via: 'Nạp', at: '10/10 08:16', qty: '12 kg', ncc: 'NCC-0005', nccName: 'Premix Việt', lotNcc: 'PV-2510-07', po: 'PO-2510-0003', coa: 'DGN-PV-2510-07.pdf' }),
+N('h6', 'me3', 'Nút 0003-H6', 'Nút silo', { lk: '', item: 'NVL-PGA-0009', itemSub: 'Silo 6', via: 'Xả vào mẻ', at: '10/10 08:18', qty: '0,118 kg' }),
+N('dha02', 'h6', 'L-DHA-02', 'Lô NVL', { item: 'NVL-PGA-0009', itemSub: 'DHA vi lượng', via: 'Nạp', at: '10/10 08:18', qty: '0,118 kg', ncc: 'NCC-0002', nccName: 'Lacto Ingredients', lotNcc: 'LI-24-881', po: 'PO-2506-0009', coa: 'DGN-LI-24-881.pdf' }));
+return out;
+}
+pack(pid, lon, thung) {
+const N = this.N.bind(this);
+return [N('lon12', pid, 'L-LON-12', 'Lô bao bì', { item: 'NVL-BBI-0001', itemSub: 'Lon thiếc 800 g', via: 'Chiết rót', at: '11/10', qty: lon, ncc: 'NCC-0004', nccName: 'Bao bì Đông Á', lotNcc: 'DA-2609-A', po: 'PO-2609-0004', coa: 'DGN-DA-2609-A.pdf' }),
+N('thu05', pid, 'L-THU-05', 'Lô bao bì', { lk: '', item: 'NVL-BBI-0004', itemSub: 'Thùng carton 24 lon', via: 'Đóng thùng', at: '11/10', qty: thung, ncc: 'NCC-0008', nccName: 'Carton Sài Gòn Xanh', lotNcc: 'CSG-0726', po: 'PO-2607-0003', coa: 'DGN-CSG-0726.pdf' })];
+}
+outA(pid) {
+const N = this.N.bind(this);
+return [N('pxA', pid, 'PX-NM1-2610-0035', 'Phiếu xuất bán', { item: 'ĐH-2610-0019', itemSub: 'Sales yêu cầu xuất', via: 'Xuất bán', at: '16/10 07:50', qty: '20 lon' }),
+N('khA', 'pxA', 'KH-0007', 'Khách', { item: 'Đại lý Minh Phát', itemSub: 'ghi nhận giao · PX-NM1-2610-0035', via: 'Ký nhận', at: '16/10 09:30', qty: '20 lon' }),
+N('mlA', pid, 'ML-NM1-2610-0027', 'Mẫu lưu', { item: 'NM1-MAUQC', itemSub: '1 kiểm (QC-NM1-2610-0055) + 1 lưu · đo lại 17/10: 5,4 %', via: 'Lấy mẫu', at: '12/10 14:00', qty: '2 lon' }),
+N('tonA', pid, 'NM1-DP', 'Tồn kho', { lk: '', item: 'Khóa · Khoanh vùng', itemSub: 'TH-2610-0003 từ 17/10 10:20', via: 'Tồn', at: '18/10', qty: '2 lon' })];
+}
+outB(pid) {
+const N = this.N.bind(this);
+return [N('mlB', pid, 'ML-NM1-2610-0030', 'Mẫu lưu', { item: 'NM1-MAUQC', itemSub: 'QC-NM1-2610-0058 · 2 kiểm + 1 lưu · đo lại 17/10: 4,8 %', via: 'Lấy mẫu', at: '14/10 10:30', qty: '3 lon' }),
+N('tonB1', pid, 'NM1-BTP', 'Tồn kho', { lk: '', item: 'kho BTP', itemSub: 'Chờ kiểm', via: 'Tồn', at: '18/10', qty: '672 lon' }),
+N('tonB2', pid, 'NM1-DP', 'Tồn kho', { lk: '', item: 'kho điều phối', itemSub: 'chuyển kho 15/10 · Chờ kiểm', via: 'Tồn', at: '18/10', qty: '480 lon' })];
+}
+BAL() { return {
+'A261011': ['Lô TP', 'lon', 24, 0, 20, 0, 0, 2, 2, 0],
+'B261011': ['Lô BTP', 'lon', 1157, 0, 0, 0, 0, 3, 1152, 0],
+'L-BOT-01': ['Lô NVL', 'kg', 1625, 400, 0, 0, 0, 0, 925, 300],
+'L-BOT-27': ['Lô NVL', 'kg', 1144, 1144, 0, 0, 0, 0, 0, 0],
+'L-BOT-28': ['Lô NVL', 'kg', 1000, 384, 0, 0, 0, 0, 0, 616],
+'L-WHE-05': ['Lô NVL', 'kg', 944, 594, 0, 0, 0, 0, 350, 0],
+'HH-261010': ['Lô hỗn hợp', 'kg', 240, 240, 0, 0, 0, 0, 0, 0],
+'L-CAC-04': ['Lô NVL', 'kg', 319.286, 19.286, 0, 0, 0, 0, 300, 0],
+'L-LEC-03': ['Lô NVL', 'kg', 216.596, 16.596, 0, 0, 0, 0, 200, 0],
+'L-PGA-09': ['Lô NVL', 'kg', 162, 12, 0, 0, 0, 0, 150, 0],
+'L-DHA-02': ['Lô NVL', 'kg', 5.118, 0.118, 0, 0, 0, 0, 5, 0],
+'L-LON-12': ['Lô bao bì', 'cái', 20000, 2000, 0, 0, 0, 0, 18000, 0],
+'L-THU-05': ['Lô bao bì', 'thùng', 1200, 1200, 0, 0, 0, 0, 0, 0],
+'L-PGA-05': ['Lô NVL', 'kg', 54, 24, 0, 0, 0, 0, 30, 0],
+'HH-260916': ['Lô hỗn hợp', 'kg', 240, 160, 0, 0, 0, 0, 80, 0],
+'A260918': ['Lô TP', 'lon', 506, 0, 480, 0, 0, 2, 24, 0],
+'A260922': ['Lô TP', 'lon', 242, 0, 0, 0, 0, 2, 240, 0],
+'L-BOT-19': ['Lô NVL', 'kg', 1050, 50, 0, 0, 0, 0, 1000, 0],
+'A261007': ['Lô TP', 'lon', 482, 0, 0, 0, 0, 2, 480, 0],
+'A260902': ['Lô TP', 'lon', 362, 0, 240, 0, 0, 2, 120, 0],
+'A260820': ['Lô TP', 'lon', 602, 0, 480, 0, 0, 2, 120, 0],
+'A260821': ['Lô TP', 'lon', 362, 0, 0, 0, 0, 2, 360, 0],
+'L-LON-09': ['Lô bao bì', 'cái', 2000, 964, 0, 0, 0, 0, 1036, 0],
+'L-BOT-32': ['Lô NVL', 'kg', 1000, 50, 0, 0, 950, 0, 0, 0],
+'A260914': ['Lô TP', 'lon', 1154, 0, 1152, 0, 0, 2, 0, 0],
+'A260912': ['Lô TP', 'lon', 1154, 0, 576, 0, 0, 2, 576, 0]
+}; }
+CUST() { return {
+'A261011': [['KH-0007', 'Đại lý Minh Phát', 'ĐH-2610-0019', 'PX-NM1-2610-0035', 'A261011', 20, '16/10/2026 09:30']],
+'A260918': [['KH-0031', 'Đại lý Hoàng Gia', 'ĐH-2609-0012', 'PX-NM1-2609-0040', 'A260918', 192, '22/09/2026'], ['KH-0044', 'Nhà thuốc Minh Châu', 'ĐH-2609-0014', 'PX-NM1-2609-0043', 'A260918', 96, '23/09/2026'], ['KH-0012', 'Công ty TNHH Phân phối An Khang', 'ĐH-2609-0016', 'PX-NM1-2609-0047', 'A260918', 192, '25/09/2026']],
+'A260902': [['KH-0052', 'Siêu thị Bách hóa Phương Đông', 'ĐH-2608-0041', 'PX-NM1-2609-0002', 'A260902', 240, '02/09/2026']],
+'A260820': [['KH-0052', 'Siêu thị Bách hóa Phương Đông', 'ĐH-2608-0033', 'PX-NM1-2608-0051', 'A260820', 360, '25/08/2026'], ['KH-0058', 'Đại lý Tâm An', 'ĐH-2608-0036', 'PX-NM1-2608-0055', 'A260820', 120, '27/08/2026']],
+'A260912': [['KH-0012', 'Công ty TNHH Phân phối An Khang', 'ĐH-2609-0018', 'PX-NM1-2609-0048', 'A260912', 576, '14/09/2026']],
+'A260914': [['KH-0052', 'Siêu thị Bách hóa Phương Đông', 'ĐH-2609-0022', 'PX-NM1-2609-0050', 'A260914', 1152, '25/09/2026']]
+}; }
+// kịch bản theo lô + hướng → { tree, bal, cust, sum, note, cl }
+scen(lot, dir) {
+const N = this.N.bind(this);
+const k = lot + '|' + dir;
+if (k === 'A261011|Ngược') { const tree = [N('r', null, 'A261011', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Lô truy xuất', at: 'NSX 11/10/2026', qty: '24 lon' }), N('qr', 'r', 'AT000001', 'Thùng', { lk: '', item: 'QR thùng', itemSub: 'mã đầu vào', via: 'Thùng → lô', at: '11/10', qty: '24 lon' })].concat(this.outA('r').slice(0, 2), this.me4('r', { sib: 'B261011' }), this.pack('r', '1.181 cái (24 cho A261011)', '1 thùng'));
+return { tree: tree, bal: ['A261011', 'B261011', 'L-BOT-01', 'L-BOT-27', 'L-BOT-28', 'L-WHE-05', 'HH-261010', 'L-CAC-04', 'L-LEC-03', 'L-PGA-09', 'L-DHA-02', 'L-LON-12', 'L-THU-05'], cust: this.CUST()['A261011'], sum: this.cnt(tree) + ' · 1 khách nhận 20 lon' }; }
+if (k === 'B261011|Ngược') { const tree = [N('r', null, 'B261011', 'Lô BTP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g · BTP', via: 'Lô truy xuất', at: 'NSX 11/10/2026', qty: '1.157 lon' })].concat(this.me4('r', { sib: 'A261011' }), this.pack('r', '1.181 cái (1.157 cho B261011)', '48 thùng'));
+return { tree: tree, bal: ['B261011', 'A261011', 'L-BOT-01', 'L-BOT-27', 'L-BOT-28', 'L-WHE-05', 'HH-261010', 'L-CAC-04', 'L-LEC-03', 'L-PGA-09', 'L-DHA-02', 'L-LON-12', 'L-THU-05'], cust: this.CUST()['A261011'], sum: this.cnt(tree) + ' · lô cùng mẻ A261011 đã giao 20 lon' }; }
+if (k === 'A261011|Xuôi') return { tree: [N('r', null, 'A261011', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Lô truy xuất', at: 'NSX 11/10/2026', qty: '24 lon' })].concat(this.outA('r')), bal: ['A261011'], cust: this.CUST()['A261011'], sum: '1 lô · 1 khách nhận 20 lon · tồn 2 lon (khóa)' };
+if (k === 'B261011|Xuôi') return { tree: [N('r', null, 'B261011', 'Lô BTP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g · BTP', via: 'Lô truy xuất', at: 'NSX 11/10/2026', qty: '1.157 lon' })].concat(this.outB('r')), bal: ['B261011'], cust: [], sum: '1 lô · chưa giao khách · tồn 1.152 lon (Chờ kiểm)' };
+if (k === 'L-BOT-01|Xuôi' || k === 'L-BOT-27|Xuôi') {
+const one = lot === 'L-BOT-01';
+const root = N('r', null, lot, 'Lô NVL', { item: 'NVL-BOT-0001', itemSub: 'Bột sữa nguyên kem 26% béo', via: 'Lô truy xuất', at: one ? 'nhập 14/11/2025' : 'nhập 02/10/2026', qty: one ? '1.625 kg' : '1.144 kg', ncc: one ? 'NCC-0003' : 'NCC-0001', nccName: one ? 'Southland Milk' : 'Phương Nam', lotNcc: one ? 'S-111' : 'S-1287', po: one ? 'PO-2510-0012' : 'PO-2609-0006', coa: one ? 'DGN-S-111.pdf' : 'DGN-S-1287.pdf' });
+const tree = [root, N('b1', 'r', 'Nút 0004-B1', 'Nút silo', { lk: '', item: 'NVL-BOT-0001', itemSub: one ? 'nạp lần 1 · sau đó nạp bổ sung L-BOT-27 144 kg' : 'nạp bổ sung · trước đó đã có L-BOT-01 400 kg', via: one ? 'Nạp 400 kg' : 'Nạp bổ sung 144 kg', at: one ? '10/10 15:40' : '11/10 05:50', qty: one ? '400 kg' : '144 kg' }),
+N('me4', 'b1', 'LSX-2610-0004 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'nút trộn 2 lô: L-BOT-01 + L-BOT-27', via: 'Xả vào mẻ', at: '11/10 06:20–07:15', qty: '960 kg' }),
+N('a', 'me4', 'A261011', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Ra mẻ', at: '11/10', qty: '24 lon' })].concat(this.outA('a'),
+[N('bb', 'me4', 'B261011', 'Lô BTP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g · BTP', via: 'Ra mẻ', at: '11/10', qty: '1.157 lon' })], this.outB('bb'));
+if (one) tree.push(N('t1', 'r', 'NM1-TONG', 'Tồn kho', { lk: '', item: 'kho tổng', itemSub: 'Chờ kiểm · YC-NM1-2610-0022', via: 'Tồn', at: '18/10', qty: '900 kg' }), N('t2', 'r', 'PH-NM1-2610-0013', 'Tồn kho', { item: 'NM1-TONG · 1 bao', itemSub: 'Khóa chờ hủy · bao rách', via: 'Tồn', at: '18/10', qty: '25 kg' }), N('t3', 'r', 'PC-NM1-2610-0009', 'Đang chuyển', { item: 'NM1-TONG → NM2-TONG', itemSub: 'Chờ kiểm', via: 'Đang chuyển', at: '18/10', qty: '300 kg' }));
+else tree.push(N('t1', 'r', 'LSX-2610-0009', 'Mẻ BTP', { lk: 'me:LSX-2610-0009', item: 'SP-0001', itemSub: 'nạp silo · hết tồn', via: 'Nạp 1.000 kg', at: '17/10 12:55', qty: '1.000 kg' }));
+return { tree: tree, bal: [lot, 'A261011', 'B261011'], cust: this.CUST()['A261011'], sum: '1 nút silo · 1 mẻ · 2 lô (A261011, B261011) · 1 khách nhận 20 lon · ' + (one ? 'còn 925 kg tồn + 300 kg đang chuyển' : '1.000 kg còn lại đã nạp LSX-2610-0009'), offline: true };
+}
+if (k === 'L-BOT-01|Ngược' || k === 'L-BOT-27|Ngược') {
+const one = lot === 'L-BOT-01';
+return { tree: [N('r', null, lot, 'Lô NVL', { item: 'NVL-BOT-0001', itemSub: 'Bột sữa nguyên kem 26% béo', via: 'Lô truy xuất', at: one ? 'nhập 14/11/2025' : 'nhập 02/10/2026', qty: one ? '1.625 kg' : '1.144 kg', ncc: one ? 'NCC-0003' : 'NCC-0001', nccName: one ? 'Southland Milk' : 'Phương Nam', lotNcc: one ? 'S-111' : 'S-1287', po: one ? 'PO-2510-0012' : 'PO-2609-0006', coa: one ? 'DGN-S-111.pdf' : 'DGN-S-1287.pdf' })],
+bal: [lot], cust: [], sum: 'Lô NVL mua: nhà cung cấp, PO, file đánh giá bên ngoài — không có cấp trên trong nhà máy' };
+}
+if (k === 'L-PGA-05|Xuôi') return { tree: [N('r', null, 'L-PGA-05', 'Lô NVL', { lk: '', item: 'NVL-PGA-0001', itemSub: 'Premix vitamin & khoáng', via: 'Lô truy xuất', at: 'nhập 28/08/2026', qty: '54 kg', ncc: 'NCC-0005', nccName: 'Premix Việt', lotNcc: 'PV-2608-12', po: 'PO-2608-0009', coa: 'DGN-PV-2608-12.pdf' }),
+N('h4', 'r', 'Nút 0021-H4', 'Nút silo', { lk: '', item: 'NVL-PGA-0001', itemSub: 'Silo 4 · khu HH', via: 'Nạp 24 kg', at: '16/09 07:40', qty: '24 kg' }),
+N('me21', 'h4', 'LSX-2609-0021 · mẻ 1–2', 'Mẻ HH', { lk: '', item: 'CT-HH-0003 v2', itemSub: '2 × 240 kg', via: 'Xả vào mẻ', at: '16/09 08:00–11:10', qty: '480 kg' }),
+N('hh', 'me21', 'HH-260916', 'Lô hỗn hợp', { lk: '', item: 'NVL-HHP-0003', itemSub: 'Bột hỗn hợp vi lượng Số 3', via: 'Ra mẻ', at: '16/09', qty: '240 kg' }),
+N('me22', 'hh', 'LSX-2609-0022 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'Nút 0022-B4 · 80 kg HH', via: 'Nạp bao HH', at: '18/09', qty: '960 kg' }),
+N('a18', 'me22', 'A260918', 'Lô TP', { lk: '', item: 'SP-0002', itemSub: 'Nhãn B · Số 3 · 800 g', via: 'Ra mẻ', at: '18/09', qty: '506 lon' }),
+N('k31', 'a18', 'KH-0031', 'Khách', { item: 'Đại lý Hoàng Gia', itemSub: 'ghi nhận giao · PX-NM1-2609-0040', via: 'Giao', at: '22/09', qty: '192 lon' }),
+N('k44', 'a18', 'KH-0044', 'Khách', { item: 'Nhà thuốc Minh Châu', itemSub: 'ghi nhận giao · PX-NM1-2609-0043', via: 'Giao', at: '23/09', qty: '96 lon' }),
+N('k12', 'a18', 'KH-0012', 'Khách', { item: 'Công ty TNHH Phân phối An Khang', itemSub: 'ghi nhận giao · PX-NM1-2609-0047', via: 'Giao', at: '25/09', qty: '192 lon' }),
+N('t18', 'a18', 'NM1-BTP', 'Tồn kho', { lk: '', item: 'tồn + 2 lon mẫu lưu', itemSub: '', via: 'Tồn', at: '02/10', qty: '24 lon' }),
+N('me24', 'hh', 'LSX-2609-0024 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'Nút 0024-B4 · 80 kg HH', via: 'Nạp bao HH', at: '22/09', qty: '960 kg' }),
+N('a22', 'me24', 'A260922', 'Lô TP', { lk: '', item: 'SP-0002', itemSub: 'Nhãn B · Số 3 · 800 g', via: 'Ra mẻ', at: '22/09', qty: '242 lon' }),
+N('t22', 'a22', 'NM1-BTP', 'Tồn kho', { lk: '', item: 'chưa giao + 2 lon mẫu lưu', itemSub: '', via: 'Tồn', at: '02/10', qty: '240 lon' }),
+N('thh', 'hh', 'NM1-DP', 'Tồn kho', { lk: '', item: 'HH-260916 · 3 bao × 24 kg + 8 kg', itemSub: 'khóa ngay khi truy xuất xong', via: 'Tồn', at: '02/10', qty: '80 kg' }),
+N('tp', 'r', 'NM1-TONG', 'Tồn kho', { lk: '', item: 'kho tổng', itemSub: 'Khóa · Khoanh vùng', via: 'Tồn', at: '02/10', qty: '30 kg' })],
+bal: ['L-PGA-05', 'HH-260916', 'A260918', 'A260922'], cust: this.CUST()['A260918'], sum: 'L-PGA-05 → 1 lệnh hỗn hợp → HH-260916 → 2 mẻ BTP → A260918, A260922 → 3 khách, 480 lon' };
+if (k === 'L-BOT-19|Xuôi') return { tree: [N('r', null, 'L-BOT-19', 'Lô NVL', { item: 'NVL-BOT-0001', itemSub: 'Bột sữa nguyên kem 26% béo', via: 'Lô truy xuất', at: 'nhập 01/08/2026', qty: '1.050 kg', ncc: 'NCC-0001', nccName: 'Phương Nam', lotNcc: 'S-904', po: 'PO-2607-0012', coa: 'DGN-S-904.pdf' }),
+N('b1', 'r', 'Nút 0002-B1', 'Nút silo', { lk: '', item: 'NVL-BOT-0001', itemSub: 'dừng nạp sau 2 bao — mùi lạ', via: 'Nạp 50 kg', at: '06/10 06:05', qty: '50 kg' }),
+N('me2', 'b1', 'LSX-2610-0002 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'Khu BTP NM1', via: 'Xả vào mẻ', at: '06/10 06:30–07:25', qty: '960 kg' }),
+N('a07', 'me2', 'A261007', 'Lô TP', { lk: '', item: 'SP-0003', itemSub: 'Nhãn A · Số 4 · 800 g', via: 'Ra mẻ', at: '06/10', qty: '482 lon' }),
+N('t07', 'a07', 'NM1-BTP', 'Tồn kho', { lk: '', item: 'chưa giao + 2 lon mẫu lưu', itemSub: '', via: 'Tồn', at: '08/10', qty: '480 lon' }),
+N('t19', 'r', 'NM1-TONG', 'Tồn kho', { lk: '', item: 'kho tổng', itemSub: 'Khóa · Khoanh vùng', via: 'Tồn', at: '08/10', qty: '1.000 kg' })],
+bal: ['L-BOT-19', 'A261007'], cust: [], sum: 'L-BOT-19 → nút 0002-B1 → 1 mẻ BTP → A261007; chưa giao khách' };
+if (k === 'A260902|Xuôi') return { tree: [N('r', null, 'A260902', 'Lô TP', { lk: '', item: 'SP-0005', itemSub: 'Nhãn C · Ít đường · 800 g', via: 'Lô truy xuất', at: 'NSX 02/09/2026', qty: '362 lon' }),
+N('k52', 'r', 'KH-0052', 'Khách', { item: 'Siêu thị Bách hóa Phương Đông', itemSub: 'ghi nhận giao · PX-NM1-2609-0002', via: 'Giao', at: '02/09', qty: '240 lon' }),
+N('t', 'r', 'NM1-BTP', 'Tồn kho', { lk: '', item: 'tồn + 2 lon mẫu lưu', itemSub: '', via: 'Tồn', at: '03/09', qty: '120 lon' })], bal: ['A260902'], cust: this.CUST()['A260902'], sum: 'A260902 → 1 khách, 240 lon · tồn 120 lon' };
+if (k === 'A260820|Ngược') return { tree: [N('r', null, 'A260820', 'Lô TP', { lk: '', item: 'SP-0004', itemSub: 'Nhãn C · người lớn · 900 g', via: 'Lô truy xuất', at: 'NSX 20/08/2026', qty: '602 lon' }),
+N('me', 'r', 'LSX-2608-0031 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0003 v3', itemSub: 'Khu BTP NM1', via: 'Ra mẻ', at: '20/08', qty: '960 kg' }),
+N('lon', 'r', 'L-LON-09', 'Lô bao bì', { lk: '', item: 'NVL-BBI-0002', itemSub: 'Lon thiếc 900 g · lỗi mí ghép', via: 'Chiết rót', at: '20/08', qty: '602 cái', ncc: 'NCC-0004', nccName: 'Bao bì Đông Á', lotNcc: 'DA-2608-B', po: 'PO-2608-0004', coa: 'DGN-DA-2608-B.pdf' })],
+bal: ['A260820', 'L-LON-09'], cust: this.CUST()['A260820'], sum: 'Nguyên nhân: lô lon L-LON-09 (lô NCC DA-2608-B, Bao bì Đông Á)' };
+if (k === 'L-LON-09|Xuôi') return { tree: [N('r', null, 'L-LON-09', 'Lô bao bì', { lk: '', item: 'NVL-BBI-0002', itemSub: 'Lon thiếc 900 g', via: 'Lô truy xuất', at: 'nhập 12/08/2026', qty: '2.000 cái', ncc: 'NCC-0004', nccName: 'Bao bì Đông Á', lotNcc: 'DA-2608-B', po: 'PO-2608-0004', coa: 'DGN-DA-2608-B.pdf' }),
+N('a20', 'r', 'A260820', 'Lô TP', { lk: '', item: 'SP-0004', itemSub: 'chiết rót 20/08', via: 'Chiết rót', at: '20/08', qty: '602 lon' }),
+N('k52', 'a20', 'KH-0052', 'Khách', { item: 'Siêu thị Bách hóa Phương Đông', itemSub: 'ghi nhận giao · PX-NM1-2608-0051', via: 'Giao', at: '25/08', qty: '360 lon' }),
+N('k58', 'a20', 'KH-0058', 'Khách', { item: 'Đại lý Tâm An', itemSub: 'ghi nhận giao · PX-NM1-2608-0055', via: 'Giao', at: '27/08', qty: '120 lon' }),
+N('a21', 'r', 'A260821', 'Lô TP', { lk: '', item: 'SP-0004', itemSub: 'chiết rót 21/08', via: 'Chiết rót', at: '21/08', qty: '362 lon' }),
+N('t', 'r', 'NM1-TONG', 'Tồn kho', { lk: '', item: 'lon chưa dùng', itemSub: '', via: 'Tồn', at: '05/09', qty: '1.036 cái' })],
+bal: ['L-LON-09', 'A260820', 'A260821'], cust: this.CUST()['A260820'], sum: 'L-LON-09 → A260820, A260821 → 2 khách, 480 lon' };
+if (k === 'L-BOT-32|Xuôi') return { tree: [N('r', null, 'L-BOT-32', 'Lô NVL', { item: 'NVL-BOT-0002', itemSub: 'Bột sữa gầy', via: 'Lô truy xuất', at: 'nhập 12/09/2026', qty: '1.000 kg', ncc: 'NCC-0001', nccName: 'Phương Nam', lotNcc: 'S-1207', po: 'PO-2609-0010', coa: 'DGN-S-1207.pdf' }),
+N('b2', 'r', 'Nút 0026-B2', 'Nút silo', { lk: '', item: 'NVL-BOT-0002', itemSub: 'Silo 2 · cùng L-BOT-24 142 kg', via: 'Nạp 50 kg', at: '14/09 06:10', qty: '50 kg' }),
+N('me', 'b2', 'LSX-2609-0026 · mẻ 1', 'Mẻ BTP', { lk: '', item: 'CT-BTP-0002 v4', itemSub: 'Khu BTP NM1', via: 'Xả vào mẻ', at: '14/09 06:30–07:25', qty: '960 kg' }),
+N('a14', 'me', 'A260914', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Ra mẻ', at: '14/09', qty: '1.154 lon' }),
+N('t14', 'a14', 'NM1-BTP', 'Tồn kho', { lk: '', item: 'chưa giao + 2 lon mẫu lưu', itemSub: 'Khóa · Khoanh vùng', via: 'Tồn', at: '16/09', qty: '1.152 lon' }),
+N('t', 'r', 'NM1-TONG', 'Tồn kho', { lk: '', item: 'kho tổng', itemSub: 'Khóa · Khoanh vùng TH-2609-0004 · 38 bao', via: 'Tồn', at: '16/09', qty: '950 kg' })],
+bal: ['L-BOT-32', 'A260914'], cust: [], sum: 'L-BOT-32 → nút 0026-B2 → 1 mẻ BTP → A260914; chưa giao khách' };
+if (k === 'A260912|Xuôi') return { tree: [N('r', null, 'A260912', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Lô truy xuất', at: 'NSX 12/09/2026', qty: '1.154 lon' }),
+N('k12', 'r', 'KH-0012', 'Khách', { item: 'Công ty TNHH Phân phối An Khang', itemSub: 'ghi nhận giao · PX-NM1-2609-0048', via: 'Giao', at: '14/09', qty: '576 lon' }),
+N('t', 'r', 'NM1-DP', 'Tồn kho', { lk: '', item: 'tồn + 2 lon mẫu lưu', itemSub: 'Khóa · Khoanh vùng', via: 'Tồn', at: '21/09', qty: '576 lon' })], bal: ['A260912'], cust: this.CUST()['A260912'], sum: 'A260912 → 1 khách, 576 lon · tồn 576 lon' };
+if (k === 'A260914|Xuôi') return { tree: [N('r', null, 'A260914', 'Lô TP', { item: 'SP-0001', itemSub: 'Nhãn A · Số 3 · 800 g', via: 'Lô truy xuất', at: 'NSX 14/09/2026', qty: '1.154 lon' }),
+N('k52', 'r', 'KH-0052', 'Khách', { item: 'Siêu thị Bách hóa Phương Đông', itemSub: 'ghi nhận giao · PX-NM1-2609-0050', via: 'Giao', at: '25/09', qty: '1.152 lon' }),
+N('ml', 'r', 'NM1-MAUQC', 'Tồn kho', { lk: '', item: '2 lon mẫu lưu', itemSub: '', via: 'Tồn', at: '30/09', qty: '2 lon' })], bal: ['A260914'], cust: this.CUST()['A260914'], sum: 'A260914 → 1 khách, 1.152 lon · còn 2 lon mẫu lưu' };
+return null;
+}
+cnt(tree) { const u = (f) => tree.filter(f).map((n) => n.code).filter((c, i, a) => a.indexOf(c) === i).length; const ncc = tree.map((n) => n.ncc).filter((c, i, a) => c && a.indexOf(c) === i).length; return u((n) => /^Lô/.test(n.kind)) + ' lô · ' + u((n) => /^Mẻ/.test(n.kind)) + ' mẻ · ' + u((n) => n.kind === 'Nút silo') + ' nút silo · ' + ncc + ' NCC'; }
+defDir(lot) { return /^[AB]\d/.test(lot) ? 'Ngược' : 'Xuôi'; }
+// y1: tra mã → lô
+resolve(kind, code0) {
+const code = String(code0 || '').trim().toUpperCase();
+const LOT = { 'A261011': 'Lô TP · SP-0001 · 24 lon', 'B261011': 'Lô BTP · SP-0001 · 1.157 lon', 'L-BOT-01': 'Lô NVL · NVL-BOT-0001 · Chờ kiểm', 'L-BOT-27': 'Lô NVL · NVL-BOT-0001 · Hết (đã nạp hết vào LSX-2610-0009)', 'L-BOT-19': 'Lô NVL · NVL-BOT-0001 · Khóa', 'L-PGA-05': 'Lô NVL · NVL-PGA-0001 · Khóa', 'A260914': 'Lô TP · SP-0001 · 1.154 lon · Hết' };
+const one = (lot, how) => ({ ok: true, lots: [{ lot: lot, sub: LOT[lot], how: how }], msg: '' });
+if (!code) return { ok: false, lots: [], msg: 'Nhập mã đầu vào.' };
+if (kind === 'Số lô') { if (LOT[code]) return one(code, 'Số lô nhập tay — có trong hệ thống'); return { ok: false, lots: [], msg: 'Không tìm thấy lô ' + code + ' — kiểm lại số lô.' }; }
+if (kind === 'QR lon / thùng / bao') {
+if (code === 'AT000001') return one('A261011', 'QR thùng AT000001 → lô A261011');
+if (/^AL0000(0[1-9]|1[0-9]|2[0-4])$/.test(code)) return one('A261011', 'QR lon ' + code + ' → thùng AT000001 → lô A261011');
+if (/^L-BOT-01-B\d{3}$/.test(code)) return one('L-BOT-01', 'QR bao ' + code + ' → lô L-BOT-01');
+return { ok: false, lots: [], msg: 'Không đọc được mã ' + code + ' — quét lại hoặc nhập số lô.' };
+}
+if (kind === 'Đơn hàng') { if (code === 'ĐH-2610-0019') return one('A261011', 'Đơn ĐH-2610-0019 · KH-0007 · 20 lon A261011 giao 16/10'); if (code === 'ĐH-2609-0022') return one('A260914', 'Đơn ĐH-2609-0022 · KH-0052 · 1.152 lon A260914 giao 25/09'); return { ok: false, lots: [], msg: 'Đơn ' + code + ' chưa giao lô nào — không có gì để truy.' }; }
+if (kind === 'Khách hàng') { if (code === 'KH-0007') return one('A261011', 'KH-0007 Đại lý Minh Phát · lô đã nhận trong 30 ngày: A261011 (20 lon, 16/10)'); return { ok: false, lots: [], msg: 'Không tìm thấy lô nào giao cho ' + code + ' trong 30 ngày.' }; }
+if (kind === 'Mã NVL') { if (code === 'NVL-BOT-0001') return { ok: true, lots: [{ lot: 'L-BOT-01', sub: LOT['L-BOT-01'], how: 'NVL-BOT-0001' }, { lot: 'L-BOT-27', sub: LOT['L-BOT-27'], how: 'NVL-BOT-0001' }, { lot: 'L-BOT-19', sub: LOT['L-BOT-19'], how: 'NVL-BOT-0001' }], msg: '' }; if (code === 'NVL-PGA-0001') return { ok: true, lots: [{ lot: 'L-PGA-05', sub: LOT['L-PGA-05'], how: 'NVL-PGA-0001' }], msg: '' }; return { ok: false, lots: [], msg: 'Không có lô nào của ' + code + ' đã dùng cho sản xuất.' }; }
+return { ok: false, lots: [], msg: 'Chọn loại mã đầu vào.' };
+}
+H(t, who, what, key) { return { t: t, who: who, what: what, key: !!key }; }
+// tạo bản ghi phiếu từ kịch bản
+build(f, by, at, code, extra) {
+const sc = this.scen(f.lot, f.dir) || { tree: [], bal: [], cust: [], sum: '' };
+const H = this.H.bind(this);
+const t = Object.assign({ code: code, src: f.src, srcDoc: f.srcDoc || '', reason: f.reason, inKind: f.inKind, inCode: f.inCode, lot: f.lot, dir: f.dir, by: by, at: at, end: at, dur: '0,4 giây', secs: 0.4, st: 'Hoàn thành',
+tree: sc.tree, bal: sc.bal, cust: sc.cust, sum: sc.sum, offline: !!sc.offline, th: '', ret: null, report: '', cl: null,
+hist: [H(at, by, 'Tạo phiếu · nguồn ' + f.src + ' · mã đầu vào ' + f.inCode + (f.inCode !== f.lot ? ' → lô ' + f.lot : ''), true), H(at, 'Hệ thống', 'Kiểm quyền Người truy xuất: đạt · ghi nhật ký · ghi thời điểm tạo phiếu'), H(at, 'Hệ thống', 'Dựng chuỗi ' + f.dir.toLowerCase() + ': ' + sc.sum + ' · gom hồ sơ QC / file đánh giá bên ngoài / mẫu lưu / NCR'), H(at, 'Hệ thống', 'Cân bằng khối lượng ' + sc.bal.length + ' lô')] }, extra || {});
+if (sc.bal.indexOf('B261011') >= 0) t.cl = { lot: 'B261011', qty: '2 lon', at: '17/10/2026 09:40', by: 'Nguyễn Văn Tú', why: 'Chiết rót đếm 1.157 lon, phiếu nhập BTP 11/10 ghi 1.155 lon', kk: 'PK-NM1-2610-0006', reuse: code !== 'TX-2610-0003' };
+return t;
+}
+seed() {
+const H = this.H.bind(this);
+const t3 = this.build({ src: 'QC nghi lỗi', srcDoc: 'ML-NM1-2610-0030', reason: 'Mẫu lưu B261011 (ML-NM1-2610-0030) đo lại độ ẩm 4,8 %, sát mức cho phép theo phiếu kiểm nghiệm — truy lô TP A261011 cùng mẻ đã giao KH-0007', inKind: 'QR lon / thùng / bao', inCode: 'AT000001', lot: 'A261011', dir: 'Ngược' }, 'Ngô Thu Trang', '17/10/2026 09:00', 'TX-2610-0003',
+{ end: '17/10/2026 09:00', dur: '0,6 giây', secs: 0.6, th: 'TH-2610-0003', ret: { to: 'Trần Thị Mai · QC trưởng (ủy quyền)', at: '17/10/2026 09:05' }, report: 'bao-cao-TX-2610-0003.pdf' });
+t3.cl = { lot: 'B261011', qty: '2 lon', at: '17/10/2026 09:40', by: 'Nguyễn Văn Tú', why: 'Chiết rót đếm 1.157 lon, phiếu nhập BTP 11/10 ghi 1.155 lon — nghi đếm trùng 2 lon ở đầu dòng', kk: 'PK-NM1-2610-0006', reuse: false };
+t3.hist = [H('17/10/2026 09:00', 'Ngô Thu Trang', 'Tạo phiếu · nguồn QC nghi lỗi (ML-NM1-2610-0030) · quét QR thùng AT000001 → lô A261011', true), H('17/10/2026 09:00', 'Hệ thống', 'Kiểm quyền Người truy xuất: đạt · ghi nhật ký · ghi thời điểm tạo phiếu'), H('17/10/2026 09:00', 'Hệ thống', 'Dựng chuỗi ngược: 13 lô · 2 mẻ · 9 nút silo · 7 NCC · gom hồ sơ (mẫu lưu A261011 ML-NM1-2610-0027 đo lại độ ẩm 5,4 % — vượt mức cho phép theo phiếu kiểm nghiệm) · có kết quả sau 0,6 giây'), H('17/10/2026 09:00', 'Hệ thống', 'Cân bằng 13 lô: lệch 1 lô (B261011 −2 lon) → ghi vào kết quả, báo Thủ kho lập biên bản (không chờ)'), H('17/10/2026 09:03', 'Ngô Thu Trang', 'Xuất báo cáo truy xuất · B261011 ghi "lệch 2 lon — đang kiểm kho"', true), H('17/10/2026 09:05', 'Ngô Thu Trang', 'Trả kết quả cho QC trưởng Trần Thị Mai (ủy quyền)'), H('17/10/2026 09:10', 'Trần Thị Mai', 'Mở hồ sơ thu hồi TH-2610-0003 từ kết quả này'), H('17/10/2026 09:40', 'Nguyễn Văn Tú', 'Lập biên bản chênh lệch B261011 (Thủ kho NM1-BTP)', true), H('17/10/2026 09:40', 'Hệ thống', 'Tạo kiểm kho PK-NM1-2610-0006 cho lô B261011 (NM1-BTP) · gắn biên bản vào phiếu (bổ sung) · báo lại QC trưởng')];
+const t2 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2610-0002', reason: 'Bao L-BOT-19 có mùi lạ khi nạp silo khu BTP ngày 06/10 — tìm lô đã dùng', inKind: 'Số lô', inCode: 'L-BOT-19', lot: 'L-BOT-19', dir: 'Xuôi' }, 'Võ Thanh Hà', '08/10/2026 14:35', 'TX-2610-0002',
+{ end: '08/10/2026 14:35', dur: '0,3 giây', secs: 0.3, th: 'TH-2610-0002', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '08/10/2026 14:35' }, report: 'bao-cao-TX-2610-0002.pdf' });
+const t1 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2610-0001', reason: 'Premix Việt báo lô NCC PV-2608-12 nhiễm chì — tìm mọi lô đã dùng và khách đã nhận', inKind: 'Số lô', inCode: 'L-PGA-05', lot: 'L-PGA-05', dir: 'Xuôi' }, 'Võ Thanh Hà', '02/10/2026 09:20', 'TX-2610-0001',
+{ end: '02/10/2026 09:20', dur: '0,9 giây', secs: 0.9, th: 'TH-2610-0001', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '02/10/2026 09:20' }, report: 'bao-cao-TX-2610-0001.pdf' });
+const t12 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2609-0003', reason: 'Lô lon L-LON-09 hở mí ghép — tìm mọi lô TP đã dùng và khách đã nhận', inKind: 'Số lô', inCode: 'L-LON-09', lot: 'L-LON-09', dir: 'Xuôi' }, 'Võ Thanh Hà', '05/09/2026 11:00', 'TX-2609-0012',
+{ end: '05/09/2026 11:00', dur: '0,7 giây', secs: 0.7, th: 'TH-2609-0003', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '05/09/2026 11:00' }, report: 'bao-cao-TX-2609-0012.pdf' });
+const t11 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2609-0003', reason: 'KH-0052 báo 6 lon SP-0004 phồng nắp — tìm nguyên nhân', inKind: 'Số lô', inCode: 'A260820', lot: 'A260820', dir: 'Ngược' }, 'Võ Thanh Hà', '05/09/2026 09:10', 'TX-2609-0011',
+{ end: '05/09/2026 09:10', dur: '0,5 giây', secs: 0.5, th: 'TH-2609-0003', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '05/09/2026 09:10' }, report: 'bao-cao-TX-2609-0011.pdf' });
+const t9 = this.build({ src: 'Cơ quan quản lý', srcDoc: 'TH-2609-0001', reason: 'Chi cục ATTP yêu cầu: lon SP-0005 in sai hạn dùng — danh sách khách đã nhận', inKind: 'Số lô', inCode: 'A260902', lot: 'A260902', dir: 'Xuôi' }, 'Võ Thanh Hà', '03/09/2026 08:40', 'TX-2609-0009',
+{ end: '03/09/2026 08:40', dur: '0,4 giây', secs: 0.4, th: 'TH-2609-0001', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '03/09/2026 08:40' }, report: 'bao-cao-TX-2609-0009.pdf' });
+const t15 = this.build({ src: 'Kiểm tra nội bộ', srcDoc: '', reason: 'Kiểm tra nội bộ quý III — từ đơn ĐH-2609-0022 tìm lô, khách và phần còn tồn', inKind: 'Đơn hàng', inCode: 'ĐH-2609-0022', lot: 'A260914', dir: 'Xuôi' }, 'Ngô Thu Trang', '30/09/2026 08:30', 'TX-2609-0015',
+{ end: '30/09/2026 08:30', dur: '0,4 giây', secs: 0.4, th: '', ret: { to: 'Bên yêu cầu · Kiểm tra nội bộ', at: '30/09/2026 08:35' }, report: 'bao-cao-TX-2609-0015.pdf' });
+t15.hist = [H('30/09/2026 08:30', 'Ngô Thu Trang', 'Tạo phiếu · nguồn Kiểm tra nội bộ · mã đầu vào ĐH-2609-0022 → lô A260914', true), H('30/09/2026 08:30', 'Hệ thống', 'Dựng chuỗi xuôi · gom hồ sơ · cân bằng 1 lô: khớp · có kết quả sau 0,4 giây'), H('30/09/2026 08:33', 'Ngô Thu Trang', 'Xuất báo cáo truy xuất', true), H('30/09/2026 08:35', 'Ngô Thu Trang', 'Trả kết quả cho Bên yêu cầu · Kiểm tra nội bộ · lưu hồ sơ, không xóa', true)];
+const t14 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2609-0005', reason: 'Kiểm ngoài báo vitamin D3 lô A260912 chỉ 58 % công bố — danh sách khách đã nhận và phần còn tồn', inKind: 'Số lô', inCode: 'A260912', lot: 'A260912', dir: 'Xuôi' }, 'Võ Thanh Hà', '21/09/2026 09:00', 'TX-2609-0014',
+{ end: '21/09/2026 09:00', dur: '0,6 giây', secs: 0.6, th: 'TH-2609-0005', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '21/09/2026 09:00' }, report: 'bao-cao-TX-2609-0014.pdf' });
+const t13 = this.build({ src: 'Thu hồi', srcDoc: 'TH-2609-0004', reason: 'Bao L-BOT-32 có dị vật (sợi nhựa) khi tách kiện 16/09 — tìm lô đã dùng', inKind: 'Số lô', inCode: 'L-BOT-32', lot: 'L-BOT-32', dir: 'Xuôi' }, 'Võ Thanh Hà', '16/09/2026 10:40', 'TX-2609-0013',
+{ end: '16/09/2026 10:40', dur: '0,3 giây', secs: 0.3, th: 'TH-2609-0004', ret: { to: 'Võ Thanh Hà · QC trưởng', at: '16/09/2026 10:40' }, report: 'bao-cao-TX-2609-0013.pdf' });
+[t2, t1, t14, t13, t12, t11, t9].forEach((t) => { t.hist = [H(t.at, t.by, 'Tạo phiếu · nguồn ' + t.src + ' (' + t.srcDoc + ') · lô ' + t.lot, true), H(t.at, 'Hệ thống', 'Dựng chuỗi ' + t.dir.toLowerCase() + ' · gom hồ sơ · cân bằng ' + t.bal.length + ' lô: khớp · có kết quả sau ' + t.dur), H(t.end, t.by, 'Xuất báo cáo · trả kết quả cho hồ sơ ' + t.th, true)]; });
+return [t3, t2, t1, t15, t14, t13, t12, t11, t9];
+}
+
+// ---------- thao tác ----------
+cur() { return this.state.txs.find((t) => t.code === this.state.sel); }
+setF(o) { this.setState({ f: Object.assign({}, this.state.f, o, { err: '' }) }); }
+lookup() { const f = this.state.f; const r = this.resolve(f.inKind, f.inCode); const o = { res: r, lot: '', dir: f.dir }; if (r.ok && r.lots.length === 1) { o.lot = r.lots[0].lot; o.dir = f.dir || this.defDir(o.lot); } this.setF(o); }
+nextCode() { let n = 0; this.state.txs.forEach((t) => { if (t.code.indexOf('TX-2610-') === 0) n = Math.max(n, +t.code.slice(8)); }); return 'TX-2610-' + String(n + 1).padStart(4, '0'); }
+run() {
+const f = this.state.f;
+const bad = (m) => this.setState({ f: Object.assign({}, f, { err: m }) });
+if (!f.src) { bad('Chọn nguồn yêu cầu.'); return; }
+if (!(f.reason || '').trim()) { bad('Nhập lý do truy xuất.'); return; }
+if (!f.res || !f.res.ok || !f.lot) { bad('Tra mã đầu vào ra lô trước khi chạy.'); return; }
+if (!f.dir) { bad('Chọn hướng truy.'); return; }
+const me = MPX.name(this.state.role); const at = this.now(); const code = this.nextCode();
+const t = this.build(f, me, at, code);
+if (!this.scen(f.lot, f.dir)) { bad('Lô ' + f.lot + ' chưa có liên kết theo hướng ' + f.dir.toLowerCase() + '.'); return; }
+t.end = at; t.hist = t.hist.concat([this.H(at, 'Hệ thống', t.cl ? 'Lệch 1 lô (' + t.cl.lot + ') — ghi vào kết quả, không chờ; đã có ' + t.cl.kk + ' đang kiểm, không mở kiểm kho mới' : 'Cân bằng khớp mọi lô')]);
+this.setState({ txs: [t].concat(this.state.txs), scr: 'ct', sel: code, tab: 'kq', cview: 'cay', layer: '', balAll: false, f: this.blankF(), closed: {}, toast: 'Đã tạo ' + code + ' và chạy truy ' + f.dir.toLowerCase() + ' — ' + t.sum + '.', toastKind: 'info' });
+}
+updT(fn, toast) { const code = this.state.sel; this.setState({ txs: this.state.txs.map((t) => t.code === code ? fn(Object.assign({}, t)) : t), toast: toast || '', toastKind: 'info', err: '' }); }
+report() { const me = MPX.name(this.state.role); const at = this.now(); this.updT((t) => { t.report = 'bao-cao-' + t.code + '.pdf'; t.hist = t.hist.concat([this.H(at, me, 'Xuất báo cáo truy xuất (chuỗi lô, khách + SL, hồ sơ QC, cân bằng, tạo phiếu ' + t.at + ' · có kết quả sau ' + t.dur + ')', true)]); return t; }, 'Đã xuất bao-cao-' + this.state.sel + '.pdf.'); }
+giveBack() { const me = MPX.name(this.state.role); const at = this.now(); this.updT((t) => { const to = t.src === 'QC nghi lỗi' ? 'Trần Thị Mai · QC trưởng (ủy quyền)' : (t.src === 'Thu hồi' ? 'Hồ sơ ' + t.srcDoc : 'Bên yêu cầu · ' + t.src); t.ret = { to: to, at: at }; t.hist = t.hist.concat([this.H(at, me, 'Trả kết quả cho ' + to + ' · lưu hồ sơ, không xóa', true)]); return t; }, 'Đã trả kết quả cho bên yêu cầu.'); }
+saveCl() {
+const b = this.state.bb; const t0 = this.cur();
+if (!(b.why || '').trim()) { this.setState({ err: 'Ghi nguyên nhân (nếu đã rõ) hoặc "chưa rõ".' }); return; }
+const me = MPX.name(this.state.role); const at = this.now(); const row = this.balRows(t0).find((r) => r.lech !== 0);
+this.updT((t) => { t.cl = { lot: row.lot, qty: this.fn(Math.abs(row.lech)) + ' ' + row.unit, at: at, by: me, why: b.why, kk: row.lot === 'B261011' ? 'PK-NM1-2610-0006' : 'PK-NM1-2610-0009', reuse: row.lot === 'B261011' }; t.hist = t.hist.concat([this.H(at, me, 'Lập biên bản chênh lệch ' + row.lot, true), this.H(at, 'Hệ thống', 'Gắn biên bản vào phiếu (bổ sung, không đổi chuỗi lô / khách)' + (t.report ? ' · báo lại bên yêu cầu' : ''))]); return t; }, 'Đã lập biên bản chênh lệch.');
+this.setState({ bb: { qty: '', why: '' } });
+}
+balRows(t) {
+const B = this.BAL();
+return t.bal.map((lot) => { const b = B[lot]; const sum = b[3] + b[4] + b[5] + b[6] + b[7] + b[8] + b[9]; const lech = Math.round((b[2] - sum) * 1000) / 1000; return { lot: lot, kind: b[0], unit: b[1], v: b.slice(2), lech: lech }; });
+}
+
+// ---------- hiển thị ----------
+inLabel(t) { if (t.inKind !== 'QR lon / thùng / bao') return t.inKind; return /^AT/.test(t.inCode) ? 'QR thùng' : (/^AL/.test(t.inCode) ? 'QR lon' : 'QR bao'); }
+tlEvents(t, LS, LCL) {
+const kids = {}; t.tree.forEach((n) => { const p = n.p || '_'; (kids[p] = kids[p] || []).push(n); });
+const root = t.tree.find((n) => !n.p);
+const parse = (at) => { const m = /(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?(?:\s+(\d{1,2}):(\d{2}))?/.exec(at || ''); if (!m) return null; const y = m[3] ? +m[3] : 2026; return { y: y, mo: +m[2], d: +m[1], hh: m[4] ? +m[4] : -1, mi: m[5] ? +m[5] : 0, key: y * 1e8 + (+m[2]) * 1e6 + (+m[1]) * 1e4 + (m[4] ? +m[4] * 100 + (+m[5]) : 9999) }; };
+const typeOf = (n) => { const v = (n.via || '').toLowerCase(); const k = n.kind;
+if (n === root) return 'goc';
+if (v === 'tồn' || k === 'Tồn kho') return 'ton';
+if (k === 'Khách' || /giao|xuất bán|ký nhận/.test(v)) return 'giao';
+if (k === 'Đang chuyển' || /chuyển/.test(v)) return 'xe';
+if (/lấy mẫu/.test(v)) return 'qc';
+if (/^Mẻ/.test(k)) return 'me';
+if (k === 'Nút silo' || /^nạp/.test(v)) return 'nap';
+if (/Lô NVL|Lô bao bì/.test(k)) return /nhập/.test(v) ? 'nhap' : 'nap';
+if (/Lô TP|Lô BTP|Lô hỗn hợp|Thùng/.test(k)) return 'ra';
+return 'khac'; };
+const TY = { goc: ['Lô được truy xuất', 'goc'], nhap: ['Nhập nguyên liệu', 'nhap'], nap: ['Nạp nguyên liệu vào sản xuất', 'nap'], me: ['Sản xuất mẻ', 'me'], ra: ['Ra lô thành phẩm / BTP', 'ra'], qc: ['Lấy mẫu QC', 'qc'], xe: ['Vận chuyển', 'xe'], giao: ['Giao khách', 'giao'], ton: ['Còn tồn hiện tại', 'ton'], khac: ['Sự kiện', 'khac'] };
+const merged = {};
+const evs = t.tree.map((n, i) => { let ty = typeOf(n); const tm = parse(n.at); let m = n; let par = t.tree.find((x) => x.id === n.p); let via2 = '';
+if (n.kind === 'Nút silo' && n !== root) { const ch = (kids[n.id] || []).find((c) => /^Lô /.test(c.kind) && c.at === n.at); if (ch) { merged[ch.id] = true; m = Object.assign({}, ch, { via: n.via || ch.via }); via2 = 'qua ' + n.code; ty = 'nap'; } }
+const st = /^Lô /.test(m.kind) ? LS[m.code] : null;
+return { n: m, i: i, ty: ty, tm: tm, st: st, par: par, via2: via2 }; }).filter((e) => !merged[e.n.id] || e.via2);
+return { evs: evs, root: root, parse: parse, TY: TY }; }
+renderVals() {
+const s = this.state; const role = s.role;
+const setRole = (r) => this.setState({ role: r, err: '' });
+const isTx = role === 'Người truy xuất';
+const gTx = MPX.gate(role, ['Người truy xuất'], setRole, 'chỉ vai trò này tạo và chạy truy xuất');
+const LCL = this.LOTCLS(); const LS = this.LS();
+const base = { vx: MPX.vx(role, setRole, 'tx_tx'), isList: s.scr === 'list' || s.scr === 'tao', isTao: s.scr === 'tao', isCt: s.scr === 'ct', crumbCode: '', hasCrumb: false,
+hasToast: !!s.toast, toast: s.toast, toastCls: s.toastKind === 'warn' ? 'mp-banner mp-banner--warn' : 'mp-banner mp-banner--info', closeToast: () => this.setState({ toast: '' }) };
+const STC = { 'Hoàn thành': 'mp-doc mp-doc--ok', 'Đang truy xuất': 'mp-doc mp-doc--wait' };
+const lotsOf = (t) => t.tree.filter((n) => /^Lô /.test(n.kind)).map((n) => n.code).filter((v, i, a) => a.indexOf(v) === i);
+// ----- danh sách -----
+const TABS = [['all', 'Tất cả'], ['Ngược', 'Truy ngược'], ['Xuôi', 'Truy xuôi'], ['lech', 'Có lệch'], ['th', 'Đã gắn thu hồi']];
+const inTab = (t, k) => k === 'all' || (k === 'lech' ? !!t.cl : (k === 'th' ? !!t.th : t.dir === k));
+const done = s.txs.filter((t) => t.st === 'Hoàn thành');
+base.L = {
+canNew: isTx, g: gTx, goNew: () => this.setState({ scr: 'tao', f: this.blankF(), toast: '' }),
+stats: [{ label: 'Phiếu tháng 10', value: String(s.txs.filter((t) => /^TX-2610-/.test(t.code)).length), note: s.txs.filter((t) => /^TX-2610-/.test(t.code) && t.dir === 'Ngược').length + ' ngược · ' + s.txs.filter((t) => /^TX-2610-/.test(t.code) && t.dir === 'Xuôi').length + ' xuôi' },
+{ label: 'Thời gian tra chuỗi trung bình', value: (done.reduce((a, t) => a + (t.secs || 0), 0) / Math.max(1, done.length)).toFixed(1).replace('.', ',') + ' giây', note: 'hệ thống tự chạy sau khi tạo phiếu' },
+{ label: 'Lệch cân bằng', value: String(s.txs.filter((t) => !!t.cl).length), note: 'B261011 → kiểm kho PK-NM1-2610-0006' },
+{ label: 'Gắn hồ sơ thu hồi', value: String(s.txs.filter((t) => !!t.th).length), note: 'đã mở từ kết quả truy xuất' }],
+tabs: TABS.map((x) => ({ t: x[1], n: String(s.txs.filter((t) => inTab(t, x[0])).length), cls: x[0] === s.ltab ? 'tab on' : 'tab', go: () => this.setState({ ltab: x[0] }) })),
+rows: s.txs.filter((t) => inTab(t, s.ltab)).map((t) => ({ code: t.code, open: () => this.setState({ scr: 'ct', sel: t.code, tab: 'kq', cview: 'cay', layer: '', kqF: '', balAll: false, tlF: 'all', closed: {}, toast: '', logAll: false }), src: t.src, srcDoc: this.X(t.srcDoc), hasSrcDoc: !!t.srcDoc, reason: t.reason,
+inp: t.inKind === 'Số lô' ? t.lot : t.inCode + ' → ' + t.lot, lot: this.X(t.lot), dir: t.dir, dirCls: t.dir === 'Ngược' ? 'mp-doc mp-doc--draft' : 'mp-doc mp-doc--wait', by: t.by, at: t.at, dur: t.dur, sum: t.sum,
+st: t.st, stCls: STC[t.st] || 'mp-doc', hasCl: !!t.cl, th: this.X(t.th), hasTh: !!t.th }))
+};
+base.L.noRows = base.L.rows.length === 0;
+// ----- tạo phiếu -----
+const f = s.f;
+const opt = (list, cur, set, sub) => list.map((o) => ({ t: o, cls: cur === o ? 'opt on' : 'opt', go: () => this.setF(set(o)), sub: sub ? (sub[o] || '') : '', hasSub: !!(sub && sub[o]) }));
+const ex = { 'Số lô': ['A261011', 'B261011', 'L-BOT-01', 'L-PGA-05'], 'QR lon / thùng / bao': ['AT000001', 'AL000007', 'L-BOT-01-B017'], 'Đơn hàng': ['ĐH-2610-0019', 'ĐH-2609-0022'], 'Khách hàng': ['KH-0007'], 'Mã NVL': ['NVL-BOT-0001', 'NVL-PGA-0001'] };
+const r = f.res;
+base.F = {
+srcs: opt(['Thu hồi', 'QC nghi lỗi', 'Cơ quan quản lý', 'Kiểm tra nội bộ'], f.src, (o) => ({ src: o })), src: f.src || '', setSrc: (ev) => { const v = ev && ev.target ? ev.target.value : ''; const d = f.srcDoc || ''; const keep = (v === 'Thu hồi' && /^TH-/.test(d)) || (v === 'QC nghi lỗi' && /^YC-NM\d-/.test(d)) || (v === 'Cơ quan quản lý' && !!f.cvName); this.setF(keep ? { src: v } : { src: v, srcDoc: '', cvName: '' }); },
+srcDoc: f.srcDoc, setSrcDoc: (ev) => this.setF({ srcDoc: ev && ev.target ? ev.target.value : '' }),
+isAuto: f.src === 'Thu hồi' || f.src === 'QC nghi lỗi', hasDoc: !!f.srcDoc && !f.cvName, noDoc: !f.srcDoc || !!f.cvName, docFrom: /^TH-/.test(f.srcDoc || '') ? 'hồ sơ thu hồi' : (/^YC-NM\d-/.test(f.srcDoc || '') ? 'yêu cầu kiểm QC' : 'chứng từ của bên yêu cầu'),
+autoHint: f.src === 'Thu hồi' ? 'Tự gắn mã hồ sơ thu hồi khi mở truy xuất từ hồ sơ (Truy xuất & thu hồi › Hồ sơ thu hồi).' : 'Tự gắn mã yêu cầu kiểm QC khi mở truy xuất từ màn Chất lượng.',
+isCq: f.src === 'Cơ quan quản lý', hasCv: !!f.cvName, noCv: !f.cvName, cvName: f.cvName || '',
+pickCv: (ev) => { const t = ev && ev.target; const fl = t && t.files && t.files[0]; if (fl) this.setF({ cvName: fl.name, srcDoc: fl.name }); if (t) t.value = ''; }, clearCv: () => this.setF({ cvName: '', srcDoc: '' }),
+reason: f.reason, setReason: (ev) => this.setF({ reason: ev && ev.target ? ev.target.value : '' }),
+kinds: opt(['Số lô', 'QR lon / thùng / bao', 'Đơn hàng', 'Khách hàng', 'Mã NVL'], f.inKind, (o) => ({ inKind: o, inCode: '', res: null, lot: '', dir: '' })), inKind: f.inKind, setKind: (ev) => { const v = ev && ev.target ? ev.target.value : 'Số lô'; if (v !== f.inKind) this.setF({ inKind: v, inCode: '', res: null, lot: '', dir: '' }); },
+code: f.inCode, setCode: (ev) => this.setF({ inCode: ev && ev.target ? ev.target.value : '', res: null, lot: '' }), lookup: () => this.lookup(),
+ex: (ex[f.inKind] || []).map((c) => ({ t: c, go: () => { const rr = this.resolve(f.inKind, c); const o = { inCode: c, res: rr, lot: '', dir: f.dir }; if (rr.ok && rr.lots.length === 1) { o.lot = rr.lots[0].lot; o.dir = f.dir || this.defDir(o.lot); } this.setF(o); } })),
+hasRes: !!r, resOk: !!(r && r.ok), resBad: !!(r && !r.ok), resMsg: r ? r.msg : '',
+lots: r && r.ok ? r.lots.map((x) => ({ lot: x.lot, sub: x.sub, how: x.how, cls: f.lot === x.lot ? 'opt on' : 'opt', go: () => this.setF({ lot: x.lot, dir: f.dir || this.defDir(x.lot) }) })) : [],
+dirs: opt(['Ngược', 'Xuôi'], f.dir, (o) => ({ dir: o }), { 'Ngược': 'từ lô TP / BTP về mẻ, nút silo, lô NVL, bao bì, PO, NCC', 'Xuôi': 'từ lô NVL / hỗn hợp / bao bì tới mẻ, lô TP, khách, tồn' }),
+hasLot: !!f.lot, lotT: f.lot, hasErr: !!f.err, err: f.err, can: isTx, g: gTx, run: () => this.run(), cancel: () => this.setState({ scr: 'list', f: this.blankF() })
+};
+// ----- chi tiết -----
+const t = s.scr === 'ct' ? this.cur() : null;
+if (!t) { base.D = { tree: [], cust: [], docs: [], bal: [], log: MPLOG.view([]), tabs: [] }; return base; }
+base.crumbCode = t.code; base.hasCrumb = true;
+const kids = {}; t.tree.forEach((n) => { const p = n.p || '_'; (kids[p] = kids[p] || []).push(n); });
+const cnt = (id) => (kids[id] || []).reduce((a, k) => a + 1 + cnt(k.id), 0);
+const rows = []; const closed = s.closed || {};
+const LOTK = /^Lô /;
+const mk = (n, d, flat) => { const has = !flat && !!kids[n.id]; const open = has && !closed[n.id]; const st = LS[n.code];
+const showSt = LOTK.test(n.kind) && !!st;
+return { c: this.X(n.lk, n.code), kind: n.kind, item: this.X(/^(SP-|NVL-)/.test(n.item) ? n.item : '', n.item), itemSub: n.itemSub, hasItemSub: !!n.itemSub, via: n.via, at: n.at, qty: n.qty, note: n.note || '', hasNote: !!n.note,
+hasSrc: !!n.ncc, ncc: this.X(n.ncc), nccName: n.nccName, lotNcc: n.lotNcc, po: n.po, coa: n.coa, noSrc: !n.ncc,
+hasSt: showSt, st: showSt ? st[0] : '', stCls: showSt ? (LCL[st[0]] || 'mp-lot') : '', why: showSt ? st[1] : '', hasWhy: showSt && !!st[1], noSt: !showSt,
+hasKids: has, isLeaf: !has, open: open ? 'true' : 'false', showCount: has && !open, countLabel: cnt(n.id) + ' mục',
+toggle: () => this.setState({ closed: Object.assign({}, closed, { [n.id]: !closed[n.id] }) }), chevStyle: 'transition: transform 120ms; transform: rotate(' + (open ? 0 : -90) + 'deg)',
+rowCls: 'lv' + Math.min(d, 3) + (n.kind === 'Nút silo' ? ' is-node' : '') + (/^Mẻ/.test(n.kind) ? ' is-me' : ''), indent: 'padding-left: ' + (12 + d * 22) + 'px', open_: open }; };
+const walk = (n, d) => { const r = mk(n, d, false); rows.push(r); if (r.open_) kids[n.id].forEach((k) => walk(k, d + 1)); };
+const TAB = ({ tl: 'chuoi', khach: 'kq', canbang: 'hoso', nhatky: 'kq' })[s.tab] || s.tab || 'kq';
+const cview = s.tab === 'tl' ? 'tl' : (s.cview || 'cay');
+const isNg = t.dir === 'Ngược';
+const uniq = (arr) => arr.filter((n, i, a) => a.findIndex((x) => x.code === n.code) === i);
+const parOf = (n) => t.tree.find((x) => x.id === n.p);
+const LAY = isNg
+? [['me', (n) => /^Mẻ/.test(n.kind), 'mẻ'], ['silo', (n) => n.kind === 'Nút silo', 'nút silo'], ['hh', (n) => n.kind === 'Lô hỗn hợp', 'lô hỗn hợp'], ['nvl', (n) => n.kind === 'Lô NVL', 'lô NVL'], ['bb', (n) => n.kind === 'Lô bao bì', 'lô bao bì'], ['ncc', (n) => !!n.ncc, 'NCC']]
+: [['hh', (n) => n.kind === 'Lô hỗn hợp', 'lô hỗn hợp'], ['me', (n) => /^Mẻ/.test(n.kind), 'mẻ'], ['tp', (n) => /^Lô (TP|BTP)$/.test(n.kind), 'lô TP / BTP'], ['khach', null, 'khách'], ['ton', (n) => n.kind === 'Tồn kho' || n.kind === 'Đang chuyển', 'phần còn lại']];
+const layerNodes = (L) => { const ns = t.tree.filter((n) => n.p && L[1] && L[1](n)); if (L[0] === 'ncc') return ns.filter((n, i, a) => a.findIndex((x) => x.ncc === n.ncc) === i); return uniq(ns); };
+const curL = LAY.find((L) => L[0] === s.layer && L[1] && L[0] !== 'ton') || null;
+if (curL) layerNodes(curL).forEach((n) => rows.push(mk(n, 0, true)));
+else (kids._ || []).forEach((n) => walk(n, 0));
+const ids = Object.keys(kids).filter((k) => k !== '_');
+const nLots = lotsOf(t).length; const nMe = t.tree.filter((n) => /^Mẻ/.test(n.kind)).length; const nNode = t.tree.filter((n) => n.kind === 'Nút silo').length;
+const nNcc = t.tree.filter((n) => n.ncc).map((n) => n.ncc).filter((v, i, a) => a.indexOf(v) === i).length;
+const balRows = this.balRows(t);
+const nLech = balRows.filter((b) => b.lech !== 0).length;
+const custQty = t.cust.reduce((a, c) => a + (+c[5] || 0), 0);
+const PR = this.PROD()[t.lot] || null;
+const P = (() => { if (!PR) return null;
+const fm = (m) => m >= 60 ? Math.floor(m / 60) + ' giờ' + (m % 60 ? ' ' + (m % 60) + ' phút' : '') : m + ' phút';
+const pd = (x) => { const m = /(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/.exec(x); return m ? new Date(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]) : null; };
+const gd = PR.cd.reduce((a, c) => a + c[9], 0), tl = PR.cd.reduce((a, c) => a + c[11], 0), nGd = PR.cd.filter((c) => c[9] > 0).length;
+const bd = PR.cd[0][7], kt = PR.cd[PR.cd.length - 1][8];
+const span = Math.round((pd(kt) - pd(bd)) / 60000);
+const pct = (v) => String(Math.round(v * 10) / 10).replace('.', ',') + ' %';
+const st = LS[t.lot] || ['—', ''];
+const mau = PR.cl.mau; const okR = mau[0] ? mau[1] / mau[0] * 100 : 0;
+const kv = (a) => a.map((x) => ({ k: x[0], v: x[1], cls: x[2] || '' }));
+const go = (tab) => () => this.setState({ tab: tab, kqF: '' });
+return { lot: t.lot, lsx: this.X(PR.lsx), goCd: go('cd'), goHs: go('hoso'),
+sl: { big: PR.big, bigSub: PR.bigSub, kv: kv(PR.sl), barL: PR.barL, barV: pct(PR.bar), barW: 'width: ' + PR.bar + '%', barCls: 'pc__fill' + (PR.bar < 95 ? ' is-warn' : '') },
+cl: { st: st[0], stCls: LCL[st[0]] || 'mp-lot', big: PR.cl.big, bigSub: PR.cl.bigSub, kv: kv(PR.cl.kv), barL: 'Tỷ lệ mẫu đạt', barV: mau[0] ? pct(okR) : '—', barW: 'width: ' + okR + '%', barCls: 'pc__fill' + (mau[2] ? ' is-bad' : '') },
+tg: { big: fm(tl), bigSub: 'thời gian chạy · ' + PR.cd.length + ' công đoạn', kv: kv([['Bắt đầu thực tế', bd], ['Kết thúc thực tế', kt], ['Gián đoạn', gd ? fm(gd) + ' · ' + nGd + ' lần' : 'Không có', gd ? 'bad' : '']]), barL: 'Tỷ lệ chạy máy (chạy ÷ chạy + gián đoạn)', barV: pct((tl / (tl + gd)) * 100), barW: 'width: ' + (tl / (tl + gd)) * 100 + '%', barCls: 'pc__fill' + (gd ? ' is-warn' : '') },
+cd: PR.cd.map((c) => ({ name: c[0], sub: c[1], st: 'Đã xong', stCls: 'mp-doc mp-doc--ok', yc: this.fn(c[2]) + ' ' + c[6], sx: this.fn(c[3]) + ' ' + c[6], dat: this.fn(c[4]) + ' ' + c[6], loi: this.fn(c[5]) + ' ' + c[6], loiCls: c[5] ? 'txt-bad' : '',
+bd: c[7], kt: c[8], gd: c[9] ? fm(c[9]) : '0 phút', gdCls: c[9] ? 'txt-bad' : 'mp-muted', gdWhy: c[10], hasGdWhy: !!c[10], tl: fm(c[11]) })),
+cdN: PR.cd.length, cdSum: PR.cd.length + ' công đoạn · từ ' + bd + ' đến ' + kt + ' (' + fm(span) + ')',
+tot: { bd: bd, kt: kt, gd: gd ? fm(gd) + ' · ' + nGd + ' lần' : '0 phút', tl: fm(tl) } }; })();
+const TABS2 = [['kq', isNg ? 'Làm từ gì' : 'Hàng đang ở đâu']].concat(P ? [['cd', 'Công đoạn sản xuất']] : [], [['chuoi', 'Chuỗi chi tiết'], ['hoso', 'Hồ sơ và cân bằng']]);
+const DOC = this.DOCS();
+const gKho = MPX.gate(role, ['Thủ kho', 'Thủ kho điều phối'], setRole, 'thủ kho phụ trách NM1-BTP / NM1-DP');
+const cl = t.cl;
+const thRef = this.X(t.th);
+const toTh = MPX.ref(t.code + '|' + t.lot, role, 'ThuHoi-r8hw');
+const TLV = (() => { const E = this.tlEvents(t, LS, LCL); const f = s.tlF || 'all'; const asc = s.tlDir !== 'desc';
+const MON = ['', 'th1', 'th2', 'th3', 'th4', 'th5', 'th6', 'th7', 'th8', 'th9', 'th10', 'th11', 'th12'];
+const evs = E.evs.filter((e) => e.ty !== 'ton');
+const ton = E.evs.filter((e) => e.ty === 'ton');
+const FIL = [['all', 'Tất cả'], ['nl', 'Nguyên liệu'], ['me', 'Mẻ sản xuất'], ['ra', 'Thành phẩm'], ['qc', 'QC'], ['giao', 'Giao & vận chuyển']];
+const GRP = { nl: ['nhap', 'nap'], me: ['me'], ra: ['ra', 'goc'], qc: ['qc'], giao: ['giao', 'xe'] };
+const inF = (e) => f === 'all' || (GRP[f] || []).indexOf(e.ty) >= 0;
+const sorted = evs.filter((e) => e.tm).sort((a, b) => (a.tm.key - b.tm.key) * (asc ? 1 : -1) || a.i - b.i);
+const card = (e) => { const n = e.n; const st = e.st; const T = E.TY[e.ty];
+return { uid: n.id + '@' + e.i, ty: T[1], cls: 'tl-ev tl-ev--' + T[1] + (e.ty === 'goc' ? ' is-root' : ''), label: T[0], kindShort: (n.itemSub || n.item || n.kind || '').split(' · ')[0], time: e.tm && e.tm.hh >= 0 ? String(e.tm.hh).padStart(2, '0') + ':' + String(e.tm.mi).padStart(2, '0') : '', hasTime: !!(e.tm && e.tm.hh >= 0), atRaw: n.at,
+code: this.X(n.lk, n.code), kind: n.kind, item: this.X(/^(SP-|NVL-)/.test(n.item) ? n.item : '', n.item), hasItem: !!n.item, itemSub: n.itemSub, hasItemSub: !!n.itemSub, via: n.via, hasVia: !!n.via && n.via !== 'Lô truy xuất' && n.via !== 'Tồn', qty: n.qty, hasQty: !!n.qty,
+hasSrc: !!n.ncc, ncc: this.X(n.ncc), nccName: n.nccName || '', po: n.po || '', hasPo: !!n.po, coa: n.coa || '', hasCoa: !!n.coa, lotNcc: n.lotNcc || '', hasLotNcc: !!n.lotNcc,
+hasSt: !!st, st: st ? st[0] : '', stCls: st ? (LCL[st[0]] || 'mp-lot') : '', why: st ? st[1] : '', hasWhy: !!(st && st[1]), note: n.note || '', hasNote: !!n.note,
+hasFrom: !!e.par && e.ty !== 'goc', from: e.par ? e.par.code : '', hasVia2: !!e.via2, via2: e.via2, isRoot: e.ty === 'goc',
+short: ({ goc: 'Lô truy xuất', nhap: 'Nhập kho', nap: 'Nạp', me: 'Mẻ', ra: 'Ra lô', qc: 'Lấy mẫu QC', xe: 'Vận chuyển', giao: 'Giao khách', ton: 'Còn tồn', khac: 'Khác' })[e.ty] || T[0], fromT: e.ty === 'goc' ? (n.at || '') : (e.via2 ? e.via2 : (e.par ? 'từ ' + e.par.code : '')), stBad: !!st && /Khóa|Không đạt|Hủy|Chờ kiểm/.test(st[0]), mCls: 'tlm-ev' + (e.ty === 'goc' ? ' is-root' : ''),
+iNhap: T[1] === 'nhap', iNap: T[1] === 'nap', iMe: T[1] === 'me', iRa: T[1] === 'ra' || T[1] === 'goc', iQc: T[1] === 'qc', iXe: T[1] === 'xe', iGiao: T[1] === 'giao', iKhac: T[1] === 'khac' || T[1] === 'ton', show: inF(e) }; };
+const days = []; sorted.forEach((e) => { const c = card(e); if (!c.show) return; const k = e.tm.y + '-' + e.tm.mo + '-' + e.tm.d; let d = days.find((x) => x.k === k); if (!d) { const dt = new Date(e.tm.y, e.tm.mo - 1, e.tm.d); const W = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+d = { k: k, day: String(e.tm.d).padStart(2, '0'), mon: MON[e.tm.mo] + (e.tm.y !== 2026 ? ' ' + e.tm.y : ''), wd: W[dt.getDay()], full: String(e.tm.d).padStart(2, '0') + '/' + String(e.tm.mo).padStart(2, '0') + '/' + e.tm.y, evs: [] }; days.push(d); } d.evs.push(c); });
+days.forEach((d) => { d.n = d.evs.length + ' sự kiện'; const dc = s.tlDC || {}; const op = !dc[d.k]; d.isOpen = op; d.ariaOpen = op ? 'true' : 'false'; d.chev = 'transform: rotate(' + (op ? 0 : -90) + 'deg)'; d.toggle = () => this.setState({ tlDC: Object.assign({}, this.state.tlDC || {}, { [d.k]: op }) });
+d.evs.forEach((e) => { const ex = !!(s.tlEx || {})[e.uid]; e.exp = ex; e.ariaExp = ex ? 'true' : 'false'; e.chev = 'transition: transform 120ms; transform: rotate(' + (ex ? 0 : -90) + 'deg)'; e.toggle = () => this.setState({ tlEx: Object.assign({}, this.state.tlEx || {}, { [e.uid]: !ex }) }); }); });
+const first = sorted[0], last = sorted[sorted.length - 1]; const fmt = (x) => x ? String(x.tm.d).padStart(2, '0') + '/' + String(x.tm.mo).padStart(2, '0') + '/' + x.tm.y : '';
+const span = asc ? fmt(first) + ' → ' + fmt(last) : fmt(last) + ' → ' + fmt(first);
+const cntF = (k) => evs.filter((e) => k === 'all' || (GRP[k] || []).indexOf(e.ty) >= 0).length;
+const LANES = [['nl', 'Nguyên liệu', 'nap'], ['me', 'Mẻ sản xuất', 'me'], ['ra', 'Thành phẩm', 'ra'], ['qc', 'QC', 'qc'], ['giao', 'Giao & vận chuyển', 'giao']];
+const laneOf = (c) => { const k = Object.keys(GRP).find((g) => GRP[g].indexOf(c.ty === 'goc' ? 'goc' : c.ty) >= 0); return k || 'nl'; };
+const hdays = days.slice(); const cols = []; let prev = null;
+hdays.forEach((d) => { const [y, mo, dd] = d.k.split('-').map(Number); const dt = new Date(y, mo - 1, dd); if (prev) { const gap = Math.round((dt - prev) / 86400000); if (gap > 3) cols.push({ gap: true, txt: gap >= 60 ? '… ' + Math.round(gap / 30) + ' tháng' : '… ' + (gap - 1) + ' ngày' }); } prev = dt; cols.push({ gap: false, d: d }); });
+const gridCols = '168px ' + cols.map((c) => c.gap ? '64px' : 'minmax(200px, 1fr)').join(' ');
+const allCards = []; days.forEach((d) => d.evs.forEach((e) => allCards.push(e)));
+const lanes = LANES.map((L) => { const cells = cols.map((c) => { if (c.gap) return { gap: true, cls: 'hl-cell hl-cell--gap', evs: [], hasMore: false, hasLess: false }; const all = c.d.evs.filter((e) => laneOf(e) === L[0]).map((e) => Object.assign({}, e, { open: () => this.setState({ tlSel: e.uid }) })); const ck = L[0] + '|' + c.d.k; const ex = !!(s.tlExp || {})[ck]; const cut = all.length > 4 && !ex; const evs = cut ? all.slice(0, 3) : all;
+return { gap: false, cls: 'hl-cell' + (all.length ? '' : ' is-empty'), evs: evs, hasMore: cut, more: '+ ' + (all.length - 3) + ' sự kiện nữa', hasLess: all.length > 4 && ex, toggle: () => this.setState({ tlExp: Object.assign({}, this.state.tlExp || {}, { [ck]: !ex }) }) }; });
+const n = cells.reduce((a, c) => a + c.evs.length, 0); return { key: L[0], label: L[1], n: n + ' sự kiện', labCls: 'hl-lab hl-lane--' + L[2], cells: cells.map((c) => Object.assign(c, { cls: c.cls + ' hl-lane--' + L[2] })), show: n > 0 }; }).filter((l) => l.show);
+const head = cols.map((c) => c.gap ? { gap: true, txt: c.txt, cls: 'hl-hd hl-hd--gap' } : { gap: false, isDay: true, day: c.d.day, mon: c.d.mon, wd: c.d.wd, n: c.d.evs.length + '', cls: 'hl-hd' });
+const selC = allCards.find((e) => e.uid === s.tlSel) || null;
+const H = { gridStyle: 'grid-template-columns: ' + gridCols, head: head, lanes: lanes, hasSel: !!selC, sel: selC || {}, closeSel: () => this.setState({ tlSel: '' }) };
+return { H: H, isH: (s.tlView || 'h') === 'h', isV: s.tlView === 'v', viewH: () => this.setState({ tlView: 'h' }), viewV: () => this.setState({ tlView: 'v' }), hCls: (s.tlView || 'h') === 'h' ? 'seg-b on' : 'seg-b', vCls: s.tlView === 'v' ? 'seg-b on' : 'seg-b', hOn: (s.tlView || 'h') === 'h' ? 'true' : 'false', vOn: s.tlView === 'v' ? 'true' : 'false',
+days: days, noDays: !days.length, span: span, nEv: evs.length + ' sự kiện · ' + days.length + ' ngày',
+filters: FIL.filter((x) => x[0] === 'all' || cntF(x[0]) > 0).map((x) => ({ t: x[1], n: String(cntF(x[0])), cls: 'tl-chip' + (x[0] === f ? ' on' : ''), on: x[0] === f ? 'true' : 'false', go: () => this.setState({ tlF: x[0] }) })),
+fopts: FIL.filter((x) => x[0] === 'all' || cntF(x[0]) > 0).map((x) => ({ v: x[0], t: x[1] + ' · ' + cntF(x[0]) })), fval: f, setF: (ev) => this.setState({ tlF: ev && ev.target ? ev.target.value : 'all' }),
+openAll: () => { const ex = {}; days.forEach((d) => d.evs.forEach((e) => { ex[e.uid] = true; })); this.setState({ tlDC: {}, tlEx: ex }); }, closeAll: () => { const dc = {}; days.forEach((d) => { dc[d.k] = true; }); this.setState({ tlDC: dc, tlEx: {} }); },
+dirT: asc ? 'Cũ → mới' : 'Mới → cũ', flip: () => this.setState({ tlDir: asc ? 'desc' : 'asc' }),
+ton: ton.map((e) => card(e)), hasTon: ton.length > 0, tonN: ton.length + ' phần tồn' }; })();
+const fnU = (v, u) => this.fn(v) + (u ? ' ' + u : '');
+const endU = balRows.some((b) => b.unit === 'lon') ? 'lon' : ((balRows[0] || {}).unit || '');
+const rowsU = balRows.filter((b) => b.unit === endU);
+const sumV = (k) => rowsU.reduce((a, b) => a + (b.v[k] || 0), 0);
+const tonU = sumV(6), chuyenU = sumV(7), mlU = sumV(5), huyU = sumV(4);
+const rootB = balRows.find((b) => b.lot === t.lot);
+const rootLeft = rootB && rootB.unit !== endU ? rootB.v[6] + rootB.v[7] : 0;
+const STK = t.tree.filter((n) => n.kind === 'Tồn kho' || n.kind === 'Đang chuyển').map((n) => { const p = parOf(n); const ml = /MAUQC/.test(n.code);
+return { c: this.X(n.lk, n.code), where: n.kind === 'Đang chuyển' ? 'đang chuyển' : (ml ? 'mẫu lưu QC' : 'kho'), lot: this.X(p ? p.code : ''), qty: n.qty, note: [n.item, n.itemSub].filter((x) => !!x).join(' · ') || '—', at: n.at }; });
+const stockSum = fnU(tonU + chuyenU, endU) + (mlU ? ' + ' + fnU(mlU, endU) + ' mẫu lưu' : '') + (rootLeft ? ' · ' + fnU(rootLeft, rootB.unit) + ' ' + t.lot + ' chưa dùng' : '');
+const INP = uniq(t.tree.filter((n) => n.p && /^(Lô NVL|Lô bao bì|Lô hỗn hợp)$/.test(n.kind))).map((n) => { const p = parOf(n); return Object.assign(mk(n, 0, true), { par: p ? p.code : '—' }); });
+const BADST = /Khóa|Không đạt|Hủy/;
+const badLots = lotsOf(t).filter((l) => { const st = LS[l]; const d = DOC[l]; return (st && BADST.test(st[0])) || (d && d.ncr); });
+const nIn = INP.length;
+const kLech = { k: 'Cân bằng khối lượng', v: nLech ? 'Lệch ' + nLech + ' lô' : 'Khớp', sub: nLech ? 'đang kiểm kho · không chặn báo cáo' : balRows.length + ' lô', box: nLech ? 'is-warn' : '' };
+const KP = isNg ? [
+{ k: 'Nguyên liệu và bao bì', v: nIn + ' lô', sub: nNcc + ' nhà cung cấp', box: '' },
+{ k: 'Mẻ sản xuất', v: nMe + ' mẻ', sub: nNode + ' nút silo', box: '' },
+{ k: 'Lô có vấn đề', v: badLots.length ? badLots.length + ' lô' : 'Không có', sub: badLots.length ? badLots.slice(0, 3).join(', ') + (badLots.length > 3 ? '…' : '') : 'khóa / không đạt / NCR', box: badLots.length ? 'is-bad' : '' }, kLech]
+: [
+{ k: 'Đã giao khách', v: t.cust.length ? this.fn(custQty) + ' lon' : 'Chưa giao', sub: t.cust.length ? t.cust.length + ' khách' : '—', box: '' },
+{ k: 'Còn trong nhà máy', v: fnU(tonU + chuyenU, endU), sub: (chuyenU ? fnU(chuyenU, endU) + ' đang chuyển' : STK.filter((x) => x.where === 'kho').map((x) => x.c.id).filter((v, i, a) => a.indexOf(v) === i).length + ' kho') + (rootLeft ? ' · + ' + fnU(rootLeft, rootB.unit) + ' ' + t.lot : ''), box: '' },
+{ k: 'Mẫu lưu · hủy', v: fnU(mlU + huyU, endU), sub: fnU(mlU, '') + ' mẫu lưu · ' + fnU(huyU, '') + ' hủy', box: '' }, kLech];
+const CH = [{ t: t.lot, cls: 'chip-l is-root' + (!s.layer && TAB === 'chuoi' ? ' on' : ''), on: 'false', arr: false, go: () => this.setState({ tab: 'chuoi', cview: 'cay', layer: '', kqF: '' }) }].concat(LAY.map((L) => {
+const n = L[0] === 'khach' ? t.cust.map((c) => c[0]).filter((v, i, a) => a.indexOf(v) === i).length : layerNodes(L).length;
+const toKq = L[0] === 'khach' || L[0] === 'ton'; const on = toKq ? (TAB === 'kq' && s.kqF === L[0]) : (s.layer === L[0] && TAB === 'chuoi' && cview !== 'tl');
+return { t: n + ' ' + L[2], n: n, cls: 'chip-l' + (on ? ' on' : ''), on: on ? 'true' : 'false', arr: true, go: () => this.setState(toKq ? { tab: 'kq', kqF: on ? '' : L[0] } : { tab: 'chuoi', cview: 'cay', layer: on ? '' : L[0], kqF: '' }) }; }).filter((c) => c.n > 0));
+const BC = [[0, 'SL vào'], [1, 'Dùng SX'], [2, 'Giao khách'], [3, 'Trả NCC'], [4, 'Hủy'], [5, 'Mẫu lưu'], [6, 'Tồn'], [7, 'Đang chuyển']];
+const BCOL = BC.filter((c) => c[0] === 0 || balRows.some((b) => b.v[c[0]]));
+const balAll = !!s.balAll || nLech === 0;
+const balShow = balAll ? balRows : balRows.filter((b) => b.lech !== 0);
+base.D = {
+code: t.code, st: t.st, stCls: STC[t.st] || 'mp-doc', dir: 'Truy ' + t.dir.toLowerCase(), back: () => this.setState({ scr: 'list', toast: '' }),
+src: t.src, srcDoc: this.X(t.srcDoc), hasSrcDoc: !!t.srcDoc, reason: t.reason, inp: this.inLabel(t) + ' ' + t.inCode + (t.inCode !== t.lot ? ' → lô ' + t.lot : ''), lot: this.X(t.lot), by: t.by, at: t.at, end: t.end,
+offline: !!t.offline,
+kpis: KP,
+chips: CH,
+tabs: TABS2.map((x) => ({ t: x[1], cls: x[0] === TAB ? 'tab on' : 'tab', go: () => this.setState({ tab: x[0], cview: cview, kqF: '' }), n: x[0] === 'hoso' && nLech ? '!' : '', hasN: x[0] === 'hoso' && nLech > 0 })),
+hasProd: !!P, P: P || { sl: {}, cl: {}, tg: {}, cd: [], tot: {}, lsx: this.X('') }, isCd: TAB === 'cd' && !!P,
+isKqX: TAB === 'kq' && !isNg, isKqN: TAB === 'kq' && isNg, isChuoi: TAB === 'chuoi', isHoso: TAB === 'hoso', TL: TLV,
+isCay: cview !== 'tl', isTlv: cview === 'tl',
+cvCay: { cls: cview !== 'tl' ? 'seg-b on' : 'seg-b', on: cview !== 'tl' ? 'true' : 'false', go: () => this.setState({ tab: 'chuoi', cview: 'cay' }) },
+cvTl: { cls: cview === 'tl' ? 'seg-b on' : 'seg-b', on: cview === 'tl' ? 'true' : 'false', go: () => this.setState({ tab: 'chuoi', cview: 'tl' }) },
+hasLayer: !!curL, noLayer: !curL, layerT: curL ? layerNodes(curL).length + ' ' + curL[2] : '', clearLayer: () => this.setState({ layer: '' }),
+showCust: s.kqF !== 'ton', showStock: s.kqF !== 'khach', hasKqF: !!s.kqF && TAB === 'kq', kqFT: s.kqF === 'ton' ? 'Đang xem: phần còn trong nhà máy' : 'Đang xem: khách đã nhận', clearKqF: () => this.setState({ kqF: '' }),
+stock: STK, hasStock: STK.length > 0, noStock: STK.length === 0, stockSum: STK.length ? STK.length + ' phần · ' + stockSum : 'không còn',
+inputs: INP, inSum: INP.length + ' lô · ' + nNcc + ' NCC',
+treeTitle: isNg ? 'Chuỗi ngược từ lô ' + t.lot : 'Chuỗi xuôi từ lô ' + t.lot,
+tree: rows, expandAll: () => this.setState({ closed: {} }), collapseAll: () => { const c = {}; ids.forEach((i) => { c[i] = true; }); c.r = false; this.setState({ closed: c }); },
+cust: t.cust.map((c) => ({ kh: this.X(c[0]), name: c[1], dh: this.X(c[2]), px: this.X(c[3]), lot: this.X(c[4]), qty: this.fn(c[5]) + ' lon', at: c[6] })), hasCust: t.cust.length > 0, noCust: t.cust.length === 0,
+custSum: t.cust.length ? t.cust.length + ' khách · ' + this.fn(custQty) + ' lon' : 'chưa giao khách',
+docs: lotsOf(t).map((lot) => { const d = DOC[lot] || { qc: [], cn: [], ml: [], coa: '', ncr: '', pos: '' }; const st = LS[lot] || ['—', '']; const b = this.BAL()[lot];
+return { lot: this.X(lot), kind: b ? b[0] : '', qc: d.qc.concat(d.cn).map((c) => this.X(c)), hasQc: d.qc.length + d.cn.length > 0, noQc: d.qc.length + d.cn.length === 0, ml: d.ml.map((c) => this.X(c)), hasMl: d.ml.length > 0, noMl: d.ml.length === 0,
+coa: d.coa || '—', ncr: d.ncr || '—', st: st[0], stCls: LCL[st[0]] || 'mp-lot', why: st[1], hasWhy: !!st[1], pos: d.pos || '—' }; }),
+bal: balShow.map((b) => ({ lot: this.X(b.lot), kind: b.kind, unit: b.unit, cells: BCOL.map((c) => ({ v: this.fn(b.v[c[0]]) })), v0: this.fn(b.v[0]), v1: this.fn(b.v[1]), v2: this.fn(b.v[2]), v3: this.fn(b.v[3]), v4: this.fn(b.v[4]), v5: this.fn(b.v[5]), v6: this.fn(b.v[6]), v7: this.fn(b.v[7]), lech: b.lech ? (b.lech > 0 ? '−' : '+') + this.fn(Math.abs(b.lech)) : '0', lechCls: b.lech ? 'mp-num txt-bad' : 'mp-num', ok: !b.lech, bad: !!b.lech, rowCls: b.lech ? 'row-bad' : '',
+hasCl: !!b.lech && !!cl, noCl: !!b.lech && !cl, kk: cl ? this.X(cl.kk) : this.X(''), clBy: cl ? cl.by + ' · ' + cl.at : '' })),
+balCols: BCOL.map((c) => ({ t: c[1] })), balT: { has: nLech > 0, t: balAll ? 'Chỉ xem lô lệch' : 'Xem cả ' + balRows.length + ' lô', go: () => this.setState({ balAll: !balAll }) },
+cl: { has: !!cl, none: nLech > 0 && !cl, lot: cl ? this.X(cl.lot) : this.X(''), qty: cl ? cl.qty : '', by: cl ? cl.by + ' · ' + cl.at : '', why: cl ? cl.why : '', kk: cl ? this.X(cl.kk) : this.X(''), reuse: !!(cl && cl.reuse),
+can: nLech > 0 && !cl && !gKho, g: nLech > 0 && !cl ? gKho : null, val: s.bb.why, set: (ev) => this.setState({ bb: { qty: '', why: ev && ev.target ? ev.target.value : '' }, err: '' }), save: () => this.saveCl(), hasErr: !!s.err, err: s.err },
+log: MPLOG.view(t.hist.map((h) => ({ who: h.who, what: h.what, at: h.t, cls: h.key ? 'is-key' : '' })), { all: !!s.logAll, toggle: () => this.setState({ logAll: !this.state.logAll }), link: MPX.ref(t.code, role, 'NhatKy-n5jd') }),
+// kết quả
+report: t.report, hasReport: !!t.report, noReport: !t.report, canReport: isTx && !t.report, doReport: () => this.report(), gRep: !t.report ? gTx : null,
+ret: t.ret ? t.ret.to + ' · ' + t.ret.at : '', hasRet: !!t.ret, canRet: isTx && !t.ret && !!t.report, doRet: () => this.giveBack(), gRet: !t.ret && t.report ? gTx : null, needRep: !t.ret && !t.report,
+th: thRef, hasTh: !!t.th, noTh: !t.th, toTh: toTh,
+thNote: t.src === 'Thu hồi' ? 'Phiếu này là bước truy xuất của hồ sơ trên.' : (t.th ? '' : 'Do QC trưởng mở khi cần.')
+};
+return base;
+}
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Đăng nhập</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; min-height: 900px; background: var(--surface-0); display: flex; flex-wrap: wrap; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line)">
+<section style="flex: 1 1 480px; background: var(--brand); color: var(--on-brand); padding: 56px 64px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; box-sizing: border-box">
+<div style="font-size: 26px; font-weight: 700; letter-spacing: -0.01em">MES Powder</div>
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 460px">
+<div style="font-size: 36px; line-height: 44px; font-weight: 700">Quản lý sản xuất và truy xuất sữa bột lon</div>
+<div style="font-size: 20px; line-height: 28px">Bán hàng, mua hàng, kho, sản xuất, chất lượng, truy xuất và thu hồi — một nơi cho cả 2 nhà máy.</div>
+</div>
+<div style="font-size: 16px; line-height: 24px">Phiên bản 1.0 · Hỗ trợ: liên hệ Admin hệ thống</div>
+</section>
+<main style="flex: 1 1 560px; display: flex; align-items: center; justify-content: center; padding: 48px 24px; box-sizing: border-box; padding-top: 48px; padding-bottom: 48px">
+<div class="mp-card" style="width: 483px; max-width: 620px; padding: 32px; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 600">Đăng nhập</h1>
+</div>
+<div style="display: flex"><span class="mp-site mp-site--both" title="Có ở cloud và ở máy chủ nhà máy — khi mất mạng, người ở nhà máy vẫn dùng với việc của chứng từ nhà máy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="1.5"></rect><rect x="3" y="13" width="18" height="7" rx="1.5"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>Cloud + nhà máy · dùng được khi mất mạng</span></div>
+
+<sc-if value="{{isWrong}}" hint-placeholder-val="{{ false }}">
+<div class="mp-banner mp-banner--bad"><span><b>Sai mã nhân viên hoặc mật khẩu.</b> Kiểm tra lại, chú ý chữ hoa / thường.</span></div>
+</sc-if>
+<sc-if value="{{isLocked}}" hint-placeholder-val="{{ false }}">
+<div class="mp-banner mp-banner--bad"><span><b>Tài khoản đang bị khóa tạm</b> do không đăng nhập quá 90 ngày. Liên hệ Admin để mở khóa.</span></div>
+</sc-if>
+<sc-if value="{{isClosed}}" hint-placeholder-val="{{ false }}">
+<div class="mp-banner mp-banner--bad"><span><b>Tài khoản đã khóa</b> do nghỉ việc — không đăng nhập được, thẻ NV cũng bị chặn. Nếu có nhầm lẫn, liên hệ HR.</span></div>
+</sc-if>
+
+<sc-if value="{{isNormal}}" hint-placeholder-val="{{ true }}">
+<form style="display: flex; flex-direction: column; gap: 16px" onSubmit="{{noop}}">
+<div class="mp-field"><label for="ma">Mã nhân viên</label><input id="ma" class="mp-input" value="{{maNv}}" placeholder="NV0123" autocomplete="username" style="height: 40px; font-size: 19px"></div>
+<div class="mp-field"><label for="mk">Mật khẩu</label><input id="mk" class="mp-input" type="password" value="matkhau123" autocomplete="current-password" style="height: 40px; font-size: 19px"></div>
+<label style="display: flex; gap: 8px; align-items: center; font-size: 16px"><input type="checkbox"> Ghi nhớ trên máy này</label>
+<button type="submit" class="mp-btn mp-btn--primary" style="height: 44px; justify-content: center; font-size: 19px">Đăng nhập</button>
+</form>
+</sc-if>
+
+<sc-if value="{{isFirst}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div class="mp-banner mp-banner--info"><span><b>Đăng nhập lần đầu · {{maNv}}.</b> Đổi mật khẩu tạm Admin / HR đã cấp trước khi dùng hệ thống.</span></div>
+<div class="mp-field"><label for="mk1">Mật khẩu mới</label><input id="mk1" class="mp-input" type="password" value="" style="height: 40px"><span class="hint">Tối thiểu 8 ký tự, có chữ và số</span></div>
+<div class="mp-field"><label for="mk2">Nhập lại mật khẩu mới</label><input id="mk2" class="mp-input" type="password" value="" style="height: 40px"></div>
+<button type="button" class="mp-btn mp-btn--primary" style="height: 44px; justify-content: center; font-size: 19px">Đổi mật khẩu và vào hệ thống</button>
+</div>
+</sc-if>
+
+<div style="border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 16px; color: var(--ink-muted)">
+<span><b style="color: var(--ink)">Quên mật khẩu?</b> Liên hệ Admin để được cấp mật khẩu tạm.</span>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;trangThai&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Bình thường&quot;,&quot;Sai mật khẩu&quot;,&quot;Tài khoản bị khóa tạm&quot;,&quot;Tài khoản đã khóa (nghỉ việc)&quot;,&quot;Đăng nhập lần đầu&quot;],&quot;default&quot;:&quot;Đăng nhập lần đầu&quot;},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+renderVals() {
+const t = this.props.trangThai ?? 'Bình thường';
+return {
+isNormal: t === 'Bình thường' || t === 'Sai mật khẩu' || t === 'Tài khoản bị khóa tạm' || t === 'Tài khoản đã khóa (nghỉ việc)',
+isWrong: t === 'Sai mật khẩu',
+isLocked: t === 'Tài khoản bị khóa tạm',
+isClosed: t === 'Tài khoản đã khóa (nghỉ việc)',
+isFirst: t === 'Đăng nhập lần đầu',
+maNv: t === 'Tài khoản bị khóa tạm' ? 'NV0226' : t === 'Tài khoản đã khóa (nghỉ việc)' ? 'NV0457' : t === 'Đăng nhập lần đầu' ? 'NV0562' : 'NV0123',
+noop: (e) => { if (e && e.preventDefault) e.preventDefault(); }
+};
+}
+}
+</script>
+</body>
+</html>

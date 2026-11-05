@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Đơn vị</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+.req{color:var(--bad);margin-left:2px}
+.err{border-color:var(--bad)!important}
+.errtext{font-size:15px;line-height:20px;color:var(--bad)}
+.hint{font-size:15px;line-height:20px;color:var(--ink-muted)}
+.icon-btn{width:36px;height:36px;display:inline-grid;place-items:center;border:0;border-radius:8px;background:transparent;color:var(--ink-muted);cursor:pointer;flex:none;font-size:24px;line-height:1}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink)}
+.row-btn{height:32px;padding:0 10px;font-size:16px;font-weight:500;text-decoration:none;display:inline-flex;align-items:center}
+.mp-btn--ghost.is-bad{color:var(--bad)}
+.linkbtn{border:0;background:none;padding:0;font:600 18px/24px var(--font-sans);color:var(--ink);cursor:pointer;text-align:left}
+.linkbtn:hover{color:var(--brand);text-decoration:underline}
+.linkbtn:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);font:500 15px/1 var(--font-sans);color:var(--ink);white-space:nowrap}
+.box{border:1px solid var(--line);border-radius:10px;background:var(--surface-1)}
+
+
+.chk{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface-1)}
+.chk input{width:18px;height:18px;accent-color:var(--brand);margin:0}
+.ovl{position:absolute;inset:0;background:rgba(22,33,43,0.45);display:flex;justify-content:center;align-items:flex-start;padding:96px 16px 32px;box-sizing:border-box;z-index:40}
+
+
+
+
+
+
+.sec-t{font:600 18px/24px var(--font-sans);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tab{padding:8px 12px;text-decoration:none;border:0;border-bottom:2px solid transparent;background:none;font:400 18px/24px var(--font-sans);color:var(--ink-muted);cursor:pointer}
+.tab.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
+.acts{display:flex;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.mp-table th.mp-num{text-align:right}
+.mp-table td.c,.mp-table th.c{text-align:center}
+.ck{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px;background:var(--ok-soft);color:var(--ok);font-weight:700;font-size:16px;line-height:1}
+.ck--bad{background:var(--bad-soft);color:var(--bad)}
+.ck--wait{background:var(--wait-soft);color:var(--wait)}
+.links{display:flex;gap:6px 10px;flex-wrap:wrap;align-items:baseline}
+.tr-hl td{background:var(--brand-soft)}
+.kv2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 24px;margin:0}
+.kv2 dt{font-size:15px;line-height:20px;color:var(--ink-muted)}.kv2 dd{margin:2px 0 0;font-size:18px;line-height:24px}
+
+
+
+/* mp-shell v2 */
+.mp-nav{flex:0 0 256px;width:256px;background:var(--surface-1);border-right:1px solid var(--line);padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box}
+.mp-nav__brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;margin-bottom:6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.mp-nav__logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 15px/1 var(--font-sans);letter-spacing:.02em;flex:none}
+.mp-nav__brand b{font-size:19px;line-height:22px;display:block}.mp-nav__brand small{font-size:14px;line-height:18px;color:var(--ink-muted);display:block}
+.mp-nav__sec{font:600 14px/20px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:14px 10px 6px}
+.mp-nav__div{height:1px;background:var(--line);margin:8px 0}
+.mp-nav__item{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--ink);text-decoration:none;font:500 18px/24px var(--font-sans)}
+.mp-nav__item svg{flex:none;color:var(--ink-muted)}
+.mp-nav__item:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__item.is-on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-nav__item.is-on svg{color:var(--brand)}
+.mp-nav__item .mp-nav__count{margin-left:auto;min-width:26px;height:24px;padding:0 8px;border-radius:999px;background:var(--brand);color:var(--on-brand);font:600 15px/24px var(--font-sans);text-align:center;box-sizing:border-box}
+.mp-nav__subs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.mp-nav__subs .snav,.mp-nav__subs .navsub{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:none;border-radius:6px;padding:6px 10px;font:400 16px/22px var(--font-sans);color:var(--ink-muted);text-decoration:none;cursor:pointer;text-align:left;position:relative;box-sizing:border-box}
+.mp-nav__subs .snav:hover,.mp-nav__subs .navsub:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__subs .snav.on,.mp-nav__subs .navsub.on{color:var(--brand-strong);font-weight:600;background:var(--surface-2)}
+.mp-nav__subs .snav.on::before,.mp-nav__subs .navsub.on::before{content:"";position:absolute;left:-11px;top:6px;bottom:6px;width:2px;border-radius:2px;background:var(--brand)}
+.mp-nav__subs .navsub svg{display:none}
+.mp-nav__subs .snav.is-parent{color:var(--brand-strong);font-weight:600}
+.mp-nav__subs .mp-nav__subs{margin:0 0 2px 10px}
+.mp-nav__foot{margin-top:auto;padding:12px 10px 2px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink-muted)}
+.mp-nav__foot button{white-space:nowrap;border:0;background:none;color:var(--ink-muted);display:inline-flex;align-items:center;gap:6px;font:inherit;cursor:pointer;padding:4px;border-radius:6px}
+.mp-nav__foot button:hover{background:var(--surface-2);color:var(--ink)}
+.mp-hd{position:relative;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:10px 24px 10px 32px;background:var(--surface-1);border-bottom:1px solid var(--line);box-sizing:border-box}
+.mp-hd__crumb{font-size:16px;line-height:22px;color:var(--ink-muted);min-width:0;flex:1 1 220px}
+.mp-hd__right{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;flex:0 1 auto;min-width:0}
+.mp-hd__fac{display:inline-flex;align-items:center;gap:6px;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font:500 16px/1 var(--font-sans);color:var(--ink);cursor:pointer}
+.mp-hd__fac svg{color:var(--ink-muted)}
+.mp-hd__sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.mp-hd__right>.seg{height:40px;box-sizing:border-box;border-color:var(--line)}
+.mp-hd__right>.seg .segbtn{display:inline-flex;align-items:center;padding:0 12px}
+.mp-hd__right>.conn{height:40px;box-sizing:border-box;border-radius:8px;padding:0 12px;font-size:16px}
+.mp-pop{position:relative}
+.mp-pop>summary{list-style:none;cursor:pointer}
+.mp-pop>summary::-webkit-details-marker{display:none}
+.mp-bell>summary{position:relative;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.mp-bell>summary:hover,.mp-bell[open]>summary{background:var(--surface-2)}
+.mp-bell__dot{position:absolute;top:3px;left:18px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--bad-solid);color:var(--on-solid);font:600 13px/18px var(--font-sans);text-align:center;box-sizing:border-box;border:2px solid var(--surface-1)}
+.mp-me>summary{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 4px;border-radius:999px;margin-left:4px}
+.mp-me>summary:hover,.mp-me[open]>summary{background:var(--surface-2)}
+.mp-av{width:32px;height:32px;border-radius:999px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 15px/1 var(--font-sans);flex:none}
+.mp-av--lg{width:44px;height:44px;font-size:19px}
+.mp-me__txt{display:flex;flex-direction:column;line-height:20px;max-width:190px}
+.mp-me__txt b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me__txt small{font-size:15px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me>summary>svg{color:var(--ink-muted)}
+.mp-pop__panel{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:30;overflow:hidden;text-align:left}
+.mp-pop__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.mp-pop__head a{font-size:15px}
+.mp-pop a{text-decoration:none}.mp-pop a:hover{text-decoration:underline}
+.mp-pop__foot{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;background:var(--surface-0)}
+.mp-noti{width:380px}
+.mp-noti__tabs{display:flex;gap:4px;padding:8px 12px 0}
+.mp-noti__tabs span{padding:6px 10px;border-radius:6px;font-size:15px;color:var(--ink-muted)}
+.mp-noti__tabs span.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-noti ul{list-style:none;margin:0;padding:6px 0}
+.mp-noti li{display:flex;gap:10px;padding:10px 16px;position:relative}
+.mp-noti li:hover{background:var(--surface-0)}
+.mp-noti li.is-unread::after{content:"";position:absolute;right:14px;top:16px;width:8px;height:8px;border-radius:999px;background:var(--brand)}
+.mp-noti li p{margin:0;font-size:16px;line-height:22px;padding-right:14px}
+.mp-noti li.is-unread p{font-weight:500}
+.mp-noti li time{display:block;font-size:15px;color:var(--ink-muted);margin-top:2px}
+.mp-noti__ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.mp-noti__ic.ok{background:var(--ok-soft);color:var(--ok)}.mp-noti__ic.wait{background:var(--wait-soft);color:var(--wait)}.mp-noti__ic.bad{background:var(--bad-soft);color:var(--bad)}.mp-noti__ic.info{background:var(--brand-soft);color:var(--brand)}
+.mp-me__panel{width:300px}
+.mp-me__who{display:flex;gap:12px;align-items:center;padding:16px}
+.mp-me__who b{display:block;font-size:18px}.mp-me__who small{display:block;font-size:15px;color:var(--ink-muted)}
+.mp-me__roles{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.mp-me__roles span{font-size:15px;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.mp-me__menu{list-style:none;margin:0;padding:6px;border-top:1px solid var(--line)}
+.mp-me__menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:16px;color:var(--ink);text-decoration:none}
+.mp-me__menu a:hover{background:var(--surface-2)}
+.mp-me__menu a svg{color:var(--ink-muted)}
+.mp-me__menu a.bad{color:var(--bad)}.mp-me__menu a.bad svg{color:var(--bad)}
+.mp-hd__as{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 10px;border:1px dashed var(--line-strong);border-radius:8px;font:500 15px/1 var(--font-sans);color:var(--ink-muted);box-sizing:border-box}
+.mp-hd__as select{height:34px;border:0;background:transparent;font:600 16px/1 var(--font-sans);color:var(--ink);padding:0 4px;cursor:pointer}
+.mp-gate{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-0);font-size:15px;line-height:20px;color:var(--ink-muted)}
+.mp-gate b{color:var(--ink);font-weight:600}
+.mp-gate button{border:0;background:none;padding:0;font:600 15px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-decoration:underline}
+a.mp-xlink{color:var(--brand);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+a.mp-xlink:hover{color:var(--brand-strong);border-bottom-style:solid}
+a.mp-xlink.mp-code{font-family:var(--font-mono)}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+.mp-pg{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-muted)}
+.mp-pg__nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.mp-pg__n{min-width:40px;height:40px;padding:0 10px;box-sizing:border-box;border:1px solid var(--line);border-radius:var(--radius-md,6px);background:var(--surface-1,#fff);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.mp-pg__n:hover:not(:disabled){border-color:var(--line-strong);background:var(--surface-2)}
+.mp-pg__n.is-on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff)}
+.mp-pg__n:disabled{opacity:.4;cursor:default}
+.mp-pg__n:focus-visible{outline:2px solid var(--focus-ring,var(--brand));outline-offset:2px}
+.mp-pg__n svg{width:16px;height:16px}
+.mp-pg__gap{padding:0 4px}
+.mp-pg__size{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.mp-pg__size select{width:auto;min-width:76px;height:40px;padding:0 8px}
+.toastbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.xbtn{border:0;background:none;color:var(--ink-muted);cursor:pointer;font-size:24px;line-height:1;padding:4px 8px;border-radius:6px}
+.xbtn:hover{background:var(--surface-2);color:var(--ink)}
+.lnk{border:0;background:none;padding:0;font:inherit;color:var(--brand);cursor:pointer;text-decoration:none;border-bottom:1px dotted currentColor}
+.lnk:hover{color:var(--brand-strong);border-bottom-style:solid}
+tr.is-hl td{background:var(--brand-soft)}
+.is-dim{opacity:.55}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.dv-lock{color:var(--ink-muted)}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; position: relative; min-height: 1000px; background: var(--surface-0); display: flex; flex-wrap: wrap; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line)">
+<nav aria-label="Phân hệ" class="mp-nav">
+<a href="HopDuyet.dc.html" class="mp-nav__brand"><span class="mp-nav__logo">MP</span><span><b>MES Powder</b><small>Quản lý sản xuất sữa bột</small></span></a>
+<a href="{{vx.m.href.viec}}" onClick="{{vx.m.go.viec}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span>Việc cần làm</span><span class="mp-nav__count">9</span></a>
+<div class="mp-nav__div"></div>
+<sc-if value="{{vx.m.show.ban}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.ban}}" onClick="{{vx.m.go.ban}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><path d="M7 7h.01"></path></svg><span>Bán hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.mua}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.mua}}" onClick="{{vx.m.go.mua}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Mua hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.kt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kt}}" onClick="{{vx.m.go.kt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg><span>Kế toán</span></a></sc-if>
+<sc-if value="{{vx.m.show.kho}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kho}}" onClick="{{vx.m.go.kho}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg><span>Kho</span></a></sc-if>
+<sc-if value="{{vx.m.show.sx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.sx}}" onClick="{{vx.m.go.sx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20V9l6 4V9l6 4V5h3l1 15z"></path><path d="M2 20h20"></path></svg><span>Sản xuất</span></a></sc-if>
+<sc-if value="{{vx.m.show.cl}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.cl}}" onClick="{{vx.m.go.cl}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span>Chất lượng</span></a></sc-if>
+<sc-if value="{{vx.m.show.tx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.tx}}" onClick="{{vx.m.go.tx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg><span>Truy xuất &amp; thu hồi</span></a></sc-if>
+<sc-if value="{{vx.m.show.dm}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.dm}}" onClick="{{vx.m.go.dm}}" class="mp-nav__item is-on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>Danh mục</span></a>
+<div class="mp-nav__subs">
+<sc-if value="{{vx.m.show.dm_nvl}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.dm_nvl}}" href="DanhMuc-15tr.dc.html" class="snav">Nguyên vật liệu</a></sc-if>
+<sc-if value="{{vx.m.show.sx_ct}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.sx_ct}}" href="CongThuc-qdhl.dc.html" class="snav">Công thức</a></sc-if>
+<sc-if value="{{vx.m.show.dm_sp}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.dm_sp}}" href="DanhMucSP-zd4p.dc.html" class="snav">Sản phẩm</a></sc-if>
+<sc-if value="{{vx.m.show.dm_dv}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.dm_dv}}" href="DonVi-u7dv.dc.html" class="snav on">Đơn vị</a></sc-if>
+<sc-if value="{{vx.m.show.dm_nm}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.dm_nm}}" href="NhaMay-qd07.dc.html" class="snav">Nhà máy</a></sc-if>
+<sc-if value="{{vx.m.show.dm_hs}}" hint-placeholder-val="{{ true }}"><a onClick="{{vx.m.go.dm_hs}}" href="HoSoPhapLy-h7pl.dc.html" class="snav">Hồ sơ pháp lý chung</a></sc-if>
+</div></sc-if>
+<sc-if value="{{vx.m.show.qt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.qt}}" onClick="{{vx.m.go.qt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span>Quản trị</span></a></sc-if>
+<div class="mp-nav__foot"><span>MES Powder v1.0</span><button type="button" aria-label="Thu gọn menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l-5-5 5-5"></path><path d="M18 17l-5-5 5-5"></path></svg>Thu gọn</button></div>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header class="mp-hd"><div class="mp-hd__crumb">Danh mục / <span style="color: var(--ink)">Đơn vị</span></div><div class="mp-hd__right"><span class="mp-site mp-site--cloud" title="Màn chỉ có trên cloud — người ở nhà máy không vào được khi nhà máy mất mạng"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>Chỉ trên cloud</span><label class="mp-hd__as" title="Mô phỏng: đổi vai trò người đang dùng"><span>Xem như</span><select value="{{vx.role}}" onChange="{{vx.set}}" aria-label="Xem như vai trò"><sc-for list="{{vx.optl}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></label><button type="button" class="mp-hd__fac" aria-label="Nhà máy đang xem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{vx.fac}}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button><span class="mp-hd__sep"></span><details class="mp-pop mp-bell"><summary aria-label="Thông báo, 3 chưa đọc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="mp-bell__dot">3</span></summary><div class="mp-pop__panel mp-noti"><div class="mp-pop__head"><b>Thông báo</b><a href="#">Đánh dấu tất cả đã đọc</a></div><div class="mp-noti__tabs"><span class="on">Chưa đọc 3</span><span>Tất cả</span></div><ul><li class="is-unread"><span class="mp-noti__ic ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><p>Phiếu nhập <span class="mp-code">PN-NM1-2610-0031</span> chờ Thủ kho trưởng xác nhận lệch — 1 bao rách đã tách trả NCC</p><time>10 phút trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic wait"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><p>2 lô hết hạn chưa hủy quá 30 ngày ở <span class="mp-code">NM1-TONG</span></p><time>1 giờ trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></span><div><p>Lệnh <span class="mp-code">LSX-2610-0011</span> chưa tới server NM1 quá 10 phút — đang gửi lại</p><time>2 giờ trước · Sản xuất</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"></path></svg></span><div><p>Nhắc nợ: <span class="mp-code">KH-0012</span> có khoản quá hạn 4 ngày</p><time>Hôm qua · Kế toán</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span><div><p>Vai trò ủy quyền QC trưởng của bạn hết hạn ngày 21/10</p><time>Hôm qua · Quản trị</time></div></li></ul><div class="mp-pop__foot"><a href="HopDuyet.dc.html">Việc chờ duyệt ở Việc cần làm →</a><a href="#">Xem tất cả</a></div></div></details><details class="mp-pop mp-me"><summary aria-label="Tài khoản"><span class="mp-av">{{vx.ini}}</span><span class="mp-me__txt"><b>{{vx.name}}</b><small>{{vx.label}}</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></summary><div class="mp-pop__panel mp-me__panel"><div class="mp-me__who"><span class="mp-av mp-av--lg">{{vx.ini}}</span><span><b>{{vx.name}}</b><small>{{vx.label}} · {{vx.fac}}</small></span></div><ul class="mp-me__menu"><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Hồ sơ của tôi</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Vai trò &amp; ủy quyền</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zM15.5 7.5l3 3L22 7l-3-3"></path></svg>Đổi mật khẩu</a></li><li><a href="DangNhap.dc.html" class="bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Đăng xuất</a></li></ul></div></details></div></header>
+<sc-if value="{{vx.m.deny}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0; box-sizing: border-box; width: 100%"><div class="mp-banner mp-banner--warn" role="status"><span><b>Vai trò {{vx.role}} không có quyền vào màn này.</b> <a href="{{vx.m.homeHref}}" onClick="{{vx.m.homeGo}}">Về Việc cần làm</a></span></div></div></sc-if>
+<div style="padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; width: 100%">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px; max-width: 920px">
+<h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 600">Đơn vị</h1>
+</div>
+<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><sc-if value="{{canEdit}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-btn mp-btn--primary" onClick="{{addNew}}">+ Thêm đơn vị</button></sc-if><sc-if value="{{g}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{g.who}}</b><sc-if value="{{g.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{g.why}}</sc-if><button type="button" onClick="{{g.sw}}">Xem như {{g.who}}</button></span></sc-if></div>
+</div>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info toastbar" role="status"><span>{{toast}}</span><button type="button" class="xbtn" aria-label="Ẩn" onClick="{{closeToast}}">×</button></div></sc-if>
+<sc-if value="{{hasMiss}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn"><span>Không tìm thấy đơn vị <b>{{miss}}</b>.</span></div></sc-if>
+
+<div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end">
+<div class="mp-field" style="flex: 1 1 260px"><label for="dv-q">Tìm</label><input id="dv-q" class="mp-input" value="{{f.q}}" onChange="{{f.setQ}}" placeholder="Mã, tên…"></div>
+<div class="mp-field" style="flex: 0 1 190px"><label for="dv-k">Loại</label><select id="dv-k" class="mp-input" value="{{f.k}}" onChange="{{f.setK}}"><option value="">Mọi loại</option><sc-for list="{{f.kinds}}" as="o" hint-placeholder-count="3"><option value="{{o}}">{{o}}</option></sc-for></select></div>
+<div class="mp-field" style="flex: 0 1 230px"><label for="dv-s">Tham chiếu</label><select id="dv-s" class="mp-input" value="{{f.s}}" onChange="{{f.setS}}"><option value="">Tất cả</option><option value="Đang được dùng">Đang được dùng (khóa)</option><option value="Chưa có tham chiếu">Chưa có tham chiếu</option></select></div>
+</div>
+
+<div class="mp-card" style="min-width: 0; overflow-x: auto">
+<div class="mp-card__head"><h2 class="mp-card__title">Danh sách đơn vị</h2><span class="mp-muted" style="font-size: 15px">{{countT}}</span></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 900px">
+<thead><tr><th>Mã</th><th>Tên</th><th>Loại</th><th>Quy đổi</th><th>Tham chiếu</th><th>Trạng thái</th><th class="mp-actions"><span class="sr">Thao tác</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="u" hint-placeholder-count="10">
+<tr class="{{u.rowCls}}">
+<td class="mp-nowrap"><span class="mp-code" style="font-weight: 600">{{u.code}}</span></td>
+<td class="mp-nowrap">{{u.name}}<span class="mp-sub">{{u.sub}}</span></td>
+<td class="mp-nowrap">{{u.kind}}</td>
+<td style="font-size: 16px">{{u.conv}}</td>
+<td><sc-if value="{{u.hasRefs}}" hint-placeholder-val="{{ true }}"><button type="button" class="lnk" style="font-size: 16px; text-align: left" onClick="{{u.openRefs}}" aria-label="{{u.refAria}}">{{u.refT}}</button></sc-if><sc-if value="{{u.noRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-muted" style="font-size: 16px">Chưa có</span></sc-if></td>
+<td class="mp-nowrap"><span class="{{u.stCls}}">{{u.stT}}</span></td>
+<td class="mp-actions mp-nowrap"><div class="mp-rowact">
+<sc-if value="{{u.canMod}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-iconbtn" aria-label="{{u.editLabel}}" title="Sửa" onClick="{{u.edit}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button><button type="button" class="mp-iconbtn mp-iconbtn--danger" aria-label="{{u.delLabel}}" title="Xóa" onClick="{{u.del}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"></path></svg></button></sc-if>
+<sc-if value="{{u.lockedAct}}" hint-placeholder-val="{{ true }}"><button type="button" class="mp-iconbtn dv-lock" aria-label="{{u.lockTip}}" title="{{u.lockTip}}" onClick="{{u.openRefs}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></button></sc-if>
+</div></td>
+</tr>
+</sc-for>
+<sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}"><tr><td colspan="7" class="mp-muted" style="text-align: center; padding: 24px">Không có đơn vị nào khớp bộ lọc. <button type="button" class="mp-btn mp-btn--ghost" onClick="{{f.clear}}">Bỏ lọc</button></td></tr></sc-if>
+</tbody>
+</table></div></div>
+<sc-if value="{{pg.show}}" hint-placeholder-val="{{ false }}"><nav class="mp-pg" aria-label="Phân trang"><span>Dòng {{pg.info}}</span><div class="mp-pg__nav"><button type="button" class="mp-pg__n" onClick="{{pg.prev}}" disabled="{{pg.atFirst}}" aria-label="Trang trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button><sc-for list="{{pg.nums}}" as="pn" hint-placeholder-count="3"><sc-if value="{{pn.btn}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{pn.cls}}" aria-current="{{pn.cur}}" aria-label="{{pn.aria}}" onClick="{{pn.go}}">{{pn.t}}</button></sc-if><sc-if value="{{pn.gap}}" hint-placeholder-val="{{ false }}"><span class="mp-pg__gap" aria-hidden="true">…</span></sc-if></sc-for><button type="button" class="mp-pg__n" onClick="{{pg.next}}" disabled="{{pg.atLast}}" aria-label="Trang sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button></div><label class="mp-pg__size">Số dòng/trang <select class="mp-input" value="{{pg.size}}" onChange="{{pg.setSize}}"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label></nav></sc-if>
+<div style="padding: 12px 16px; font-size: 16px; color: var(--ink-muted); display: flex; flex-direction: column; gap: 4px">
+<span>Chỉ đơn vị <b style="color: var(--ink)">chưa có tham chiếu</b> (mới tạo, chưa NVL, sản phẩm, công thức hay chứng từ nào dùng) mới sửa / xóa được.</span>
+<span>Cần đổi đơn vị đang dùng: thêm đơn vị mới rồi chọn nó ở mã mới — số liệu cũ giữ nguyên đơn vị cũ.</span>
+</div>
+</div>
+</div>
+</main>
+<sc-if value="{{dg.on}}" hint-placeholder-val="{{ false }}"><div class="ovl" style="z-index: 40"><div class="mp-dlg" role="dialog" aria-modal="true" aria-labelledby="dv-dt" style="max-width: 600px; width: 100%">
+<div class="mp-dlg__head"><h2 id="dv-dt">{{dg.title}}</h2><button type="button" class="xbtn" aria-label="Đóng" onClick="{{dg.close}}">×</button></div>
+<div class="mp-dlg__body" style="display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{dg.isForm}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{dg.isEdit}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" style="font-size: 16px"><span>Đơn vị này chưa có tham chiếu nên còn sửa được. Khi đã được dùng, đơn vị sẽ khóa.</span></div></sc-if>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+<div class="mp-field"><label for="dv-code">Mã<span class="req">*</span></label><input id="dv-code" class="{{dg.codeCls}}" value="{{dg.code}}" onChange="{{dg.setCode}}" placeholder="vd hop"><sc-if value="{{dg.hasCodeErr}}" hint-placeholder-val="{{ false }}"><span class="errtext">{{dg.codeErr}}</span></sc-if><sc-if value="{{dg.noCodeErr}}" hint-placeholder-val="{{ true }}"><span class="hint">Chữ thường không dấu, số, gạch dưới</span></sc-if></div>
+<div class="mp-field"><label for="dv-name">Tên<span class="req">*</span></label><input id="dv-name" class="{{dg.nameCls}}" value="{{dg.name}}" onChange="{{dg.setName}}" placeholder="vd hộp"><sc-if value="{{dg.hasNameErr}}" hint-placeholder-val="{{ false }}"><span class="errtext">{{dg.nameErr}}</span></sc-if></div>
+<div class="mp-field"><label for="dv-kind">Loại<span class="req">*</span></label><select id="dv-kind" class="mp-input" value="{{dg.ukSel}}" onChange="{{dg.setKind}}"><sc-for list="{{dg.kinds}}" as="o" hint-placeholder-count="3"><option value="{{o}}">{{o}}</option></sc-for><option value="__new">+ Khác</option></select><sc-if value="{{dg.newKind}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; align-items: center; margin-top: 6px"><input class="{{dg.nkCls}}" style="flex: 1 1 auto; min-width: 0" value="{{dg.nk}}" onChange="{{dg.setNk}}" placeholder="Tên loại mới" aria-label="Tên loại mới"><button type="button" class="mp-btn mp-btn--secondary row-btn" onClick="{{dg.addKind}}">＋ Thêm</button><button type="button" class="mp-btn mp-btn--ghost row-btn" onClick="{{dg.cancelKind}}">Hủy</button></div><sc-if value="{{dg.hasNkErr}}" hint-placeholder-val="{{ false }}"><span class="errtext">{{dg.nkErr}}</span></sc-if></sc-if></div>
+<div class="mp-field" style="grid-column: 1 / -1"><label for="dv-cvb">Quy đổi theo đơn vị gốc</label><div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span class="mp-nowrap">1 <b>{{dg.selfT}}</b> =</span><input id="dv-cvn" type="number" min="0" step="any" class="{{dg.cvnCls}}" style="width: 140px" value="{{dg.cvN}}" onChange="{{dg.setCvN}}" placeholder="Số lượng" aria-label="Số lượng đơn vị gốc" disabled="{{dg.noBase}}"><select id="dv-cvb" class="{{dg.cvbCls}}" style="flex: 1 1 220px" value="{{dg.cvBase}}" onChange="{{dg.setCvBase}}"><option value="">Không quy đổi</option><sc-for list="{{dg.bases}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div><sc-if value="{{dg.hasCvErr}}" hint-placeholder-val="{{ false }}"><span class="errtext">{{dg.cvErr}}</span></sc-if><sc-if value="{{dg.noCvErr}}" hint-placeholder-val="{{ true }}"><span class="hint">{{dg.cvHint}}</span></sc-if></div>
+</div>
+</sc-if>
+<sc-if value="{{dg.isDel}}" hint-placeholder-val="{{ false }}">
+<div style="font-size: 17px">Xóa đơn vị <b class="mp-code">{{dg.code}}</b> ({{dg.name}})?</div>
+<div class="mp-banner mp-banner--info" style="font-size: 16px"><span>Chưa có NVL, sản phẩm, công thức hay chứng từ nào dùng đơn vị này. Xóa xong ghi nhật ký hệ thống.</span></div>
+</sc-if>
+<sc-if value="{{dg.isRefs}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px"><sc-for list="{{dg.refLines}}" as="l" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px"><span>{{l.t}}</span><b class="mp-num">{{l.n}}</b></div></sc-for></div>
+<sc-if value="{{dg.hasEx}}" hint-placeholder-val="{{ false }}"><div style="font-size: 16px; color: var(--ink-muted); display: flex; gap: 6px 12px; flex-wrap: wrap; align-items: center"><span>Ví dụ:</span><sc-for list="{{dg.ex}}" as="x" hint-placeholder-count="3"><a href="{{x.href}}" class="mp-xlink mp-code" onClick="{{x.open}}">{{x.id}}</a></sc-for></div></sc-if>
+<div class="mp-banner mp-banner--warn" style="font-size: 16px"><span>{{dg.refNote}}</span></div>
+</sc-if>
+</div>
+<div class="mp-dlg__foot"><button type="button" class="mp-btn mp-btn--secondary" onClick="{{dg.close}}">{{dg.closeT}}</button><sc-if value="{{dg.isDel}}" hint-placeholder-val="{{ false }}"><button type="button" class="mp-btn mp-btn--danger" onClick="{{dg.ok}}">Xóa đơn vị</button></sc-if><sc-if value="{{dg.isForm}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{dg.okCls}}" onClick="{{dg.ok}}">{{dg.okLabel}}</button></sc-if></div>
+</div></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vaitro": {"editor": "enum", "options": ["Admin", "Thủ kho trưởng", "Kế hoạch", "Mua hàng", "QC"], "default": "Admin", "section": "Trạng thái hiển thị"}, "cheDo": {"editor": "enum", "options": ["Danh sách", "Thêm đơn vị", "Sửa đơn vị mới tạo", "Xem tham chiếu (khóa)"], "default": "Danh sách", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1100}}'>
+/* mp-xs: thanh cuộn ngang ngay dưới tiêu đề bảng + dưới đáy bảng — đồng bộ 2 thanh, chỉ hiện thanh trên khi bảng tràn */
+(function () {
+  if (typeof window === 'undefined' || window.__mpXs) return; window.__mpXs = true;
+  var lock = false;
+  function fit() {
+    var xs = document.querySelectorAll('.mp-xs');
+    for (var i = 0; i < xs.length; i++) {
+      var x = xs[i], t = x.children[0], b = x.children[1];
+      if (!t || !b || !t.classList.contains('mp-xs__top')) continue;
+      var w = b.scrollWidth, s = t.firstElementChild;
+      if (s && s.style.width !== w + 'px') s.style.width = w + 'px';
+      var over = w > b.clientWidth + 1 ? '1' : '0';
+      if (x.getAttribute('data-over') !== over) x.setAttribute('data-over', over);
+      var th = b.querySelector('table > thead');
+      var top = th ? Math.max(0, th.offsetHeight - 17) + 'px' : '0px';
+      if (x.style.getPropertyValue('--xs-top') !== top) x.style.setProperty('--xs-top', top);
+      if (over === '1' && t.scrollLeft !== b.scrollLeft) t.scrollLeft = b.scrollLeft;
+    }
+  }
+  var queued = false;
+  function later() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fit(); }); }
+  document.addEventListener('scroll', function (e) {
+    var el = e.target, x = el && el.parentElement;
+    if (lock || !x || !x.classList || !x.classList.contains('mp-xs')) return;
+    var other = el === x.children[0] ? x.children[1] : el === x.children[1] ? x.children[0] : null;
+    if (!other) return;
+    lock = true; other.scrollLeft = el.scrollLeft; requestAnimationFrame(function () { lock = false; });
+  }, true);
+  new MutationObserver(later).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+  window.addEventListener('resize', later);
+  setTimeout(fit, 0); setTimeout(fit, 400); setTimeout(fit, 1500);
+})();
+
+const MPX = {
+people: { 'Sales': ['Võ Thị Lan', 'NM1'], 'CSKH': ['Đinh Mỹ Linh', 'Tất cả nhà máy'], 'Kế hoạch': ['Đỗ Minh Khang', 'NM1'], 'Mua hàng': ['Mai Anh Thư', 'Tất cả nhà máy'], 'Trưởng BP Mua hàng': ['Tạ Văn Hùng', 'Tất cả nhà máy'], 'Thủ kho': ['Lê Văn Hải', 'NM1'], 'Thủ kho điều phối': ['Hồ Văn Nam', 'NM1'], 'Thủ kho trưởng': ['Trần Thị Mai', 'NM1'], 'QC': ['Ngô Thu Trang', 'NM1'], 'QC trưởng': ['Trần Thị Mai', 'NM1'], 'Kế toán': ['Ngô Bảo Ngọc', 'Tất cả nhà máy'], 'Kế toán trưởng': ['Bùi Minh Châu', 'Tất cả nhà máy'], 'Giám đốc': ['Lê Quang Minh', 'Tất cả nhà máy'], 'Người truy xuất': ['Ngô Thu Trang', 'NM1'], 'HR': ['Hoàng Thị Lan', 'Tất cả nhà máy'], 'Admin': ['Nguyễn Hoàng Long', 'Tất cả nhà máy'], 'R&D': ['Nguyễn Thị Yến', 'Tất cả nhà máy'], 'Vận chuyển': ['Phan Văn Toàn', 'NM1'] },
+roles: ['Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'QC', 'QC trưởng', 'Kế toán', 'Kế toán trưởng', 'Giám đốc', 'Người truy xuất', 'HR', 'Admin'],
+roleText(r) { return r === 'Thủ kho điều phối' ? 'Thủ kho @ kho điều phối' : r; },
+menu: {"viec": ["*"], "ban_dh": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Sales"], "ban_kh": ["Admin", "CSKH", "Giám đốc", "Sales"], "mua_don": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "mua_ncc": ["Admin", "Giám đốc", "Mua hàng", "Trưởng BP Mua hàng"], "mua_tra": ["Admin", "Giám đốc", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "kt_kh": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng", "Sales"], "kt_ncc": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kt_so": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kho_ton": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_nhap": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_xuat": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_chuyen": ["Admin", "Giám đốc", "Kế hoạch", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Vận chuyển"], "kho_kiem": ["Admin", "Giám đốc", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_huy": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "QC", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "sx_lenh": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho", "Thủ kho điều phối"], "sx_me": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho điều phối"], "sx_ct": ["Admin", "Giám đốc", "Kế hoạch", "QC", "R&D"], "cl_yc": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_pk": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_cn": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Sales"], "cl_ml": ["Admin", "Giám đốc", "QC"], "tx_tx": ["Admin", "Giám đốc", "Người truy xuất", "Thủ kho", "Thủ kho điều phối"], "tx_th": ["Admin", "CSKH", "Giám đốc", "Kế toán trưởng", "Người truy xuất", "QC", "QC trưởng", "Sales"], "dm_nvl": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_sp": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_hs": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "R&D", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_dv": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_kho": ["Admin", "Giám đốc", "Thủ kho trưởng"], "dm_ncc": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Mua hàng", "QC", "Thủ kho", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_nm": ["Admin", "Giám đốc", "Thủ kho trưởng"], "qt_nd": ["Admin", "Giám đốc", "HR"], "qt_kv": ["Admin", "Giám đốc"], "qt_ch": ["Admin", "Giám đốc"], "qt_nk": ["Admin", "Giám đốc", "HR"]},
+scr: {"viec": ["HopDuyet", "HopDuyet"], "ban_dh": ["BanDonHang-0r5c", "BanHang-wvhq"], "ban_kh": ["BanHang-wvhq", "BanHang-wvhq"], "mua_don": ["MuaPO-3fox", "MuaHang-7mvk"], "mua_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "mua_tra": ["MuaTraHang-e9jn", "MuaHang-7mvk"], "kt_kh": ["KeToan-k2vm", "KeToan-k2vm"], "kt_ncc": ["KeToanNCC-m3pz", "KeToan-k2vm"], "kt_so": ["KeToanSo-v6qe", "KeToan-k2vm"], "kho_ton": ["TonLo", "TonLo"], "kho_nhap": ["KhoVH-xv2s", "KhoVH-xv2s"], "kho_xuat": ["KhoXuat-71ki", "KhoVH-xv2s"], "kho_chuyen": ["KhoChuyen-oq5y", "KhoVH-xv2s"], "kho_kiem": ["KhoKiemKe-23cu", "KhoVH-xv2s"], "kho_huy": ["KhoHuy-br6r", "KhoVH-xv2s"], "sx_lenh": ["LenhSX-hxoc", "LenhSX-hxoc"], "sx_me": ["TheoDoiMe-w4ka", "LenhSX-hxoc"], "sx_ct": ["CongThuc-qdhl", "CongThuc-qdhl"], "cl_yc": ["ChatLuong-q4ls", "ChatLuong-q4ls"], "cl_pk": ["ChatLuongPK-d2xh", "ChatLuong-q4ls"], "cl_cn": ["ChatLuongCN-t9bw", "ChatLuongCN-t9bw"], "cl_ml": ["ChatLuongML-p5ga", "ChatLuongCN-t9bw"], "tx_tx": ["TruyXuat", "TruyXuat"], "tx_th": ["ThuHoi-r8hw", "ThuHoi-r8hw"], "dm_nvl": ["DanhMuc-15tr", "DanhMuc-15tr"], "dm_sp": ["DanhMucSP-zd4p", "DanhMucSP-zd4p"], "dm_hs": ["HoSoPhapLy-h7pl", "HoSoPhapLy-h7pl"], "dm_dv": ["DonVi-u7dv", "DonVi-u7dv"], "dm_kho": ["NhaMay-qd07", "NhaMay-qd07"], "dm_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "dm_nm": ["NhaMay-qd07", "NhaMay-qd07"], "qt_nd": ["NguoiDung", "NguoiDung"], "qt_kv": ["KhuVuc", "KhuVuc"], "qt_ch": ["CauHinh-cocg", "CauHinh-cocg"], "qt_nk": ["NhatKy-n5jd", "NhatKy-n5jd"]},
+mods: {"ban": ["ban_dh", "ban_kh"], "mua": ["mua_don", "mua_ncc", "mua_tra"], "kt": ["kt_kh", "kt_ncc", "kt_so"], "kho": ["kho_ton", "kho_nhap", "kho_xuat", "kho_chuyen", "kho_kiem", "kho_huy"], "sx": ["sx_lenh", "sx_me"], "cl": ["cl_yc", "cl_pk", "cl_cn", "cl_ml"], "tx": ["tx_tx", "tx_th"], "dm": ["dm_nvl", "sx_ct", "dm_sp", "dm_hs", "dm_dv", "dm_kho", "dm_nm", "qt_kv"], "qt": ["qt_nd", "qt_ch", "qt_nk"]},
+sees(r, k) { const a = this.menu[k] || []; return a.indexOf('*') >= 0 || a.indexOf(r) >= 0; },
+nav(r, here) { const show = {}, href = {}, go = {}; const to = (k) => { const x = this.scr[k]; href[k] = x[0] + '.dc.html'; go[k] = () => this.go(x[1], '', r); };
+Object.keys(this.scr).forEach((k) => { show[k] = this.sees(r, k); to(k); });
+Object.keys(this.mods).forEach((m) => { const vis = this.mods[m].filter((k) => show[k]); show[m] = vis.length > 0; const f = vis[0] || this.mods[m][0]; href[m] = href[f]; go[m] = go[f]; });
+const deny = !!here && !show[here]; const home = this.mods[(here || '').split('_')[0]] || [];
+return { show: show, href: href, go: go, deny: deny, homeHref: href.viec, homeGo: go.viec, alt: home.filter((k) => show[k]).length > 0 }; },
+name(r) { return (this.people[r] || [r])[0]; },
+fac(r) { return (this.people[r] || ['', 'NM1'])[1]; },
+roleLabel(r) { return r === 'QC trưởng' ? 'QC trưởng (ủy quyền)' : r; },
+go(board, id, role) { try { localStorage.setItem('mp.open', JSON.stringify({ b: board, id: id || '', r: role || '', t: Date.now() })); } catch (e) {} },
+take(board) { try { const x = JSON.parse(localStorage.getItem('mp.open') || 'null'); if (x && x.b === board && Date.now() - x.t < 20000) { localStorage.removeItem('mp.open'); return x; } } catch (e) {} return null; },
+can(role, allowed) { return allowed.indexOf(role) >= 0; },
+vx(role, setRole, here) { const n = this.name(role); const w = n.split(' '); return { m: this.nav(role, here), role: role, label: this.roleLabel(role), name: n, fac: this.fac(role), ini: (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(), opts: this.roles, optl: this.roles.map((x) => ({ v: x, t: this.roleText(x) })), set: (ev) => setRole(ev.target.value) }; },
+map: [['TH-NCC-', 'MuaHang-7mvk'], ['TH-2', 'ThuHoi-r8hw'], ['ĐH-', 'BanHang-wvhq'], ['KH-', 'BanHang-wvhq'], ['NC-', 'MuaHang-7mvk'], ['PO-', 'MuaHang-7mvk'], ['NCC-', 'MuaHang-7mvk'], ['TC-', 'KeToan-k2vm'], ['PN-', 'KhoVH-xv2s'], ['PX-', 'KhoVH-xv2s'], ['PC-', 'KhoVH-xv2s'], ['PK-', 'KhoVH-xv2s'], ['PH-', 'KhoVH-xv2s'], ['BB-TL-', 'KhoVH-xv2s'], ['L-', 'TonLo'], ['A-BAO-', 'TonLo'], ['LSX-', 'LenhSX-hxoc'], ['me:', 'LenhSX-hxoc'], ['CT-', 'CongThucChiTiet-pji2'], ['YC-NM', 'ChatLuong-q4ls'], ['QC-', 'ChatLuong-q4ls'], ['CN-', 'ChatLuongCN-t9bw'], ['ML-', 'ChatLuongCN-t9bw'], ['BB-ML-', 'ChatLuongCN-t9bw'], ['TX-', 'TruyXuat'], ['NVL-', 'DanhMuc-15tr'], ['SP-', 'DanhMucSP-zd4p'], ['NM1-', 'NhaMay-qd07'], ['NM2-', 'NhaMay-qd07']],
+board(id) { if (/^[AB]\d{6}/.test(id)) return 'TonLo'; for (const m of this.map) { if (id.indexOf(m[0]) === 0) return m[1]; } return ''; },
+ref(id, role, board, file) { const b = board || this.board(id); if (!b) return { id: id, ok: false, href: '#', open: () => {} }; const f = file || (id.indexOf('me:') === 0 ? 'TheoDoiMe-w4ka' : b); return { id: id.replace(/^me:/, ''), ok: true, href: f + '.dc.html', open: () => this.go(b, id, role) }; },
+gate(role, allowed, setRole, why) { if (allowed.indexOf(role) >= 0) return null; const who = allowed[0]; return { who: who, why: why || '', hasWhy: !!why, sw: () => setRole(who) }; }
+};
+
+// Phân trang dùng chung: MPPG(this, 'khóa-bảng', mảngĐãLọc, { sig: chuỗi-bộ-lọc }) → { items, show, info, nums, prev, next, atFirst, atLast, size, setSize }
+function MPPG(self, key, list, opt) {
+  opt = opt || {}; list = list || [];
+  const all = self.state.__pg || {}; const cur = all[key] || {};
+  const size = cur.size || opt.size || 10; const n = list.length;
+  const pages = Math.max(1, Math.ceil(n / size));
+  const sig = String(opt.sig !== undefined ? opt.sig : '') + '#' + n;
+  let p = cur.sig === sig ? (cur.p || 1) : 1; if (p > pages) p = pages;
+  const set = (np, ns) => { const a = Object.assign({}, self.state.__pg || {}); a[key] = { p: np, size: ns || size, sig: sig }; self.setState({ __pg: a }); };
+  const from = (p - 1) * size; const nums = [];
+  const push = (i) => nums.push({ t: String(i), btn: true, gap: false, cur: i === p ? 'page' : 'false', cls: i === p ? 'mp-pg__n is-on' : 'mp-pg__n', aria: 'Trang ' + i, go: () => set(i) });
+  const gap = () => nums.push({ t: '…', btn: false, gap: true, cur: 'false', cls: '', aria: '', go: () => {} });
+  if (pages <= 7) { for (let i = 1; i <= pages; i++) push(i); }
+  else { let a = Math.max(2, p - 1), b = Math.min(pages - 1, p + 1); if (p <= 3) { a = 2; b = 4; } if (p >= pages - 2) { a = pages - 3; b = pages - 1; } push(1); if (a > 2) gap(); for (let i = a; i <= b; i++) push(i); if (b < pages - 1) gap(); push(pages); }
+  return { items: list.slice(from, from + size), show: n > 10, info: (n ? from + 1 : 0) + '–' + Math.min(from + size, n) + ' / ' + n, nums: nums,
+    atFirst: p <= 1, atLast: p >= pages, prev: () => { if (p > 1) set(p - 1); }, next: () => { if (p < pages) set(p + 1); },
+    size: String(size), setSize: (ev) => set(1, +(ev && ev.target ? ev.target.value : 10) || 10) };
+}
+const DV0 = [
+{ code: 'kg', name: 'ki-lô-gam', kind: 'Khối lượng', conv: 'đơn vị gốc', use: 'NVL bột, BTP theo khối lượng, giữ chỗ NVL', refs: { nvl: 14, sp: 0, ct: 9, doc: 1240, bc: 4 }, ex: ['NVL-BOT-0003', 'CT-HH-0005', 'PN-NM1-2610-0032'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'g', name: 'gam', kind: 'Khối lượng', conv: '1.000 g = 1 kg', use: 'quy cách lon (800 g, 900 g), định mức vi lượng', refs: { nvl: 6, sp: 8, ct: 9, doc: 312, bc: 0 }, ex: ['SP-0008', 'NVL-PGA-0004', 'CT-HH-0005'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'tan', name: 'tấn', kind: 'Khối lượng', conv: '1 tấn = 1.000 kg', use: 'báo cáo sản lượng', refs: { nvl: 0, sp: 0, ct: 0, doc: 0, bc: 3 }, ex: [], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'lon', name: 'lon', kind: 'Đếm', conv: '1 lon = 800 g / 900 g / 400 g (theo quy cách SP)', use: 'BTP, TP, vỏ lon', refs: { nvl: 2, sp: 8, ct: 0, doc: 860, bc: 2 }, ex: ['SP-0001', 'PX-NM1-2610-0050', 'LSX-2610-0015'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'thung', name: 'thùng', kind: 'Đếm', conv: '1 thùng = 12 / 24 / 48 lon (theo quy cách SP)', use: 'TP, giao hàng', refs: { nvl: 0, sp: 8, ct: 0, doc: 214, bc: 1 }, ex: ['SP-0001', 'ĐH-2610-0041'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'bao', name: 'bao', kind: 'Đếm', conv: '1 bao = 25 kg (theo NVL)', use: 'NVL nhập kho, quét tem bao', refs: { nvl: 9, sp: 0, ct: 0, doc: 2310, bc: 0 }, ex: ['NVL-BOT-0002', 'PN-NM1-2610-0031', 'A-BAO-000412'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'cuon', name: 'cuộn', kind: 'Đếm', conv: 'theo NVL bao bì', use: 'màng, nhãn', refs: { nvl: 4, sp: 0, ct: 0, doc: 58, bc: 0 }, ex: ['PN-NM1-2610-0032'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'cai', name: 'cái', kind: 'Đếm', conv: '—', use: 'nắp, muỗng', refs: { nvl: 3, sp: 0, ct: 0, doc: 41, bc: 0 }, ex: ['PO-2610-0023'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'l', name: 'lít', kind: 'Thể tích', conv: '1 l = 1.000 ml', use: 'phụ gia lỏng', refs: { nvl: 1, sp: 0, ct: 1, doc: 12, bc: 0 }, ex: ['CT-HH-0005'], at: '01/01/2023', by: 'Nguyễn Hoàng Long' },
+{ code: 'hop', name: 'hộp', kind: 'Đếm', conv: '1 hộp = 12 gói (theo quy cách)', use: 'quà tặng kèm — đang chuẩn bị', refs: { nvl: 0, sp: 0, ct: 0, doc: 0, bc: 0 }, ex: [], at: '27/10/2026', by: 'Nguyễn Hoàng Long' },
+{ code: 'ml', name: 'mi-li-lít', kind: 'Thể tích', conv: '1.000 ml = 1 l', use: 'phụ gia lỏng vi lượng', refs: { nvl: 0, sp: 0, ct: 0, doc: 0, bc: 0 }, ex: [], at: '28/10/2026', by: 'Nguyễn Hoàng Long' }
+];
+const DV_RL = [['nvl', 'Nguyên vật liệu'], ['sp', 'Sản phẩm (quy cách)'], ['ct', 'Công thức'], ['doc', 'Chứng từ (phiếu, đơn, lệnh)'], ['bc', 'Báo cáo']];
+const DV_RS = { nvl: 'NVL', sp: 'sản phẩm', ct: 'công thức', doc: 'chứng từ', bc: 'báo cáo' };
+const DV_KINDS = ['Đếm', 'Khối lượng', 'Thể tích'];
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+const it = MPX.take('DonVi-u7dv');
+const cd = props.cheDo || 'Danh sách';
+this.state = { role: (it && it.r) || props.vaitro || 'Admin', items: DV0.slice(), q: '', fk: '', fs: '', dlg: null, hl: '', toast: '', miss: '' };
+if (cd === 'Thêm đơn vị') this.state.dlg = { kind: 'add', orig: '', code: '', name: '', uk: 'Đếm', conv: '', use: '', tried: false };
+if (cd === 'Sửa đơn vị mới tạo') { const u = DV0.find((x) => x.code === 'hop'); this.state.dlg = { kind: 'edit', orig: u.code, code: u.code, name: u.name, uk: u.kind, conv: u.conv, use: u.use, tried: false }; this.state.hl = 'hop'; }
+if (cd === 'Xem tham chiếu (khóa)') { this.state.dlg = { kind: 'refs', orig: 'kg' }; this.state.hl = 'kg'; }
+if (it && it.id) { const id = String(it.id).trim(); const u = DV0.find((x) => x.code === id || x.name === id); if (u) this.state.hl = u.code; else this.state.miss = id; }
+}
+renderVals() {
+const s = this.state, role = s.role;
+const setRole = (r) => this.setState({ role: r });
+const g = MPX.gate(role, ['Admin'], setRole, 'chỉ Admin thêm / sửa / xóa đơn vị');
+const canEdit = !g;
+const fmtN = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const tot = (u) => Object.keys(u.refs).reduce((a, k) => a + (u.refs[k] || 0), 0);
+const refT = (u) => DV_RL.filter((x) => u.refs[x[0]]).map((x) => fmtN(u.refs[x[0]]) + ' ' + DV_RS[x[0]]).join(' · ');
+const q = s.q.trim().toLowerCase();
+const list = s.items.filter((u) => (!q || (u.code + ' ' + u.name).toLowerCase().indexOf(q) >= 0) && (!s.fk || u.kind === s.fk) && (!s.fs || (s.fs === 'Đang được dùng' ? tot(u) > 0 : tot(u) === 0)));
+const rows = list.map((u) => { const n = tot(u); const locked = n > 0; const openRefs = () => this.setState({ dlg: { kind: 'refs', orig: u.code }, toast: '' });
+return { code: u.code, name: u.name, kind: u.kind, conv: u.conv || '—', use: u.use || '—', refT: refT(u), hasRefs: locked, noRefs: !locked, openRefs: openRefs, refAria: 'Xem tham chiếu của đơn vị ' + u.code,
+stT: locked ? 'Khóa sửa / xóa' : 'Mới tạo · sửa được', stCls: locked ? 'mp-doc mp-doc--void' : 'mp-doc mp-doc--ok', sub: 'Tạo ' + u.at + (locked ? '' : ' · ' + u.by),
+rowCls: s.hl === u.code ? 'is-hl' : '', canMod: canEdit && !locked, lockedAct: canEdit && locked,
+edit: () => this.setState({ dlg: Object.assign({ kind: 'edit', orig: u.code, code: u.code, name: u.name, uk: u.kind, conv: u.conv === '—' ? '' : u.conv }, (() => { const m = /=\s*([\d.,]+)\s+(.+)$/.exec(u.conv || ''); const b = m ? s.items.find((x) => x.code !== u.code && (x.name === m[2].trim() || x.code === m[2].trim())) : null; return b ? { cvN: m[1].replace(/\./g, '').replace(',', '.'), cvBase: b.code } : { cvN: '', cvBase: '' }; })(), { use: u.use === '—' ? '' : u.use, tried: false }), toast: '' }),
+del: () => this.setState({ dlg: { kind: 'del', orig: u.code }, toast: '' }),
+editLabel: 'Sửa đơn vị ' + u.code, delLabel: 'Xóa đơn vị ' + u.code, lockTip: 'Đang có ' + fmtN(n) + ' tham chiếu — không sửa, không xóa' }; });
+const pg = MPPG(this, 'dm-dv', rows, { sig: [q, s.fk, s.fs].join('|') });
+let dg = { on: false };
+const d = s.dlg;
+if (d) {
+const close = () => this.setState({ dlg: null });
+const set = (k) => (ev) => this.setState({ dlg: Object.assign({}, this.state.dlg, { [k]: ev && ev.target ? ev.target.value : '' }) });
+const u = s.items.find((x) => x.code === d.orig);
+if (d.kind === 'refs' && u) {
+const n = tot(u);
+dg = { on: true, isRefs: true, title: 'Tham chiếu của đơn vị ' + u.code + ' (' + u.name + ')', closeT: 'Đóng', close: close,
+refLines: DV_RL.filter((x) => u.refs[x[0]]).map((x) => ({ t: x[1], n: fmtN(u.refs[x[0]]) })),
+ex: (u.ex || []).map((id) => { const r = MPX.ref(id, role); return { id: id, href: r.href, open: r.open }; }), hasEx: (u.ex || []).length > 0,
+refNote: n ? 'Đơn vị đang có ' + fmtN(n) + ' tham chiếu nên khóa sửa và xóa — số liệu đã ghi phải giữ nguyên nghĩa. Cần đơn vị khác thì thêm đơn vị mới.' : 'Chưa có tham chiếu — còn sửa / xóa được.' };
+} else if (d.kind === 'del' && u) {
+dg = { on: true, isDel: true, title: 'Xóa đơn vị', code: u.code, name: u.name, closeT: 'Hủy', close: close,
+ok: () => { if (tot(u) > 0) return; this.setState({ items: this.state.items.filter((x) => x.code !== u.code), dlg: null, hl: '', toast: 'Đã xóa đơn vị ' + u.code + ' (' + u.name + ').' }); } };
+} else {
+const code = String(d.code || '').trim(); const name = String(d.name || '').trim();
+const others = s.items.filter((x) => x.code !== d.orig);
+const dup = !!code && others.some((x) => x.code.toLowerCase() === code.toLowerCase());
+const badCode = !!code && !/^[a-z0-9_]{1,10}$/.test(code);
+const dupName = !!name && others.some((x) => x.name.toLowerCase() === name.toLowerCase());
+const codeErr = dup ? 'Mã ' + code + ' đã có — không tạo trùng.' : badCode ? 'Chỉ chữ thường không dấu, số, gạch dưới; tối đa 10 ký tự.' : (d.tried && !code ? 'Nhập mã.' : '');
+const nameErr = dupName ? 'Tên ' + name + ' đã có ở đơn vị khác.' : (d.tried && !name ? 'Nhập tên.' : '');
+const base = d.cvBase ? others.find((x) => x.code === d.cvBase) : null; const cvn = String(d.cvN || '').trim(); const cvBad = !!base && !(+cvn > 0);
+const cvErr = cvBad && (d.tried || cvn) ? 'Nhập số lượng > 0 của ' + base.name + '.' : '';
+const selfT = name || code || 'đơn vị này';
+const ok = !!code && !!name && !dup && !badCode && !dupName && !cvBad;
+dg = { on: true, isForm: true, isEdit: d.kind === 'edit', title: d.kind === 'add' ? 'Thêm đơn vị' : 'Sửa đơn vị · ' + d.orig,
+code: d.code, name: d.name, uk: d.uk, conv: d.conv, use: d.use, kinds: DV_KINDS.concat(s.kx || []),
+ukSel: d.newKind ? '__new' : d.uk, newKind: !!d.newKind, nk: d.nk || '', nkErr: d.nkErr || '', hasNkErr: !!d.nkErr, nkCls: d.nkErr ? 'mp-input err' : 'mp-input', setNk: set('nk'),
+cancelKind: () => this.setState({ dlg: Object.assign({}, this.state.dlg, { newKind: false, nk: '', nkErr: '' }) }),
+addKind: () => { const dd = this.state.dlg; const t = String(dd.nk || '').trim(); const KS = DV_KINDS.concat(this.state.kx || []); if (!t) { this.setState({ dlg: Object.assign({}, dd, { nkErr: 'Nhập tên loại.' }) }); return; } const ex = KS.find((k) => k.toLowerCase() === t.toLowerCase()); this.setState({ kx: ex ? (this.state.kx || []) : (this.state.kx || []).concat([t]), dlg: Object.assign({}, dd, { uk: ex || t, newKind: false, nk: '', nkErr: '' }), toast: '' }); },
+selfT: selfT, cvN: d.cvN || '', cvBase: d.cvBase || '', noBase: !base, bases: others.map((x) => ({ v: x.code, t: x.name })),
+setCvN: set('cvN'), setCvBase: (ev) => { const v = ev && ev.target ? ev.target.value : ''; this.setState({ dlg: Object.assign({}, this.state.dlg, { cvBase: v }, v ? {} : { cvN: '' }) }); },
+cvnCls: cvErr ? 'mp-input err' : 'mp-input', cvbCls: 'mp-input', cvErr: cvErr, hasCvErr: !!cvErr, noCvErr: !cvErr,
+cvHint: base ? (+cvn > 0 ? 'Sẽ lưu: 1 ' + selfT + ' = ' + cvn.replace('.', ',') + ' ' + base.name : 'Nhập số ' + base.name + ' trong 1 ' + selfT) : 'Chọn đơn vị gốc từ bảng đơn vị để quy đổi (vd 1 hộp = 12 gói)',
+setCode: set('code'), setName: set('name'), setKind: (ev) => { const v = ev && ev.target ? ev.target.value : ''; this.setState({ dlg: Object.assign({}, this.state.dlg, v === '__new' ? { newKind: true, nk: '', nkErr: '' } : { uk: v, newKind: false }) }); }, setConv: set('conv'), setUse: set('use'),
+codeCls: codeErr ? 'mp-input err' : 'mp-input', nameCls: nameErr ? 'mp-input err' : 'mp-input',
+codeErr: codeErr, hasCodeErr: !!codeErr, noCodeErr: !codeErr, nameErr: nameErr, hasNameErr: !!nameErr,
+closeT: 'Hủy', close: close, okLabel: d.kind === 'add' ? 'Thêm đơn vị' : 'Lưu', okCls: ok ? 'mp-btn mp-btn--primary' : 'mp-btn mp-btn--primary is-dim',
+ok: () => {
+if (!ok) { this.setState({ dlg: Object.assign({}, d, { tried: true }) }); return; }
+const conv = base ? '1 ' + name + ' = ' + cvn.replace('.', ',') + ' ' + base.name : '—', use = String(d.use || '').trim() || '—';
+if (d.kind === 'add') {
+const items = s.items.concat([{ code: code, name: name, kind: d.uk, conv: conv, use: use, refs: { nvl: 0, sp: 0, ct: 0, doc: 0, bc: 0 }, ex: [], at: '29/10/2026', by: MPX.name(role) }]);
+const size = +pg.size || 10; const pgs = Object.assign({}, s.__pg || {}); pgs['dm-dv'] = { p: Math.ceil(items.length / size), size: size, sig: '||#' + items.length };
+this.setState({ items: items, __pg: pgs, dlg: null, hl: code, q: '', fk: '', fs: '', toast: 'Đã thêm đơn vị ' + code + ' (' + name + '). Còn sửa / xóa được cho tới khi có NVL, sản phẩm hay chứng từ dùng.' });
+} else {
+if (u && tot(u) > 0) return;
+this.setState({ items: s.items.map((x) => x.code === d.orig ? Object.assign({}, x, { code: code, name: name, kind: d.uk, conv: conv, use: use }) : x), dlg: null, hl: code, toast: 'Đã lưu đơn vị ' + code + '.' });
+} } };
+}
+}
+const setF = (k) => (ev) => { const o = {}; o[k] = ev && ev.target ? ev.target.value : ''; this.setState(o); };
+const nLock = s.items.filter((u) => tot(u) > 0).length;
+return {
+vx: MPX.vx(role, setRole, 'dm_dv'), canEdit: canEdit, g: g,
+addNew: () => this.setState({ dlg: { kind: 'add', orig: '', code: '', name: '', uk: 'Đếm', conv: '', cvN: '', cvBase: '', use: '', tried: false }, toast: '' }),
+f: { q: s.q, k: s.fk, s: s.fs, kinds: DV_KINDS.concat(s.kx || []), setQ: setF('q'), setK: setF('fk'), setS: setF('fs'), clear: () => this.setState({ q: '', fk: '', fs: '' }) },
+rows: pg.items, pg: pg, noRows: rows.length === 0,
+countT: s.items.length + ' đơn vị · ' + nLock + ' đang được dùng',
+dg: dg,
+hasToast: !!s.toast, toast: s.toast, closeToast: () => this.setState({ toast: '' }), hasMiss: !!s.miss, miss: s.miss
+};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+/* MP-SCALE-18: cỡ chữ nền 18px */
+/* MES Powder — component styles. Every value reads a token from tokens.css. Prefix: mp- */
+.mp { font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; }
+.mp *, .mp *::before, .mp *::after { box-sizing: border-box; }
+/* Khung app web: co giãn tới 1920px, rộng hơn thì canh giữa; nền ngoài khung đặt surface-2 trên body */
+.mp-frame { width: 100%; max-width: 1920px; margin-inline: auto; box-sizing: border-box; background: var(--surface-0); box-shadow: 0 0 0 1px var(--line); }
+.mp-row { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.mp-col { display: flex; flex-direction: column; gap: var(--space-2); }
+.mp-code { font-family: var(--font-mono); font-size: 16px; line-height: 22px; font-weight: 500; letter-spacing: -0.01em; white-space: nowrap; }
+.mp-nowrap { white-space: nowrap; }
+.mp-sub { display: block; margin-top: var(--space-1); font-size: 15px; line-height: 20px; color: var(--ink-muted); }
+.mp-sub--accent { color: var(--accent); font-weight: 500; }
+.mp-sub .mp-code, .mp-stat__note .mp-code, .mp-stat__label .mp-code { font-size: 15px; line-height: 20px; }
+.mp-table td .mp-code + .mp-nowrap { margin-left: var(--space-2); }
+.mp-chips { display: inline-flex; flex-wrap: nowrap; align-items: center; gap: 6px; vertical-align: middle; white-space: nowrap; }
+.mp-chips--wrap { flex-wrap: wrap; row-gap: 6px; white-space: normal; }
+.mp-stat { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4); }
+.mp-stat__label { font: 500 15px/20px var(--font-sans); color: var(--ink-muted); }
+.mp-stat__value { font: 700 28px/34px var(--font-sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mp-stat__note { font: 400 15px/20px var(--font-sans); color: var(--ink-muted); }
+.mp-muted { color: var(--ink-muted); }
+.mp-num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+/* Button */
+.mp-btn { height: var(--control-web); padding: 0 var(--space-3); border-radius: var(--radius-md); border: 1px solid transparent;
+  font: 600 18px/1 var(--font-sans); display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; white-space: nowrap; }
+.mp-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.mp-btn--primary { background: var(--brand); color: var(--on-brand); }
+.mp-btn--primary:hover { background: var(--brand-strong); }
+.mp-btn--secondary { background: var(--surface-1); color: var(--ink); border-color: var(--line-strong); }
+.mp-btn--secondary:hover { background: var(--surface-2); }
+.mp-btn--danger { background: var(--surface-1); color: var(--bad); border-color: var(--bad); }
+.mp-btn--ghost { background: transparent; color: var(--brand); }
+.mp-btn[disabled], .mp-btn.is-disabled { background: var(--surface-2); color: var(--ink-muted); border-color: var(--line); cursor: not-allowed; }
+.mp-btn--scan { height: var(--control-scan); font-size: 20px; padding: 0 var(--space-4); border-radius: var(--radius-md); }
+.mp-btn--plant { height: var(--control-plant); font-size: 26px; padding: 0 var(--space-8); border-radius: var(--radius-lg); }
+.mp-why { margin-top: var(--space-1); font-size: 15px; line-height: 20px; color: var(--ink-muted); display: inline-flex; gap: var(--space-1); align-items: center; }
+.mp-why::before { content: ""; width: 10px; height: 12px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v7H1V5h1zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0V5z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v7H1V5h1zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0V5z'/%3E%3C/svg%3E") center/contain no-repeat; }
+
+/* Lot status chip — 5 statuses, always text, never colour alone */
+.mp-lot { display: inline-flex; align-items: center; gap: var(--space-1); height: 26px; padding: 0 var(--space-2);
+  border-radius: var(--radius-sm); font: 600 15px/1 var(--font-sans); letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; border: 1px solid transparent; }
+.mp-lot--cho-kiem { background: var(--wait-soft); color: var(--wait); border-color: var(--wait); border-style: dashed; }
+.mp-lot--dat { background: var(--ok-soft); color: var(--ok); }
+.mp-lot--khong-dat { background: var(--bad-soft); color: var(--bad); }
+.mp-lot--khoa { background: var(--lock); color: var(--on-lock); }
+.mp-lot--khoa::before { content: ""; width: 9px; height: 11px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v7H1V5h1zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0V5z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 12'%3E%3Cpath d='M2 5V3.5a3 3 0 0 1 6 0V5h1v7H1V5h1zm1.5 0h3V3.5a1.5 1.5 0 0 0-3 0V5z'/%3E%3C/svg%3E") center/contain no-repeat; }
+.mp-lot--huy { background: var(--void-soft); color: var(--void); border-color: var(--void); border-style: dashed; text-decoration: line-through; }
+.mp-reason { display: inline-flex; align-items: center; height: 26px; padding: 0 var(--space-2); border-radius: var(--radius-sm);
+  font: 500 15px/1 var(--font-sans); color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); white-space: nowrap; }
+.mp-reason--exit-huy::after { content: "· chỉ đi hủy"; color: var(--bad); margin-left: var(--space-1); font-weight: 600; }
+.mp-flag { display: inline-flex; align-items: center; height: 24px; padding: 0 var(--space-2); border-radius: var(--radius-pill);
+  font: 600 14px/1 var(--font-sans); background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+
+/* Document status + step bar */
+.mp-doc { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 var(--space-2); border-radius: var(--radius-pill);
+  font: 600 15px/1 var(--font-sans); white-space: nowrap; background: var(--surface-2); color: var(--ink); }
+/* Trạng thái dài (kèm lý do) được xuống dòng thay vì đẩy tràn trang */
+.mp-doc { max-width: 100%; white-space: normal; height: auto; min-height: 26px; padding-block: 3px; line-height: 18px; }
+.mp-doc--draft { color: var(--ink-muted); }
+.mp-doc--wait { background: var(--wait-soft); color: var(--wait); }
+.mp-doc--done { background: var(--brand-soft); color: var(--brand); }
+.mp-doc--ok { background: var(--ok-soft); color: var(--ok); }
+.mp-doc--bad { background: var(--bad-soft); color: var(--bad); }
+.mp-doc--void { background: var(--void-soft); color: var(--void); }
+.mp-steps { display: flex; align-items: center; gap: 0; font: 500 15px/20px var(--font-sans); color: var(--ink-muted); }
+.mp-step { display: flex; align-items: center; gap: var(--space-2); white-space: nowrap; }
+.mp-step + .mp-step::before { content: ""; width: 28px; height: 1px; background: var(--line-strong); margin: 0 var(--space-2); }
+.mp-step i { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line-strong); display: inline-grid; place-items: center;
+  font: 700 13px/1 var(--font-sans); font-style: normal; background: var(--surface-1); }
+.mp-step.is-done { color: var(--ink); }
+.mp-step.is-done i { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.mp-step.is-now { color: var(--brand); font-weight: 700; }
+.mp-step.is-now i { border-color: var(--brand); border-width: 2px; color: var(--brand); }
+
+/* Card, field, table */
+.mp-card { background: var(--surface-1); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.mp-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
+.mp-card__title { font: 600 19px/26px var(--font-sans); margin: 0; }
+.mp-card__body { padding: var(--space-4); }
+.mp-kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-3) var(--space-6); }
+.mp-kv dt { font: 500 15px/20px var(--font-sans); color: var(--ink-muted); margin: 0 0 var(--space-1); }
+.mp-kv dd { margin: 0; font: 500 18px/24px var(--font-sans); }
+/* Bảng dày dữ liệu: 16px (chữ nền 18px làm bảng phải cuộn ngang ở 1440px) */
+.mp-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 16px; line-height: 22px; }
+.mp-table th { text-align: left; font: 600 15px/20px var(--font-sans); color: var(--ink-muted); background: var(--surface-2);
+  padding: 10px var(--space-3); border-bottom: 1px solid var(--line); white-space: nowrap; }
+.mp-table td { padding: 10px var(--space-3); height: var(--row-web); line-height: 22px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.mp-table td.mp-actions { text-align: right; white-space: nowrap; }
+.mp-table tr:hover td { background: var(--surface-2); }
+.mp-table th.mp-num { text-align: right; }
+.mp-table tr.is-selected td { background: var(--brand-soft); }
+.mp-table tr.is-group td { background: var(--surface-0); font-weight: 600; height: 36px; padding-top: var(--space-2); padding-bottom: var(--space-2); }
+
+/* Banner + default-param tag */
+.mp-banner { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+  border: 1px solid var(--line); background: var(--surface-1); font-size: 18px; line-height: 24px; }
+.mp-banner b { font-weight: 600; }
+.mp-banner--warn { background: var(--accent-soft); border-color: var(--accent); }
+.mp-banner--bad { background: var(--bad-soft); border-color: var(--bad); }
+.mp-banner--offline { background: var(--lock); color: var(--on-lock); border-color: var(--lock); }
+.mp-banner--info { background: var(--brand-soft); border-color: var(--brand); }
+.mp-param { display: inline-flex; align-items: center; gap: 4px; font: 500 15px/20px var(--font-sans); color: var(--accent);
+  border-bottom: 1px dashed var(--accent); }
+.mp-param::before { content: "⚙"; font-size: 15px; }
+
+/* Timeline (audit log) */
+.mp-tl { list-style: none; margin: 0; padding: 0; }
+.mp-tl li { position: relative; padding: 0 0 var(--space-4) var(--space-6); font-size: 16px; line-height: 24px; }
+.mp-tl li::before { content: ""; position: absolute; left: 5px; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); }
+.mp-tl li::after { content: ""; position: absolute; left: 8.5px; top: 19px; bottom: -3px; width: 1px; background: var(--line); }
+.mp-tl li:last-child::after { display: none; }
+.mp-tl li.is-key::before { background: var(--brand); }
+.mp-tl time { display: block; margin-top: 2px; color: var(--ink-muted); font-size: 15px; line-height: 20px; }
+
+/* Handheld scanner */
+.mp-scan { width: 360px; background: var(--surface-0); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.mp-scan__bar { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) var(--space-4); background: var(--surface-1); border-bottom: 1px solid var(--line); }
+.mp-scan__result { margin: var(--space-4); padding: var(--space-4); border-radius: var(--radius-lg); color: var(--on-solid); }
+.mp-scan__result--ok { background: var(--ok-solid); }
+.mp-scan__result--bad { background: var(--bad-solid); }
+.mp-scan__big { font: 700 28px/34px var(--font-sans); margin: 0 0 4px; }
+.mp-scan__result .mp-code { font-size: 19px; }
+
+/* Plant PC */
+.mp-plant { font-family: var(--font-sans); background: var(--surface-0); color: var(--ink); }
+.mp-plant__step { font: 700 30px/38px var(--font-sans); }
+.mp-plant__display { font: 700 44px/52px var(--font-sans); font-variant-numeric: tabular-nums; }
+.mp-plant__code { font: 600 26px/34px var(--font-mono); }
+.mp-plant__body { font: 500 24px/32px var(--font-sans); }
+.mp-tile { background: var(--surface-1); border: 2px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-4); }
+.mp-tile.is-open { border-color: var(--ok-solid); background: var(--ok-soft); }
+.mp-tile.is-done { background: var(--surface-2); color: var(--ink-muted); }
+
+/* Nơi chạy của màn (20/10 đợt 3): chạy tại máy chủ nhà máy (dùng được khi mất mạng) / chỉ trên cloud / cả hai */
+.mp-site { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: var(--radius-pill);
+  font: 600 15px/1 var(--font-sans); white-space: nowrap; border: 1px solid transparent; flex: none; }
+.mp-site svg { flex: none; }
+.mp-site--nm { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.mp-site--both { background: var(--brand-soft); color: var(--brand); border-color: var(--brand); }
+.mp-site--cloud { background: var(--surface-2); color: var(--ink-muted); border-color: var(--line); }
+
+/* ===== Form (20/10) — quy tắc: README › Form. Ô thật chỉ cho chỗ người dùng nhập; thông tin hệ thống điền là chữ, không khung. ===== */
+/* Font nền: đặt cả trên html/body để không phần tử nào rơi về font serif mặc định của trình duyệt */
+html, body { font-family: var(--font-sans, "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif); color: var(--ink); -webkit-font-smoothing: antialiased; }
+/* :where() giữ độ ưu tiên 0 để lớp thành phần (.mp-btn, .mp-code…) vẫn thắng */
+:where(.mp) :where(button, input, select, textarea, optgroup, option, table, th, td, label, legend, dialog, summary,
+  h1, h2, h3, h4, h5, h6, p, li, dt, dd, small, b, strong, time, a) { font-family: inherit; }
+:where(.mp) :where(button, input, select, textarea) { font-size: inherit; line-height: inherit; color: inherit; letter-spacing: inherit; }
+:where(.mp) :where(code, kbd, samp, pre) { font-family: var(--font-mono); }
+
+/* Lưới form: cột cố định để ô thẳng hàng; ô dài (.full) kéo hết hàng */
+.mp-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; align-items: start; }
+.mp-form--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mp-form--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 16px; }
+.mp-form .full, .mp-form .mp-field--full { grid-column: 1 / -1; }
+@media (max-width: 900px) { .mp-form--3, .mp-form--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .mp-form, .mp-form--3, .mp-form--4 { grid-template-columns: 1fr; } }
+
+/* Mục trong form / hộp thoại: tiêu đề + (tuỳ chọn) ⓘ và nút phụ bên phải; không đoạn mô tả */
+.mp-sec { display: flex; flex-direction: column; gap: 12px; }
+.mp-sec + .mp-sec { padding-top: 20px; border-top: 1px solid var(--line); }
+.mp-sec__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 24px; }
+.mp-sec__title { margin: 0; font: 600 19px/26px var(--font-sans); color: var(--ink); display: inline-flex; align-items: center; }
+.mp-sec__meta { font: 400 15px/20px var(--font-sans); color: var(--ink-muted); }
+
+/* Trường: nhãn → ô → gợi ý (1 dòng, chỉ số liệu / giới hạn) */
+.mp-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.mp-field label, .mp-field .flabel, .flabel { font: 600 16px/22px var(--font-sans); color: var(--ink); }
+.mp-field .req, .mp-req { color: var(--bad); margin-left: 2px; font-weight: 700; }
+.mp-field .hint, .mp-hint { font: 400 15px/20px var(--font-sans); color: var(--ink-muted); }
+.mp-field .hint.is-bad, .mp-hint.is-bad { color: var(--bad); font-weight: 500; }
+
+/* ⓘ: lời giải thích nằm trong tooltip (title + aria-label), không thành đoạn chữ */
+.mp-info { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin-left: 4px; vertical-align: -4px;
+  color: var(--ink-muted); border-radius: 50%; cursor: help; flex: none; }
+.mp-info:hover, .mp-info:focus-visible { color: var(--brand); background: var(--brand-soft); outline: none; }
+.mp-info svg { width: 17px; height: 17px; }
+
+/* Ô nhập — viền line-strong (≥3:1), cao control-field, 4 trạng thái: thường · lỗi · khóa · đang nhập */
+.mp-input { display: inline-block; vertical-align: middle; max-width: 100%; height: var(--control-field, 44px); border: 1px solid var(--line-strong); border-radius: var(--radius-md);
+  background: var(--surface-1); color: var(--ink); padding: 0 var(--space-3); font: 500 18px/24px var(--font-sans); min-width: 0; margin: 0;
+  transition: border-color .12s, box-shadow .12s; -webkit-appearance: none; appearance: none; }
+/* Trong trường / lưới form: ô giãn hết ô lưới. Ngoài form (cạnh chữ đơn vị, trong câu) ô giữ dòng chữ */
+.mp-field > .mp-input, .mp-field > .suffix > .mp-input, .mp-form > .mp-input { display: block; width: 100%; }
+.mp-input::placeholder { color: var(--ink-muted); opacity: 1; font-weight: 400; }
+.mp-input:hover { border-color: var(--ink-muted); }
+.mp-input:focus, .mp-input:focus-visible { outline: none; border-color: var(--brand);
+  box-shadow: 0 0 0 1px var(--brand), 0 0 0 4px color-mix(in srgb, var(--brand) 28%, transparent); }
+.mp-input.err, .mp-input[aria-invalid="true"] { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); background: var(--bad-soft); }
+.mp-input.err:focus { background: var(--surface-1); box-shadow: 0 0 0 1px var(--bad), 0 0 0 4px color-mix(in srgb, var(--bad) 22%, transparent); }
+.mp-input[disabled] { background: var(--surface-2); color: var(--ink-muted); border-color: var(--line); border-style: dashed; cursor: not-allowed; box-shadow: none; }
+select.mp-input { padding-right: 36px; cursor: pointer; background-color: var(--surface-1); text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230b1117' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; }
+[data-theme="dark"] select.mp-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e8eef3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); }
+select.mp-input[disabled] { background-color: var(--surface-2); }
+textarea.mp-input { height: auto; min-height: 72px; padding: 8px var(--space-3); line-height: 24px; resize: vertical; }
+input.mp-input[type="number"] { font-variant-numeric: tabular-nums; }
+input.mp-input[type="date"], input.mp-input[type="time"], input.mp-input[type="datetime-local"] { padding-right: var(--space-2); }
+.mp-input::-webkit-calendar-picker-indicator { opacity: .8; cursor: pointer; }
+
+/* Giá trị chỉ đọc trong form: chữ thường, KHÔNG khung — để mắt chỉ dừng ở ô cần nhập.
+   .mp-input.ro / [readonly] giữ tương thích: vẽ như .mp-ro */
+.mp-ro, .mp-input.ro, .mp-input[readonly] { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: var(--control-field, 44px); height: auto;
+  padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--ink); font: 500 18px/24px var(--font-sans); }
+.mp-ro .mp-code, .mp-input.ro .mp-code { font-size: 16px; }
+
+/* Tóm tắt chứng từ / đối tượng đã chọn: 1 dòng ngay dưới ô chọn — thay cho option dài bị cắt chữ */
+.mp-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; font: 400 15px/22px var(--font-sans); color: var(--ink-muted); }
+.mp-sum > * + *::before { content: "·"; margin: 0 6px; color: var(--line-strong); }
+.mp-sum b { color: var(--ink); font-weight: 600; }
+.mp-sum .mp-code { font-size: 15px; color: var(--ink); }
+
+/* Thông tin ngữ cảnh do hệ thống điền: hàng nhãn–giá trị gọn, nền nhạt, 1 lớp */
+.mp-facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 10px 14px; border-radius: var(--radius-md); background: var(--surface-0); border: 1px solid var(--line); }
+.mp-facts > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mp-facts dt { font: 500 15px/20px var(--font-sans); color: var(--ink-muted); margin: 0; }
+.mp-facts dd { font: 600 18px/24px var(--font-sans); color: var(--ink); margin: 0; }
+
+/* Dòng hàng trong form: bảng gọn, ô nhập trong ô bảng cao 32px */
+.mp-table--form { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
+.mp-table--form th { padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.mp-table--form td { padding: 6px 12px; height: 52px; }
+.mp-table--form tr:last-child td { border-bottom: 0; }
+.mp-table--form tr:hover td { background: transparent; }
+.mp-table--form .mp-input { height: 40px; }
+.mp-table--form .mp-ro, .mp-table--form .mp-input.ro { min-height: 20px; }
+.mp-table--form td.mp-actions { width: 1%; }
+
+/* Hộp thoại form: đầu (tiêu đề, không câu mô tả quy trình) · thân · chân (Hủy + 1 nút chính) */
+.mp-dlg { width: 100%; background: var(--surface-1); border-radius: var(--radius-lg); box-shadow: var(--shadow-pop); display: flex; flex-direction: column; }
+.mp-dlg__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 24px; border-bottom: 1px solid var(--line); }
+.mp-dlg__head h2 { margin: 0; font: 600 22px/30px var(--font-sans); display: inline-flex; align-items: center; gap: 8px; }
+.mp-dlg__body { padding: 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+.mp-dlg__foot { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 14px 24px; border-top: 1px solid var(--line); background: var(--surface-0); border-radius: 0 0 var(--radius-lg) var(--radius-lg); flex-wrap: wrap; }
+.mp-dlg__foot .mp-btn { min-width: 104px; justify-content: center; height: var(--control-field, 44px); }
+.mp-dlg__foot .mp-why { margin: 0 auto 0 0; }
+/* ===== hết Form ===== */
+
+/* ===== Bảng rộng: cuộn ngang, thanh cuộn ngay dưới tiêu đề bảng và dưới đáy bảng (mp-xs) ===== */
+/* Bảng tự giãn theo nội dung (cột không bị ép), mỗi ô tối đa 20em rồi xuống dòng; khung ngoài cuộn ngang */
+.mp-table:not(.mp-table--form) { width: max-content; min-width: 100%; }
+.mp-table:not(.mp-table--form) td { max-width: 20em; }
+/* Ô có câu ghi chú / lý do dài (dòng phụ mp-sub, hoặc nhiều chữ) được rộng hơn để không xuống quá 3–4 dòng */
+.mp-table:not(.mp-table--form) td:has(> .mp-sub), .mp-table:not(.mp-table--form) td.mp-wide { max-width: 28em; }
+.mp-xs { position: relative; min-width: 0; max-width: 100%; }
+.mp-xs__top { display: none; height: 16px; overflow-x: auto; overflow-y: hidden; }
+/* Thanh trên nằm NGAY DƯỚI hàng tiêu đề: tiêu đề chừa thêm 16px đáy, thanh phủ đúng dải đó (vị trí --xs-top do script đo) */
+.mp-xs[data-over="1"] > .mp-xs__top { display: block; position: absolute; left: 0; right: 0; top: var(--xs-top, 0px); z-index: 2; }
+.mp-xs[data-over="1"] > .mp-xs__body > .mp-table > thead > tr:last-child > th { padding-bottom: 26px; }
+.mp-xs__sizer { height: 1px; }
+.mp-xs__body { overflow-x: auto; overflow-y: hidden; }
+/* Thanh cuộn to, rõ cho người lớn tuổi */
+.mp-xs__top, .mp-xs__body { scrollbar-width: auto; scrollbar-color: var(--line-strong) var(--surface-2); }
+.mp-xs__top::-webkit-scrollbar, .mp-xs__body::-webkit-scrollbar { height: 16px; }
+.mp-xs__top::-webkit-scrollbar-track, .mp-xs__body::-webkit-scrollbar-track { background: var(--surface-2); }
+.mp-xs__top::-webkit-scrollbar-thumb, .mp-xs__body::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 8px; border: 4px solid var(--surface-2); }
+.mp-xs__top::-webkit-scrollbar-thumb:hover, .mp-xs__body::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+
+/* ===== Hiệu ứng rê chuột chung (20/10): mọi thứ bấm được đều đổi khi rê ===== */
+.mp-btn--ghost:not([disabled]):not(.is-disabled):hover { background: var(--brand-soft); color: var(--brand-strong); }
+.mp-btn--ghost.is-bad:not([disabled]):not(.is-disabled):hover { background: var(--bad-soft); color: var(--bad); }
+.mp-btn--danger:not([disabled]):not(.is-disabled):hover { background: var(--bad); color: var(--on-brand, #fff); }
+.mp-btn--secondary:not([disabled]):not(.is-disabled):hover { border-color: var(--ink-muted); }
+/* Tab (đổi màn trong board) */
+.tab:not(.on):hover, [role=tab]:not([aria-selected=true]):hover { color: var(--ink) !important; background: var(--surface-2); border-bottom-color: var(--line-strong); }
+.qtab:hover { color: var(--ink) !important; background: var(--surface-2); }
+/* Chip lọc, ô chọn kiểu thẻ, nút phân đoạn */
+.fchip:not(.on):hover { border-color: var(--brand); color: var(--brand-strong); }
+.opt:not(.opt--on):hover { border-color: var(--brand); background: var(--surface-0); }
+.scope button:not(.on):hover { background: var(--surface-2); color: var(--ink); }
+.silo--add:hover { border-color: var(--brand); color: var(--brand-strong); background: var(--brand-soft); }
+/* Nút dạng chữ / đổi vai trò */
+.lnk:hover, .linkbtn:hover, .mp-gate button:hover { color: var(--brand-strong); text-decoration: underline; }
+/* Dòng bảng bấm được: dòng đang chọn đậm hơn khi rê */
+.mp-table tr.is-selected:hover td { background: var(--brand-soft); box-shadow: inset 0 0 0 9999px rgba(0, 0, 0, .04); }
+.mp-table--form tr:hover td { background: transparent; }
+
+/* ===== Header 1 hàng (20/10): đường dẫn bên trái, nhóm điều khiển bên phải, không xuống hàng ===== */
+.mp-hd { flex-wrap: nowrap !important; }
+.mp-hd__crumb { flex: 1 1 0 !important; min-width: 0 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mp-hd__right { flex: 0 0 auto !important; flex-wrap: nowrap !important; }
+.mp-hd__right > * { flex: none; }
+.mp-hd__as select { max-width: 168px; text-overflow: ellipsis; }
+.mp-site { white-space: nowrap; }
+.mp-hd__as select { max-width: 136px; }
+/* Vai trò đã hiện ở ô "Xem như" — tài khoản chỉ còn tên (vai trò xem trong bảng tài khoản khi mở) */
+.mp-me__txt small { display: none; }
+.mp-me__txt b { display: block; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Màn có thêm nút Cloud / Server nhà máy và trạng thái kết nối (Lệnh SX): gọn ô Xem như và tài khoản */
+.mp-hd:has(.seg) .mp-hd__as > span { display: none; }
+.mp-hd:has(.seg) .mp-me__txt { display: none; }
+
+/* ===== Dãn dòng (20/10): chữ xuống nhiều dòng không bị chật — tối thiểu 1,5 lần cỡ chữ ===== */
+.mp { line-height: 1.5 !important; }
+.mp :is(p, li, dd, dt, td, label, div, span, b, strong, small, em, a, summary):not(.mp-btn):not(.mp-doc):not(.mp-lot):not(.mp-site):not(.mp-nav__count):not(.navcnt):not(.mp-av):not(.mp-bell__dot) { line-height: 1.5 !important; }
+.mp :is(h1, h2, h3, .mp-card__title) { line-height: 1.3 !important; }
+.mp-table td { line-height: 1.5 !important; }
+.mp :is(.mp-doc, .mp-lot, .mp-site) { line-height: 1.4 !important; }
+
+/* Thanh cuộn ngang trên (dưới tiêu đề bảng): có đường kẻ phía trên để tách khỏi hàng tiêu đề (21/10) */
+.mp-xs[data-over="1"] > .mp-xs__top { border-top: 1px solid var(--line); background: var(--surface-2); }
+
+/* Bảng luôn phủ hết chiều ngang khung (21/10): bảng là phần tử flex co giãn — ngắn hơn khung thì giãn ra cho đủ, dài hơn thì cuộn ngang */
+.mp-xs__body { display: flex; }
+.mp-xs__body > .mp-table { flex: 1 0 auto; }
+
+input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}
+input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+td input.mp-input{min-width:72px}
+
+/* ===== Ô nhập có đơn vị / icon (chốt 23/10) =====
+   Khung viền vẽ ở div.suffix: lề trái = lề phải = 12px; ô nhập bên trong co giãn; đơn vị đứng cuối, cách giá trị 4px; đơn vị giữ đủ bề rộng chữ, ô nhập không được lấn.
+   :not(#_) nâng độ ưu tiên lên mức id để thắng các bản vá cũ trong từng màn mà không cần !important. */
+div.suffix:has(> span):not(#_) { display: flex; align-items: center; gap: 4px; position: relative; min-width: 0; min-height: var(--control-field, 44px); padding: 0 var(--space-3, 12px); border: 1px solid var(--line-strong); border-radius: var(--radius-md, 6px); background: var(--surface-1); box-sizing: border-box; transition: border-color .12s, box-shadow .12s; }
+div.suffix:has(> span):not(#_):hover { border-color: var(--ink-muted); }
+div.suffix:has(> span):not(#_):focus-within { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand), 0 0 0 4px color-mix(in srgb, var(--brand) 28%, transparent); }
+div.suffix:has(> span):has(> .err):not(#_), div.suffix:has(> span):has(> [aria-invalid="true"]):not(#_) { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); background: var(--bad-soft); }
+div.suffix:has(> span):has(> :disabled):not(#_) { background: var(--surface-2); border-color: var(--line); border-style: dashed; cursor: not-allowed; }
+div.suffix:has(> span):not(#_) > input, div.suffix:has(> span):not(#_) > .mp-input { flex: 1 1 0; width: auto; min-width: 0; max-width: none; height: auto; min-height: 0; align-self: stretch; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; outline: none; }
+div.suffix:not(#_) > span { position: static; transform: none; flex: 0 0 auto !important; width: max-content !important; min-width: max-content !important; max-width: none !important; box-sizing: content-box; overflow: visible; display: inline-block; align-items: center; margin: 0; padding: 0; border: 0; background: none; color: var(--ink-muted); font: 500 16px/1 var(--font-sans); white-space: nowrap; pointer-events: none; }
+/* Phần tử con trong span đơn vị (chữ do runtime bọc thêm) — bản vá cũ `.suffix span { position: absolute }` ở từng màn từng kéo nó ra ngoài, làm span rộng 0 */
+div.suffix:not(#_) > span * { position: static; transform: none; inset: auto; margin: 0; }
+.mp-table--form div.suffix:has(> span):not(#_) { min-height: 40px; }
+/* Icon có sẵn trong ô: mũi tên chọn, lịch — cách mép phải 12px như lề trái */
+select.mp-input:not(#_) { background-position: right var(--space-3, 12px) center; padding-right: 36px; }
+input.mp-input:not(#_)[type="date"], input.mp-input:not(#_)[type="time"], input.mp-input:not(#_)[type="datetime-local"] { padding-right: var(--space-3, 12px); }
+.mp-input::-webkit-calendar-picker-indicator { margin: 0 0 0 var(--space-2, 8px); }
+/* ===== Canh phải ô số (chốt 23/10) =====
+   Ô có đơn vị và ô kiểu số (type=number, inputmode decimal/numeric) — ở form lẫn trong bảng — canh phải, chữ số đều bề rộng.
+   Mã, SĐT, MST, số tài khoản là ô chữ nên vẫn canh trái. */
+div.suffix:has(> span):not(#_) > input,
+input.mp-input:not(#_):is([type="number"], [inputmode="decimal"], [inputmode="numeric"]) { text-align: right; font-variant-numeric: tabular-nums; }
+input.mp-input:not(#_):is([type="number"], [inputmode="decimal"], [inputmode="numeric"])::placeholder { text-align: right; }
+
+/* ===== Ô số lượng + đơn vị gộp (chốt 23/10) =====
+   Một khung: bên trái nhập số (canh phải), bên phải chọn đơn vị; viền / trạng thái lỗi / focus vẽ trên khung. */
+.qu:not(#_) { display: flex; align-items: stretch; min-width: 0; min-height: var(--control-field, 44px); border: 1px solid var(--line-strong); border-radius: var(--radius-md, 6px); background: var(--surface-1); overflow: hidden; box-sizing: border-box; transition: border-color .12s, box-shadow .12s; }
+.qu:not(#_):hover { border-color: var(--ink-muted); }
+.qu:not(#_):focus-within { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand), 0 0 0 4px color-mix(in srgb, var(--brand) 28%, transparent); }
+.qu:not(#_):has(.err) { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); }
+.qu:not(#_):has(:disabled) { background: var(--surface-2); border-style: dashed; }
+.qu:not(#_) > input { flex: 1 1 0; width: auto; min-width: 0; max-width: none; height: auto; min-height: 0; margin: 0; padding: 0 var(--space-3, 12px); border: 0; border-radius: 0; background: transparent; box-shadow: none; outline: none; text-align: right; font-variant-numeric: tabular-nums; }
+.qu:not(#_) > select { flex: 0 0 auto; width: auto; min-width: 92px; max-width: 50%; height: auto; min-height: 0; margin: 0; padding: 0 36px 0 var(--space-3, 12px); border: 0; border-left: 1px solid var(--line); border-radius: 0; background-color: var(--surface-0); box-shadow: none; outline: none; font-weight: 500; cursor: pointer; }
+.qu:not(#_) > select:focus-visible { background-color: var(--brand-soft); }
+.qu:not(#_) > select.qu-empty { color: var(--ink-muted); }
+.mp-table--form .qu:not(#_) { min-height: 40px; }
+
+/* ===== Nhật ký dùng chung (chốt 23/10) =====
+   <section class="mp-log"> · tiêu đề "Nhật ký" + số mục + liên kết "Xem ở Nhật ký hệ thống" · dòng thời gian mp-tl · nút "Xem tất cả (n)".
+   Mỗi mục: <b>Người</b> (vai trò) · việc · <time>dd/mm/yyyy HH:mm</time>. Chấm: xám = thường, is-key = đổi trạng thái / duyệt / chốt, is-bad = hủy / từ chối / khóa / lỗi; is-sys = "Hệ thống". */
+.mp-log { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.mp-log__h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.mp-log__t { margin: 0; display: inline-flex; align-items: center; gap: 8px; font: 600 18px/26px var(--font-sans); color: var(--ink); }
+.mp-log__n { display: inline-block; min-width: 24px; height: 22px; padding: 0 8px; border-radius: 11px; background: var(--surface-2); color: var(--ink-muted); font: 600 13px/22px var(--font-sans); text-align: center; box-sizing: border-box; }
+.mp-log__h .mp-xlink { font-size: 16px; }
+.mp-log__empty { font-size: 16px; color: var(--ink-muted); }
+.mp-tl b { font-weight: 600; }
+.mp-tl__role { color: var(--ink-muted); font-weight: 400; }
+.mp-tl li.is-key::before { background: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.mp-tl li.is-bad::before { background: var(--bad); box-shadow: 0 0 0 3px var(--bad-soft); }
+.mp-tl li.is-sys { color: var(--ink-muted); }
+.mp-tl li.is-sys b { font-weight: 500; font-style: italic; color: var(--ink-muted); }
+.mp-tl__more { align-self: flex-start; border: 0; background: none; padding: 4px 0; margin: 0; color: var(--brand); font: 500 16px/22px var(--font-sans); cursor: pointer; }
+.mp-tl__more:hover { text-decoration: underline; }
+.mp-tl__more:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: 4px; }
+
+/* ===== Danh sách: cột mã đứng yên, thao tác hiện khi rê vào dòng (chốt 23/10) =====
+   Cột đầu (mã) dính trái khi cuộn ngang. Cột thao tác không chiếm chỗ: nội dung bọc trong <div class="mp-rowact">,
+   hiện thành thanh nút biểu tượng nổi ở mép phải dòng khi rê chuột / focus bàn phím (màn cảm ứng: luôn hiện). */
+.mp-table:not(.mp-table--form) > thead > tr > th:first-child,
+.mp-table:not(.mp-table--form) > tbody > tr > td:first-child { position: sticky; left: 0; z-index: 1; box-shadow: inset -1px 0 0 var(--line); }
+.mp-table:not(.mp-table--form) > tbody > tr > td:first-child { background: var(--surface-1); }
+.mp-table:not(.mp-table--form) > thead > tr > th:first-child { z-index: 3; background: var(--surface-2); }
+.mp-table:not(.mp-table--form) > tbody > tr:hover > td:first-child { background: var(--surface-2); }
+.mp-table:not(.mp-table--form) > tbody > tr.is-selected > td:first-child { background: var(--brand-soft); }
+.mp-table:not(.mp-table--form) > tbody > tr.is-group > td:first-child { background: var(--surface-0); }
+.mp-table:not(.mp-table--form) th.mp-actions { width: 0; min-width: 0; max-width: 0; padding: 0 !important; border: 0; overflow: hidden; font-size: 0; }
+.mp-table:not(.mp-table--form) td.mp-actions { position: sticky; right: 0; z-index: 2; width: 0; min-width: 0; max-width: 0; padding: 0 !important; overflow: visible; background: transparent !important; }
+.mp-rowact { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 10px; background: var(--surface-1); border: 1px solid var(--line); box-shadow: var(--shadow-pop); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
+.mp-table tr:hover .mp-rowact, .mp-table tr:focus-within .mp-rowact { opacity: 1; pointer-events: auto; }
+@media (hover: none) { .mp-rowact { opacity: 1; pointer-events: auto; } }
+.mp-rowact .mp-gate { font-size: 14px; }
+.mp-iconbtn { width: 36px; height: 36px; flex: none; display: inline-grid; place-items: center; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--ink); cursor: pointer; text-decoration: none; }
+.mp-iconbtn svg { width: 20px; height: 20px; }
+.mp-iconbtn:hover { background: var(--surface-2); }
+.mp-iconbtn--primary { color: var(--brand); }
+.mp-iconbtn--primary:hover { background: var(--brand-soft); }
+.mp-iconbtn--danger { color: var(--bad); }
+.mp-iconbtn--danger:hover { background: var(--bad-soft); }
+.mp-iconbtn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+.mp-iconbtn[disabled], .mp-iconbtn.is-disabled { opacity: .4; cursor: not-allowed; }
+
+/* ===== Số đếm trên tab (chốt 30/10) =====
+   Mọi tab có số: tab thường = viên xám (surface-2 / ink-muted); tab đang chọn = viên đặc màu chủ đạo, chữ trắng — như "Chưa phát" ở Lệnh SX.
+   Số đỏ (cảnh báo) giữ màu đỏ; khi tab đang chọn thì đỏ đặc.
+   :not(#_) + !important để thắng style riêng của từng màn và style inline (font-weight:400). */
+[role=tab]:not(#_) > span.mp-muted:last-child {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 7px; margin-left: 6px;
+  border-radius: 11px; background: var(--surface-2); color: var(--ink-muted) !important;
+  font: 600 13px/22px var(--font-sans) !important; font-variant-numeric: tabular-nums; vertical-align: 1px; box-sizing: border-box; }
+:is(.tab.on, [role=tab][aria-selected="true"]):not(#_) > span.mp-muted:last-child,
+.tab.on:not(#_) :is(.n, .vtab__n, .tab__n, .hs-tab__n):not(.bad):not(.n--bad):not(.is-wait):not(.is-bad),
+.pg-tab.on:not(#_) .pg-tab__n,
+.atab.on:not(#_) .atab__n,
+.dtab.on:not(.dtab--late):not(#_) .dtab__n,
+.tl-chip.on:not(#_) .n,
+:is(.on, [aria-selected="true"]):not(#_) > :is(.tcount, .dbadge),
+:is(.on, [aria-selected="true"]):not(#_) > sc-if > :is(.tcount, .dbadge, .vtab__n) {
+  background: var(--brand) !important; color: var(--on-brand) !important; }
+.tab.on:not(#_) :is(.n.bad, .n--bad, .hs-tab__n.is-bad) { background: var(--bad-solid) !important; color: var(--on-solid) !important; }
+.tab.on:not(#_) .hs-tab__n.is-wait { background: var(--wait) !important; color: var(--on-solid, #fff) !important; }
+
+/* ===== Thanh cuộn nổi (chốt 03/11) =====
+   Màn có <script src="./mp-scroll.js">: ẩn thanh cuộn gốc (không chiếm chỗ), vẽ thanh nổi đè lên nội dung,
+   chỉ hiện khi rê chuột / cuộn, tự ẩn sau ~1 giây đứng yên. Bảng rộng: 1 thanh ngay dưới tiêu đề + 1 thanh ở đáy khung nhìn. */
+/* Bảng rộng: bỏ thanh cuộn dưới tiêu đề — chỉ còn 1 thanh ở đáy thân bảng (mọi màn) */
+.mp-xs > .mp-xs__top { display: none !important; }
+.mp-xs[data-over="1"] > .mp-xs__body > .mp-table > thead > tr:last-child > th { padding-bottom: 10px; }
+html.mp-osb, html.mp-osb * { scrollbar-width: none !important; }
+html.mp-osb::-webkit-scrollbar, html.mp-osb ::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none; }
+html.mp-osb .mp-xs > .mp-xs__top { display: none !important; }
+html.mp-osb .mp-xs[data-over="1"] > .mp-xs__body > .mp-table > thead > tr:last-child > th { padding-bottom: 10px; }
+.mp-osb-layer { position: fixed; inset: 0; pointer-events: none; z-index: 2147483000; }
+.mp-osb-track { position: fixed; box-sizing: border-box; pointer-events: none; opacity: 0; transition: opacity .3s ease; }
+.mp-osb-track.is-on { opacity: 1; pointer-events: auto; transition-duration: .1s; }
+.mp-osb-thumb { position: absolute; left: 0; top: 0; border-radius: 999px; background: color-mix(in srgb, var(--ink, #0b1117) 40%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--surface-1, #fff) 70%, transparent); transition: background .12s, width .12s, height .12s, margin .12s; }
+.mp-osb-track--x .mp-osb-thumb { height: 8px; margin-top: 3px; }
+.mp-osb-track--y .mp-osb-thumb { width: 8px; margin-left: 3px; }
+.mp-osb-track:hover .mp-osb-thumb, .mp-osb-track.is-drag .mp-osb-thumb { background: color-mix(in srgb, var(--ink, #0b1117) 62%, transparent); }
+html.mp-osb-dragging, html.mp-osb-dragging * { user-select: none !important; -webkit-user-select: none !important; }

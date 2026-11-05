@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Kế toán — công nợ &amp; sổ thu chi</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/mespowder/tokens.css">
+<link rel="stylesheet" href="ds/mespowder/components/bundle.css">
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:var(--surface-2);font-family:var(--font-sans,"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif);color:var(--ink)}
+a{color:var(--brand)}a:hover{color:var(--brand-strong)}
+.pg{padding:24px 32px 40px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box;width:100%}
+.pg-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.pg-h h1{margin:0;font-size:28px;line-height:36px;font-weight:600}
+.pg-h p{margin:4px 0 0;color:var(--ink-muted);max-width:820px;font-size:18px;line-height:24px}
+.pg-acts{display:flex;gap:8px;flex-wrap:wrap;padding-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.stats .mp-stat__value{font-size:26px;line-height:32px}
+.icon-btn{width:32px;height:32px;display:inline-grid;place-items:center;border:0;border-radius:8px;background:transparent;color:var(--ink-muted);cursor:pointer;flex:none}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink)}
+.linkbtn{border:0;background:none;padding:0;font:600 18px/24px var(--font-sans);color:var(--brand);cursor:pointer;text-align:left}
+.linkbtn:hover{text-decoration:underline;color:var(--brand-strong)}
+.linkbtn.mono{font-family:var(--font-mono);font-size:16px;white-space:nowrap}
+.row-btn{height:32px;padding:0 10px;font-size:16px;font-weight:500}
+.mp-actions .mp-btn+.mp-btn{margin-left:6px}
+.mp-table th{font:600 15px/20px var(--font-sans);color:var(--ink);text-align:left;padding:10px 12px;background:var(--surface-0);border-bottom:1px solid var(--line-strong);white-space:nowrap}
+.mp-table th.mp-num{text-align:right}
+.mp-table th.grp{text-align:center;border-bottom:1px solid var(--line);color:var(--ink-muted);padding-bottom:6px}
+.mp-table td{vertical-align:top}
+.mp-table.tight th,.mp-table.tight td{padding-left:10px;padding-right:10px}
+.mp-table.tight td{font-size:16px}
+.mp-table.tight td:first-child{min-width:170px}
+.mp-table.tight th{white-space:normal}
+.mp-table.tight th.mp-nowrap{white-space:nowrap}
+.top2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:16px;align-items:start}
+.mp-table td.mp-num{white-space:nowrap;font-variant-numeric:tabular-nums}
+.mp-table td.c-bad{color:var(--bad);font-weight:600}
+.mp-table td.c-muted{color:var(--ink-muted)}
+.mp-table td.w-party{max-width:230px}
+.mp-table td.w-mat{min-width:170px}
+.mp-table tr.is-void td{color:var(--ink-muted)}
+.mp-table tr.is-hl td{background:var(--brand-soft)}
+.mp-table tr.is-void td.mp-num{text-decoration:line-through}
+.mp-table tr.is-group td .mp-doc{margin-left:8px;font-weight:500}
+.mp-table tr.is-group td .gsub{margin-left:8px;font-weight:400;color:var(--ink-muted);font-size:16px}
+.cardh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line)}
+.cardh h2{margin:0;font:600 19px/26px var(--font-sans)}
+.cardh .sub{font-size:16px;color:var(--ink-muted)}
+.cardf{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line);font-size:16px;color:var(--ink-muted)}
+.sec-t{margin:0;font:600 18px/24px var(--font-sans)}
+.det{display:flex;flex-direction:column;gap:16px;padding:16px}
+.det-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding:16px;border-bottom:1px solid var(--line)}
+.det-h h2{margin:0;font-size:22px;line-height:28px;font-weight:600}
+.det-h .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px;font-size:16px;color:var(--ink-muted)}
+.kv-box{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--surface-0)}
+.mp-kv dd.bad{color:var(--bad)}.mp-kv dd.ok{color:var(--ok)}
+.mp-kv dd .mp-sub{font-weight:400}
+.two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:16px;align-items:start}
+.tl-box{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.mp-tl li b{font-weight:600}
+.rule{display:flex;flex-direction:column;gap:6px;font-size:16px;line-height:24px}
+.rule .mp-param{margin:0 2px}
+.flt{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ovl .mp-dlg{max-height:none}
+.cdpop{width:100%;max-width:1180px;max-height:calc(100vh - 88px);overflow:auto;min-width:0}
+.mp-dlg__head .icon-btn{margin:-6px -8px -6px 0}
+.mp-dlg__body{gap:16px}
+.mp-ro.has-sub{flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+.ovl{position:absolute;inset:0;background:rgba(22,33,43,0.45);display:flex;justify-content:center;align-items:flex-start;padding:56px 16px 32px;box-sizing:border-box;z-index:40}
+
+
+
+
+
+
+
+
+
+.req{color:var(--bad);margin-left:2px}
+.err{border-color:var(--bad)!important}
+.errtext{font-size:15px;line-height:20px;color:var(--bad)}
+.hint{font-size:15px;line-height:20px;color:var(--ink-muted)}
+
+
+.suffix{position:relative}
+.suffix .mp-input{width:100%;padding-right:40px;box-sizing:border-box;text-align:right;font-variant-numeric:tabular-nums}
+.suffix span{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--ink-muted);pointer-events:none}
+
+.mp-field .mp-input{width:100%;box-sizing:border-box}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:var(--radius-sm);overflow:hidden;height:var(--control-web);box-sizing:border-box}
+.seg button{border:0;background:var(--surface-1);padding:0 16px;font:500 18px/24px var(--font-sans);color:var(--ink);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line-strong)}
+.seg button.on{background:var(--brand);color:var(--on-brand)}
+.file{display:flex;align-items:center;gap:8px;min-height:var(--control-web);flex-wrap:wrap}
+.chip-f{display:inline-flex;align-items:center;gap:6px;padding:4px 6px 4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface-0);font-size:16px}
+.chip-f button{border:0;background:none;color:var(--ink-muted);cursor:pointer;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px}
+.chip-f button:hover{background:var(--surface-2);color:var(--ink)}
+.alloc{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.alloc .mp-table td{vertical-align:middle;padding-top:8px;padding-bottom:8px}
+.alloc .suffix{width:170px;margin-left:auto}
+.alloc-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;background:var(--surface-0);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.alloc-f{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-top:1px solid var(--line);font-size:16px;background:var(--surface-0);flex-wrap:wrap}
+.alloc-f b{font-variant-numeric:tabular-nums}
+.alloc-f .bad{color:var(--bad);font-weight:600}.alloc-f .ok{color:var(--ok);font-weight:600}
+
+
+
+
+
+/* mp-shell v2 */
+.mp-nav{flex:0 0 256px;width:256px;background:var(--surface-1);border-right:1px solid var(--line);padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box}
+.mp-nav__brand{display:flex;align-items:center;gap:10px;padding:2px 8px 14px;margin-bottom:6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.mp-nav__logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:700 15px/1 var(--font-sans);letter-spacing:.02em;flex:none}
+.mp-nav__brand b{font-size:19px;line-height:22px;display:block}.mp-nav__brand small{font-size:14px;line-height:18px;color:var(--ink-muted);display:block}
+.mp-nav__sec{font:600 14px/20px var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:14px 10px 6px}
+.mp-nav__div{height:1px;background:var(--line);margin:8px 0}
+.mp-nav__item{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--ink);text-decoration:none;font:500 18px/24px var(--font-sans)}
+.mp-nav__item svg{flex:none;color:var(--ink-muted)}
+.mp-nav__item:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__item.is-on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-nav__item.is-on svg{color:var(--brand)}
+.mp-nav__item .mp-nav__count{margin-left:auto;min-width:26px;height:24px;padding:0 8px;border-radius:999px;background:var(--brand);color:var(--on-brand);font:600 15px/24px var(--font-sans);text-align:center;box-sizing:border-box}
+.mp-nav__subs{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.mp-nav__subs .snav,.mp-nav__subs .navsub{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:none;border-radius:6px;padding:6px 10px;font:400 16px/22px var(--font-sans);color:var(--ink-muted);text-decoration:none;cursor:pointer;text-align:left;position:relative;box-sizing:border-box}
+.mp-nav__subs .snav:hover,.mp-nav__subs .navsub:hover{background:var(--surface-2);color:var(--ink)}
+.mp-nav__subs .snav.on,.mp-nav__subs .navsub.on{color:var(--brand-strong);font-weight:600;background:var(--surface-2)}
+.mp-nav__subs .snav.on::before,.mp-nav__subs .navsub.on::before{content:"";position:absolute;left:-11px;top:6px;bottom:6px;width:2px;border-radius:2px;background:var(--brand)}
+.mp-nav__subs .navsub svg{display:none}
+.mp-nav__subs .snav.is-parent{color:var(--brand-strong);font-weight:600}
+.mp-nav__subs .mp-nav__subs{margin:0 0 2px 10px}
+.mp-nav__foot{margin-top:auto;padding:12px 10px 2px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink-muted)}
+.mp-nav__foot button{white-space:nowrap;border:0;background:none;color:var(--ink-muted);display:inline-flex;align-items:center;gap:6px;font:inherit;cursor:pointer;padding:4px;border-radius:6px}
+.mp-nav__foot button:hover{background:var(--surface-2);color:var(--ink)}
+.mp-hd{position:relative;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:10px 24px 10px 32px;background:var(--surface-1);border-bottom:1px solid var(--line);box-sizing:border-box}
+.mp-hd__crumb{font-size:16px;line-height:22px;color:var(--ink-muted);min-width:0;flex:1 1 220px}
+.mp-hd__right{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px;flex:0 1 auto;min-width:0}
+.mp-hd__fac{display:inline-flex;align-items:center;gap:6px;height:40px;box-sizing:border-box;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font:500 16px/1 var(--font-sans);color:var(--ink);cursor:pointer}
+.mp-hd__fac svg{color:var(--ink-muted)}
+.mp-hd__sep{width:1px;height:24px;background:var(--line);margin:0 4px}
+.mp-hd__right>.seg{height:40px;box-sizing:border-box;border-color:var(--line)}
+.mp-hd__right>.seg .segbtn{display:inline-flex;align-items:center;padding:0 12px}
+.mp-field .seg{display:inline-flex;width:auto;align-self:flex-start;height:36px}
+.mp-field .seg button{display:inline-flex;align-items:center;justify-content:center;padding:0 14px;font-size:15px;white-space:nowrap}
+.mp-hd__right>.conn{height:40px;box-sizing:border-box;border-radius:8px;padding:0 12px;font-size:16px}
+.mp-pop{position:relative}
+.mp-pop>summary{list-style:none;cursor:pointer}
+.mp-pop>summary::-webkit-details-marker{display:none}
+.mp-bell>summary{position:relative;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;color:var(--ink)}
+.mp-bell>summary:hover,.mp-bell[open]>summary{background:var(--surface-2)}
+.mp-bell__dot{position:absolute;top:3px;left:18px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--bad-solid);color:var(--on-solid);font:600 13px/18px var(--font-sans);text-align:center;box-sizing:border-box;border:2px solid var(--surface-1)}
+.mp-me>summary{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 4px;border-radius:999px;margin-left:4px}
+.mp-me>summary:hover,.mp-me[open]>summary{background:var(--surface-2)}
+.mp-av{width:32px;height:32px;border-radius:999px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 15px/1 var(--font-sans);flex:none}
+.mp-av--lg{width:44px;height:44px;font-size:19px}
+.mp-me__txt{display:flex;flex-direction:column;line-height:20px;max-width:190px}
+.mp-me__txt b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me__txt small{font-size:15px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-me>summary>svg{color:var(--ink-muted)}
+.mp-pop__panel{position:absolute;right:0;top:calc(100% + 8px);background:var(--surface-1);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-pop);z-index:30;overflow:hidden;text-align:left}
+.mp-pop__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:18px}
+.mp-pop__head a{font-size:15px}
+.mp-pop a{text-decoration:none}.mp-pop a:hover{text-decoration:underline}
+.mp-pop__foot{display:flex;justify-content:space-between;gap:8px;padding:10px 16px;border-top:1px solid var(--line);font-size:15px;background:var(--surface-0)}
+.mp-noti{width:380px}
+.mp-noti__tabs{display:flex;gap:4px;padding:8px 12px 0}
+.mp-noti__tabs span{padding:6px 10px;border-radius:6px;font-size:15px;color:var(--ink-muted)}
+.mp-noti__tabs span.on{background:var(--brand-soft);color:var(--brand-strong);font-weight:600}
+.mp-noti ul{list-style:none;margin:0;padding:6px 0}
+.mp-noti li{display:flex;gap:10px;padding:10px 16px;position:relative}
+.mp-noti li:hover{background:var(--surface-0)}
+.mp-noti li.is-unread::after{content:"";position:absolute;right:14px;top:16px;width:8px;height:8px;border-radius:999px;background:var(--brand)}
+.mp-noti li p{margin:0;font-size:16px;line-height:22px;padding-right:14px}
+.mp-noti li.is-unread p{font-weight:500}
+.mp-noti li time{display:block;font-size:15px;color:var(--ink-muted);margin-top:2px}
+.mp-noti__ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+.mp-noti__ic.ok{background:var(--ok-soft);color:var(--ok)}.mp-noti__ic.wait{background:var(--wait-soft);color:var(--wait)}.mp-noti__ic.bad{background:var(--bad-soft);color:var(--bad)}.mp-noti__ic.info{background:var(--brand-soft);color:var(--brand)}
+.mp-me__panel{width:300px}
+.mp-me__who{display:flex;gap:12px;align-items:center;padding:16px}
+.mp-me__who b{display:block;font-size:18px}.mp-me__who small{display:block;font-size:15px;color:var(--ink-muted)}
+.mp-me__roles{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.mp-me__roles span{font-size:15px;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.mp-me__menu{list-style:none;margin:0;padding:6px;border-top:1px solid var(--line)}
+.mp-me__menu a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:16px;color:var(--ink);text-decoration:none}
+.mp-me__menu a:hover{background:var(--surface-2)}
+.mp-me__menu a svg{color:var(--ink-muted)}
+.mp-me__menu a.bad{color:var(--bad)}.mp-me__menu a.bad svg{color:var(--bad)}
+.mp-hd__as{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 10px;border:1px dashed var(--line-strong);border-radius:8px;font:500 15px/1 var(--font-sans);color:var(--ink-muted);box-sizing:border-box}
+.mp-hd__as select{height:34px;border:0;background:transparent;font:600 16px/1 var(--font-sans);color:var(--ink);padding:0 4px;cursor:pointer}
+.mp-gate{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 10px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--surface-0);font-size:15px;line-height:20px;color:var(--ink-muted)}
+.mp-gate b{color:var(--ink);font-weight:600}
+.mp-gate button{border:0;background:none;padding:0;font:600 15px/20px var(--font-sans);color:var(--brand);cursor:pointer;text-decoration:underline}
+a.mp-xlink{color:var(--brand);text-decoration:none;border-bottom:1px dotted currentColor;white-space:nowrap}
+a.mp-xlink:hover{color:var(--brand-strong);border-bottom-style:solid}
+a.mp-xlink.mp-code{font-family:var(--font-mono)}
+/* tab popup + chọn tệp + xem trước ảnh */
+.dlg-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 24px;overflow-x:auto}.dlg-tabs button{border:0;background:none;padding:10px 14px;font:inherit;font-size:16px;color:var(--ink-muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}.dlg-tabs button.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}.tab-err{color:var(--bad);margin-left:4px}
+.fbox{display:flex;flex-direction:column;gap:8px;min-width:0}.fpick{position:relative;display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);cursor:pointer}.fpick:focus-within{outline:2px solid var(--brand);outline-offset:2px}.fpick__btn{display:inline-flex;align-items:center;height:36px;padding:0 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);font-weight:600;color:var(--ink);flex:none}.fpick__hint{color:var(--ink-muted);font-size:15px}.flist{display:flex;flex-wrap:wrap;gap:8px}.fchip{display:inline-flex;align-items:center;gap:8px;padding:4px 6px 4px 4px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);font-size:15px;max-width:100%}.fchip img,.fchip .fthumb{width:40px;height:40px;border-radius:6px;object-fit:cover;background:var(--surface-2);display:grid;place-items:center;color:var(--ink-muted)}.fchip button.fview{border:0;padding:0;background:none;cursor:zoom-in;border-radius:6px;display:block}.fchip__t{display:flex;flex-direction:column;min-width:0;line-height:20px}.fchip__n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}.fchip__t small{color:var(--ink-muted);font-size:13px}.fchip__x{border:0;background:none;color:var(--ink-muted);cursor:pointer;width:28px;height:28px;border-radius:6px;display:inline-grid;place-items:center;flex:none}.fchip__x:hover{background:var(--surface-2);color:var(--ink)}
+.ovl.pv-ovl{z-index:50}.pv-img{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:0 auto;border-radius:8px;background:var(--surface-2)}.pv-ph{min-height:280px;max-height:70vh;display:grid;place-items:center;align-content:center;gap:8px;background:var(--surface-2);border-radius:8px;color:var(--ink-muted);font-size:16px}.pv-name{text-align:center;color:var(--ink-muted);font-size:15px;word-break:break-all}.pv-pos{margin-left:8px;font-weight:400;color:var(--ink-muted);font-size:16px}.pv-nav{display:inline-flex;gap:8px;margin-right:auto}
+/* fix ô số + đơn vị */.mp-field div.suffix,div.suffix{position:relative;display:flex;align-items:center;gap:8px;min-width:0}.mp-field div.suffix>.mp-input,.mp-field div.suffix input.mp-input,div.suffix>.mp-input,div.suffix input.mp-input{flex:1 1 auto;width:auto;min-width:88px;padding-right:10px;border-radius:var(--radius-md,6px)}.mp-field div.suffix>span,div.suffix>span{position:static;transform:none;display:inline-flex;align-items:center;flex:none;padding:0;border:0;background:none;color:var(--ink-muted);font-size:15px;line-height:1;white-space:nowrap;pointer-events:none}input.mp-input[type=number]{-moz-appearance:textfield;appearance:textfield;min-width:72px}input.mp-input[type=number]::-webkit-inner-spin-button,input.mp-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}td input.mp-input{min-width:72px}
+.mp-pg{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-muted)}
+.mp-pg__nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.mp-pg__n{min-width:40px;height:40px;padding:0 10px;box-sizing:border-box;border:1px solid var(--line);border-radius:var(--radius-md,6px);background:var(--surface-1,#fff);color:var(--ink);font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.mp-pg__n:hover:not(:disabled){border-color:var(--line-strong);background:var(--surface-2)}
+.mp-pg__n.is-on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff)}
+.mp-pg__n:disabled{opacity:.4;cursor:default}
+.mp-pg__n:focus-visible{outline:2px solid var(--focus-ring,var(--brand));outline-offset:2px}
+.mp-pg__n svg{width:16px;height:16px}
+.mp-pg__gap{padding:0 4px}
+.mp-pg__size{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.mp-pg__size select{width:auto;min-width:76px;height:40px;padding:0 8px}
+</style>
+</helmet>
+<div class="mp" style="font-family: var(--font-sans); color: var(--ink); font-size: 18px; line-height: 24px; min-height: 1100px; background: var(--surface-0); display: flex; align-items: stretch; width: 100%; max-width: 1920px; margin: 0 auto; box-sizing: border-box; box-shadow: 0 0 0 1px var(--line); position: relative">
+<nav aria-label="Phân hệ" class="mp-nav">
+<a href="HopDuyet.dc.html" class="mp-nav__brand"><span class="mp-nav__logo">MP</span><span><b>MES Powder</b><small>Quản lý sản xuất sữa bột</small></span></a>
+<a href="{{vx.m.href.viec}}" onClick="{{vx.m.go.viec}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span>Việc cần làm</span><span class="mp-nav__count">9</span></a>
+<div class="mp-nav__div"></div>
+<sc-if value="{{vx.m.show.ban}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.ban}}" onClick="{{vx.m.go.ban}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><path d="M7 7h.01"></path></svg><span>Bán hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.mua}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.mua}}" onClick="{{vx.m.go.mua}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Mua hàng</span></a></sc-if>
+<sc-if value="{{vx.m.show.kt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kt}}" onClick="{{vx.m.go.kt}}" class="mp-nav__item is-on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path><path d="M6 15h4"></path></svg><span>Kế toán</span></a>
+<div class="mp-nav__subs">
+<sc-if value="{{vx.m.show.kt_kh}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{nav.cnkh}}" onClick="{{go.cnkh}}">Công nợ khách hàng</button></sc-if>
+<sc-if value="{{vx.m.show.kt_ncc}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{nav.cnncc}}" onClick="{{go.cnncc}}">Công nợ nhà cung cấp</button></sc-if>
+<sc-if value="{{vx.m.show.kt_so}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{nav.so}}" onClick="{{go.so}}">Sổ thu chi</button></sc-if>
+</div></sc-if>
+<sc-if value="{{vx.m.show.kho}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.kho}}" onClick="{{vx.m.go.kho}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"></path><rect x="1" y="3" width="22" height="5" rx="1"></rect><path d="M10 12h4"></path></svg><span>Kho</span></a></sc-if>
+<sc-if value="{{vx.m.show.sx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.sx}}" onClick="{{vx.m.go.sx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20V9l6 4V9l6 4V5h3l1 15z"></path><path d="M2 20h20"></path></svg><span>Sản xuất</span></a></sc-if>
+<sc-if value="{{vx.m.show.cl}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.cl}}" onClick="{{vx.m.go.cl}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span>Chất lượng</span></a></sc-if>
+<sc-if value="{{vx.m.show.tx}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.tx}}" onClick="{{vx.m.go.tx}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg><span>Truy xuất &amp; thu hồi</span></a></sc-if>
+<sc-if value="{{vx.m.show.dm}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.dm}}" onClick="{{vx.m.go.dm}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>Danh mục</span></a></sc-if>
+<sc-if value="{{vx.m.show.qt}}" hint-placeholder-val="{{ true }}"><a href="{{vx.m.href.qt}}" onClick="{{vx.m.go.qt}}" class="mp-nav__item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span>Quản trị</span></a></sc-if>
+<div class="mp-nav__foot"><span>MES Powder v1.0</span><button type="button" aria-label="Thu gọn menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 17l-5-5 5-5"></path><path d="M18 17l-5-5 5-5"></path></svg>Thu gọn</button></div>
+</nav>
+<main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header class="mp-hd"><div class="mp-hd__crumb">Kế toán / <span style="color: var(--ink)">{{crumb}}</span></div><div class="mp-hd__right"><span class="mp-site mp-site--cloud" title="Màn chỉ có trên cloud — người ở nhà máy không vào được khi nhà máy mất mạng"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>Chỉ trên cloud</span><label class="mp-hd__as" title="Mô phỏng: đổi vai trò người đang dùng"><span>Xem như</span><select value="{{vx.role}}" onChange="{{vx.set}}" aria-label="Xem như vai trò"><sc-for list="{{vx.optl}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></label><button type="button" class="mp-hd__fac" aria-label="Nhà máy đang xem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{vx.fac}}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button><span class="mp-hd__sep"></span><details class="mp-pop mp-bell"><summary aria-label="Thông báo, 3 chưa đọc"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="mp-bell__dot">3</span></summary><div class="mp-pop__panel mp-noti"><div class="mp-pop__head"><b>Thông báo</b><a href="#">Đánh dấu tất cả đã đọc</a></div><div class="mp-noti__tabs"><span class="on">Chưa đọc 3</span><span>Tất cả</span></div><ul><li class="is-unread"><span class="mp-noti__ic ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><p>Phiếu nhập <span class="mp-code">PN-NM1-2610-0031</span> chờ Thủ kho trưởng xác nhận lệch — 1 bao rách đã tách trả NCC</p><time>10 phút trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic wait"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div><p>2 lô hết hạn chưa hủy quá 30 ngày ở <span class="mp-code">NM1-TONG</span></p><time>1 giờ trước · Kho</time></div></li><li class="is-unread"><span class="mp-noti__ic bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></span><div><p>Lệnh <span class="mp-code">LSX-2610-0011</span> chưa tới server NM1 quá 10 phút — đang gửi lại</p><time>2 giờ trước · Sản xuất</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2.2 0 3 6 1.6 6 4.6 0 1.3-1.3 2.2-3 2.2-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"></path></svg></span><div><p>Nhắc nợ: <span class="mp-code">KH-0012</span> có khoản quá hạn 3 ngày</p><time>Hôm qua · Kế toán</time></div></li><li class=""><span class="mp-noti__ic info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span><div><p>Vai trò ủy quyền QC trưởng của bạn hết hạn ngày 21/10</p><time>Hôm qua · Quản trị</time></div></li></ul><div class="mp-pop__foot"><a href="HopDuyet.dc.html">Việc chờ duyệt ở Việc cần làm →</a><a href="#">Xem tất cả</a></div></div></details><details class="mp-pop mp-me"><summary aria-label="Tài khoản"><span class="mp-av">{{vx.ini}}</span><span class="mp-me__txt"><b>{{vx.name}}</b><small>{{vx.label}}</small></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></summary><div class="mp-pop__panel mp-me__panel"><div class="mp-me__who"><span class="mp-av mp-av--lg">{{vx.ini}}</span><span><b>{{vx.name}}</b><small>{{vx.label}} · {{vx.fac}}</small></span></div><ul class="mp-me__menu"><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Hồ sơ của tôi</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Vai trò &amp; ủy quyền</a></li><li><a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zM15.5 7.5l3 3L22 7l-3-3"></path></svg>Đổi mật khẩu</a></li><li><a href="DangNhap.dc.html" class="bad"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Đăng xuất</a></li></ul></div></details></div></header>
+<sc-if value="{{vx.m.deny}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 32px 0; box-sizing: border-box; width: 100%"><div class="mp-banner mp-banner--warn" role="status"><span><b>Vai trò {{vx.role}} không có quyền vào màn này.</b> <a href="{{vx.m.homeHref}}" onClick="{{vx.m.homeGo}}">Về Việc cần làm</a></span></div></div></sc-if>
+<div class="pg">
+<sc-if value="{{isTcView}}" hint-placeholder-val="{{ false }}"><div><button type="button" class="mp-btn mp-btn--ghost" style="padding-left: 0" onClick="{{tc.back}}">← {{tc.backLabel}}</button></div></sc-if>
+<div class="pg-h"><div><h1>{{page.title}}</h1><p>{{page.desc}}</p></div><div class="pg-acts"><sc-for list="{{pageBtns}}" as="b" hint-placeholder-count="2"><button type="button" class="{{b.cls}}" onClick="{{b.run}}">{{b.label}}</button></sc-for><sc-if value="{{hasPg}}" hint-placeholder-val="{{ false }}"><span class="mp-gate">Việc của <b>{{pg.who}}</b><sc-if value="{{pg.hasWhy}}" hint-placeholder-val="{{ false }}"> · {{pg.why}}</sc-if><button type="button" onClick="{{pg.sw}}">Xem như {{pg.who}}</button></span></sc-if></div></div>
+<sc-if value="{{hasMiss}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" style="font-size: 16px">Không tìm thấy <span class="mp-code">{{miss}}</span> ở Kế toán — mở danh sách thay thế.</div></sc-if>
+<sc-if value="{{hasRoleNote}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" style="font-size: 16px">{{roleNote}}</div></sc-if>
+<sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--info" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; border-color: var(--ok); background: var(--ok-soft)"><span>{{toast}}</span><button type="button" class="icon-btn" aria-label="Đóng thông báo" onClick="{{closeToast}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></div></sc-if>
+<sc-if value="{{noTcView}}" hint-placeholder-val="{{ true }}"><div class="stats"><sc-for list="{{stats}}" as="x" hint-placeholder-count="5"><div class="mp-card mp-stat"><span class="mp-stat__label">{{x.label}}</span><span class="mp-stat__value" style="{{x.style}}">{{x.value}}</span><span class="mp-stat__note">{{x.note}}</span></div></sc-for></div></sc-if>
+<sc-if value="{{isTcView}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><sc-for list="{{tc.chips}}" as="ch" hint-placeholder-count="2"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></div>
+<sc-if value="{{tc.isVoid}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--warn" style="font-size: 16px"><span><b>Đã hủy {{tc.cancelAt}}</b> · {{tc.reason}}. Bản ghi giữ lại để tra cứu, không tính vào công nợ.</span></div></sc-if>
+<div class="two">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<div class="mp-card" style="min-width: 0"><div class="cardh"><h2>Thông tin</h2></div><div style="padding: 16px"><dl class="mp-kv" style="margin: 0"><sc-for list="{{tc.kv}}" as="x" hint-placeholder-count="8"><div><dt>{{x.k}}</dt><dd class="{{x.cls}}"><sc-if value="{{x.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{x.href}}" class="mp-xlink mp-code" onClick="{{x.open}}">{{x.v}}</a></sc-if><sc-if value="{{x.isText}}" hint-placeholder-val="{{ true }}">{{x.v}}</sc-if><sc-if value="{{x.hasSub}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{x.sub}}</span></sc-if></dd></div></sc-for></dl></div></div>
+<div class="mp-card" style="min-width: 0"><div class="cardh"><h2>{{tc.allocTitle}} <span class="sub" style="font-weight: 400">· {{tc.allocN}}</span></h2><span class="sub">{{tc.allocSub}}</span></div>
+<div style="overflow-x: auto"><table class="mp-table" style="min-width: 560px"><thead><tr><th>Chứng từ</th><th>Khoản</th><th>Hạn</th><th class="mp-num">Giá trị khoản</th><th class="mp-num">Bản ghi này</th></tr></thead><tbody>
+<sc-for list="{{tc.alloc}}" as="a" hint-placeholder-count="1"><tr><td class="mp-nowrap"><a href="{{a.href}}" class="mp-xlink mp-code" onClick="{{a.open}}">{{a.code}}</a></td><td>{{a.kind}}<sc-if value="{{a.hasSub}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{a.sub}}</span></sc-if></td><td class="mp-nowrap">{{a.due}}</td><td class="mp-num">{{a.total}}</td><td class="mp-num" style="font-weight: 600">{{a.amt}}</td></tr></sc-for>
+<sc-if value="{{tc.noAlloc}}" hint-placeholder-val="{{ false }}"><tr><td colspan="5" class="mp-muted" style="text-align: center; padding: 20px">Chưa cấn vào khoản nào.</td></tr></sc-if>
+</tbody></table></div></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<div class="mp-card" style="min-width: 0"><div class="cardh"><h2>Chứng từ</h2></div><div style="padding: 16px; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-0)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg><span style="min-width: 0; overflow-wrap: anywhere; font-size: 16px">{{tc.file}}</span></div><span class="mp-sub">{{tc.fileSub}}</span></div></div>
+<div class="mp-card" style="min-width: 0"><div class="cardh"><h2>Lịch sử</h2></div><div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 10px"><sc-for list="{{tc.hist}}" as="h" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 2px; font-size: 16px"><span>{{h.what}}</span><span class="mp-sub">{{h.who}} · {{h.at}}</span></div></sc-for></div></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isKH}}" hint-placeholder-val="{{ true }}">
+<div class="mp-card" style="min-width: 0">
+<div class="cardh"><h2>Khách hàng <span class="sub" style="font-weight: 400">· {{kh.count}}</span></h2><span class="sub">Nhấn tên khách để mở chi tiết</span></div>
+<div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table tight" style="min-width: 0px"><thead><tr><th rowspan="2">Khách hàng</th><th rowspan="2" class="mp-num">Hạn mức</th><th rowspan="2" class="mp-num">Công nợ hiện tại</th><th rowspan="2" class="mp-num">Trong hạn</th><th colspan="3" class="grp">Quá hạn theo tuổi nợ</th><th rowspan="2" class="mp-num">Chờ thu trước SX, giao</th><th rowspan="2">Tình trạng</th></tr><tr><th class="mp-num mp-nowrap">1–30 ngày</th><th class="mp-num mp-nowrap">31–90 ngày</th><th class="mp-num mp-nowrap">Trên 90 ngày</th></tr></thead><tbody><sc-for list="{{kh.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{kh.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{kh.emptyText}}</div></sc-if>
+<div class="cardf"><span>{{kh.foot}}</span></div>
+</div>
+<sc-if value="{{cdOpen}}" hint-placeholder-val="{{ false }}"><div class="ovl" style="position: fixed"><div class="mp-card cdpop" role="dialog" aria-modal="true" aria-label="Chi tiết công nợ khách hàng">
+<div class="det-h">
+<div style="min-width: 0"><h2>{{cd.company}}</h2><div class="meta"><a href="{{cd.ref.href}}" class="mp-xlink mp-code" onClick="{{cd.ref.open}}">{{cd.code}}</a><span>{{cd.pay}}</span><sc-for list="{{cd.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></div></div>
+<div class="mp-actions" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center"><sc-for list="{{cd.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="{{b.cls}}" onClick="{{b.run}}">{{b.label}}</button></sc-for><sc-for list="{{cd.links}}" as="l" hint-placeholder-count="1"><a href="{{l.href}}" class="mp-btn mp-btn--secondary" style="text-decoration: none" onClick="{{l.open}}">{{l.label}}</a></sc-for><button type="button" class="icon-btn" aria-label="Đóng chi tiết" onClick="{{cdClose}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></div>
+</div>
+<div class="det">
+<div class="top2">
+<div style="display: flex; flex-direction: column; gap: 12px; min-width: 0">
+<sc-for list="{{cd.banners}}" as="bn" hint-placeholder-count="1"><div class="{{bn.cls}}" style="font-size: 16px">{{bn.t}}</div></sc-for>
+<div class="kv-box"><dl class="mp-kv" style="margin: 0"><sc-for list="{{cd.kv}}" as="x" hint-placeholder-count="8"><div><dt>{{x.k}}</dt><dd class="{{x.cls}}">{{x.v}}<sc-if value="{{x.hasSub}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{x.sub}}</span></sc-if></dd></div></sc-for></dl></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<h3 class="sec-t">Lịch sử thanh toán &amp; nhắc nợ</h3>
+<div class="tl-box"><ul class="mp-tl"><sc-for list="{{cd.tl}}" as="h" hint-placeholder-count="4"><li class="{{h.cls}}"><b>{{h.who}}</b> · {{h.what}}<time>{{h.t}}</time></li></sc-for></ul></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<h3 class="sec-t">Lịch thanh toán theo đơn</h3>
+<div style="border: 1px solid var(--line); border-radius: 10px; overflow: hidden"><div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 900px"><thead><tr><sc-for list="{{sched.cols}}" as="h" hint-placeholder-count="6"><th class="{{h.cls}}">{{h.t}}</th></sc-for><th class="mp-actions" aria-label="Thao tác"></th></tr></thead><tbody><sc-for list="{{sched.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{sched.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{sched.emptyText}}</div></sc-if></div>
+</div>
+</div>
+</div>
+</div></sc-if></sc-if></div>
+
+<sc-if value="{{isNCC}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="min-width: 0">
+<div class="cardh"><h2>Khoản phải trả — PO trả sau</h2><span class="sub">Hạn = ngày nhận hàng + số ngày theo điều khoản</span></div>
+<div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 0px"><thead><tr><sc-for list="{{ap.cols}}" as="h" hint-placeholder-count="6"><th class="{{h.cls}}">{{h.t}}</th></sc-for><th class="mp-actions" aria-label="Thao tác"></th></tr></thead><tbody><sc-for list="{{ap.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{ap.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{ap.emptyText}}</div></sc-if>
+<div class="cardf"><span>{{ap.foot}}</span></div>
+</div>
+<div class="mp-card" style="min-width: 0">
+<div class="cardh"><h2>Trả trước theo PO</h2><span class="sub">Ghi nhận sau khi PO được duyệt và NCC xác nhận</span></div>
+<div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 0px"><thead><tr><sc-for list="{{pre.cols}}" as="h" hint-placeholder-count="6"><th class="{{h.cls}}">{{h.t}}</th></sc-for><th class="mp-actions" aria-label="Thao tác"></th></tr></thead><tbody><sc-for list="{{pre.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{pre.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{pre.emptyText}}</div></sc-if>
+</div>
+<div class="mp-card" style="min-width: 0">
+<div class="cardh"><h2>Giảm trừ khi trả hàng</h2><span class="sub">Phiếu trả NCC chọn giảm công nợ — ghi khi kho đã xuất trả</span></div>
+<div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 0px"><thead><tr><sc-for list="{{ret.cols}}" as="h" hint-placeholder-count="6"><th class="{{h.cls}}">{{h.t}}</th></sc-for><th class="mp-actions" aria-label="Thao tác"></th></tr></thead><tbody><sc-for list="{{ret.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{ret.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{ret.emptyText}}</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{isSo}}" hint-placeholder-val="{{ false }}">
+<div class="mp-card" style="min-width: 0">
+<div class="flt">
+<div class="mp-field" style="flex: 1 1 260px; max-width: 380px"><label for="so-q">Tìm</label><input id="so-q" class="mp-input" value="{{so.q}}" onChange="{{so.setQ}}" placeholder="Mã bản ghi, khách, NCC, đơn, PO…"></div>
+<sc-for list="{{so.filters}}" as="fl" hint-placeholder-count="3"><div class="mp-field" style="flex: 0 1 190px"><label for="{{fl.id}}">{{fl.label}}</label><select id="{{fl.id}}" class="mp-input" value="{{fl.value}}" onChange="{{fl.set}}"><option value="">{{fl.all}}</option><sc-for list="{{fl.opts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></div></sc-for>
+</div>
+<div style="overflow-x: auto"><div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table" style="min-width: 1120px"><thead><tr><sc-for list="{{so.cols}}" as="h" hint-placeholder-count="6"><th class="{{h.cls}}">{{h.t}}</th></sc-for><th class="mp-actions" aria-label="Thao tác"></th></tr></thead><tbody><sc-for list="{{so.rows}}" as="r" hint-placeholder-count="4"><sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><tr class="is-group"><td colspan="{{r.span}}"><sc-if value="{{r.gIsRef}}" hint-placeholder-val="{{ false }}"><a href="{{r.gHref}}" class="mp-xlink mp-code" onClick="{{r.gOpen}}">{{r.gcode}}</a></sc-if><sc-if value="{{r.gNoRef}}" hint-placeholder-val="{{ true }}"><span class="mp-code">{{r.gcode}}</span></sc-if><sc-if value="{{r.hasGst}}" hint-placeholder-val="{{ false }}"><span class="{{r.gcls}}">{{r.gst}}</span></sc-if><span class="gsub">{{r.gsub}}</span></td></tr></sc-if><sc-if value="{{r.isRow}}" hint-placeholder-val="{{ true }}"><tr class="{{r.cls}}"><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6"><td class="{{c.td}}"><sc-if value="{{c.isLink}}" hint-placeholder-val="{{ false }}"><button type="button" class="{{c.lcls}}" onClick="{{c.run}}">{{c.t}}</button></sc-if><sc-if value="{{c.isText}}" hint-placeholder-val="{{ true }}"><span class="{{c.cls}}">{{c.t}}</span></sc-if><sc-if value="{{c.isRef}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="mp-xlink mp-code" onClick="{{c.open}}">{{c.t}}</a></sc-if><sc-if value="{{c.hasChips}}" hint-placeholder-val="{{ false }}"><span class="mp-chips mp-chips--wrap"><sc-for list="{{c.chips}}" as="ch" hint-placeholder-count="1"><span class="{{ch.cls}}">{{ch.t}}</span></sc-for></span></sc-if><sc-if value="{{c.hasSub}}" hint-placeholder-val="{{ false }}"><span class="{{c.subCls}}">{{c.sub}}</span></sc-if><sc-if value="{{c.hasRefs}}" hint-placeholder-val="{{ false }}"><span class="mp-sub"><sc-for list="{{c.refs}}" as="rf" hint-placeholder-count="1">{{rf.pre}}<a href="{{rf.href}}" class="mp-xlink mp-code" onClick="{{rf.open}}">{{rf.id}}</a>{{rf.post}}</sc-for></span></sc-if><sc-for list="{{c.lines}}" as="ln" hint-placeholder-count="0"><span class="mp-sub">{{ln}}</span></sc-for></td></sc-for><sc-if value="{{r.hasAct}}" hint-placeholder-val="{{ true }}"><td class="mp-actions"><div class="mp-rowact"><sc-for list="{{r.btns}}" as="b" hint-placeholder-count="1"><button type="button" class="mp-iconbtn {{b.icCls}}" onClick="{{b.run}}" aria-label="{{b.label}}" title="{{b.tip}}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{b.icD}}"></path></svg></button></sc-for><sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="text-align: right; white-space: normal; max-width: 200px; margin-left: auto">{{r.note}}</span></sc-if></div></td></sc-if></tr></sc-if></sc-for></tbody></table></div></div></div><sc-if value="{{so.pg.show}}" hint-placeholder-val="{{ false }}"><nav class="mp-pg" aria-label="Phân trang"><span>Dòng {{so.pg.info}}</span><div class="mp-pg__nav"><button type="button" class="mp-pg__n" onClick="{{so.pg.prev}}" disabled="{{so.pg.atFirst}}" aria-label="Trang trước"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button><sc-for list="{{so.pg.nums}}" as="pn" hint-placeholder-count="3"><sc-if value="{{pn.btn}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{pn.cls}}" aria-current="{{pn.cur}}" aria-label="{{pn.aria}}" onClick="{{pn.go}}">{{pn.t}}</button></sc-if><sc-if value="{{pn.gap}}" hint-placeholder-val="{{ false }}"><span class="mp-pg__gap" aria-hidden="true">…</span></sc-if></sc-for><button type="button" class="mp-pg__n" onClick="{{so.pg.next}}" disabled="{{so.pg.atLast}}" aria-label="Trang sau"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button></div><label class="mp-pg__size">Số dòng/trang <select class="mp-input" value="{{so.pg.size}}" onChange="{{so.pg.setSize}}"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label></nav></sc-if><sc-if value="{{so.empty}}" hint-placeholder-val="{{ false }}"><div style="padding: 28px 16px; text-align: center; color: var(--ink-muted)">{{so.emptyText}}</div></sc-if>
+<div class="cardf"><span>{{so.foot}}</span></div>
+</div>
+</sc-if>
+</main></div>
+
+<sc-if value="{{dlgOpen}}" hint-placeholder-val="{{ false }}">
+<div class="ovl">
+<div class="mp-dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-title" style="{{dlg.style}}">
+<div class="mp-dlg__head"><h2 id="dlg-title">{{dlg.title}}<sc-if value="{{dlg.hasSub}}" hint-placeholder-val="{{ false }}"><span class="mp-info" tabindex="0" role="img" aria-label="{{dlg.sub}}" title="{{dlg.sub}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></sc-if></h2><button type="button" class="icon-btn" aria-label="Đóng" onClick="{{dlg.close}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></div>
+<sc-if value="{{dlg.hasTabs}}" hint-placeholder-val="{{ false }}"><div class="dlg-tabs" role="tablist" aria-label="Phần của biểu mẫu"><sc-for list="{{dlg.tabs}}" as="t" hint-placeholder-count="3"><button type="button" role="tab" class="{{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.hasErr}}" hint-placeholder-val="{{ false }}"><span class="tab-err" aria-label="có lỗi">•</span></sc-if></button></sc-for></div></sc-if>
+<div class="mp-dlg__body">
+<sc-for list="{{dlg.banners}}" as="bn" hint-placeholder-count="1"><div class="{{bn.cls}}" style="font-size: 16px">{{bn.t}}</div></sc-for>
+<sc-if value="{{dlg.showFields}}" hint-placeholder-val="{{ true }}"><div class="mp-form"><sc-for list="{{dlg.fields}}" as="x" hint-placeholder-count="5"><div class="{{x.wrap}}"><div class="mp-field">
+<label for="{{x.id}}">{{x.label}}<sc-if value="{{x.req}}" hint-placeholder-val="{{ false }}"><span class="req">*</span></sc-if><sc-if value="{{x.hasInfo}}" hint-placeholder-val="{{ false }}"><span class="mp-info" tabindex="0" role="img" aria-label="{{x.info}}" title="{{x.info}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></sc-if></label>
+<sc-if value="{{x.isInput}}" hint-placeholder-val="{{ true }}"><input id="{{x.id}}" type="{{x.itype}}" class="{{x.cls}}" value="{{x.value}}" onChange="{{x.set}}" placeholder="{{x.ph}}"></sc-if>
+<sc-if value="{{x.isMoney}}" hint-placeholder-val="{{ false }}"><div class="suffix"><input id="{{x.id}}" class="{{x.cls}}" value="{{x.value}}" onChange="{{x.set}}" placeholder="0" inputmode="numeric"><span>đ</span></div></sc-if>
+<sc-if value="{{x.isSelect}}" hint-placeholder-val="{{ false }}"><select id="{{x.id}}" class="{{x.cls}}" value="{{x.value}}" onChange="{{x.set}}"><option value="">{{x.ph}}</option><sc-for list="{{x.opts}}" as="o" hint-placeholder-count="3"><option value="{{o.v}}">{{o.t}}</option></sc-for></select></sc-if>
+<sc-if value="{{x.isArea}}" hint-placeholder-val="{{ false }}"><textarea id="{{x.id}}" class="{{x.cls}}" value="{{x.value}}" onChange="{{x.set}}" rows="3" placeholder="{{x.ph}}"></textarea></sc-if>
+<sc-if value="{{x.isRo}}" hint-placeholder-val="{{ false }}"><div class="{{x.roCls}}">{{x.value}}<sc-if value="{{x.hasRoSub}}" hint-placeholder-val="{{ false }}"><span class="mp-sub">{{x.roSub}}</span></sc-if></div></sc-if>
+<sc-if value="{{x.isSeg}}" hint-placeholder-val="{{ false }}"><div class="seg" role="radiogroup" aria-label="{{x.label}}"><sc-for list="{{x.segs}}" as="sg" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{sg.on}}" class="{{sg.cls}}" onClick="{{sg.run}}">{{sg.t}}</button></sc-for></div></sc-if>
+<sc-if value="{{x.isFile}}" hint-placeholder-val="{{ false }}"><div class="fbox"><label class="fpick"><input id="{{x.id}}" type="file" accept="{{x.accept}}" multiple="" onChange="{{x.pickF}}" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"><span class="fpick__btn">Chọn tệp</span><span class="fpick__hint">{{x.fhint}}</span></label><sc-if value="{{x.hasFile}}" hint-placeholder-val="{{ false }}"><div class="flist"><sc-for list="{{x.files}}" as="fl" hint-placeholder-count="1"><span class="fchip"><sc-if value="{{fl.hasUrl}}" hint-placeholder-val="{{ false }}"><button type="button" class="fview" onClick="{{fl.preview}}" aria-label="Xem trước {{fl.name}}"><img src="{{fl.url}}" alt="{{fl.name}}"></button></sc-if><sc-if value="{{fl.isSampleImg}}" hint-placeholder-val="{{ false }}"><button type="button" class="fview" onClick="{{fl.preview}}" aria-label="Xem trước {{fl.name}}"><span class="fthumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg></span></button></sc-if><sc-if value="{{fl.noImg}}" hint-placeholder-val="{{ true }}"><span class="fthumb"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M8 13h8M8 17h6"></path></svg></span></sc-if><span class="fchip__t"><span class="fchip__n">{{fl.name}}</span><small>{{fl.sizeTxt}}</small></span><button type="button" class="fchip__x" aria-label="Bỏ tệp {{fl.name}}" onClick="{{fl.remove}}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></span></sc-for></div></sc-if></div></sc-if>
+<sc-if value="{{x.hasErr}}" hint-placeholder-val="{{ false }}"><span class="errtext">{{x.err}}</span></sc-if>
+<sc-if value="{{x.hasHint}}" hint-placeholder-val="{{ false }}"><span class="{{x.hintCls}}">{{x.hint}}</span></sc-if>
+</div></div></sc-for></div></sc-if>
+<sc-if value="{{dlg.showAlloc}}" hint-placeholder-val="{{ false }}"><div class="alloc">
+<div class="alloc-h"><h3 class="mp-sec__title">Cấn vào khoản trong lịch thanh toán<span class="mp-info" tabindex="0" role="img" aria-label="Hệ thống gợi ý cấn khoản đến hạn sớm nhất trước; sửa số cấn từng khoản nếu khách chỉ định." title="Hệ thống gợi ý cấn khoản đến hạn sớm nhất trước; sửa số cấn từng khoản nếu khách chỉ định."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg></span></h3><button type="button" class="mp-btn mp-btn--secondary row-btn" onClick="{{dlg.autoRun}}">Cấn tự động lại</button></div>
+<div class="mp-xs"><div class="mp-xs__top" aria-hidden="true"><div class="mp-xs__sizer"></div></div><div class="mp-xs__body"><table class="mp-table"><thead><tr><th>Khoản</th><th>Hạn</th><th class="mp-num">Còn phải thu</th><th class="mp-num" style="min-width: 170px">Cấn vào khoản này</th></tr></thead>
+<tbody><sc-for list="{{dlg.alloc}}" as="a" hint-placeholder-count="3"><tr><td><span class="mp-code">{{a.od}}</span> · {{a.kind}}<span class="mp-sub">{{a.basis}}</span></td><td class="{{a.dueCls}}">{{a.due}}<sc-if value="{{a.hasLate}}" hint-placeholder-val="{{ false }}"><span class="mp-sub" style="color: var(--bad)">{{a.late}}</span></sc-if></td><td class="mp-num">{{a.rem}}</td><td><div class="suffix"><input class="{{a.cls}}" value="{{a.value}}" onChange="{{a.set}}" aria-label="{{a.aria}}" inputmode="numeric"><span>đ</span></div><sc-if value="{{a.hasErr}}" hint-placeholder-val="{{ false }}"><span class="errtext" style="display: block; text-align: right">{{a.err}}</span></sc-if></td></tr></sc-for></tbody></table></div></div>
+<sc-if value="{{dlg.allocEmpty}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 12px; color: var(--ink-muted); font-size: 16px">{{dlg.allocEmptyText}}</div></sc-if>
+<div class="alloc-f"><span>Số tiền ghi nhận <b>{{dlg.sumAmt}}</b> · Đã cấn <b>{{dlg.sumAlloc}}</b></span><span class="{{dlg.diffCls}}">{{dlg.diffText}}</span></div>
+</div></sc-if>
+<sc-if value="{{dlg.hasFormErr}}" hint-placeholder-val="{{ false }}"><div class="mp-banner mp-banner--bad" style="font-size: 16px">{{dlg.formErr}}</div></sc-if>
+</div>
+<div class="mp-dlg__foot"><sc-if value="{{dlg.hasXl}}" hint-placeholder-val="{{ false }}"><a href="{{dlg.xl.href}}" class="mp-btn mp-btn--ghost" style="text-decoration: none; margin-right: auto" onClick="{{dlg.xl.open}}">{{dlg.xl.label}}</a></sc-if><button type="button" class="mp-btn mp-btn--secondary" onClick="{{dlg.close}}">{{dlg.cancelLabel}}</button><sc-if value="{{dlg.canSave}}" hint-placeholder-val="{{ true }}"><button type="button" class="{{dlg.saveCls}}" onClick="{{dlg.save}}">{{dlg.saveLabel}}</button></sc-if></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{pv.open}}" hint-placeholder-val="{{ false }}">
+<div class="ovl pv-ovl"><div class="mp-dlg" role="dialog" aria-modal="true" aria-labelledby="pv-t" style="max-width: 900px">
+<div class="mp-dlg__head"><h2 id="pv-t">Xem trước ảnh<span class="pv-pos">{{pv.pos}}</span></h2><button type="button" class="icon-btn" aria-label="Đóng xem trước" onClick="{{pv.close}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></div>
+<div class="mp-dlg__body">
+<sc-if value="{{pv.hasUrl}}" hint-placeholder-val="{{ false }}"><img class="pv-img" src="{{pv.url}}" alt="{{pv.name}}"></sc-if>
+<sc-if value="{{pv.noUrl}}" hint-placeholder-val="{{ true }}"><div class="pv-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg><span>Ảnh mẫu — chưa có nội dung</span></div></sc-if>
+<div class="pv-name">{{pv.name}}</div>
+</div>
+<div class="mp-dlg__foot"><sc-if value="{{pv.many}}" hint-placeholder-val="{{ false }}"><span class="pv-nav"><button type="button" class="mp-btn mp-btn--secondary" aria-label="Ảnh trước" onClick="{{pv.prev}}">‹</button><button type="button" class="mp-btn mp-btn--secondary" aria-label="Ảnh sau" onClick="{{pv.next}}">›</button></span></sc-if><button type="button" class="mp-btn mp-btn--secondary" onClick="{{pv.close}}">Đóng</button></div>
+</div></div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"screen": {"editor": "enum", "options": ["cnkh", "cnncc", "so"], "default": "cnkh", "section": "Trạng thái hiển thị"}, "vaitro": {"editor": "enum", "options": ["Kế toán", "Kế toán trưởng", "Sales", "Mua hàng", "Giám đốc"], "default": "Kế toán", "section": "Trạng thái hiển thị"}, "hopthoai": {"editor": "enum", "options": ["khong", "tien-ve", "hoan-tien", "ket-qua-90", "lien-he", "tra-ncc", "giam-tru", "huy"], "default": "khong", "section": "Trạng thái hiển thị"}, "$preview": {"width": 1440, "height": 1100}}'>
+/* mp-xs: thanh cuộn ngang ngay dưới tiêu đề bảng + dưới đáy bảng — đồng bộ 2 thanh, chỉ hiện thanh trên khi bảng tràn */
+(function () {
+  if (typeof window === 'undefined' || window.__mpXs) return; window.__mpXs = true;
+  var lock = false;
+  function fit() {
+    var xs = document.querySelectorAll('.mp-xs');
+    for (var i = 0; i < xs.length; i++) {
+      var x = xs[i], t = x.children[0], b = x.children[1];
+      if (!t || !b || !t.classList.contains('mp-xs__top')) continue;
+      var w = b.scrollWidth, s = t.firstElementChild;
+      if (s && s.style.width !== w + 'px') s.style.width = w + 'px';
+      var over = w > b.clientWidth + 1 ? '1' : '0';
+      if (x.getAttribute('data-over') !== over) x.setAttribute('data-over', over);
+      var th = b.querySelector('table > thead');
+      var top = th ? Math.max(0, th.offsetHeight - 17) + 'px' : '0px';
+      if (x.style.getPropertyValue('--xs-top') !== top) x.style.setProperty('--xs-top', top);
+      if (over === '1' && t.scrollLeft !== b.scrollLeft) t.scrollLeft = b.scrollLeft;
+    }
+  }
+  var queued = false;
+  function later() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fit(); }); }
+  document.addEventListener('scroll', function (e) {
+    var el = e.target, x = el && el.parentElement;
+    if (lock || !x || !x.classList || !x.classList.contains('mp-xs')) return;
+    var other = el === x.children[0] ? x.children[1] : el === x.children[1] ? x.children[0] : null;
+    if (!other) return;
+    lock = true; other.scrollLeft = el.scrollLeft; requestAnimationFrame(function () { lock = false; });
+  }, true);
+  new MutationObserver(later).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+  window.addEventListener('resize', later);
+  setTimeout(fit, 0); setTimeout(fit, 400); setTimeout(fit, 1500);
+})();
+
+const MPX = {
+people: { 'Sales': ['Võ Thị Lan', 'NM1'], 'CSKH': ['Đinh Mỹ Linh', 'Tất cả nhà máy'], 'Kế hoạch': ['Đỗ Minh Khang', 'NM1'], 'Mua hàng': ['Mai Anh Thư', 'Tất cả nhà máy'], 'Trưởng BP Mua hàng': ['Tạ Văn Hùng', 'Tất cả nhà máy'], 'Thủ kho': ['Lê Văn Hải', 'NM1'], 'Thủ kho điều phối': ['Hồ Văn Nam', 'NM1'], 'Thủ kho trưởng': ['Trần Thị Mai', 'NM1'], 'QC': ['Ngô Thu Trang', 'NM1'], 'QC trưởng': ['Trần Thị Mai', 'NM1'], 'Kế toán': ['Ngô Bảo Ngọc', 'Tất cả nhà máy'], 'Kế toán trưởng': ['Bùi Minh Châu', 'Tất cả nhà máy'], 'Giám đốc': ['Lê Quang Minh', 'Tất cả nhà máy'], 'Người truy xuất': ['Ngô Thu Trang', 'NM1'], 'HR': ['Hoàng Thị Lan', 'Tất cả nhà máy'], 'Admin': ['Nguyễn Hoàng Long', 'Tất cả nhà máy'], 'R&D': ['Nguyễn Thị Yến', 'Tất cả nhà máy'], 'Vận chuyển': ['Phan Văn Toàn', 'NM1'] },
+roles: ['Sales', 'CSKH', 'Kế hoạch', 'R&D', 'Mua hàng', 'Trưởng BP Mua hàng', 'Thủ kho', 'Thủ kho điều phối', 'Thủ kho trưởng', 'Vận chuyển', 'QC', 'QC trưởng', 'Kế toán', 'Kế toán trưởng', 'Giám đốc', 'Người truy xuất', 'HR', 'Admin'],
+roleText(r) { return r === 'Thủ kho điều phối' ? 'Thủ kho @ kho điều phối' : r; },
+menu: {"viec": ["*"], "ban_dh": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Sales"], "ban_kh": ["Admin", "CSKH", "Giám đốc", "Sales"], "mua_don": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "mua_ncc": ["Admin", "Giám đốc", "Mua hàng", "Trưởng BP Mua hàng"], "mua_tra": ["Admin", "Giám đốc", "Mua hàng", "Thủ kho", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "kt_kh": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng", "Sales"], "kt_ncc": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kt_so": ["Admin", "Giám đốc", "Kế toán", "Kế toán trưởng"], "kho_ton": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_nhap": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Mua hàng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_xuat": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_chuyen": ["Admin", "Giám đốc", "Kế hoạch", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Vận chuyển"], "kho_kiem": ["Admin", "Giám đốc", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "kho_huy": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "QC", "Sales", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "sx_lenh": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho", "Thủ kho điều phối"], "sx_me": ["Admin", "Giám đốc", "Kế hoạch", "QC", "Thủ kho điều phối"], "sx_ct": ["Admin", "Giám đốc", "Kế hoạch", "QC", "R&D"], "cl_yc": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_pk": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối"], "cl_cn": ["Admin", "Giám đốc", "Kế hoạch", "QC", "QC trưởng", "Sales"], "cl_ml": ["Admin", "Giám đốc", "QC"], "tx_tx": ["Admin", "Giám đốc", "Người truy xuất", "Thủ kho", "Thủ kho điều phối"], "tx_th": ["Admin", "CSKH", "Giám đốc", "Kế toán trưởng", "Người truy xuất", "QC", "QC trưởng", "Sales"], "dm_nvl": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_sp": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_dv": ["Admin", "Giám đốc", "Kế hoạch", "Mua hàng", "QC", "QC trưởng", "Thủ kho", "Thủ kho trưởng", "Thủ kho điều phối", "Trưởng BP Mua hàng"], "dm_kho": ["Admin", "Giám đốc", "Thủ kho trưởng"], "dm_ncc": ["Admin", "Giám đốc", "Kế hoạch", "Kế toán", "Kế toán trưởng", "Mua hàng", "QC", "Thủ kho", "Thủ kho trưởng", "Trưởng BP Mua hàng"], "dm_nm": ["Admin", "Giám đốc", "Thủ kho trưởng"], "qt_nd": ["Admin", "Giám đốc", "HR"], "qt_kv": ["Admin", "Giám đốc"], "qt_ch": ["Admin", "Giám đốc"], "qt_nk": ["Admin", "Giám đốc", "HR"]},
+scr: {"viec": ["HopDuyet", "HopDuyet"], "ban_dh": ["BanDonHang-0r5c", "BanHang-wvhq"], "ban_kh": ["BanHang-wvhq", "BanHang-wvhq"], "mua_don": ["MuaPO-3fox", "MuaHang-7mvk"], "mua_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "mua_tra": ["MuaTraHang-e9jn", "MuaHang-7mvk"], "kt_kh": ["KeToan-k2vm", "KeToan-k2vm"], "kt_ncc": ["KeToanNCC-m3pz", "KeToan-k2vm"], "kt_so": ["KeToanSo-v6qe", "KeToan-k2vm"], "kho_ton": ["TonLo", "TonLo"], "kho_nhap": ["KhoVH-xv2s", "KhoVH-xv2s"], "kho_xuat": ["KhoXuat-71ki", "KhoVH-xv2s"], "kho_chuyen": ["KhoChuyen-oq5y", "KhoVH-xv2s"], "kho_kiem": ["KhoKiemKe-23cu", "KhoVH-xv2s"], "kho_huy": ["KhoHuy-br6r", "KhoVH-xv2s"], "sx_lenh": ["LenhSX-hxoc", "LenhSX-hxoc"], "sx_me": ["TheoDoiMe-w4ka", "LenhSX-hxoc"], "sx_ct": ["CongThuc-qdhl", "CongThuc-qdhl"], "cl_yc": ["ChatLuong-q4ls", "ChatLuong-q4ls"], "cl_pk": ["ChatLuongPK-d2xh", "ChatLuong-q4ls"], "cl_cn": ["ChatLuongCN-t9bw", "ChatLuongCN-t9bw"], "cl_ml": ["ChatLuongML-p5ga", "ChatLuongCN-t9bw"], "tx_tx": ["TruyXuat", "TruyXuat"], "tx_th": ["ThuHoi-r8hw", "ThuHoi-r8hw"], "dm_nvl": ["DanhMuc-15tr", "DanhMuc-15tr"], "dm_sp": ["DanhMucSP-zd4p", "DanhMucSP-zd4p"], "dm_dv": ["DonVi-u7dv", "DonVi-u7dv"], "dm_kho": ["NhaMay-qd07", "NhaMay-qd07"], "dm_ncc": ["MuaHang-7mvk", "MuaHang-7mvk"], "dm_nm": ["NhaMay-qd07", "NhaMay-qd07"], "qt_nd": ["NguoiDung", "NguoiDung"], "qt_kv": ["KhuVuc", "KhuVuc"], "qt_ch": ["CauHinh-cocg", "CauHinh-cocg"], "qt_nk": ["NhatKy-n5jd", "NhatKy-n5jd"]},
+mods: {"ban": ["ban_dh", "ban_kh"], "mua": ["mua_don", "mua_ncc", "mua_tra"], "kt": ["kt_kh", "kt_ncc", "kt_so"], "kho": ["kho_ton", "kho_nhap", "kho_xuat", "kho_chuyen", "kho_kiem", "kho_huy"], "sx": ["sx_lenh", "sx_me"], "cl": ["cl_yc", "cl_pk", "cl_cn", "cl_ml"], "tx": ["tx_tx", "tx_th"], "dm": ["dm_nvl", "sx_ct", "dm_sp", "dm_dv", "dm_kho", "dm_nm", "qt_kv"], "qt": ["qt_nd", "qt_ch", "qt_nk"]},
+sees(r, k) { const a = this.menu[k] || []; return a.indexOf('*') >= 0 || a.indexOf(r) >= 0; },
+nav(r, here) { const show = {}, href = {}, go = {}; const to = (k) => { const x = this.scr[k]; href[k] = x[0] + '.dc.html'; go[k] = () => this.go(x[1], '', r); };
+Object.keys(this.scr).forEach((k) => { show[k] = this.sees(r, k); to(k); });
+Object.keys(this.mods).forEach((m) => { const vis = this.mods[m].filter((k) => show[k]); show[m] = vis.length > 0; const f = vis[0] || this.mods[m][0]; href[m] = href[f]; go[m] = go[f]; });
+const deny = !!here && !show[here]; const home = this.mods[(here || '').split('_')[0]] || [];
+return { show: show, href: href, go: go, deny: deny, homeHref: href.viec, homeGo: go.viec, alt: home.filter((k) => show[k]).length > 0 }; },
+name(r) { return (this.people[r] || [r])[0]; },
+fac(r) { return (this.people[r] || ['', 'NM1'])[1]; },
+roleLabel(r) { return r === 'QC trưởng' ? 'QC trưởng (ủy quyền)' : r; },
+go(board, id, role) { try { localStorage.setItem('mp.open', JSON.stringify({ b: board, id: id || '', r: role || '', t: Date.now() })); } catch (e) {} },
+take(board) { try { const x = JSON.parse(localStorage.getItem('mp.open') || 'null'); if (x && x.b === board && Date.now() - x.t < 20000) { localStorage.removeItem('mp.open'); return x; } } catch (e) {} return null; },
+can(role, allowed) { return allowed.indexOf(role) >= 0; },
+vx(role, setRole, here) { const n = this.name(role); const w = n.split(' '); return { m: this.nav(role, here), role: role, label: this.roleLabel(role), name: n, fac: this.fac(role), ini: (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(), opts: this.roles, optl: this.roles.map((x) => ({ v: x, t: this.roleText(x) })), set: (ev) => setRole(ev.target.value) }; },
+map: [['TH-NCC-', 'MuaHang-7mvk'], ['TH-2', 'ThuHoi-r8hw'], ['ĐH-', 'BanHang-wvhq'], ['KH-', 'BanHang-wvhq'], ['NC-', 'MuaHang-7mvk'], ['PO-', 'MuaHang-7mvk'], ['NCC-', 'MuaHang-7mvk'], ['TC-', 'KeToan-k2vm'], ['PN-', 'KhoVH-xv2s'], ['PX-', 'KhoVH-xv2s'], ['PC-', 'KhoVH-xv2s'], ['PK-', 'KhoVH-xv2s'], ['PH-', 'KhoVH-xv2s'], ['BB-TL-', 'KhoVH-xv2s'], ['L-', 'TonLo'], ['A-BAO-', 'TonLo'], ['LSX-', 'LenhSX-hxoc'], ['me:', 'LenhSX-hxoc'], ['CT-', 'CongThucChiTiet-pji2'], ['YC-NM', 'ChatLuong-q4ls'], ['QC-', 'ChatLuong-q4ls'], ['CN-', 'ChatLuongCN-t9bw'], ['ML-', 'ChatLuongCN-t9bw'], ['BB-ML-', 'ChatLuongCN-t9bw'], ['TX-', 'TruyXuat'], ['NVL-', 'DanhMuc-15tr'], ['SP-', 'DanhMucSP-zd4p'], ['NM1-', 'NhaMay-qd07'], ['NM2-', 'NhaMay-qd07']],
+board(id) { if (/^[AB]\d{6}/.test(id)) return 'TonLo'; for (const m of this.map) { if (id.indexOf(m[0]) === 0) return m[1]; } return ''; },
+ref(id, role, board, file) { const b = board || this.board(id); if (!b) return { id: id, ok: false, href: '#', open: () => {} }; const f = file || (id.indexOf('me:') === 0 ? 'TheoDoiMe-w4ka' : b); return { id: id.replace(/^me:/, ''), ok: true, href: f + '.dc.html', open: () => this.go(b, id, role) }; },
+gate(role, allowed, setRole, why) { if (allowed.indexOf(role) >= 0) return null; const who = allowed[0]; return { who: who, why: why || '', hasWhy: !!why, sw: () => setRole(who) }; }
+};
+// Biểu tượng thao tác dùng chung (chốt 23/10)
+const MPICON = {
+P: { userx: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM17 8l5 5M22 8l-5 5', note: 'M9 2h6v4H9zM16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4', down: 'M12 3v12M7 10l5 5 5-5M5 21h14', eye: 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z', edit: 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z', trash: 'M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6', xc: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM15 9l-6 6M9 9l6 6', ban: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM4.9 4.9l14.2 14.2', undo: 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5', print: 'M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z', sign: 'M3 17c3 0 4-6 6-6s1 6 4 6 3-4 5-4M3 21h18', pulse: 'M22 12h-4l-3 9L9 3l-3 9H2', truck: 'M1 3h15v13H1zM16 8h4l3 3v5h-7zM5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z', bell: 'M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0', ok: 'M22 11.1V12a10 10 0 1 1-5.9-9.1M22 4L12 14l-3-3', no: 'M18 6L6 18M6 6l12 12', move: 'M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20', flask: 'M9 3h6M10 3v6L4 20a1 1 0 0 0 .9 1.5h14.2A1 1 0 0 0 20 20l-6-11V3', warn: 'M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01', filex: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M9.5 12.5l5 5M14.5 12.5l-5 5', clock: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2', check: 'M20 6L9 17l-5-5', plus: 'M12 5v14M5 12h14', money: 'M2 6h20v12H2zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 12h.01M18 12h.01', send: 'M22 2L11 13M22 2l-7 20-4-9-9-4z', copy: 'M9 9h11v11H9zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1', play: 'M5 3l14 9-14 9z', key: 'M21 2l-2 2m-7.6 7.6a5.5 5.5 0 1 1-7.8 7.8 5.5 5.5 0 0 1 7.8-7.8zM15.5 7.5l3 3L22 7l-3-3', more: 'M5 12h.01M12 12h.01M19 12h.01' },
+R: [[/^gỡ/i, 'userx', 'mp-iconbtn--danger'], [/^(chọn|đã soạn)/i, 'check', 'mp-iconbtn--primary'], [/^ghi nhận/i, 'money', ''], [/^ghi /i, 'note', ''], [/^lấy/i, 'down', ''], [/^báo /i, 'bell', ''], [/^(xem|mở|chi tiết)/i, 'eye', ''], [/^(sửa|cập nhật|đổi)/i, 'edit', ''], [/^(xóa|bỏ)|✕/i, 'trash', 'mp-iconbtn--danger'], [/hủy mẫu|tạo phiếu hủy/i, 'filex', 'mp-iconbtn--danger'], [/^hủy/i, 'xc', 'mp-iconbtn--danger'], [/ngừng|thu hồi|khóa/i, 'ban', 'mp-iconbtn--danger'], [/dùng lại|kích hoạt|mở khóa|khôi phục/i, 'undo', ''], [/in /i, 'print', ''], [/^ký/i, 'sign', 'mp-iconbtn--primary'], [/^mẻ|theo dõi mẻ/i, 'pulse', ''], [/đợt giao|giao hàng/i, 'truck', 'mp-iconbtn--primary'], [/nhắc|thông báo/i, 'bell', ''], [/^(duyệt|đồng ý|chấp nhận|xác nhận)/i, 'ok', 'mp-iconbtn--primary'], [/^(từ chối|không)/i, 'no', 'mp-iconbtn--danger'], [/dời|chuyển vị trí/i, 'move', ''], [/gửi qc|kiểm/i, 'flask', ''], [/sự cố|báo lỗi/i, 'warn', ''], [/nhật ký|lịch sử/i, 'clock', ''], [/^giữ/i, 'check', ''], [/^(thêm|tạo|lập)/i, 'plus', 'mp-iconbtn--primary'], [/tiền|thanh toán|thu/i, 'money', ''], [/^gửi/i, 'send', 'mp-iconbtn--primary'], [/sao chép|nhân bản/i, 'copy', ''], [/phát|bắt đầu/i, 'play', 'mp-iconbtn--primary'], [/mật khẩu|quyền/i, 'key', '']],
+of(label) { const t = String(label || '').trim(); for (const r of this.R) { if (r[0].test(t)) return { d: this.P[r[1]], cls: r[2] }; } return { d: this.P.more, cls: '' }; }
+};
+// Phân trang dùng chung: MPPG(this, 'khóa-bảng', mảngĐãLọc, { sig: chuỗi-bộ-lọc }) → { items, show, info, nums, prev, next, atFirst, atLast, size, setSize }
+function MPPG(self, key, list, opt) {
+  opt = opt || {}; list = list || [];
+  const all = self.state.__pg || {}; const cur = all[key] || {};
+  const size = cur.size || opt.size || 10; const n = list.length;
+  const pages = Math.max(1, Math.ceil(n / size));
+  const sig = String(opt.sig !== undefined ? opt.sig : '') + '#' + n;
+  let p = cur.sig === sig ? (cur.p || 1) : 1; if (p > pages) p = pages;
+  const set = (np, ns) => { const a = Object.assign({}, self.state.__pg || {}); a[key] = { p: np, size: ns || size, sig: sig }; self.setState({ __pg: a }); };
+  const from = (p - 1) * size; const nums = [];
+  const push = (i) => nums.push({ t: String(i), btn: true, gap: false, cur: i === p ? 'page' : 'false', cls: i === p ? 'mp-pg__n is-on' : 'mp-pg__n', aria: 'Trang ' + i, go: () => set(i) });
+  const gap = () => nums.push({ t: '…', btn: false, gap: true, cur: 'false', cls: '', aria: '', go: () => {} });
+  if (pages <= 7) { for (let i = 1; i <= pages; i++) push(i); }
+  else { let a = Math.max(2, p - 1), b = Math.min(pages - 1, p + 1); if (p <= 3) { a = 2; b = 4; } if (p >= pages - 2) { a = pages - 3; b = pages - 1; } push(1); if (a > 2) gap(); for (let i = a; i <= b; i++) push(i); if (b < pages - 1) gap(); push(pages); }
+  return { items: list.slice(from, from + size), show: n > 10, info: (n ? from + 1 : 0) + '–' + Math.min(from + size, n) + ' / ' + n, nums: nums,
+    atFirst: p <= 1, atLast: p >= pages, prev: () => { if (p > 1) set(p - 1); }, next: () => { if (p < pages) set(p + 1); },
+    size: String(size), setSize: (ev) => set(1, +(ev && ev.target ? ev.target.value : 10) || 10) };
+}
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+const it = MPX.take('KeToan-k2vm');
+this.state = Object.assign({ role: (it && it.r) || props.vaitro || 'Kế toán', scr: null, sel: 'k12', cdOpen: false, hl: '', miss: '', toast: '', dlg: undefined, pv: null, q: '', fType: '', fPur: '', fSt: '' }, this.seed());
+if (it && it.id) this.intent(it.id);
+}
+/* nhận ý định mở từ màn khác: KH- / ĐH- / TH-2… → công nợ KH; PO- / NCC- / TH-NCC- → công nợ NCC; TC- → sổ thu chi */
+intent(id) { const s = this.state; const D = s.data; const miss = () => { s.miss = id; };
+if (id.indexOf('KH-') === 0) { const k = D.kh.find((x) => x.code === id); if (k) { s.scr = 'cnkh'; s.sel = k.id; s.cdOpen = true; } else miss(); return; }
+if (id.indexOf('TH-NCC-') === 0) { if (D.tra.find((x) => x.code === id)) { s.scr = 'cnncc'; s.hl = id; } else { const p = D.po.find((x) => (x.retNote || '').indexOf(id) >= 0); if (p) { s.scr = 'cnncc'; s.hl = p.code; } else miss(); } return; }
+if (id.indexOf('ĐH-') === 0 || id.indexOf('TH-2') === 0) { const o = D.od[id]; if (o) { s.scr = 'cnkh'; s.sel = o.cust; s.hl = id; s.cdOpen = true; } else miss(); return; }
+if (id.indexOf('PO-') === 0) { if (D.po.find((x) => x.code === id)) { s.scr = 'cnncc'; s.hl = id; } else miss(); return; }
+if (id.indexOf('NCC-') === 0) { if (Object.keys(D.ncc).some((k) => D.ncc[k].code === id)) { s.scr = 'cnncc'; s.hl = id; } else miss(); return; }
+if (id.indexOf('TC-') === 0) { if (D.v.find((x) => x.code === id)) { s.scr = 'so'; s.q = id; } else miss(); return; }
+miss(); }
+R(id, b, f) { return MPX.ref(id, this.state.role, b, f); }
+refs(list) { return list.filter((x) => x && x.id).map((x) => { const r = this.R(x.id); return { id: r.id, href: r.href, open: r.open, pre: x.pre || '', post: x.post || '' }; }); }
+/* ---------- tiện ích ---------- */
+T() { return '2026-10-18'; }
+days(iso) { return Math.round((Date.parse(iso) - Date.parse(this.T())) / 86400000); }
+addDays(iso, n) { return new Date(Date.parse(iso) + n * 86400000).toISOString().slice(0, 10); }
+fd(iso) { if (!iso) return '—'; const p = iso.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+fs(iso) { if (!iso) return '—'; const p = iso.split('-'); return p[2] + '/' + p[1]; }
+fn(n) { return Math.round(+n || 0).toLocaleString('vi-VN'); }
+money(n) { return this.fn(n) + ' đ'; }
+m0(n) { return n ? this.money(n) : '—'; }
+num(s) { const x = String(s == null ? '' : s).replace(/[^\d]/g, ''); return x ? +x : 0; }
+hm() { const d = new Date(); const p = (x) => String(x).padStart(2, '0'); return p(d.getHours()) + ':' + p(d.getMinutes()); }
+noop() {}
+iso(s) { const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(s || '').trim()); if (!m) return ''; const r = m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0'); return isNaN(Date.parse(r)) ? '' : r; }
+role() { const R = { 'Kế toán': 'kt', 'Kế toán trưởng': 'ktt', 'Sales': 'sales' }; return R[this.state.role] || 'xem'; }
+viewer() { const r = this.state.role; return { n: MPX.name(r), r: r }; }
+scr() { if (this.role() === 'sales') return 'cnkh'; const s = this.state.scr || this.props.screen; return ['cnkh', 'cnncc', 'so'].indexOf(s) >= 0 ? s : 'cnkh'; }
+cell(t, o) { o = o || {}; const ref = o.ref && o.ref.ok ? o.ref : null; const rf = o.refs ? this.refs(o.refs) : [];
+return { t: (t === '' || t === null || t === undefined) ? '—' : String(t), td: o.td || '', cls: o.cls || '', isLink: !!o.run, lcls: o.lcls || 'linkbtn', run: o.run || this.noop, isRef: !!ref && !o.run, href: ref ? ref.href : '', open: ref ? ref.open : this.noop, isText: !o.run && !o.chips && !ref, hasChips: !!o.chips, chips: o.chips || [], sub: o.sub || '', hasSub: !!o.sub, subCls: o.subCls || 'mp-sub', hasRefs: rf.length > 0, refs: rf, lines: o.lines || [] }; }
+row(cells, btns, o) { o = o || {}; btns = (btns || []).map((b) => { const ic = MPICON.of(b.label); return Object.assign({}, b, { icD: ic.d, icCls: ic.cls + (/is-disabled/.test(b.cls || '') ? ' is-disabled' : ''), tip: b.title ? b.label + ' — ' + b.title : b.label }); }); return { isRow: true, isGroup: false, cls: o.cls || '', cells: cells, btns: btns, hasAct: !o.noAct, hasNote: !!o.note, note: o.note || '' }; }
+grp(span, code, st, cls, sub) { const r = this.R(code); return { isRow: false, isGroup: true, span: span, gcode: code, gIsRef: r.ok, gNoRef: !r.ok, gHref: r.href, gOpen: r.open, gst: st || '', gcls: cls || '', hasGst: !!st, gsub: sub || '', cells: [], btns: [] }; }
+btn(label, run, cls, title) { return { label: label, run: run || this.noop, cls: 'mp-btn row-btn ' + (cls || 'mp-btn--secondary'), title: title || '' }; }
+offBtn(label, title) { return { label: label, run: this.noop, cls: 'mp-btn row-btn is-disabled', title: title || '' }; }
+/* ---------- dữ liệu mẫu ---------- */
+seed() {
+const kh = [
+{ id: 'k7', code: 'KH-0007', company: 'Đại lý Minh Phát', name: 'Nguyễn Văn Phát', pay: 'Chuyển khoản', status: 'Đang hoạt động', limit: null, n: 0 },
+{ id: 'k12', code: 'KH-0012', company: 'Công ty TNHH Phân phối An Khang', name: 'Lê Thị Hồng', pay: 'Mua nợ (công nợ)', status: 'Đang hoạt động', limit: 1500000000, n: 30 },
+{ id: 'k31', code: 'KH-0031', company: 'Đại lý Hoàng Gia', name: 'Trần Minh Hoàng', pay: 'TM/CK', status: 'Đang hoạt động', limit: null, n: 0 },
+{ id: 'k44', code: 'KH-0044', company: 'Nhà thuốc Minh Châu', name: 'Phạm Thu Châu', pay: 'Tiền mặt', status: 'Đang hoạt động', limit: null, n: 0 },
+{ id: 'k52', code: 'KH-0052', company: 'Siêu thị Bách hóa Phương Đông', name: 'Đặng Quốc Bảo', pay: 'Mua nợ (công nợ)', status: 'Đang hoạt động', limit: 2000000000, n: 45 },
+{ id: 'k58', code: 'KH-0058', company: 'Đại lý Tâm An', name: 'Huỳnh Tâm An', pay: 'Tiền mặt', status: 'Đang hoạt động', limit: null, n: 0 },
+{ id: 'k60', code: 'KH-0060', company: 'Cửa hàng Mẹ & Bé Thanh Sơn', name: 'Võ Thanh Sơn', pay: 'Mua nợ (công nợ)', status: 'Ngừng hoạt động', limit: 100000000, n: 15 },
+{ id: 'k63', code: 'KH-0063', company: 'Cửa hàng Sữa Bé Ngoan', name: 'Lương Thị Ngọc Hà', pay: 'Chuyển khoản', status: 'Tạm dừng giao dịch', limit: null, n: 0 },
+{ id: 'k64', code: 'KH-0064', company: 'Công ty TNHH Thương mại Thiên Phúc', name: 'Nguyễn Hoàng Yến', pay: 'Mua nợ (công nợ)', status: 'Đang hoạt động', limit: null, n: 30, sales: 'Nguyễn Minh Khoa' },
+{ id: 'k65', code: 'KH-0065', company: 'Đại lý Lộc Phát', name: 'Trịnh Văn Lộc', pay: 'TM/CK', status: 'Đang hoạt động', limit: null, n: 0 }];
+const O = (cust, st, total, note) => ({ cust: cust, st: st, total: total, note: note || '' });
+const od = {
+'ĐH-2610-0031': O('k7', 'Đang sản xuất', 896400000), 'ĐH-2609-0018': O('k12', 'Đã giao', 537840000), 'ĐH-2609-0025': O('k12', 'Đã giao', 272160000),
+'ĐH-2610-0028': O('k12', 'Đang sản xuất', 672300000), 'ĐH-2610-0030': O('k31', 'Đang sản xuất', 553500000), 'ĐH-2609-0011': O('k31', 'Đã hủy', 43200000, 'hủy 24/09 · cọc 20.000.000 đ, hoàn 10.000.000 đ'),
+'ĐH-2610-0033': O('k44', 'Chờ thu tiền', 222480000), 'ĐH-2610-0037': O('k44', 'Chờ thu tiền', 90720000, 'chốt đơn 20/10 · chờ thu cọc 27.000.000 đ'), 'ĐH-2609-0022': O('k52', 'Đã giao', 432000000), 'ĐH-2610-0035': O('k52', 'Đang sản xuất', 1007100000),
+'ĐH-2610-0036': O('k58', 'Đã chốt', 510300000), 'ĐH-2609-0029': O('k58', 'Đã hủy', 259200000, 'hủy 14/10'), 'ĐH-2606-0014': O('k60', 'Đã giao', 90720000), 'ĐH-2607-0004': O('k60', 'Đã giao', 22680000),
+'ĐH-2610-0019': O('k7', 'Đã giao', 3780000, 'giao 16/10'), 'ĐH-2610-0024': O('k7', 'Giao một phần', 44820000, 'giao 16/10 — khách nhận 192 / 240 lon'), 'ĐH-2610-0022': O('k44', 'Đã giao', 17928000, 'khách lấy 17/10'),
+'ĐH-2610-0026': O('k58', 'Sẵn sàng giao', 44820000, 'chờ Sales yêu cầu xuất'), 'ĐH-2610-0025': O('k52', 'Đang giao', 44820000, 'Mua nợ · nợ 30 ngày theo đơn'),
+'ĐH-2610-0040': O('k44', 'Đang giao', 40824000, 'khách tự lấy 19/10'), 'ĐH-2610-0041': O('k31', 'Đang giao', 40824000, 'gửi cùng chuyến nhà xe với ĐH-2610-0030'),
+'TH-2609-0003': O('k58', 'Hồ sơ thu hồi', 19200000, 'hoàn tiền thu hồi lô A260820 (120 lon)') };
+const P = (id, o, seq, type, basis, due, amt, x) => Object.assign({ id: id, od: o, seq: seq, type: type, basis: basis, due: due, amt: amt, deliv: '', note: '', esc: null }, x || {});
+const ps = [
+P('p1', 'ĐH-2610-0031', 1, 'COC', 'TRUOC_SX', '2026-10-15', 100000000), P('p2', 'ĐH-2610-0031', 2, 'TRA_NOT', 'TRUOC_GIAO', '2026-10-20', 79640000, { deliv: 'lần xuất 1/2', gh: 'PX-NM1-2610-0043', note: 'đã trừ cọc cấn 10.000.000 đ' }), P('p2b', 'ĐH-2610-0031', 3, 'TRA_NOT', 'TRUOC_GIAO', '2026-10-30', 716760000, { deliv: 'phần còn lại — chưa yêu cầu xuất' }),
+P('p3', 'ĐH-2609-0018', 1, 'CONG_NO', 'SAU_GIAO', '2026-10-14', 537840000, { deliv: 'khách nhận 14/09' }),
+P('p4', 'ĐH-2609-0025', 1, 'CONG_NO', 'SAU_GIAO', '2026-11-01', 272160000, { deliv: 'khách nhận 02/10' }),
+P('p5', 'ĐH-2610-0028', 1, 'CONG_NO', 'SAU_GIAO', '', 40338000, { deliv: 'yêu cầu xuất 1/2 — chờ thanh toán' }), P('p5b', 'ĐH-2610-0028', 2, 'CONG_NO', 'SAU_GIAO', '', 631962000, { deliv: 'phần còn lại — chưa yêu cầu xuất' }),
+P('p6', 'ĐH-2610-0030', 1, 'COC', 'TRUOC_SX', '2026-10-11', 50000000), P('p7', 'ĐH-2610-0030', 2, 'TRA_NOT', 'TRUOC_GIAO', '2026-10-19', 80560000, { deliv: 'lần xuất 1/2', gh: 'PX-NM1-2610-0044', note: 'đã trừ cọc cấn 8.000.000 đ' }), P('p7b', 'ĐH-2610-0030', 3, 'TRA_NOT', 'TRUOC_GIAO', '2026-10-18', 422940000, { deliv: 'phần còn lại — chưa yêu cầu xuất' }),
+P('p23', 'ĐH-2609-0011', 1, 'COC', 'TRUOC_SX', '2026-09-06', 20000000), P('p16', 'ĐH-2609-0011', 2, 'CHENH_LECH', 'TRUOC_SX', '', -10000000, { note: 'Hủy đơn đã chốt — Kế toán trưởng Bùi Minh Châu quyết hoàn 10.000.000 đ / cọc 20.000.000 đ' }),
+P('p8', 'ĐH-2610-0033', 1, 'COC', 'TRUOC_SX', '2026-10-16', 15000000), P('p9', 'ĐH-2610-0033', 2, 'TRA_NOT', 'TRUOC_GIAO', '2026-10-31', 207480000),
+P('p28', 'ĐH-2610-0037', 1, 'COC', 'TRUOC_SX', '2026-10-20', 27000000), P('p29', 'ĐH-2610-0037', 2, 'TRA_NOT', 'TRUOC_GIAO', '2026-11-12', 63720000),
+P('p10', 'ĐH-2609-0022', 1, 'CONG_NO', 'SAU_GIAO', '2026-11-09', 432000000, { deliv: 'khách nhận 25/09' }),
+P('p11', 'ĐH-2610-0035', 1, 'CONG_NO', 'SAU_GIAO', '', 1007100000),
+P('p12', 'ĐH-2610-0036', 1, 'COC', 'TRUOC_SX', '2026-10-17', 30000000), P('p13', 'ĐH-2610-0036', 2, 'TRA_NOT', 'TRUOC_GIAO', '2026-11-04', 480300000),
+P('p24', 'ĐH-2609-0029', 1, 'COC', 'TRUOC_SX', '2026-09-22', 24000000), P('p14', 'ĐH-2609-0029', 2, 'CHENH_LECH', 'TRUOC_SX', '', -12000000, { note: 'Hủy đơn đã chốt 14/10 — Giám đốc Lê Quang Minh quyết hoàn 12.000.000 đ / cọc 24.000.000 đ' }),
+P('p15', 'ĐH-2606-0014', 1, 'CONG_NO', 'SAU_GIAO', '2026-07-10', 90720000, { deliv: 'khách nhận 25/06' }),
+P('p25', 'ĐH-2607-0004', 1, 'CONG_NO', 'SAU_GIAO', '2026-07-23', 22680000, { deliv: 'khách nhận 08/07' }),
+P('p26', 'ĐH-2610-0040', 1, 'TRA_DU', 'TRUOC_SX', '2026-10-19', 40824000, { deliv: 'cả đơn', gh: 'PX-NM1-2610-0049' }), P('p27', 'ĐH-2610-0041', 1, 'TRA_DU', 'TRUOC_GIAO', '2026-10-19', 40824000, { deliv: 'cả đơn', gh: 'PX-NM1-2610-0050' }),
+P('p17', 'ĐH-2610-0019', 1, 'TRA_DU', 'TRUOC_GIAO', '2026-10-15', 3780000, { deliv: 'cả đơn', gh: 'PX-NM1-2610-0035' }), P('p18', 'ĐH-2610-0022', 1, 'TRA_DU', 'TRUOC_GIAO', '2026-10-15', 17928000, { deliv: 'cả đơn', gh: 'PX-NM1-2610-0034' }),
+P('p19', 'ĐH-2610-0024', 1, 'TRA_DU', 'TRUOC_GIAO', '2026-10-15', 44820000, { deliv: 'cả đơn', gh: 'PX-NM1-2610-0036' }), P('p20', 'ĐH-2610-0026', 1, 'TRA_DU', 'TRUOC_GIAO', '2026-10-16', 44820000, { deliv: 'cả đơn — chưa yêu cầu xuất' }),
+P('p21', 'ĐH-2610-0025', 1, 'CONG_NO', 'SAU_GIAO', '', 44820000, { deliv: 'cả đơn — đã xuất, chờ ghi nhận khách nhận', gh: 'PX-NM1-2610-0045', n: 30 }),
+P('p22', 'TH-2609-0003', 1, 'CHENH_LECH', 'SAU_GIAO', '', -19200000, { note: 'Thu hồi TH-2609-0003 (lô A260820, 120 lon) — Kế toán trưởng Bùi Minh Châu duyệt hoàn 19.200.000 đ ngày 10/10' })];
+const NG = 'Ngô Bảo Ngọc';
+const V = (code, at, type, pur, party, ref, amount, method, file, allocs, x) => Object.assign({ id: code, code: code, at: at, date: at.slice(0, 10), type: type, pur: pur, cust: pur === 'TRA_NCC' ? '' : party, sup: pur === 'TRA_NCC' ? party : '', od: pur === 'TRA_NCC' ? '' : ref, po: pur === 'TRA_NCC' ? ref : '', amount: amount, method: method, file: file, allocs: allocs || [], by: NG, st: 'DA_GHI_NHAN', reason: '', cancelAt: '', fac: 'NM1' }, x || {});
+const v = [
+V('TC-2608-0003', '2026-08-05 10:20', 'THU', 'TIEN_VE', 'k60', 'ĐH-2606-0014', 30000000, 'TIEN_MAT', 'phieu-nop-tien-thanhson.jpg', [{ ps: 'p15', amt: 30000000 }]),
+V('TC-2609-0001', '2026-09-06 10:15', 'THU', 'TIEN_VE', 'k31', 'ĐH-2609-0011', 20000000, 'CK', 'sao-ke-hoanggia-06-09.jpg', [{ ps: 'p23', amt: 20000000 }]),
+V('TC-2609-0002', '2026-09-22 09:30', 'THU', 'TIEN_VE', 'k58', 'ĐH-2609-0029', 24000000, 'TIEN_MAT', 'phieu-nop-tien-taman-22-09.jpg', [{ ps: 'p24', amt: 24000000 }]),
+V('TC-2609-0003', '2026-09-22 11:20', 'CHI', 'TRA_NCC', 'n2', 'PO-2609-0008', 84000000, 'CK', 'unc-lacto-22-09-nhap.pdf', [], { kind: 'TRA_TRUOC', st: 'DA_HUY', reason: 'Ghi nhận khi ủy nhiệm chi chưa được ngân hàng duyệt — ghi lại TC-2609-0004 khi tiền đã đi', cancelAt: '22/09 14:00' }),
+V('TC-2609-0004', '2026-09-22 14:05', 'CHI', 'TRA_NCC', 'n2', 'PO-2609-0008', 84000000, 'CK', 'unc-lacto-22-09.pdf', [], { kind: 'TRA_TRUOC' }),
+V('TC-2609-0005', '2026-09-26 09:40', 'CHI', 'HOAN_KHACH', 'k31', 'ĐH-2609-0011', 10000000, 'CK', 'unc-hoan-hoanggia.pdf', [{ ps: 'p16', amt: 10000000 }]),
+V('TC-2610-0001', '2026-10-10 11:30', 'THU', 'TIEN_VE', 'k12', 'ĐH-2609-0018', 200000000, 'CK', 'sao-ke-ankhang-10-10.jpg', [{ ps: 'p3', amt: 200000000 }]),
+V('TC-2610-0002', '2026-10-10 15:00', 'CHI', 'HOAN_KHACH', 'k58', 'TH-2609-0003', 19200000, 'CK', 'unc-hoan-taman-thuhoi-10-10.pdf', [{ ps: 'p22', amt: 19200000 }]),
+V('TC-2610-0003', '2026-10-11 09:15', 'THU', 'TIEN_VE', 'k31', 'ĐH-2610-0030', 50000000, 'CK', 'sao-ke-hoanggia-11-10.jpg', [{ ps: 'p6', amt: 50000000 }]),
+V('TC-2610-0004', '2026-10-11 14:50', 'THU', 'TIEN_VE', 'k31', 'ĐH-2610-0030', 50000000, 'CK', 'sao-ke-hoanggia-11-10.jpg', [{ ps: 'p6', amt: 50000000 }], { st: 'DA_HUY', reason: 'Nhập trùng TC-2610-0003 — cùng một lần chuyển khoản', cancelAt: '11/10 15:20' }),
+V('TC-2610-0005', '2026-10-14 16:30', 'THU', 'TIEN_VE', 'k44', 'ĐH-2610-0022', 17928000, 'TIEN_MAT', 'phieu-nop-tien-minhchau-14-10.jpg', [{ ps: 'p18', amt: 17928000 }]),
+V('TC-2610-0006', '2026-10-15 09:40', 'THU', 'TIEN_VE', 'k7', 'ĐH-2610-0019', 3780000, 'CK', 'sao-ke-minhphat-15-10-a.jpg', [{ ps: 'p17', amt: 3780000 }]),
+V('TC-2610-0007', '2026-10-15 10:20', 'THU', 'TIEN_VE', 'k58', 'ĐH-2610-0026', 44820000, 'TIEN_MAT', 'phieu-nop-tien-taman-15-10.jpg', [{ ps: 'p20', amt: 44820000 }]),
+V('TC-2610-0008', '2026-10-15 11:00', 'THU', 'TIEN_VE', 'k7', 'ĐH-2610-0024', 44820000, 'CK', 'sao-ke-minhphat-15-10-b.jpg', [{ ps: 'p19', amt: 44820000 }]),
+V('TC-2610-0009', '2026-10-15 15:00', 'THU', 'TIEN_VE', 'k7', 'ĐH-2610-0031', 100000000, 'CK', 'sao-ke-minhphat-15-10.jpg', [{ ps: 'p1', amt: 100000000 }]),
+V('TC-2610-0010', '2026-10-15 16:10', 'CHI', 'TRA_NCC', 'n1', 'PO-2609-0007', 147000000, 'CK', 'unc-phuongnam-15-10.pdf', [], { kind: 'TRA_SAU' }),
+V('TC-2610-0011', '2026-10-16 10:30', 'THU', 'TIEN_VE', 'k31', 'ĐH-2610-0030', 80560000, 'CK', 'sao-ke-hoanggia-16-10.jpg', [{ ps: 'p7', amt: 80560000 }]),
+V('TC-2610-0012', '2026-10-17 15:30', 'THU', 'TIEN_VE', 'k7', 'ĐH-2610-0031', 79640000, 'CK', 'sao-ke-minhphat-17-10.jpg', [{ ps: 'p2', amt: 79640000 }]),
+V('TC-2610-0013', '2026-10-17 16:00', 'THU', 'TIEN_VE', 'k58', 'ĐH-2610-0036', 30000000, 'CK', 'sao-ke-taman-17-10.jpg', [{ ps: 'p12', amt: 30000000 }]),
+V('TC-2610-0014', '2026-10-18 08:15', 'THU', 'TIEN_VE', 'k44', 'ĐH-2610-0040', 40824000, 'TIEN_MAT', 'phieu-nop-tien-minhchau-18-10.jpg', [{ ps: 'p26', amt: 40824000 }]),
+V('TC-2610-0015', '2026-10-18 09:00', 'THU', 'TIEN_VE', 'k31', 'ĐH-2610-0041', 40824000, 'CK', 'sao-ke-hoanggia-18-10.jpg', [{ ps: 'p27', amt: 40824000 }])];
+const L = (cust, at, who, what, key) => ({ cust: cust, at: at, who: who, what: what, key: !!key });
+const lg = [
+L('k12', '2026-09-14 16:00', 'Hệ thống', 'Phát sinh công nợ ĐH-2609-0018 (khách nhận 14/09): 537.840.000 đ, hạn 14/10'),
+L('k12', '2026-10-02 17:00', 'Hệ thống', 'Phát sinh công nợ ĐH-2609-0025 (khách nhận 02/10): 272.160.000 đ, hạn 01/11'),
+L('k12', '2026-10-15 00:05', 'Hệ thống', 'Bật cờ tạm khóa: ĐH-2609-0018 quá hạn', true),
+L('k12', '2026-10-17 08:00', 'Hệ thống', 'Nhắc nợ trên chuông cho Sales, Kế toán: ĐH-2609-0018 quá hạn 3 ngày', true),
+L('k12', '2026-10-17 15:00', 'Võ Thị Lan', 'ĐH-2610-0034 gửi kiểm công nợ — vướng nợ quá hạn, chờ khách trả'),
+L('k12', '2026-10-17 15:30', 'Võ Thị Lan', 'Liên hệ nhắc nợ: liên hệ được · khách hẹn chuyển 337.840.000 đ ngày 20/10'),
+L('k52', '2026-09-25 17:00', 'Hệ thống', 'Phát sinh công nợ ĐH-2609-0022 (khách nhận 25/09): 432.000.000 đ, hạn 09/11'),
+L('k52', '2026-10-16 11:00', 'Ngô Bảo Ngọc', 'Kiểm công nợ ĐH-2610-0035: đủ điều kiện (không nợ quá hạn, trong hạn mức)'),
+L('k60', '2026-06-25 17:00', 'Hệ thống', 'Phát sinh công nợ ĐH-2606-0014 (khách nhận 25/06): 90.720.000 đ, hạn 10/07'),
+L('k60', '2026-07-08 17:00', 'Hệ thống', 'Phát sinh công nợ ĐH-2607-0004 (khách nhận 08/07): 22.680.000 đ, hạn 23/07'),
+L('k60', '2026-07-11 00:05', 'Hệ thống', 'Bật cờ tạm khóa: ĐH-2606-0014 quá hạn', true),
+L('k60', '2026-07-15 10:00', 'Võ Thị Lan', 'Liên hệ nhắc nợ: liên hệ được · khách hẹn trả 90.720.000 đ cuối tháng 7'),
+L('k60', '2026-09-30 15:00', 'Võ Thị Lan', 'Liên hệ nhắc nợ: không liên hệ được — cửa hàng đã đóng cửa'),
+L('k60', '2026-10-08 08:00', 'Hệ thống', 'Quá hạn 90 ngày: báo Giám đốc, Kế toán trưởng quyết bên ngoài hệ thống', true),
+L('k60', '2026-10-12 08:00', 'Hệ thống', 'Nhắc nợ trên chuông cho Sales, Kế toán (mỗi 7 ngày)'),
+L('k58', '2026-10-14 10:30', 'Lê Quang Minh', 'Quyết số tiền hoàn khi hủy ĐH-2609-0029: 12.000.000 đ — chờ Kế toán ghi nhận hoàn', true),
+L('k44', '2026-10-16 16:00', 'Võ Thị Lan', 'ĐH-2610-0033 ký hợp đồng — chờ thu cọc 15.000.000 đ'),
+L('k58', '2026-10-09 14:00', 'Võ Thị Lan', 'Thu hồi TH-2609-0003: đề nghị hoàn tiền 19.200.000 đ (120 lon lô A260820)'),
+L('k58', '2026-10-10 09:20', 'Bùi Minh Châu', 'Duyệt số tiền hoàn thu hồi TH-2609-0003: 19.200.000 đ — chờ Kế toán ghi nhận hoàn', true),
+L('k12', '2026-10-18 08:40', 'Hệ thống', 'Yêu cầu xuất ĐH-2610-0028 (lần 1/2) chờ thanh toán — khách đang tạm khóa, chưa xuất', true),
+L('k52', '2026-10-17 16:20', 'Hệ thống', 'ĐH-2610-0025 đủ điều kiện giao (Mua nợ, không tạm khóa)'),
+L('k64', '2026-10-18 09:20', 'Hệ thống', 'ĐH-2610-0038 (442.800.000 đ, Mua nợ 30 ngày) gửi kiểm công nợ — khách mới chưa có hạn mức; đề xuất hạn mức ban đầu 500.000.000 đ theo ĐH-2610-0054 đang chờ duyệt, duyệt xong kiểm lại (chưa tính vào dư nợ)', true),
+L('k63', '2026-10-18 09:45', 'Võ Thị Lan', 'Tạm dừng giao dịch: không liên hệ được từ 08/10 — đã yêu cầu hủy ĐH-2610-0039 (chưa thu tiền)')];
+const ncc = { n1: { code: 'NCC-0001', name: 'Công ty TNHH Nguyên liệu Sữa Phương Nam', terms: 'Trả sau 30 ngày' }, n2: { code: 'NCC-0002', name: 'Lacto Ingredients B.V.', terms: 'Trả sau 60 ngày' }, n3: { code: 'NCC-0003', name: 'Southland Milk Co-operative', terms: 'Trả sau 60 ngày' }, n4: { code: 'NCC-0004', name: 'Công ty CP Bao bì Kim loại Đông Á', terms: 'Trả sau 30 ngày' } };
+const PO = (code, sup, terms, days, st, mat, qty, unit, price, rqty, recv, x) => Object.assign({ code: code, sup: sup, terms: terms, days: days, st: st, mat: mat, qty: qty, unit: unit, price: price, rqty: rqty, recv: recv, fac: 'NM1', note: '' }, x || {});
+const po = [
+PO('PO-2607-0009', 'n2', 'Trả sau 60 ngày', 60, 'Đã nhận đủ', 'Whey protein cô đặc 80%', 2000, 'kg', 185000, 2000, '2026-08-19'),
+PO('PO-2609-0004', 'n4', 'Trả sau 30 ngày', 30, 'Đã nhận đủ', 'Lon thiếc 800 g, nắp nhôm', 20000, 'cái', 3200, 20000, '2026-09-15', { note: 'đợt chính 19.000 lon 15/09; 1.000 lon đổi (TH-NCC-2609-0001) nhận 22/09', retNote: 'TH-NCC-2609-0001' }),
+PO('PO-2609-0007', 'n1', 'Trả sau 30 ngày', 30, 'Đã nhận đủ', 'Bột sữa nguyên kem 26% béo', 1500, 'kg', 98000, 1500, '2026-09-15'),
+PO('PO-2609-0010', 'n1', 'Trả sau 30 ngày', 30, 'Đã nhận đủ', 'Bột sữa gầy', 1000, 'kg', 88000, 1000, '2026-09-12', { pn: 'PN-NM1-2609-0052', hold: 'tạm giữ: NCR lô L-BOT-32 chờ NCC bồi hoàn' }),
+PO('PO-2609-0009', 'n1', 'Trả sau 30 ngày', 30, 'Nhận một phần', 'Bột sữa nguyên kem 26% béo', 5000, 'kg', 98000, 2725, '2026-09-25', { pn: 'PN-NM1-2609-0050', note: 'đợt 2 2.275 kg NCC hẹn giao 24/10', retNote: 'TH-NCC-2609-0002, TH-NCC-2610-0006' }),
+PO('PO-2610-0015', 'n1', 'Trả sau 30 ngày', 30, 'Đã nhận đủ', 'Bột sữa gầy', 500, 'kg', 88000, 500, '2026-10-05', { pn: 'PN-NM1-2610-0019' }),
+PO('PO-2610-0018', 'n1', 'Trả sau 30 ngày', 30, 'Đã gửi NCC', 'Bột sữa gầy', 3000, 'kg', 88000, 0, '', { pn: 'PN-NM1-2610-0031', pnSt: 'chờ xác nhận lệch', note: 'phiếu nhập 1.975 kg chờ Thủ kho trưởng xác nhận lệch (1 bao rách trả NCC) — phải trả phát sinh khi duyệt', retNote: 'TH-NCC-2610-0004' }),
+PO('PO-2610-0016', 'n4', 'Trả sau 30 ngày', 30, 'Đã gửi NCC', 'Lon thiếc 800 g, nắp nhôm', 24000, 'cái', 3200, 0, '', { pn: 'PN-NM1-2610-0028', pnSt: 'đang nhận', note: 'đang nhận 10.800 lon; 1.200 lon móp khi nhận (TH-NCC-2610-0005) và 2.000 lon từ chối ở cửa kho, đổi 1-1', retNote: 'TH-NCC-2610-0002, TH-NCC-2610-0005' }),
+PO('PO-2610-0017', 'n4', 'Trả sau 30 ngày', 30, 'Đã gửi NCC', 'Lon thiếc 800 g, nắp nhôm', 18000, 'cái', 3200, 0, '', { note: 'NCC hẹn giao 22/10' }),
+PO('PO-2609-0008', 'n2', 'Trả trước', 0, 'Đã nhận đủ', 'Bột sữa gầy', 1000, 'kg', 84000, 1000, '2026-10-08'),
+PO('PO-2610-0019', 'n3', 'Trả sau 60 ngày', 60, 'Chờ duyệt', 'Bột sữa nguyên kem 26% béo', 1000, 'kg', 92500, 0, '', { fac: 'NM2' }),
+PO('PO-2610-0022', 'n3', 'Trả trước', 0, 'Đã duyệt', 'Bột sữa gầy', 1000, 'kg', 86500, 0, '', { fac: 'NM2', note: 'NCC giao sau khi nhận tiền trả trước' }),
+PO('PO-2610-0023', 'n2', 'Trả trước', 0, 'Chờ duyệt', 'Whey protein cô đặc 80%', 1000, 'kg', 185000, 0, '', { fac: 'NM2' })];
+const R = (code, poc, why, mat, lot, qty, st, rec, x) => Object.assign({ code: code, po: poc, why: why, mat: mat, lot: lot, qty: qty, st: st, rec: rec, recAt: '', recBy: '', note: '', px: '' }, x || {});
+const tra = [
+R('TH-NCC-2610-0003', 'PO-2610-0015', 'QC không đạt', 'Bột sữa gầy', 'L-BOT-22', 475, 'Chờ kho xuất trả', 0, { qc: 'QC-NM1-2610-0044', note: 'Không đạt theo QC-NM1-2610-0044 — NCC đồng ý nhận lại; Kho đang xuất trả theo PX-NM1-2610-0046 (đã lấy 250/475 kg)' }),
+R('TH-NCC-2610-0001', 'PO-2610-0015', 'Hư', 'Bột sữa gầy', 'L-BOT-22', 25, 'Đã xuất trả', 0, { px: 'PX-NM1-2610-0040', note: 'Đã xuất trả 09/10 theo PX-NM1-2610-0040' }),
+R('TH-NCC-2609-0004', 'PO-2609-0009', 'Hư', 'Bột sữa nguyên kem 26% béo', 'L-BOT-33', 100, 'Chờ ký xác nhận', 9800000, { recAt: '16/10 15:20', recBy: 'Ngô Bảo Ngọc', px: 'PX-NM1-2609-0055', note: 'Đã xuất trả 30/09 theo PX-NM1-2609-0055' }),
+R('TH-NCC-2609-0003', 'PO-2609-0009', 'Hư', 'Bột sữa nguyên kem 26% béo', 'L-BOT-33', 50, 'Không thống nhất', 0, { note: 'NCC chưa nhận lỗi — chờ đo ẩm mẫu lưu đối chứng (dự kiến 22/10)' })];
+return { data: { kh: kh, od: od, ps: ps, v: v, lg: lg, ncc: ncc, po: po, tra: tra } };
+}
+/* ---------- tính công nợ khách ---------- */
+D() { return this.state.data; }
+custOf(p) { return this.D().od[p.od].cust; }
+kh(id) { return this.D().kh.find((k) => k.id === id) || {}; }
+paidOf(id) { let s = 0; this.D().v.forEach((v) => { if (v.st === 'DA_GHI_NHAN') v.allocs.forEach((a) => { if (a.ps === id) s += a.amt; }); }); return s; }
+remOf(p) { return Math.abs(p.amt) - this.paidOf(p.id); }
+lateOf(p) { if (p.type !== 'CONG_NO' || !p.due || p.amt < 0 || this.remOf(p) <= 0) return 0; const d = -this.days(p.due); return d > 0 ? d : 0; }
+KIND(t, amt) { if (amt < 0) return 'Hoàn tiền'; return { COC: 'Cọc', TRA_DU: 'Trả đủ', TRA_NOT: 'Trả nốt', CONG_NO: 'Công nợ', CHENH_LECH: 'Chênh lệch' }[t]; }
+BASIS(b) { return { TRUOC_SX: 'trước sản xuất', TRUOC_GIAO: 'trước giao', SAU_GIAO: 'sau giao' }[b]; }
+calc(k) {
+const ps = this.D().ps.filter((p) => this.custOf(p) === k.id);
+const c = { cong: 0, chua: 0, inTerm: 0, b1: 0, b2: 0, b3: 0, truoc: 0, hoan: 0, maxLate: 0, firstDue: '', ps: ps, over90: [] };
+ps.forEach((p) => { const r = this.remOf(p); if (r <= 0) return;
+if (p.amt < 0) { c.hoan += r; return; }
+if (p.type === 'CONG_NO') { if (!p.due) { c.chua += r; return; } c.cong += r; const d = this.lateOf(p);
+if (d > 0) { if (d <= 30) c.b1 += r; else if (d <= 90) c.b2 += r; else { c.b3 += r; c.over90.push(p); } if (d > c.maxLate) { c.maxLate = d; c.firstDue = p.due; } } else c.inTerm += r; }
+else c.truoc += r; });
+c.over = c.b1 + c.b2 + c.b3; c.blocked = c.over > 0; c.du = c.cong + c.chua;
+return c; }
+openItems(cust) { return this.D().ps.filter((p) => this.custOf(p) === cust && p.amt > 0 && p.due && this.remOf(p) > 0).sort((a, b) => a.due < b.due ? -1 : a.due > b.due ? 1 : a.seq - b.seq); }
+refundOpen() { return this.D().ps.filter((p) => p.amt < 0 && this.remOf(p) > 0); }
+over90All() { return this.D().ps.filter((p) => this.lateOf(p) > 90); }
+autoAlloc(cust, amount) { const out = {}; let left = amount; this.openItems(cust).forEach((p) => { const r = this.remOf(p); const a = Math.min(r, Math.max(left, 0)); out[p.id] = a > 0 ? this.fn(a) : ''; left -= a; }); return out; }
+remind(c) { if (!c.maxLate || c.maxLate < 3) return null; const last = this.addDays(c.firstDue, 3 + 7 * Math.floor((c.maxLate - 3) / 7)); return { last: last, next: this.addDays(last, 7) }; }
+/* ---------- tính công nợ NCC ---------- */
+sup(id) { return this.D().ncc[id] || {}; }
+poBy(code) { return this.D().po.find((p) => p.code === code); }
+apOf(p) { const D = this.D(); let paid = 0; D.v.forEach((v) => { if (v.st === 'DA_GHI_NHAN' && v.pur === 'TRA_NCC' && v.po === p.code) paid += v.amount; });
+let giam = 0; D.tra.forEach((t) => { if (t.po === p.code && t.rec) giam += t.rec; });
+const total = p.qty * p.price; const recvVal = p.rqty * p.price; const pre = p.terms === 'Trả trước';
+const phat = pre ? 0 : recvVal; const due = (!pre && p.recv) ? this.addDays(p.recv, p.days) : '';
+return { paid: paid, giam: giam, total: total, recvVal: recvVal, phat: phat, rem: pre ? Math.max(total - paid, 0) : phat - paid - giam, due: due, pre: pre }; }
+apOpen() { return this.D().po.filter((p) => { const a = this.apOf(p); return !a.pre && a.phat > 0 && a.rem > 0; }); }
+preOpen() { return this.D().po.filter((p) => { const a = this.apOf(p); return a.pre && a.rem > 0 && ['Đã duyệt', 'Đã gửi NCC'].indexOf(p.st) >= 0; }); }
+/* ---------- hộp thoại ---------- */
+mkDlg(kind, preset) {
+const T = this.fd(this.T());
+if (kind === 'tien-ve') { const cust = preset ? 'k12' : (this.state.sel || ''); const f = { cust: cust, amount: preset ? '337.840.000' : '', date: T, method: 'CK', file: preset ? 'sao-ke-ankhang-18-10.jpg' : '' }; return { kind: kind, f: f, alloc: this.autoAlloc(cust, this.num(f.amount)), err: {} }; }
+if (kind === 'hoan-tien') { const r = this.refundOpen(); const p = r.find((x) => this.custOf(x) === this.state.sel) || r[0]; return { kind: kind, f: { ps: p ? p.id : '', date: T, method: 'CK', file: preset ? 'unc-hoan-taman-18-10.pdf' : '' }, err: {} }; }
+if (kind === 'ket-qua-90') { const p = this.over90All()[0]; return { kind: kind, f: { ps: p ? p.id : '', by: 'gd', note: preset ? 'GĐ quyết: chuyển hồ sơ cho luật sư khởi kiện đòi 60.720.000 đ; tạm ngừng bán cho khách. Dư nợ giữ nguyên tới khi có kết quả.' : '', file: preset ? 'bien-ban-hop-18-10.pdf' : '' }, err: {} }; }
+if (kind === 'lien-he') { const c = this.calc(this.kh(this.state.sel)); const p = c.ps.find((x) => this.lateOf(x) > 0) || this.D().ps.find((x) => this.lateOf(x) > 0); return { kind: kind, f: { ps: p ? p.id : '', result: 'LIEN_HE_DUOC', note: '' }, err: {} }; }
+if (kind === 'tra-ncc') { const code = preset ? 'PO-2607-0009' : ''; const p = code ? this.poBy(code) : null; return { kind: kind, f: { po: code, amount: p ? this.fn(this.apOf(p).rem) : '', date: T, method: 'CK', file: preset ? 'unc-lacto-18-10.pdf' : '' }, err: {} }; }
+if (kind === 'giam-tru') { const t = this.D().tra.find((x) => x.st === 'Đã xuất trả' && !x.rec) || this.D().tra[0]; const p = this.poBy(t.po); return { kind: kind, f: { tr: t.code, amount: this.fn(t.qty * p.price), note: '' }, err: {} }; }
+if (kind === 'huy') { return { kind: kind, f: { v: preset ? 'TC-2610-0013' : '', reason: '' }, err: {} }; }
+return null; }
+curDlg() { if (this.state.dlg !== undefined) return this.state.dlg; const h = this.props.hopthoai || 'khong'; if (h === 'khong') return null;
+const need = { 'tien-ve': ['kt', 'cnkh'], 'hoan-tien': ['kt', 'cnkh'], 'ket-qua-90': ['kt', 'cnkh'], 'lien-he': ['sales', 'cnkh'], 'tra-ncc': ['kt', 'cnncc'], 'giam-tru': ['kt', 'cnncc'], 'huy': ['kt', 'so'] }[h];
+if (!need || need[0] !== this.role() || need[1] !== this.scr()) return null;
+if (!this._pd || this._pd.k !== h) this._pd = { k: h, d: this.mkDlg(h, true) }; return this._pd.d; }
+open(kind, extra) { return () => { const d = this.mkDlg(kind, false); if (extra) Object.assign(d.f, extra); if (kind === 'tra-ncc' && d.f.po) d.f.amount = this.fn(this.apOf(this.poBy(d.f.po)).rem); this.setState({ dlg: d, toast: '', pv: null }); }; }
+setF(k) { return (ev) => { const d = this.curDlg(); const f = Object.assign({}, d.f); f[k] = ev && ev.target ? ev.target.value : ev; const nd = Object.assign({}, d, { f: f, err: {} });
+if (d.kind === 'tien-ve' && (k === 'amount' || k === 'cust')) { if (k === 'amount') f.amount = f.amount ? this.fn(this.num(f.amount)) : ''; nd.alloc = this.autoAlloc(f.cust, this.num(f.amount)); }
+if (d.kind === 'tra-ncc' && k === 'po') { const p = this.poBy(f.po); f.amount = p ? this.fn(this.apOf(p).rem) : ''; }
+if ((d.kind === 'tra-ncc' || d.kind === 'giam-tru') && k === 'amount') f.amount = f.amount ? this.fn(this.num(f.amount)) : '';
+if (d.kind === 'giam-tru' && k === 'tr') { const t = this.D().tra.find((x) => x.code === f.tr); f.amount = t ? this.fn(t.qty * this.poBy(t.po).price) : ''; }
+if (JSON.stringify(f) === JSON.stringify(d.f)) return; this.setState({ dlg: nd }); }; }
+setVal(k, v) { return () => this.setF(k)(v); }
+setAlloc(id) { return (ev) => { const d = this.curDlg(); const a = Object.assign({}, d.alloc); const n = this.num(ev.target.value); a[id] = n ? this.fn(n) : ''; if (a[id] === (d.alloc[id] || '')) return; this.setState({ dlg: Object.assign({}, d, { alloc: a, err: {} }) }); }; }
+close() { this.setState({ dlg: null, pv: null }); }
+/* ---------- tệp đính kèm: chọn tệp thật, chỉ đọc tại trình duyệt, không gửi đi ---------- */
+fsize(n) { return n < 1024 ? n + ' B' : n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1).replace('.', ',') + ' MB'; }
+fileRaw(d, key) { if (!d) return []; if (d.files && d.files[key]) return d.files[key]; const v = d.f[key]; return v ? String(v).split(' · ').map((n, i) => ({ id: 's' + i, name: n, size: 0, isImg: /\.(jpe?g|png|gif|webp)$/i.test(n), url: '' })) : []; }
+setFiles(key, list) { const d = this.curDlg(); if (!d) return; const fs = Object.assign({}, d.files || {}); fs[key] = list; const f = Object.assign({}, d.f); f[key] = list.map((x) => x.name).join(' · '); this.setState({ dlg: Object.assign({}, d, { f: f, files: fs, err: {} }) }); }
+pickFiles(key) { return (ev) => { const t = ev && ev.target; const fs = Array.from((t && t.files) || []); if (!fs.length) return;
+const items = fs.map((x) => { this._fid = (this._fid || 0) + 1; return { id: 'u' + this._fid, name: x.name, size: x.size, isImg: /^image\//.test(x.type), url: '' }; });
+this.setFiles(key, this.fileRaw(this.curDlg(), key).concat(items)); if (t) t.value = '';
+items.forEach((it, i) => { if (!it.isImg || typeof FileReader === 'undefined') return; const r = new FileReader();
+r.onload = () => { const d = this.curDlg(); const cur = (d && d.files && d.files[key]) || []; if (!cur.some((y) => y.id === it.id)) return; const fs2 = Object.assign({}, d.files); fs2[key] = cur.map((y) => (y.id === it.id ? Object.assign({}, y, { url: String(r.result || '') }) : y)); this.setState({ dlg: Object.assign({}, d, { files: fs2 }) }); };
+r.readAsDataURL(fs[i]); }); }; }
+fileList(d, key) { const fl = this.fileRaw(d, key); const imgs = fl.filter((x) => x.isImg);
+return fl.map((x) => ({ name: x.name, sizeTxt: x.size ? this.fsize(x.size) : 'Tệp mẫu', hasUrl: x.isImg && !!x.url, isSampleImg: x.isImg && !x.url, noImg: !x.isImg, url: x.url || '', preview: () => this.setState({ pv: { key: key, idx: imgs.indexOf(x) } }), remove: () => this.setFiles(key, fl.filter((y) => y !== x)) })); }
+pvVals(d) { const p = this.state.pv; const none = { open: false, url: '', hasUrl: false, noUrl: true, name: '', pos: '', many: false, prev: this.noop, next: this.noop, close: this.noop };
+if (!p || !d) return none; const imgs = this.fileRaw(d, p.key).filter((x) => x.isImg); if (!imgs.length) return none;
+const i = Math.max(0, Math.min(p.idx, imgs.length - 1)); const x = imgs[i]; const go = (k) => () => this.setState({ pv: { key: p.key, idx: (i + k + imgs.length) % imgs.length } });
+return { open: true, url: x.url || '', hasUrl: !!x.url, noUrl: !x.url, name: x.name, pos: imgs.length > 1 ? (i + 1) + '/' + imgs.length : '', many: imgs.length > 1, prev: go(-1), next: go(1), close: () => this.setState({ pv: null }) }; }
+/* tab của hộp thoại dài: Ghi nhận tiền về */
+TABS(kind) { return kind === 'tien-ve' ? [['info', 'Thông tin tiền về'], ['alloc', 'Cấn khoản']] : null; }
+errTab(kind, e) { const ks = Object.keys(e || {}); const of = (k) => (k === 'file' ? 'file' : (k === '_form' || k.indexOf('a_') === 0) ? 'alloc' : 'info'); const tabs = this.TABS(kind) || []; const t = tabs.find((x) => ks.some((k) => of(k) === x[0])); return t ? t[0] : ''; }
+newCode() { let n = 0; const pre = 'TC-2610-'; this.D().v.forEach((v) => { if (v.code.indexOf(pre) === 0) n = Math.max(n, +v.code.slice(pre.length)); }); return pre + String(n + 1).padStart(4, '0'); }
+mkV(o) { const vw = this.viewer(); return Object.assign({ id: '', code: '', at: '', date: '', type: 'THU', pur: 'TIEN_VE', cust: '', sup: '', od: '', po: '', amount: 0, method: 'CK', file: '', allocs: [], by: vw.n, st: 'DA_GHI_NHAN', reason: '', cancelAt: '', fac: 'NM1' }, o); }
+save() {
+const d = this.curDlg(); if (!d) return; const f = d.f; const e = {}; const D = this.D(); const vw = this.viewer();
+const di = this.iso(f.date); const at = (di || this.T()) + ' ' + this.hm(); const code = this.newCode();
+const data = Object.assign({}, D); let toast = '';
+if (d.kind === 'tien-ve') {
+const amt = this.num(f.amount); const items = this.openItems(f.cust); const tot = items.reduce((s, p) => s + this.remOf(p), 0);
+if (!f.cust) e.cust = 'Chọn khách hàng.';
+if (!amt) e.amount = 'Nhập số tiền khách trả.'; else if (f.cust && amt > tot) e.amount = 'Lớn hơn tổng còn phải thu (' + this.money(tot) + '). Ghi nhận đúng số cần thu — chưa giữ tiền thừa.';
+if (!di) e.date = 'Nhập ngày dạng dd/mm/yyyy.'; else if (di > this.T()) e.date = 'Không ghi nhận tiền về ở ngày tương lai.';
+if (!f.file) e.file = 'Bắt buộc ảnh chứng từ (sao kê / ủy nhiệm chi / phiếu nộp tiền).';
+const allocs = []; let sum = 0; items.forEach((p) => { const a = this.num(d.alloc[p.id]); if (a > 0) { allocs.push({ ps: p.id, amt: a }); sum += a; if (a > this.remOf(p)) e['a_' + p.id] = 'Vượt số còn phải thu.'; } });
+if (amt && !e.amount && sum !== amt) e._form = 'Tổng số cấn (' + this.money(sum) + ') phải bằng số tiền ghi nhận (' + this.money(amt) + ').';
+if (Object.keys(e).length) { this.setState({ dlg: Object.assign({}, d, { err: e, tab: this.errTab(d.kind, e) || d.tab }) }); return; }
+const k = this.kh(f.cust); const before = this.calc(k);
+const ods = allocs.map((a) => D.ps.find((p) => p.id === a.ps).od).filter((x, i, arr) => arr.indexOf(x) === i);
+data.v = D.v.concat([this.mkV({ id: code, code: code, at: at, date: di, type: 'THU', pur: 'TIEN_VE', cust: f.cust, od: ods.length === 1 ? ods[0] : '', amount: amt, method: f.method, file: f.file, allocs: allocs })]);
+this.state.data = data; const after = this.calc(k);
+const msgs = [code + ': ghi nhận ' + this.money(amt) + ' của ' + k.code + ', cấn ' + allocs.length + ' khoản.'];
+if (before.blocked && !after.blocked) msgs.push('Hết nợ quá hạn — đã tắt cờ tạm khóa.');
+const od = Object.assign({}, D.od);
+ods.forEach((o) => { const cocs = D.ps.filter((p) => p.od === o && p.type === 'COC'); if (od[o].st === 'Chờ thu tiền' && cocs.length && cocs.every((p) => this.remOf(p) <= 0)) { od[o] = Object.assign({}, od[o], { st: 'Đã chốt' }); msgs.push(o + ' đã thu đủ cọc — báo Bán hàng "Đã thu đủ", đơn chuyển Đã chốt.'); } });
+data.od = od; toast = msgs.join(' ');
+} else if (d.kind === 'hoan-tien') {
+const p = D.ps.find((x) => x.id === f.ps);
+if (!p) e.ps = 'Chọn khoản phải hoàn.'; if (!di) e.date = 'Nhập ngày dạng dd/mm/yyyy.'; if (!f.file) e.file = 'Bắt buộc ảnh chứng từ chuyển / chi tiền.';
+if (Object.keys(e).length) { this.setState({ dlg: Object.assign({}, d, { err: e, tab: this.errTab(d.kind, e) || d.tab }) }); return; }
+const r = this.remOf(p);
+data.v = D.v.concat([this.mkV({ id: code, code: code, at: at, date: di, type: 'CHI', pur: 'HOAN_KHACH', cust: this.custOf(p), od: p.od, amount: r, method: f.method, file: f.file, allocs: [{ ps: p.id, amt: r }] })]);
+toast = code + ': đã ghi nhận hoàn ' + this.money(r) + ' cho ' + this.kh(this.custOf(p)).code + ' (' + p.od + ').';
+} else if (d.kind === 'ket-qua-90') {
+const p = D.ps.find((x) => x.id === f.ps);
+if (!p) e.ps = 'Không có khoản quá 90 ngày.'; if (!f.note.trim()) e.note = 'Ghi kết quả GĐ / KTT đã quyết.'; if (!f.file) e.file = 'Đính kèm biên bản / quyết định.';
+if (Object.keys(e).length) { this.setState({ dlg: Object.assign({}, d, { err: e, tab: this.errTab(d.kind, e) || d.tab }) }); return; }
+const who = f.by === 'gd' ? 'Giám đốc Lê Quang Minh' : 'Kế toán trưởng Bùi Minh Châu';
+data.ps = D.ps.map((x) => x.id === p.id ? Object.assign({}, x, { esc: { by: who, note: f.note.trim(), file: f.file, at: '18/10/2026', rec: vw.n } }) : x);
+data.lg = D.lg.concat([{ cust: this.custOf(p), at: this.T() + ' ' + this.hm(), who: vw.n, what: 'Ghi kết quả nợ quá 90 ngày ' + p.od + ' (' + who + ' quyết): ' + f.note.trim(), key: true }]);
+toast = p.od + ': đã ghi kết quả xử lý nợ quá 90 ngày. Dư nợ giữ nguyên — hệ thống không xóa nợ.';
+} else if (d.kind === 'lien-he') {
+const p = D.ps.find((x) => x.id === f.ps); if (!p) { this.setState({ dlg: null }); return; }
+data.lg = D.lg.concat([{ cust: this.custOf(p), at: this.T() + ' ' + this.hm(), who: vw.n, what: 'Liên hệ nhắc nợ ' + p.od + ': ' + (f.result === 'LIEN_HE_DUOC' ? 'liên hệ được' : 'không liên hệ được') + (f.note.trim() ? ' · ' + f.note.trim() : '') }]);
+toast = 'Đã ghi lần liên hệ nhắc nợ ' + p.od + '.';
+} else if (d.kind === 'tra-ncc') {
+const p = this.poBy(f.po); const amt = this.num(f.amount); const a = p ? this.apOf(p) : null;
+if (!p) e.po = 'Chọn PO.'; if (!amt) e.amount = 'Nhập số tiền đã trả.'; else if (a && amt > a.rem) e.amount = 'Lớn hơn số còn phải trả (' + this.money(a.rem) + ').';
+if (!di) e.date = 'Nhập ngày dạng dd/mm/yyyy.'; else if (di > this.T()) e.date = 'Không ghi nhận ở ngày tương lai.'; if (!f.file) e.file = 'Bắt buộc ảnh chứng từ (ủy nhiệm chi / phiếu chi tiền mặt).';
+if (Object.keys(e).length) { this.setState({ dlg: Object.assign({}, d, { err: e, tab: this.errTab(d.kind, e) || d.tab }) }); return; }
+data.v = D.v.concat([this.mkV({ id: code, code: code, at: at, date: di, type: 'CHI', pur: 'TRA_NCC', sup: p.sup, po: p.code, amount: amt, method: f.method, file: f.file, kind: a.pre ? 'TRA_TRUOC' : 'TRA_SAU', fac: p.fac })]);
+toast = code + ': ghi nhận đã trả ' + this.money(amt) + ' cho ' + this.sup(p.sup).code + ' (' + p.code + ')' + (amt === a.rem ? ' — PO đã trả đủ.' : ' — còn ' + this.money(a.rem - amt) + '.');
+} else if (d.kind === 'giam-tru') {
+const t = D.tra.find((x) => x.code === f.tr); const p = this.poBy(t.po); const amt = this.num(f.amount); const a = this.apOf(p);
+if (t.st !== 'Đã xuất trả') return; if (!amt) e.amount = 'Nhập số tiền giảm trừ.'; else if (amt > a.rem) e.amount = 'Lớn hơn số còn phải trả của PO (' + this.money(a.rem) + ').';
+if (Object.keys(e).length) { this.setState({ dlg: Object.assign({}, d, { err: e, tab: this.errTab(d.kind, e) || d.tab }) }); return; }
+data.tra = D.tra.map((x) => x.code === t.code ? Object.assign({}, x, { rec: amt, recAt: '18/10 ' + this.hm(), recBy: vw.n, st: 'Chờ ký xác nhận' }) : x);
+toast = t.code + ': ghi nhận giảm trừ ' + this.money(amt) + ' vào khoản phải trả ' + p.code + '. Chờ Mua hàng ký xác nhận để hoàn tất phiếu trả.';
+} else if (d.kind === 'huy') {
+const v = D.v.find((x) => x.code === f.v); if (!v) { this.setState({ dlg: null }); return; }
+if (!f.reason.trim()) { this.setState({ dlg: Object.assign({}, d, { err: { reason: 'Bắt buộc lý do hủy.' } }) }); return; }
+const party = v.cust ? this.kh(v.cust) : null; const before = party ? this.calc(party) : null;
+data.v = D.v.map((x) => x.code === v.code ? Object.assign({}, x, { st: 'DA_HUY', reason: f.reason.trim(), cancelAt: '18/10 ' + this.hm() }) : x);
+this.state.data = data; const after = party ? this.calc(party) : null;
+toast = v.code + ': đã hủy (' + f.reason.trim() + '). ' + (v.allocs.length ? 'Đã gỡ ' + v.allocs.length + ' khoản cấn — dư nợ, nợ quá hạn tính lại.' : 'Khoản phải trả ' + v.po + ' tính lại.') + (before && !before.blocked && after.blocked ? ' Khách có lại khoản quá hạn — cờ tạm khóa bật lại.' : '');
+}
+this.setState({ data: data, dlg: null, toast: toast });
+}
+/* ---------- view hộp thoại ---------- */
+fld(id, label, type, value, o) { o = o || {}; const err = o.err || ''; return { id: 'f-' + id, label: label, req: !!o.req, wrap: (o.wide || type === 'area' || type === 'file') ? 'full' : '', itype: o.itype || 'text', isInput: type === 'input', isMoney: type === 'money', isSelect: type === 'select', isArea: type === 'area', isRo: type === 'ro', isSeg: type === 'seg', isFile: type === 'file', value: value == null ? '' : value, set: o.set || this.noop, ph: o.ph || '', opts: o.opts || [], cls: 'mp-input' + (err ? ' err' : ''), err: err, hasErr: !!err, hint: o.hint || '', hasHint: !!o.hint && !(type !== 'select' && String(o.hint).length > 64), hintCls: type === 'select' ? 'mp-sum' : 'hint', hasInfo: !!o.hint && type !== 'select' && String(o.hint).length > 64, info: o.hint || '', roCls: o.roSub ? 'mp-ro has-sub' : 'mp-ro', segs: o.segs || [], hasFile: !!value, noFile: !value, pick: o.pick || this.noop, files: o.files || [], pickF: o.pickF || this.noop, accept: o.accept || '.pdf,image/*', fhint: o.fhint || '', tab: o.tab || '', clear: o.clear || this.noop, roSub: o.roSub || '', hasRoSub: !!o.roSub }; }
+segM(v) { return [['CK', 'Chuyển khoản'], ['TIEN_MAT', 'Tiền mặt']].map((x) => ({ t: x[1], on: v === x[0] ? 'true' : 'false', cls: v === x[0] ? 'on' : '', run: this.setVal('method', x[0]) })); }
+fileF(f, err, label, fname) { return this.fld('file', label || 'Ảnh chứng từ', 'file', f.file, { req: true, wide: true, err: err, tab: 'info', files: this.fileList(this.curDlg(), 'file'), pickF: this.pickFiles('file'), accept: '.pdf,image/*', fhint: 'Ảnh hoặc PDF chứng từ, chọn được nhiều tệp (bắt buộc)', clear: this.setVal('file', '') }); }
+dlgView(d) {
+const D = this.D(); const f = d.f; const e = d.err || {}; const B = (cls, t) => ({ cls: 'mp-banner mp-banner--' + cls, t: t });
+const V = { kind: d.kind, hasXl: false, xl: { href: '', open: this.noop, label: '' }, style: 'max-width: 720px', title: '', sub: '', banners: [], fields: [], hasAlloc: false, alloc: [], allocEmpty: false, allocEmptyText: '', sumAmt: '', sumAlloc: '', diffCls: '', diffText: '', autoRun: this.noop, hasFormErr: !!e._form, formErr: e._form || '', canSave: true, saveLabel: 'Lưu', saveCls: 'mp-btn mp-btn--primary', cancelLabel: 'Hủy', close: () => this.close(), save: () => this.save() };
+if (d.kind === 'tien-ve') {
+V.style = 'max-width: 860px'; V.title = 'Ghi nhận tiền về'; V.sub = 'Khách chuyển khoản / nộp tiền mặt; số tiền được cấn vào lịch thanh toán.';
+const opts = D.kh.filter((k) => this.openItems(k.id).length).map((k) => ({ v: k.id, t: k.code + ' · ' + k.company }));
+const c = f.cust ? this.calc(this.kh(f.cust)) : null;
+V.fields = [this.fld('cust', 'Khách hàng', 'select', f.cust, { req: true, wide: true, opts: opts, ph: 'Chọn khách có khoản đang mở', set: this.setF('cust'), err: e.cust, hint: c ? 'Còn phải thu ' + this.money(this.openItems(f.cust).reduce((s, p) => s + this.remOf(p), 0)) + (c.over ? ' · quá hạn ' + this.money(c.over) : '') : '' }),
+this.fld('amount', 'Số tiền', 'money', f.amount, { req: true, set: this.setF('amount'), err: e.amount }),
+this.fld('date', 'Ngày tiền về', 'input', f.date, { req: true, ph: 'dd/mm/yyyy', set: this.setF('date'), err: e.date }),
+this.fld('method', 'Hình thức', 'seg', f.method, { req: true, segs: this.segM(f.method) }),
+this.fileF(f, e.file, 'Ảnh chứng từ', 'sao-ke-' + (this.kh(f.cust).code || 'kh').toLowerCase() + '-18-10.jpg')];
+const items = f.cust ? this.openItems(f.cust) : []; const amt = this.num(f.amount); let sum = 0;
+V.hasAlloc = true; V.alloc = items.map((p) => { const late = this.lateOf(p); const a = this.num(d.alloc[p.id]); sum += a; const er = e['a_' + p.id] || '';
+return { od: p.od, kind: this.KIND(p.type, p.amt), basis: this.BASIS(p.basis) + (p.deliv ? ' · ' + p.deliv : ''), due: this.fd(p.due), dueCls: late ? 'c-bad' : '', hasLate: late > 0, late: late ? 'quá hạn ' + late + ' ngày' : '', rem: this.money(this.remOf(p)), value: d.alloc[p.id] || '', set: this.setAlloc(p.id), aria: 'Cấn vào ' + p.od + ' ' + this.KIND(p.type, p.amt), cls: 'mp-input' + (er ? ' err' : ''), err: er, hasErr: !!er }; });
+V.allocEmpty = !items.length; V.allocEmptyText = f.cust ? 'Khách không còn khoản nào đến hạn để cấn.' : 'Chọn khách hàng để xem các khoản đang mở.';
+V.sumAmt = this.money(amt); V.sumAlloc = this.money(sum); const diff = amt - sum;
+V.diffCls = diff === 0 && amt ? 'ok' : 'bad'; V.diffText = !amt ? 'Nhập số tiền' : diff === 0 ? 'Đã cấn hết' : diff > 0 ? 'Còn ' + this.money(diff) + ' chưa cấn' : 'Cấn vượt ' + this.money(-diff);
+V.autoRun = () => this.setState({ dlg: Object.assign({}, d, { alloc: this.autoAlloc(f.cust, amt), err: {} }) });
+if (c && c.blocked) { const after = items.filter((p) => this.lateOf(p) > 0).every((p) => this.num(d.alloc[p.id]) >= this.remOf(p)); V.banners.push(after ? B('info', 'Khách đang tạm khóa. Ghi nhận này trả hết các khoản quá hạn — lưu xong cờ tạm khóa tự tắt.') : B('warn', 'Khách đang tạm khóa. Còn khoản quá hạn chưa cấn đủ — cờ tạm khóa giữ nguyên.')); }
+V.saveLabel = 'Ghi nhận tiền về';
+} else if (d.kind === 'hoan-tien') {
+V.title = 'Ghi nhận hoàn tiền'; V.sub = 'Chi hoàn theo số GĐ / KTT đã quyết.';
+const opts = this.refundOpen().map((p) => ({ v: p.id, t: this.kh(this.custOf(p)).code + ' · ' + p.od + ' · ' + this.money(this.remOf(p)) }));
+const p = D.ps.find((x) => x.id === f.ps);
+V.fields = [this.fld('ps', 'Khoản phải hoàn', 'select', f.ps, { req: true, wide: true, opts: opts, ph: 'Chọn khoản đã được quyết', set: this.setF('ps'), err: e.ps }),
+this.fld('amt', 'Số tiền hoàn', 'ro', p ? this.money(this.remOf(p)) : '—', { roSub: 'theo quyết định — không sửa ở đây' }),
+this.fld('date', 'Ngày chi', 'input', f.date, { req: true, ph: 'dd/mm/yyyy', set: this.setF('date'), err: e.date }),
+this.fld('method', 'Hình thức', 'seg', f.method, { req: true, segs: this.segM(f.method) }),
+this.fileF(f, e.file, 'Ảnh chứng từ chi', 'unc-hoan-' + (p ? this.kh(this.custOf(p)).code.toLowerCase() : 'kh') + '.pdf')];
+if (p) V.banners.push(B('info', p.note));
+V.saveLabel = 'Ghi nhận hoàn tiền';
+} else if (d.kind === 'ket-qua-90') {
+V.title = 'Ghi kết quả xử lý nợ quá 90 ngày'; V.sub = 'Ghi kết quả GĐ / KTT đã quyết vào khoản công nợ.';
+const p = D.ps.find((x) => x.id === f.ps); const k = p ? this.kh(this.custOf(p)) : {};
+V.fields = [this.fld('ps', 'Khoản công nợ', 'ro', p ? k.code + ' · ' + p.od + ' · còn ' + this.money(this.remOf(p)) : '—', { wide: true, roSub: p ? 'Hạn ' + this.fd(p.due) + ' · quá hạn ' + this.lateOf(p) + ' ngày · ' + k.company : '' }),
+this.fld('by', 'Người quyết', 'seg', f.by, { req: true, wide: true, segs: [['gd', 'Giám đốc · Lê Quang Minh'], ['ktt', 'Kế toán trưởng · Bùi Minh Châu']].map((x) => ({ t: x[1], on: f.by === x[0] ? 'true' : 'false', cls: f.by === x[0] ? 'on' : '', run: this.setVal('by', x[0]) })) }),
+this.fld('note', 'Kết quả đã quyết', 'area', f.note, { req: true, wide: true, set: this.setF('note'), err: e.note, ph: 'Vd: khởi kiện, thuê đơn vị thu hộ, khách trả góp theo lịch, xóa nợ ngoài hệ thống…' }),
+this.fileF(f, e.file, 'Biên bản / quyết định', 'quyet-dinh-' + (p ? p.od.toLowerCase() : 'no') + '.pdf')];
+V.banners.push(B('warn', 'Hệ thống không xóa nợ: dư nợ, nợ quá hạn và cờ tạm khóa giữ nguyên sau khi ghi kết quả.'));
+V.saveLabel = 'Lưu kết quả';
+} else if (d.kind === 'lien-he') {
+V.title = 'Ghi lần liên hệ nhắc nợ'; V.sub = 'Ghi kết quả liên hệ và lịch trả khách hẹn.';
+const p = D.ps.find((x) => x.id === f.ps); const k = p ? this.kh(this.custOf(p)) : {};
+V.fields = [this.fld('ps', 'Khoản quá hạn', 'ro', p ? k.code + ' · ' + p.od + ' · còn ' + this.money(this.remOf(p)) : '—', { wide: true, roSub: p ? 'Quá hạn ' + this.lateOf(p) + ' ngày · ' + k.company + ' · ' + k.name : '' }),
+this.fld('result', 'Kết quả', 'seg', f.result, { req: true, wide: true, segs: [['LIEN_HE_DUOC', 'Liên hệ được'], ['KHONG_LIEN_HE_DUOC', 'Không liên hệ được']].map((x) => ({ t: x[1], on: f.result === x[0] ? 'true' : 'false', cls: f.result === x[0] ? 'on' : '', run: this.setVal('result', x[0]) })) }),
+this.fld('note', 'Ghi chú', 'area', f.note, { wide: true, set: this.setF('note'), ph: 'Lịch trả khách hẹn, người nghe máy…' })];
+V.saveLabel = 'Lưu lần liên hệ';
+} else if (d.kind === 'tra-ncc') {
+V.title = 'Ghi nhận đã trả NCC'; V.sub = 'Ghi nhận khoản đã chi cho NCC, giảm khoản phải trả của PO.';
+const list = this.apOpen().concat(this.preOpen()); const opts = list.map((p) => { const a = this.apOf(p); return { v: p.code, t: p.code + ' · ' + this.sup(p.sup).code + ' · ' + p.terms + ' · còn ' + this.money(a.rem) }; });
+const p = f.po ? this.poBy(f.po) : null; const a = p ? this.apOf(p) : null;
+V.fields = [this.fld('po', 'PO', 'select', f.po, { req: true, wide: true, opts: opts, ph: 'Chọn PO còn phải trả', set: this.setF('po'), err: e.po, hint: p ? this.sup(p.sup).name + (a.pre ? ' · PO trả trước ' + this.money(a.total) : ' · phải trả ' + this.money(a.phat) + (a.giam ? ', đã giảm trừ ' + this.money(a.giam) : '') + ', hạn ' + this.fd(a.due)) : 'Chỉ hiện PO trả sau đã nhận hàng còn phải trả, và PO trả trước đã duyệt chưa trả đủ.' }),
+this.fld('amount', 'Số tiền đã trả', 'money', f.amount, { req: true, set: this.setF('amount'), err: e.amount }),
+this.fld('date', 'Ngày trả', 'input', f.date, { req: true, ph: 'dd/mm/yyyy', set: this.setF('date'), err: e.date }),
+this.fld('method', 'Hình thức', 'seg', f.method, { req: true, wide: true, segs: this.segM(f.method) }),
+this.fileF(f, e.file, 'Ảnh chứng từ', 'unc-' + (p ? this.sup(p.sup).code.toLowerCase() : 'ncc') + '-18-10.pdf')];
+if (p) { const xr = this.R(p.code); V.hasXl = true; V.xl = { href: xr.href, open: xr.open, label: 'Mở ' + p.code + ' ở Mua hàng' }; }
+if (p && !a.pre && a.due) { const dd = this.days(a.due); V.banners.push(B(dd < 0 ? 'bad' : dd <= 7 ? 'warn' : 'info', 'Khoản phải trả ' + p.code + ': ' + this.money(a.rem) + ' · hạn ' + this.fd(a.due) + (dd < 0 ? ' (quá hạn ' + (-dd) + ' ngày)' : dd === 0 ? ' (đến hạn hôm nay)' : ' (còn ' + dd + ' ngày)') + '.')); }
+V.saveLabel = 'Ghi nhận đã trả';
+} else if (d.kind === 'giam-tru') {
+const t = D.tra.find((x) => x.code === f.tr); const p = this.poBy(t.po); const a = this.apOf(p); const ok = t.st === 'Đã xuất trả' && !t.rec;
+V.title = 'Ghi nhận giảm trừ khoản phải trả'; V.sub = 'NCC chấp nhận giảm công nợ cho hàng trả lại.';
+V.fields = [this.fld('tr', 'Phiếu trả hàng', 'ro', t.code + ' · ' + t.st, { wide: true, roSub: t.why + (t.qc ? ' (' + t.qc + ')' : '') + ' · ' + t.mat + ' lô ' + t.lot + ' · ' + this.fn(t.qty) + ' kg' + (t.px ? ' · xuất trả theo ' + t.px : '') }),
+this.fld('po', 'PO · NCC', 'ro', p.code + ' · ' + this.sup(p.sup).code, { roSub: 'Còn phải trả ' + this.money(a.rem) }),
+this.fld('price', 'Đơn giá PO', 'ro', this.money(p.price) + '/' + p.unit, { roSub: 'Gợi ý = SL trả × đơn giá' }),
+this.fld('amount', 'Số tiền giảm trừ', 'money', f.amount, { req: true, set: ok ? this.setF('amount') : this.noop, err: e.amount }),
+this.fld('note', 'Ghi chú', 'input', f.note, { set: this.setF('note'), ph: 'Số biên bản / hóa đơn điều chỉnh của NCC' })];
+if (!ok) { V.banners.push(B('bad', 'Phiếu trả đang "' + t.st + '" — chỉ ghi giảm trừ sau khi kho xuất trả xong.')); V.canSave = false; V.cancelLabel = 'Đóng'; }
+const xr = this.R(t.code); V.hasXl = true; V.xl = { href: xr.href, open: xr.open, label: 'Mở ' + t.code + ' ở Mua hàng' };
+V.saveLabel = 'Ghi nhận giảm trừ';
+} else if (d.kind === 'huy') {
+const v = D.v.find((x) => x.code === f.v) || D.v[0];
+V.title = 'Hủy bản ghi nhập sai'; V.sub = 'Bản ghi chuyển Đã hủy, giữ lại để tra cứu — không xóa, không sửa. Nhập lại bằng bản ghi mới nếu cần.';
+V.fields = [this.fld('v', 'Bản ghi', 'ro', v.code + ' · ' + this.PUR(v.pur) + ' · ' + this.money(v.amount), { wide: true, roSub: this.partyText(v) + ' · ' + this.fd(v.date) + ' · ' + (v.method === 'CK' ? 'Chuyển khoản' : 'Tiền mặt') }),
+this.fld('reason', 'Lý do hủy', 'area', f.reason, { req: true, wide: true, set: this.setF('reason'), err: e.reason, ph: 'Vd: nhập trùng, sai khách, sai số tiền…' })];
+V.banners.push(B('warn', v.allocs.length ? 'Hủy sẽ gỡ ' + v.allocs.length + ' khoản đã cấn (' + v.allocs.map((a) => { const p = D.ps.find((x) => x.id === a.ps); return this.KIND(p.type, p.amt) + ' ' + p.od + ' ' + this.money(a.amt); }).join(', ') + '). Dư nợ, nợ quá hạn, cờ tạm khóa tính lại ngay.' : 'Hủy sẽ cộng lại ' + this.money(v.amount) + ' vào khoản phải trả ' + v.po + '.'));
+V.saveLabel = 'Hủy bản ghi'; V.saveCls = 'mp-btn mp-btn--danger'; V.cancelLabel = 'Không hủy';
+}
+V.hasSub = !!V.sub; const tdef = this.TABS(d.kind); V.hasTabs = !!tdef; V.showFields = true; V.showAlloc = V.hasAlloc; V.tabs = []; V.tabIs = {};
+if (tdef) { const cur = tdef.some((t) => t[0] === d.tab) ? d.tab : tdef[0][0]; const ek = Object.keys(e); const errOf = (id) => ek.some((k) => this.errTab(d.kind, { [k]: 1 }) === id);
+tdef.forEach((t) => { V.tabIs[t[0]] = t[0] === cur; }); V.tabs = tdef.map((t) => ({ label: t[1], cls: t[0] === cur ? 'on' : '', on: t[0] === cur ? 'true' : 'false', hasErr: errOf(t[0]), pick: () => { const dd = this.curDlg(); if (dd) this.setState({ dlg: Object.assign({}, dd, { tab: t[0] }) }); } }));
+V.fields = V.fields.filter((x) => (x.tab || 'info') === cur); V.showFields = V.fields.length > 0; V.showAlloc = V.hasAlloc && cur === 'alloc'; }
+return V; }
+PUR(p) { return { TIEN_VE: 'Tiền về của khách', HOAN_KHACH: 'Hoàn tiền khách', TRA_NCC: 'Trả NCC' }[p]; }
+openTc(code) { return () => this.setState({ tcView: code, tcBack: this.scr(), cdOpen: false, dlg: null, toast: '' }); }
+tcVals() { const v = this.D().v.find((x) => x.code === this.state.tcView); if (!v) return null; const D = this.D(); const vd = v.st === 'DA_HUY';
+const party = v.cust ? this.kh(v.cust) : this.sup(v.sup); const PUR = { TIEN_VE: 'Tiền về của khách', HOAN_KHACH: 'Hoàn tiền khách', TRA_NCC: 'Trả nhà cung cấp' };
+const K = (k, val, o) => { o = o || {}; const r = o.ref ? this.R(o.ref) : null; return { k: k, v: val || '—', cls: o.cls || '', isRef: !!(r && r.ok), isText: !(r && r.ok), href: r ? r.href : '', open: r ? r.open : this.noop, sub: o.sub || '', hasSub: !!o.sub }; };
+const doc = v.od || v.po;
+const kv = [K('Loại', v.type === 'THU' ? 'Thu' : 'Chi'), K('Mục đích', PUR[v.pur] + (v.kind ? ' · ' + (v.kind === 'TRA_TRUOC' ? 'trả trước' : 'trả sau') : '')),
+K(v.cust ? 'Khách hàng' : 'Nhà cung cấp', party.code, { ref: party.code, sub: v.cust ? party.company : party.name }), K(v.po ? 'Đơn mua (PO)' : (/^TH-/.test(doc || '') ? 'Hồ sơ thu hồi' : 'Đơn hàng'), doc, { ref: doc }),
+K('Số tiền', (v.type === 'CHI' ? '− ' : '') + this.money(v.amount), { cls: vd ? '' : (v.type === 'THU' ? 'ok' : '') }), K('Hình thức', v.method === 'CK' ? 'Chuyển khoản' : 'Tiền mặt'),
+K('Ngày tiền đi / về', this.fd(v.date)), K('Nhà máy', v.fac), K('Người ghi nhận', v.by, { sub: this.fs(v.date) + ' ' + v.at.slice(11) }), K('Trạng thái', vd ? 'Đã hủy' : 'Đã ghi nhận', { cls: vd ? 'bad' : 'ok' })];
+let alloc = v.allocs.map((a) => { const ps = D.ps.find((x) => x.id === a.ps) || {}; const r = this.R(ps.od || ''); return { code: ps.od || '—', href: r.href, open: r.open, kind: this.KIND(ps.type, ps.amt) + (ps.seq ? ' · đợt ' + ps.seq : ''), sub: ps.basis ? this.BASIS(ps.basis) : '', hasSub: !!ps.basis, due: ps.due ? this.fd(ps.due) : '—', total: this.money(Math.abs(ps.amt || 0)), amt: this.money(a.amt) }; });
+if (v.pur === 'TRA_NCC') { const r = this.R(v.po); alloc = [{ code: v.po, href: r.href, open: r.open, kind: v.kind === 'TRA_TRUOC' ? 'Trả trước theo PO' : 'Giảm khoản phải trả', sub: '', hasSub: false, due: '—', total: '—', amt: this.money(v.amount) }]; }
+const hist = [{ what: (v.type === 'THU' ? 'Ghi nhận tiền về ' : (v.pur === 'TRA_NCC' ? 'Ghi nhận đã trả NCC ' : 'Ghi nhận hoàn tiền ')) + this.money(v.amount) + (alloc.length ? ' → ' + alloc.map((x) => x.code).join(', ') : ''), who: v.by, at: this.fd(v.date) + ' ' + v.at.slice(11) }];
+if (vd) hist.unshift({ what: 'Hủy bản ghi · ' + v.reason, who: v.by, at: v.cancelAt });
+const back = this.state.tcBack || 'so';
+return { code: v.code, back: () => this.setState({ tcView: null, scr: back }), backLabel: { so: 'Sổ thu chi', cnkh: 'Công nợ khách hàng', cnncc: 'Công nợ nhà cung cấp' }[back] || 'Sổ thu chi',
+chips: [{ t: v.type === 'THU' ? 'Thu' : 'Chi', cls: v.type === 'THU' ? 'mp-doc mp-doc--ok' : 'mp-doc mp-doc--wait' }, { t: vd ? 'Đã hủy' : 'Đã ghi nhận', cls: vd ? 'mp-doc mp-doc--void' : 'mp-doc mp-doc--ok' }],
+isVoid: vd, cancelAt: v.cancelAt, reason: v.reason, kv: kv, alloc: alloc, noAlloc: !alloc.length, allocN: String(alloc.length), allocTitle: v.pur === 'TRA_NCC' ? 'Áp vào PO' : 'Đã cấn vào', allocSub: v.pur === 'TRA_NCC' ? 'Khoản phải trả của nhà cung cấp' : 'Khoản trong lịch thanh toán của đơn',
+file: v.file || 'Chưa có tệp', fileSub: v.method === 'CK' ? 'Sao kê / ủy nhiệm chi — bắt buộc khi ghi nhận' : 'Phiếu nộp / chi tiền mặt — bắt buộc khi ghi nhận', hist: hist, title: v.code, desc: PUR[v.pur] + ' · ' + this.partyText(v) + ' · ' + this.fd(v.date) }; }
+partyText(v) { return v.cust ? this.kh(v.cust).code + ' · ' + this.kh(v.cust).company : this.sup(v.sup).code + ' · ' + this.sup(v.sup).name; }
+/* ---------- màn Công nợ khách hàng ---------- */
+viewKH(kt, sales) {
+const D = this.D(); const sel = this.kh(this.state.sel).id ? this.state.sel : 'k12';
+const C = D.kh.map((k) => ({ k: k, c: this.calc(k) }));
+const rows = C.map((x) => { const k = x.k, c = x.c; const chips = [];
+if (c.blocked) chips.push({ t: 'Tạm khóa', cls: 'mp-doc mp-doc--bad' }); if (c.hoan) chips.push({ t: 'Chờ hoàn tiền', cls: 'mp-doc mp-doc--wait' });
+if (k.status !== 'Đang hoạt động') chips.push({ t: k.status, cls: 'mp-doc mp-doc--void' }); if (!chips.length) chips.push({ t: 'Bình thường', cls: 'mp-doc mp-doc--ok' });
+const pick = () => this.setState({ sel: k.id, cdOpen: true });
+return this.row([this.cell(k.company, { run: pick, refs: [{ id: k.code, post: ' · ' + k.pay.replace(' (công nợ)', '') }] }), this.cell(k.limit ? this.money(k.limit) : 'Chưa có', { td: 'mp-num' + (k.limit ? '' : ' c-muted') }),
+this.cell(this.m0(c.cong), { td: 'mp-num' }), this.cell(this.m0(c.inTerm), { td: 'mp-num' }),
+this.cell(this.m0(c.b1), { td: 'mp-num' + (c.b1 ? ' c-bad' : '') }), this.cell(this.m0(c.b2), { td: 'mp-num' + (c.b2 ? ' c-bad' : '') }), this.cell(this.m0(c.b3), { td: 'mp-num' + (c.b3 ? ' c-bad' : '') }),
+this.cell(this.m0(c.truoc), { td: 'mp-num' }), this.cell('', { chips: chips })],
+[], { cls: k.id === sel ? 'is-selected' : '', noAct: true }); });
+const T = C.reduce((a, x) => { ['cong', 'over', 'b3', 'truoc', 'hoan'].forEach((f) => { a[f] += x.c[f]; }); if (x.c.blocked) a.nb++; return a; }, { cong: 0, over: 0, b3: 0, truoc: 0, hoan: 0, nb: 0 });
+const n90 = this.over90All().filter((p) => !p.esc).length; const nRef = this.refundOpen().length;
+const stats = [{ label: 'Công nợ phải thu', value: this.money(T.cong), note: 'khoản sau giao của khách Mua nợ', style: '' },
+{ label: 'Nợ quá hạn', value: this.money(T.over), note: T.nb + ' khách đang tạm khóa đơn Mua nợ', style: T.over ? 'color: var(--bad)' : '' },
+{ label: 'Quá hạn trên 90 ngày', value: this.money(T.b3), note: n90 ? n90 + ' khoản chờ ghi kết quả GĐ / KTT' : 'đã ghi kết quả', style: T.b3 ? 'color: var(--bad)' : '' },
+{ label: 'Chờ thu trước SX / giao', value: this.money(T.truoc), note: 'cọc, trả nốt theo lịch thanh toán', style: '' },
+{ label: 'Chờ hoàn cho khách', value: this.money(T.hoan), note: nRef ? nRef + ' khoản GĐ / KTT đã quyết' : 'không có', style: T.hoan ? 'color: var(--wait)' : '' }];
+/* chi tiết khách */
+const k = this.kh(sel); const c = this.calc(k); const chips = []; const banners = [];
+if (c.blocked) chips.push({ t: 'Tạm khóa do nợ quá hạn', cls: 'mp-doc mp-doc--bad' }); else chips.push({ t: 'Không tạm khóa', cls: 'mp-doc mp-doc--ok' });
+if (k.status !== 'Đang hoạt động') chips.push({ t: k.status, cls: 'mp-doc mp-doc--void' });
+const rm = this.remind(c);
+if (c.blocked) banners.push({ cls: 'mp-banner mp-banner--bad', t: 'Tạm khóa từ ' + this.fd(this.addDays(c.firstDue, 1)) + ': chặn đơn Mua nợ mới và giao đơn Mua nợ.' + (rm ? ' Đã nhắc Sales, Kế toán ' + this.fs(rm.last) + ', nhắc lại ' + this.fs(rm.next) + '.' : '') });
+if (k.id === 'k12') banners.push({ cls: 'mp-banner mp-banner--warn', t: 'ĐH-2610-0034 (1.344.600.000 đ, Mua nợ) đang chờ kiểm công nợ — vướng nợ quá hạn; dư nợ cộng đơn này cũng vượt hạn mức (' + this.money(c.du + 1344600000) + ' > ' + this.money(k.limit) + ').' });
+c.over90.forEach((p) => banners.push({ cls: 'mp-banner mp-banner--' + (p.esc ? 'info' : 'warn'), t: p.esc ? p.od + ': đã ghi kết quả nợ quá 90 ngày ' + p.esc.at + ' — ' + p.esc.by + ' quyết: ' + p.esc.note : p.od + ' quá hạn ' + this.lateOf(p) + ' ngày: đã báo GĐ / KTT ' + this.fs(this.addDays(p.due, 90)) + ', chờ Kế toán ghi kết quả.' }));
+const kv = [{ k: 'Hạn mức (vĩnh viễn)', v: k.limit ? this.money(k.limit) : 'Chưa có', cls: '', sub: k.pay === 'Mua nợ (công nợ)' ? 'nợ ' + k.n + ' ngày sau giao' : '' },
+{ k: 'Công nợ hiện tại', v: this.money(c.cong), cls: '', sub: c.over ? 'quá hạn ' + this.money(c.over) : 'không có khoản quá hạn' },
+{ k: 'Đơn Mua nợ đã chốt chưa giao', v: this.money(c.chua), cls: '', sub: '' },
+{ k: 'Dư nợ tính hạn mức', v: this.money(c.du), cls: k.limit && c.du > k.limit ? 'bad' : '', sub: k.limit ? 'còn ' + this.money(Math.max(k.limit - c.du, 0)) : '' },
+{ k: 'Nợ quá hạn lâu nhất', v: c.maxLate ? c.maxLate + ' ngày' : '—', cls: c.maxLate ? 'bad' : '', sub: c.maxLate ? 'hạn ' + this.fd(c.firstDue) : '' },
+{ k: 'Chờ thu trước SX / giao', v: this.money(c.truoc), cls: '', sub: '' },
+{ k: 'Chờ hoàn cho khách', v: this.money(c.hoan), cls: c.hoan ? '' : '', sub: '' },
+{ k: 'Liên hệ', v: k.name, cls: '', sub: 'Sales phụ trách: ' + (k.sales || 'Võ Thị Lan') }].map((x) => Object.assign(x, { hasSub: !!x.sub }));
+const kref = this.R(k.code); const clinks = [{ label: 'Xem khách ở Bán hàng', href: kref.href, open: kref.open }];
+/* lịch thanh toán */
+const sr = []; const ods = []; c.ps.forEach((p) => { if (ods.indexOf(p.od) < 0) ods.push(p.od); });
+const hlOd = this.state.hl;
+ods.sort((a, b) => a < b ? 1 : -1);
+const ST = { 'Đã giao': 'mp-doc mp-doc--done', 'Giao một phần': 'mp-doc mp-doc--done', 'Đang giao': 'mp-doc mp-doc--ok', 'Sẵn sàng giao': 'mp-doc mp-doc--wait', 'Đang sản xuất': 'mp-doc mp-doc--ok', 'Đã chốt': 'mp-doc mp-doc--ok', 'Chờ thu tiền': 'mp-doc mp-doc--wait', 'Đã hủy': 'mp-doc mp-doc--void', 'Hồ sơ thu hồi': 'mp-doc mp-doc--draft' };
+ods.forEach((o) => { const O = D.od[o]; sr.push(this.grp(7, o, O.st, ST[O.st] || 'mp-doc', 'tổng ' + this.money(O.total) + (O.note ? ' · ' + O.note : '')));
+c.ps.filter((p) => p.od === o).sort((a, b) => a.seq - b.seq).forEach((p) => { const r = this.remOf(p); const paid = this.paidOf(p.id); const late = this.lateOf(p); let st, sc, sub = ''; const btns = [];
+if (p.amt < 0) { st = r > 0 ? 'Chờ hoàn' : 'Đã hoàn đủ'; sc = r > 0 ? 'wait' : 'ok'; if (r > 0 && kt) btns.push(this.btn('Ghi nhận hoàn', this.open('hoan-tien', { ps: p.id }))); }
+else if (r <= 0) { st = 'Đã thu đủ'; sc = 'ok'; }
+else if (p.type === 'CONG_NO' && !p.due) { st = 'Chờ giao'; sc = 'draft'; sub = 'hạn = ngày khách nhận + ' + (p.n || k.n) + ' ngày' + (p.n && p.n !== k.n ? ' (theo đơn)' : ''); }
+else if (late) { st = 'Quá hạn ' + late + ' ngày'; sc = 'bad'; if (late > 90) { sub = p.esc ? 'đã ghi kết quả ' + p.esc.at : 'quá 90 ngày — chờ ghi kết quả'; if (kt && !p.esc) btns.push(this.btn('Ghi kết quả', this.open('ket-qua-90', { ps: p.id }))); } if (sales) btns.push(this.btn('Ghi liên hệ', this.open('lien-he', { ps: p.id }))); }
+else if (p.type !== 'CONG_NO' && this.days(p.due) < 0) { const w = -this.days(p.due); st = 'Chờ thu ' + w + ' ngày'; sc = 'wait'; }
+else { st = this.days(p.due) === 0 ? 'Đến hạn hôm nay' : 'Chưa đến hạn'; sc = this.days(p.due) === 0 ? 'wait' : 'draft'; }
+const bas = this.BASIS(p.basis) + (p.deliv ? ' · ' + p.deliv : '');
+sr.push(this.row([this.cell(this.KIND(p.type, p.amt), p.amt < 0 ? { sub: 'theo quyết định GĐ / KTT' } : p.gh ? { refs: [{ pre: bas + ' · ', id: p.gh, post: p.note ? ' · ' + p.note : '' }] } : { sub: bas }),
+this.cell(p.due ? this.fd(p.due) : '—', { td: 'mp-nowrap' + (late ? ' c-bad' : '') }), this.cell(this.money(Math.abs(p.amt)), { td: 'mp-num' }), Object.assign(this.cell(this.m0(paid), { td: 'mp-num' }), (() => { const vs = this.D().v.filter((x) => x.st === 'DA_GHI_NHAN' && x.allocs.some((a) => a.ps === p.id)); return vs.length ? { hasRefs: true, refs: vs.map((x, k) => ({ pre: k ? ' · ' : '', id: x.code, post: '', href: '#' + x.code, open: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openTc(x.code)(); } })) } : {}; })()),
+this.cell(this.m0(r), { td: 'mp-num' + (late ? ' c-bad' : '') }), this.cell('', { chips: [{ t: st, cls: 'mp-doc mp-doc--' + sc }], sub: sub })], btns, { cls: hlOd === o ? 'is-hl' : '' })); }); });
+const cols = [{ t: 'Khoản' }, { t: 'Hạn' }, { t: 'Phải thu', cls: 'mp-num' }, { t: 'Đã thu', cls: 'mp-num' }, { t: 'Còn lại', cls: 'mp-num' }, { t: 'Tình trạng' }].map((x) => Object.assign({ cls: '' }, x));
+/* lịch sử */
+const ev = D.lg.filter((x) => x.cust === k.id).map((x) => ({ at: x.at, who: x.who, what: x.what, key: x.key }));
+D.v.filter((v) => v.cust === k.id).forEach((v) => { const al = v.allocs.map((a) => { const p = D.ps.find((x) => x.id === a.ps); return this.KIND(p.type, p.amt).toLowerCase() + ' ' + p.od; }).join(', ');
+ev.push({ at: v.at, who: v.by, what: (v.pur === 'HOAN_KHACH' ? 'Ghi nhận hoàn tiền ' : 'Ghi nhận tiền về ') + v.code + ' · ' + this.money(v.amount) + (al ? ' → ' + al : '') + (v.st === 'DA_HUY' ? ' — đã hủy ' + v.cancelAt + ': ' + v.reason : ''), key: v.st !== 'DA_HUY' }); });
+ev.sort((a, b) => a.at < b.at ? 1 : -1);
+const tl = ev.slice(0, 6).map((x) => { const p = x.at.slice(0, 10).split('-'); return { t: p[2] + '/' + p[1] + '/' + p[0] + ' ' + x.at.slice(11), who: x.who, what: x.what, cls: x.key ? 'is-key' : '' }; });
+if (!tl.length) tl.push({ t: '', who: 'Chưa có', what: 'chưa có lần thanh toán hay nhắc nợ nào', cls: '' });
+const cbtns = [];
+if (kt && this.openItems(k.id).length) cbtns.push({ label: 'Ghi nhận tiền về', cls: 'mp-btn mp-btn--primary', run: this.open('tien-ve', { cust: k.id }) });
+if (kt && c.hoan) cbtns.push({ label: 'Ghi nhận hoàn tiền', cls: 'mp-btn mp-btn--secondary', run: this.open('hoan-tien', { ps: this.refundOpen().find((p) => this.custOf(p) === k.id).id }) });
+return { stats: stats, kh: { rows: rows, cols: [], empty: false, emptyText: '', count: D.kh.length + ' khách', foot: D.kh.length + ' khách · ' + T.nb + ' tạm khóa · tuổi nợ tính đến 18/10/2026' },
+sched: { cols: cols, rows: sr, empty: !sr.length, emptyText: 'Khách chưa có lịch thanh toán.' },
+cd: { company: k.company, code: k.code, ref: kref, links: clinks, pay: k.pay, chips: chips, btns: cbtns, banners: banners, kv: kv, tl: tl } }; }
+/* ---------- màn Công nợ NCC ---------- */
+viewNCC(kt) {
+const D = this.D(); const ST = { 'Đã nhận đủ': 'mp-doc mp-doc--done', 'Nhận một phần': 'mp-doc mp-doc--ok', 'Đã gửi NCC': 'mp-doc mp-doc--ok', 'Chờ duyệt': 'mp-doc mp-doc--wait', 'Đã duyệt': 'mp-doc mp-doc--ok' };
+const trs = D.po.filter((p) => p.terms !== 'Trả trước' && ['Đã duyệt', 'Đã gửi NCC', 'Nhận một phần', 'Đã nhận đủ'].indexOf(p.st) >= 0); const hl = this.state.hl; const sups = []; trs.forEach((p) => { if (sups.indexOf(p.sup) < 0) sups.push(p.sup); });
+const rows = []; let tot = 0, due7 = 0, n7 = 0, late = 0, nOpen = 0;
+sups.forEach((s) => { const S = this.sup(s); const ps = trs.filter((p) => p.sup === s); const rem = ps.reduce((a, p) => a + Math.max(this.apOf(p).rem, 0), 0);
+rows.push(this.grp(8, S.code, '', '', S.name + ' · ' + S.terms + ' · còn phải trả ' + this.money(rem)));
+ps.forEach((p) => { const a = this.apOf(p); let st, sc, sub = ''; const btns = [];
+if (!a.phat) { st = 'Chưa nhận hàng'; sc = 'draft'; sub = p.note; }
+else if (a.rem <= 0) { st = 'Đã trả đủ'; sc = 'ok'; }
+else { const dd = this.days(a.due); nOpen++; tot += a.rem; if (dd < 0) { st = 'Quá hạn ' + (-dd) + ' ngày'; sc = 'bad'; late += a.rem; sub = p.hold || ''; } else if (dd <= 7) { st = dd === 0 ? 'Đến hạn hôm nay' : 'Còn ' + dd + ' ngày'; sc = 'wait'; due7 += a.rem; n7++; } else { st = 'Chưa đến hạn'; sc = 'draft'; }
+if (kt) btns.push(this.btn('Ghi nhận trả', this.open('tra-ncc', { po: p.code }))); }
+const pend = D.tra.filter((t) => t.po === p.code && !t.rec);
+rows.push(this.row([this.cell(p.code, { td: 'mp-nowrap', ref: this.R(p.code), sub: p.fac + ' · ' + p.st.toLowerCase() }), this.cell(p.mat, { td: 'w-mat', sub: this.fn(p.rqty) + ' / ' + this.fn(p.qty) + ' ' + p.unit + ' × ' + this.money(p.price) }),
+this.cell(this.m0(a.phat), p.pn ? { td: 'mp-num', refs: [{ id: p.pn, post: p.recv ? ' · nhận ' + this.fs(p.recv) : ' · ' + (p.pnSt || 'đang nhận') }] } : { td: 'mp-num', sub: p.recv ? 'nhận ' + this.fd(p.recv) : 'chưa nhận' }), this.cell(this.m0(a.paid), { td: 'mp-num' }),
+this.cell(this.m0(a.giam), { td: 'mp-num', sub: pend.length ? pend.length + ' phiếu trả chưa ghi' : '' }), this.cell(a.phat ? this.money(Math.max(a.rem, 0)) : '—', { td: 'mp-num' + (sc === 'bad' ? ' c-bad' : ''), sub: a.due ? 'hạn ' + this.fd(a.due) : '' }), this.cell('', { chips: [{ t: st, cls: 'mp-doc mp-doc--' + sc }], sub: sub })], btns, { cls: hl === p.code || hl === S.code ? 'is-hl' : '' })); }); });
+const cols = [{ t: 'PO' }, { t: 'NVL · đã nhận' }, { t: 'Phải trả', cls: 'mp-num' }, { t: 'Đã trả', cls: 'mp-num' }, { t: 'Giảm trừ', cls: 'mp-num' }, { t: 'Còn phải trả', cls: 'mp-num' }, { t: 'Tình trạng' }].map((x) => Object.assign({ cls: '' }, x));
+const pres = D.po.filter((p) => p.terms === 'Trả trước'); let preWait = 0;
+const prow = pres.map((p) => { const a = this.apOf(p); const ok = ['Đã duyệt', 'Đã gửi NCC'].indexOf(p.st) >= 0; let st, sc; const btns = []; let note = '';
+if (a.rem <= 0) { st = 'Đã trả đủ'; sc = 'ok'; } else if (ok) { st = 'Chờ ghi nhận trả trước'; sc = 'wait'; if (kt) btns.push(this.btn('Ghi nhận trả', this.open('tra-ncc', { po: p.code }))); } else { st = 'Chờ PO duyệt'; sc = 'draft'; preWait++; if (kt) btns.push(this.offBtn('Ghi nhận trả', 'Ghi nhận được khi PO đã duyệt, NCC xác nhận')); }
+const pv = D.v.find((v) => v.po === p.code && v.st === 'DA_GHI_NHAN');
+return this.row([this.cell(p.code, { td: 'mp-nowrap', ref: this.R(p.code), sub: p.fac }), this.cell(this.sup(p.sup).code, { td: 'mp-nowrap', ref: this.R(this.sup(p.sup).code), sub: this.sup(p.sup).name }), this.cell(p.mat, { td: 'w-mat', sub: this.fn(p.qty) + ' ' + p.unit + ' × ' + this.money(p.price) }),
+this.cell(this.money(a.total), { td: 'mp-num' }), this.cell(this.m0(a.paid), { td: 'mp-num', sub: pv ? pv.code + ' · ' + this.fs(pv.date) : '' }), this.cell('', { chips: [{ t: p.st, cls: ST[p.st] || 'mp-doc' }], sub: p.st === 'Chờ duyệt' ? 'Trưởng BP Mua hàng chưa duyệt' : '' }), this.cell('', { chips: [{ t: st, cls: 'mp-doc mp-doc--' + sc }] })], btns, { note: note, cls: hl === p.code ? 'is-hl' : '' }); });
+const pcols = [{ t: 'PO' }, { t: 'NCC' }, { t: 'NVL' }, { t: 'Giá trị PO', cls: 'mp-num' }, { t: 'Đã ghi nhận trả', cls: 'mp-num' }, { t: 'Trạng thái PO' }, { t: 'Tình trạng' }].map((x) => Object.assign({ cls: '' }, x));
+let retWait = 0;
+const rrow = D.tra.map((t) => { const p = this.poBy(t.po); const est = t.qty * p.price; let st, sc; const btns = []; let note = '';
+if (t.rec) { st = 'Đã ghi giảm trừ'; sc = 'ok'; } else if (t.st === 'Đã xuất trả') { st = 'Chờ ghi giảm trừ'; sc = 'wait'; if (kt) btns.push(this.btn('Ghi nhận giảm trừ', this.open('giam-tru', { tr: t.code }))); }
+else { st = t.st === 'Chờ kho xuất trả' ? 'Chờ kho xuất trả' : 'Chưa ghi được'; sc = 'draft'; retWait++; if (kt) { btns.push({ label: 'Xem', run: this.open('giam-tru', { tr: t.code }), cls: 'mp-btn row-btn mp-btn--ghost', title: '' }); note = t.st === 'Chờ kho xuất trả' ? 'Ghi được sau khi kho xuất trả' : 'NCC chưa chấp nhận'; } }
+return this.row([this.cell(t.code, { td: 'mp-nowrap', ref: this.R(t.code), refs: t.qc ? [{ pre: t.why + ' · ', id: t.qc }] : null, sub: t.qc ? '' : t.why }), this.cell(p.code, { td: 'mp-nowrap', ref: this.R(p.code), sub: this.sup(p.sup).code }), this.cell(t.mat, { td: 'w-mat', refs: [{ pre: 'lô ', id: t.lot, post: ' · ' + this.fn(t.qty) + ' kg × ' + this.money(p.price) }] }),
+this.cell('', { chips: [{ t: t.st, cls: t.st === 'Hoàn tất' ? 'mp-doc mp-doc--done' : t.st === 'Không thống nhất' ? 'mp-doc mp-doc--bad' : t.st === 'Đã xuất trả' ? 'mp-doc mp-doc--ok' : 'mp-doc mp-doc--wait' }], refs: t.px ? [{ pre: 'xuất trả theo ', id: t.px }] : null, sub: t.px ? '' : t.note }),
+this.cell(t.rec ? this.money(t.rec) : this.money(est), { td: 'mp-num' + (t.rec ? '' : ' c-muted'), sub: t.rec ? t.recBy + ' · ' + t.recAt : 'dự kiến (SL × đơn giá)' }), this.cell('', { chips: [{ t: st, cls: 'mp-doc mp-doc--' + sc }] })], btns, { note: note, cls: hl === t.code ? 'is-hl' : '' }); });
+const rcols = [{ t: 'Phiếu trả' }, { t: 'PO · NCC' }, { t: 'Hàng trả' }, { t: 'Trạng thái phiếu' }, { t: 'Giảm trừ', cls: 'mp-num' }, { t: 'Tình trạng' }].map((x) => Object.assign({ cls: '' }, x));
+const stats = [{ label: 'Còn phải trả NCC', value: this.money(tot), note: nOpen + ' PO trả sau đã nhận hàng', style: '' },
+{ label: 'Đến hạn trong 7 ngày', value: this.money(due7), note: n7 + ' PO', style: due7 ? 'color: var(--wait)' : '' },
+{ label: 'Quá hạn trả', value: this.money(late), note: late ? 'cần trả ngay' : 'không có khoản quá hạn', style: late ? 'color: var(--bad)' : '' },
+{ label: 'Trả trước chờ ghi nhận', value: String(preWait + this.preOpen().length) + ' PO', note: preWait ? preWait + ' PO trả trước chờ Trưởng BP Mua hàng duyệt' : 'không có PO chờ duyệt', style: '' },
+{ label: 'Giảm trừ chưa ghi được', value: String(retWait) + ' phiếu', note: 'chờ kho xuất trả / NCC chưa chấp nhận', style: '' }];
+return { stats: stats, ap: { cols: cols, rows: rows, empty: !rows.length, emptyText: '', foot: nOpen + ' PO còn phải trả · tổng ' + this.money(tot) },
+pre: { cols: pcols, rows: prow, empty: !prow.length, emptyText: 'Không có PO trả trước.' }, ret: { cols: rcols, rows: rrow, empty: !rrow.length, emptyText: 'Không có phiếu trả chọn giảm công nợ.' } }; }
+/* ---------- màn Sổ thu chi ---------- */
+viewSo(kt) {
+const D = this.D(); const s = this.state; const q = s.q.trim().toLowerCase();
+const list = D.v.filter((v) => { if (s.fType && v.type !== s.fType) return false; if (s.fPur && v.pur !== s.fPur) return false; if (s.fSt && v.st !== s.fSt) return false;
+if (q) { const hay = [v.code, v.od, v.po, this.partyText(v), v.file].join(' ').toLowerCase(); if (hay.indexOf(q) < 0) return false; } return true; }).sort((a, b) => a.at < b.at ? 1 : -1);
+const rows = list.map((v) => { const vd = v.st === 'DA_HUY'; const al = v.allocs.map((a) => { const p = D.ps.find((x) => x.id === a.ps); return { c: p.od, s: this.KIND(p.type, p.amt) + ' · ' + this.money(a.amt) }; });
+if (v.pur === 'TRA_NCC') al.push({ c: v.po, s: (v.kind === 'TRA_TRUOC' ? 'Trả trước' : 'Giảm khoản phải trả') + ' · ' + this.money(v.amount) });
+const party = v.cust ? this.kh(v.cust) : this.sup(v.sup); const btns = [];
+if (kt && !vd) btns.push(this.btn('Hủy', this.open('huy', { v: v.code }), 'mp-btn--ghost'));
+return this.row([this.cell(v.code, { td: 'mp-nowrap', lcls: 'linkbtn mp-code', run: this.openTc(v.code), sub: this.fd(v.date) + ' · ' + v.fac }), this.cell('', { chips: [{ t: v.type === 'THU' ? 'Thu' : 'Chi', cls: v.type === 'THU' ? 'mp-doc mp-doc--ok' : 'mp-doc mp-doc--wait' }], sub: { TIEN_VE: 'Tiền về', HOAN_KHACH: 'Hoàn khách', TRA_NCC: 'Trả NCC' }[v.pur], td: 'mp-nowrap' }),
+this.cell(party.code, { td: 'w-party', ref: this.R(party.code), sub: v.cust ? party.company : party.name }), this.cell((v.type === 'CHI' ? '− ' : '') + this.money(v.amount), { td: 'mp-num' + (vd ? '' : '') }),
+this.cell(v.method === 'CK' ? 'Chuyển khoản' : 'Tiền mặt', { td: 'mp-nowrap', sub: v.file }), this.cell(al.length ? al[0].c : '—', { td: 'mp-nowrap', cls: 'mp-code', ref: al.length ? this.R(al[0].c) : null, sub: al.length ? al[0].s : '', lines: al.slice(1).map((x) => x.c + ' · ' + x.s) }),
+this.cell('', { chips: [{ t: vd ? 'Đã hủy' : 'Đã ghi nhận', cls: vd ? 'mp-doc mp-doc--void' : 'mp-doc mp-doc--ok' }], sub: vd ? v.cancelAt + ' · ' + v.reason : v.by + ' · ' + this.fs(v.date) + ' ' + v.at.slice(11), subCls: vd ? 'mp-sub mp-sub--accent' : 'mp-sub' })], btns, { cls: vd ? 'is-void' : '' }); });
+const cols = [{ t: 'Mã · ngày' }, { t: 'Loại' }, { t: 'Khách / NCC' }, { t: 'Số tiền', cls: 'mp-num' }, { t: 'Hình thức · chứng từ' }, { t: 'Đã cấn vào' }, { t: 'Trạng thái' }].map((x) => Object.assign({ cls: '' }, x));
+const act = D.v.filter((v) => v.st === 'DA_GHI_NHAN'); const sum = (f) => act.filter(f).reduce((a, v) => a + v.amount, 0);
+const stats = [{ label: 'Tổng thu (tiền về)', value: this.money(sum((v) => v.pur === 'TIEN_VE')), note: act.filter((v) => v.pur === 'TIEN_VE').length + ' bản ghi đã ghi nhận', style: 'color: var(--ok)' },
+{ label: 'Hoàn tiền khách', value: this.money(sum((v) => v.pur === 'HOAN_KHACH')), note: act.filter((v) => v.pur === 'HOAN_KHACH').length + ' bản ghi', style: '' },
+{ label: 'Trả nhà cung cấp', value: this.money(sum((v) => v.pur === 'TRA_NCC')), note: act.filter((v) => v.pur === 'TRA_NCC').length + ' bản ghi (trả trước + trả sau)', style: '' },
+{ label: 'Bản ghi đã hủy', value: String(D.v.length - act.length), note: 'nhập sai — giữ để tra cứu', style: '' }];
+const pgS = MPPG(this, 'kt-so', rows, { sig: [q, s.fType, s.fPur, s.fSt].join('|') });
+const mk = (id, label, all, key, opts) => ({ id: id, label: label, all: all, value: s[key], opts: opts, set: (ev) => { const o = {}; o[key] = ev.target.value; this.setState(o); } });
+return { stats: stats, so: { cols: cols, rows: pgS.items, pg: pgS, empty: !rows.length, emptyText: 'Không có bản ghi khớp bộ lọc.', q: s.q, setQ: (ev) => { if (ev.target.value !== this.state.q) this.setState({ q: ev.target.value }); },
+filters: [mk('so-t', 'Loại', 'Thu và chi', 'fType', [{ v: 'THU', t: 'Thu' }, { v: 'CHI', t: 'Chi' }]), mk('so-p', 'Mục đích', 'Mọi mục đích', 'fPur', [{ v: 'TIEN_VE', t: 'Tiền về của khách' }, { v: 'HOAN_KHACH', t: 'Hoàn tiền khách' }, { v: 'TRA_NCC', t: 'Trả NCC' }]), mk('so-s', 'Trạng thái', 'Mọi trạng thái', 'fSt', [{ v: 'DA_GHI_NHAN', t: 'Đã ghi nhận' }, { v: 'DA_HUY', t: 'Đã hủy' }])],
+foot: rows.length + ' / ' + D.v.length + ' bản ghi · từ 01/08 đến 18/10/2026' } }; }
+/* ---------- render ---------- */
+renderVals() {
+const role = this.role(); const kt = role === 'kt'; const sales = role === 'sales'; const scr = this.scr(); const vw = this.viewer();
+const go = (k) => () => this.setState({ scr: k, toast: '', dlg: null, hl: '', miss: '', tcView: null });
+const setRole = (r) => this.setState({ role: r, dlg: null, toast: '' });
+const nav = (k) => k === scr ? 'snav on' : 'snav';
+const PG = { cnkh: { title: 'Công nợ khách hàng', desc: 'Tiền về, hoàn tiền, hạn mức và tuổi nợ của khách hàng' },
+cnncc: { title: 'Công nợ nhà cung cấp', desc: 'Khoản phải trả, trả trước và giảm trừ với nhà cung cấp' },
+so: { title: 'Sổ thu chi', desc: 'Tra cứu bản ghi tiền về, hoàn tiền khách và trả NCC' } };
+const empty = { rows: [], cols: [], empty: false, emptyText: '', foot: '', count: '' };
+let V = { kh: empty, sched: empty, cd: { company: '', code: '', ref: { href: '', open: this.noop }, links: [], pay: '', chips: [], btns: [], banners: [], kv: [], tl: [] }, ap: empty, pre: empty, ret: empty, so: Object.assign({ q: '', setQ: this.noop, filters: [], pg: { show: false, nums: [], items: [] } }, empty) };
+Object.assign(V, scr === 'cnkh' ? this.viewKH(kt, sales) : scr === 'cnncc' ? this.viewNCC(kt) : this.viewSo(kt));
+const pageBtns = [];
+if (kt && scr === 'cnkh') { if (this.refundOpen().length) pageBtns.push({ label: 'Ghi nhận hoàn tiền', cls: 'mp-btn mp-btn--secondary', run: this.open('hoan-tien') }); pageBtns.push({ label: 'Ghi nhận tiền về', cls: 'mp-btn mp-btn--primary', run: this.open('tien-ve') }); }
+if (kt && scr === 'cnncc') pageBtns.push({ label: 'Ghi nhận đã trả NCC', cls: 'mp-btn mp-btn--primary', run: this.open('tra-ncc') });
+const roleNote = sales ? 'Bạn xem công nợ khách hàng và ghi lần liên hệ nhắc nợ.' : '';
+const WHY = { cnkh: 'ghi nhận tiền về / hoàn tiền', cnncc: 'ghi nhận đã trả NCC, giảm trừ', so: 'hủy bản ghi nhập sai' };
+const pg = kt ? null : MPX.gate(this.state.role, ['Kế toán'], setRole, WHY[scr]);
+const d = this.curDlg(); const dv = d ? this.dlgView(d) : null; const tcv = this.state.tcView ? this.tcVals() : null;
+return Object.assign(V, {
+vx: MPX.vx(this.state.role, setRole, 'kt_' + ({ cnkh: 'kh', cnncc: 'ncc', so: 'so' }[scr] || 'kh')), hasPg: !!pg, pg: pg || { who: '', why: '', hasWhy: false, sw: this.noop }, hasMiss: !!this.state.miss, miss: this.state.miss,
+crumb: tcv ? PG[scr].title + ' / ' + tcv.code : PG[scr].title, page: tcv ? { title: tcv.title, desc: tcv.desc } : PG[scr], pageBtns: tcv ? (kt && !tcv.isVoid ? [{ label: 'Hủy bản ghi', cls: 'mp-btn mp-btn--secondary', run: this.open('huy', { v: tcv.code }) }] : []) : pageBtns, isTcView: !!tcv, noTcView: !tcv, tc: tcv || { back: this.noop, backLabel: '', chips: [], isVoid: false, kv: [], alloc: [], noAlloc: false, hist: [] },
+nav: { cnkh: nav('cnkh'), cnncc: nav('cnncc'), so: nav('so') }, go: { cnkh: go('cnkh'), cnncc: go('cnncc'), so: go('so') }, canAP: !sales,
+isKH: !tcv && scr === 'cnkh', cdOpen: !tcv && scr === 'cnkh' && !!this.state.cdOpen, cdClose: () => this.setState({ cdOpen: false }), isNCC: !tcv && scr === 'cnncc', isSo: !tcv && scr === 'so',
+hasRoleNote: !!roleNote, roleNote: roleNote, hasToast: !!this.state.toast, toast: this.state.toast, closeToast: () => this.setState({ toast: '' }),
+pv: this.pvVals(d), dlgOpen: !!dv, dlg: dv || { hasTabs: false, tabs: [], tabIs: {}, showFields: false, showAlloc: false, hasXl: false, xl: { href: '', open: this.noop, label: '' }, style: '', title: '', sub: '', banners: [], fields: [], hasAlloc: false, alloc: [], allocEmpty: false, allocEmptyText: '', sumAmt: '', sumAlloc: '', diffCls: '', diffText: '', autoRun: this.noop, hasFormErr: false, formErr: '', canSave: false, saveLabel: '', saveCls: '', cancelLabel: '', close: this.noop, save: this.noop }
+}); }
+}
+
+</script>
+</body>
+</html>

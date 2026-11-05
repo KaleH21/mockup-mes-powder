@@ -1,0 +1,36 @@
+/* MES Powder — generated from tokens.json */
+@font-face { font-family: "Be Vietnam Pro"; src: url("fonts/BeVietnamPro-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("fonts/BeVietnamPro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("fonts/BeVietnamPro-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Be Vietnam Pro"; src: url("fonts/BeVietnamPro-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+:root, [data-theme="light"] {
+  --surface-0: #f4f6f8; --surface-1: #ffffff; --surface-2: #eaeef2; --line: #d3dae1; --line-strong: #7a8792;
+  --ink: #0b1117; --ink-muted: #3a4651; --ink-inverse: #ffffff;
+  --brand: #0b5d6b; --brand-strong: #08434e; --brand-soft: #e0f0f2; --on-brand: #ffffff;
+  --accent: #9c4706; --accent-soft: #fdf0e1;
+  --ok: #166534; --ok-soft: #dcf3e3; --ok-solid: #15803d;
+  --wait: #92400e; --wait-soft: #fbefc9;
+  --bad: #a61b1b; --bad-soft: #fde3e1; --bad-solid: #b91c1c; --on-solid: #ffffff;
+  --lock: #2c3a47; --on-lock: #ffffff; --void: #5b6671; --void-soft: #eef1f4;
+  --focus-ring: var(--brand);
+  --shadow-pop: 0 6px 20px rgba(16,33,43,0.14);
+}
+[data-theme="dark"] {
+  --surface-0: #0f1418; --surface-1: #171e23; --surface-2: #212a31; --line: #2f3a43; --line-strong: #6b7985;
+  --ink: #f7fafc; --ink-muted: #c4ced8; --ink-inverse: #0f1418;
+  --brand: #5cbccb; --brand-strong: #8fd4df; --brand-soft: #11343b; --on-brand: #062a31;
+  --accent: #f0a050; --accent-soft: #3a2410;
+  --ok: #6fd08f; --ok-soft: #123222; --ok-solid: #177a3c;
+  --wait: #f4c26b; --wait-soft: #3a2c0c;
+  --bad: #ff8a80; --bad-soft: #3d1614; --bad-solid: #b3241c; --on-solid: #ffffff;
+  --lock: #c5d2dd; --on-lock: #141b21; --void: #8996a2; --void-soft: #1c2328;
+  --shadow-pop: 0 6px 20px rgba(0,0,0,0.5);
+}
+:root {
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px;
+  --radius-sm: 4px; --radius-md: 6px; --radius-lg: 12px; --radius-pill: 999px;
+  --control-web: 40px; --control-field: 44px; --control-scan: 48px; --control-plant: 72px; --row-web: 48px;
+  --font-sans: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}

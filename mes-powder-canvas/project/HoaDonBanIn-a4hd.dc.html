@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hóa đơn bán hàng — bản thể hiện</title>
+<script src="./support.js"></script>
+<script src="/_blob/1ac7da4f2947094995f1ad52291bf36c"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1a3d7c}a:hover{color:#0f2550}
+</style>
+</helmet>
+<div style="width: 794px; height: 1123px; box-sizing: border-box; padding: 40px 44px; background: #ffffff; color: #1a1a1a; font-family: 'Noto Serif', 'Times New Roman', serif; font-size: 13px; line-height: 1.45; position: relative; overflow: hidden">
+
+<sc-if value="{{showMark}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 794px; height: 1123px; display: flex; align-items: center; justify-content: center; pointer-events: none">
+<div style="transform: rotate(-30deg); font-size: 84px; font-weight: 700; letter-spacing: 6px; color: {{markColor}}; white-space: nowrap">{{markText}}</div>
+</div>
+</sc-if>
+
+<div style="position: relative; border: 1.5px solid #1a3d7c; height: 100%; box-sizing: border-box; padding: 18px 22px; display: flex; flex-direction: column">
+
+<div style="display: flex; gap: 16px; align-items: flex-start">
+<img src="/_blob/d3ae6dff5f9d9fa27801b63c82b36c1a" alt="Logo MD Group" style="width: 120px; height: 96px; object-fit: contain; flex-shrink: 0">
+<div style="flex: 1; text-align: center">
+<div style="font-size: 20px; font-weight: 700; color: #1a3d7c; letter-spacing: 0.5px">HÓA ĐƠN BÁN HÀNG</div>
+<div style="font-style: italic">(Bản thể hiện của hóa đơn điện tử)</div>
+<div style="font-style: italic">Ngày 18 tháng 10 năm 2026</div>
+<div style="font-size: 12px; margin-top: 4px">Mã của cơ quan thuế: <span style="font-family: ui-monospace, Consolas, monospace">{{cqt}}</span></div>
+</div>
+<div style="width: 170px; flex-shrink: 0; font-size: 13px">
+<div>Ký hiệu: <b>2C26T[XX]</b></div>
+<div>Số: <b style="color: #a01818; font-size: 16px">{{soHD}}</b></div>
+</div>
+</div>
+
+<div style="border-top: 1px solid #1a3d7c; margin: 12px 0 10px"></div>
+
+<div style="display: flex; gap: 16px">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 1px">
+<div style="font-size: 15px; font-weight: 700">CÔNG TY CỔ PHẦN ĐẦU TƯ MD GROUP</div>
+<div>Mã số thuế: [MST BÊN BÁN]</div>
+<div>Địa chỉ: [ĐỊA CHỈ TRỤ SỞ]</div>
+<div>Điện thoại: [SỐ ĐIỆN THOẠI]</div>
+<div>Số tài khoản: [SỐ TÀI KHOẢN · NGÂN HÀNG]</div>
+</div>
+<svg role="img" aria-label="Mã QR phiếu PX-NM1-2610-0042" width="104" height="104" viewBox="0 0 25 25" shape-rendering="crispEdges" style="display: block"><rect width="25" height="25" fill="#ffffff"></rect><path d="M2 2h7v1h-7zM12 2h1v1h-1zM16 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM12 3h3v1h-3zM16 3h1v1h-1zM22 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM13 4h1v1h-1zM16 4h1v1h-1zM18 4h3v1h-3zM22 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM14 5h1v1h-1zM16 5h1v1h-1zM18 5h3v1h-3zM22 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h3v1h-3zM22 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM12 7h3v1h-3zM16 7h1v1h-1zM22 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h7v1h-7zM11 9h1v1h-1zM13 9h2v1h-2zM3 10h3v1h-3zM7 10h2v1h-2zM11 10h1v1h-1zM20 10h2v1h-2zM2 11h1v1h-1zM5 11h3v1h-3zM9 11h2v1h-2zM13 11h3v1h-3zM19 11h1v1h-1zM22 11h1v1h-1zM3 12h4v1h-4zM8 12h1v1h-1zM12 12h2v1h-2zM19 12h4v1h-4zM3 13h3v1h-3zM9 13h1v1h-1zM13 13h1v1h-1zM16 13h1v1h-1zM18 13h2v1h-2zM21 13h1v1h-1zM2 14h1v1h-1zM6 14h4v1h-4zM12 14h3v1h-3zM17 14h1v1h-1zM22 14h1v1h-1zM10 15h2v1h-2zM13 15h2v1h-2zM16 15h1v1h-1zM20 15h1v1h-1zM22 15h1v1h-1zM2 16h7v1h-7zM11 16h1v1h-1zM15 16h1v1h-1zM18 16h1v1h-1zM20 16h1v1h-1zM2 17h1v1h-1zM8 17h1v1h-1zM10 17h1v1h-1zM13 17h2v1h-2zM17 17h1v1h-1zM19 17h2v1h-2zM22 17h1v1h-1zM2 18h1v1h-1zM4 18h3v1h-3zM8 18h1v1h-1zM11 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h2v1h-2zM21 18h2v1h-2zM2 19h1v1h-1zM4 19h3v1h-3zM8 19h1v1h-1zM10 19h1v1h-1zM12 19h2v1h-2zM16 19h1v1h-1zM18 19h1v1h-1zM21 19h1v1h-1zM2 20h1v1h-1zM4 20h3v1h-3zM8 20h1v1h-1zM10 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM19 20h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h3v1h-3zM15 21h1v1h-1zM17 21h1v1h-1zM20 21h1v1h-1zM2 22h7v1h-7zM15 22h1v1h-1zM18 22h1v1h-1zM21 22h1v1h-1z" fill="#000000"></path></svg>
+</div>
+
+<div style="border-top: 1px solid #1a3d7c; margin: 10px 0"></div>
+
+<div style="display: flex; flex-direction: column; gap: 1px">
+<div>Họ tên người mua hàng: Phạm Thu Châu</div>
+<div>Tên đơn vị: <b>Nhà thuốc Minh Châu</b></div>
+<div>Mã số thuế: 0402334455</div>
+<div>Địa chỉ: 61 Hùng Vương, Q. Hải Châu, Đà Nẵng</div>
+<div style="display: flex; gap: 24px">
+<div style="flex: 1">Hình thức thanh toán: TM/CK</div>
+<div style="flex: 1">Số tài khoản:</div>
+</div>
+<div style="display: flex; gap: 24px; font-size: 12px; color: #444444">
+<div style="flex: 1">Theo đơn hàng: ĐH-2610-0022</div>
+<div style="flex: 1">Phiếu xuất kho: PX-NM1-2610-0034 · Lô A260920</div>
+</div>
+</div>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px">
+<thead>
+<tr style="background: #eef2f8">
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px; width: 34px">STT</th>
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px">Tên hàng hóa, dịch vụ</th>
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px; width: 62px">Đơn vị tính</th>
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px; width: 62px">Số lượng</th>
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px; width: 96px">Đơn giá</th>
+<th style="border: 1px solid #1a1a1a; padding: 5px 4px; width: 112px">Thành tiền</th>
+</tr>
+<tr style="font-size: 12px">
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">1</td>
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">2</td>
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">3</td>
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">4</td>
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">5</td>
+<td style="border: 1px solid #1a1a1a; text-align: center; padding: 2px">6 = 4 × 5</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; text-align: center; padding: 6px 4px">1</td>
+<td style="border-right: 1px solid #1a1a1a; padding: 6px 6px">Nhãn A · Sữa bột trẻ em Số 3 · 800 g<br><span style="font-size: 12px; color: #444444">(24 lon/thùng · lô A260920)</span></td>
+<td style="border-right: 1px solid #1a1a1a; text-align: center; padding: 6px 4px">Thùng</td>
+<td style="border-right: 1px solid #1a1a1a; text-align: right; padding: 6px 6px">4</td>
+<td style="border-right: 1px solid #1a1a1a; text-align: right; padding: 6px 6px">4.482.000</td>
+<td style="border-right: 1px solid #1a1a1a; text-align: right; padding: 6px 6px">17.928.000</td>
+</tr>
+<sc-for list="{{blank}}" as="r" hint-placeholder-count="7">
+<tr style="height: 28px">
+<td style="border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+<td style="border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+<td style="border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+<td style="border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+<td style="border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+<td style="border-right: 1px solid #1a1a1a; border-top: 1px dotted #9a9a9a"></td>
+</tr>
+</sc-for>
+<tr>
+<td colspan="5" style="border: 1px solid #1a1a1a; padding: 5px 6px; font-weight: 700">Cộng tiền bán hàng hóa, dịch vụ</td>
+<td style="border: 1px solid #1a1a1a; padding: 5px 6px; text-align: right; font-weight: 700">17.928.000</td>
+</tr>
+<tr>
+<td colspan="6" style="border: 1px solid #1a1a1a; padding: 5px 6px">Số tiền viết bằng chữ: <i>Mười bảy triệu chín trăm hai mươi tám nghìn đồng.</i></td>
+</tr>
+</tbody>
+</table>
+
+<div style="display: flex; margin-top: 18px; text-align: center">
+<div style="flex: 1">
+<div style="font-weight: 700">Người mua hàng</div>
+<div style="font-style: italic; font-size: 12px">(Chữ ký số, chữ ký điện tử — nếu có)</div>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center">
+<div style="font-weight: 700">Người bán hàng</div>
+<div style="font-style: italic; font-size: 12px">(Chữ ký số, chữ ký điện tử)</div>
+<sc-if value="{{signed}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 10px; width: 230px; border: 1.5px solid #2d6a3e; background: #f1f8f2; padding: 8px 10px; text-align: left; font-size: 12px; color: #1f4d2b">
+<div style="font-weight: 700">Đã ký số</div>
+<div>Ký bởi: Công ty Cổ phần Đầu tư MD Group</div>
+<div>Ký ngày: 18/10/2026</div>
+</div>
+</sc-if>
+<sc-if value="{{unsigned}}" hint-placeholder-val="{{ true }}">
+<div style="margin-top: 10px; width: 230px; height: 62px; border: 1px dashed #8a8a8a; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #5c5c5c; text-align: center; padding: 0 8px; box-sizing: border-box">Chữ ký số hiện sau khi phát hành</div>
+</sc-if>
+</div>
+</div>
+
+<div style="flex: 1"></div>
+
+<sc-if value="{{isCopy}}" hint-placeholder-val="{{ false }}">
+<div style="font-size: 12px; color: #444444; margin-bottom: 6px">In lại ngày 24/10/2026 bởi Trần Thị Ngọc (Kế toán) · từ hồ sơ hóa đơn trên MES</div>
+</sc-if>
+
+<div style="border-top: 1px solid #1a3d7c; padding-top: 8px; font-size: 12px; display: flex; flex-direction: column; gap: 1px">
+<div>Mã tra cứu hóa đơn: <span style="font-family: ui-monospace, Consolas, monospace">{{maTraCuu}}</span></div>
+<div>Tra cứu tại: [TRANG TRA CỨU CỦA NHÀ CUNG CẤP HÓA ĐƠN]</div>
+<div style="text-align: center; font-style: italic; margin-top: 4px">(Cần kiểm tra, đối chiếu khi lập, giao, nhận hóa đơn)</div>
+<div style="text-align: center; color: #444444">Phát hành qua [NHÀ CUNG CẤP HÓA ĐƠN ĐIỆN TỬ] · MST [MST NHÀ CUNG CẤP]</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;trangthai&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Xem trước&quot;,&quot;Đã phát hành&quot;,&quot;Bản sao in lại&quot;],&quot;default&quot;:&quot;Xem trước&quot;,&quot;section&quot;:&quot;Trạng thái hiển thị&quot;},&quot;$preview&quot;:{&quot;width&quot;:794,&quot;height&quot;:1123}}">
+class Component extends DCLogic {
+renderVals() {
+const st = this.props.trangthai ?? 'Xem trước';
+const issued = st !== 'Xem trước';
+return {
+blank: [1, 2, 3, 4, 5, 6, 7],
+signed: issued,
+unsigned: !issued,
+isCopy: st === 'Bản sao in lại',
+showMark: st !== 'Đã phát hành',
+markText: st === 'Bản sao in lại' ? 'BẢN SAO' : 'BẢN XEM TRƯỚC',
+markColor: 'rgba(160, 24, 24, 0.10)',
+soHD: issued ? '0000902' : '(chưa cấp)',
+cqt: issued ? '[MÃ CQT CẤP]' : '(cấp khi phát hành)',
+maTraCuu: issued ? '[MÃ TRA CỨU]' : '(cấp khi phát hành)'
+};
+}
+}
+</script>
+</body>
+</html>

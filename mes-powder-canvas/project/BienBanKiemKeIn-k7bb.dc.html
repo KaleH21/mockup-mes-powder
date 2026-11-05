@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Biên bản kiểm kê kho — bản in A4</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#ffffff}
+a{color:#1a3d7c}a:hover{color:#0f2550}
+</style>
+</helmet>
+<div style="width: 794px; height: 1123px; box-sizing: border-box; padding: 40px 44px; background: #ffffff; color: #1a1a1a; font-family: 'Noto Serif', 'Times New Roman', serif; font-size: 13px; line-height: 1.45; position: relative; overflow: hidden">
+
+<sc-if value="{{hasMark}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 794px; height: 1123px; display: flex; align-items: center; justify-content: center; pointer-events: none">
+<div style="{{markStyle}}">{{markText}}</div>
+</div>
+</sc-if>
+
+<div style="position: relative; height: 100%; box-sizing: border-box; display: flex; flex-direction: column">
+
+<div style="display: flex; gap: 16px; align-items: flex-start">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 1px; font-size: 12px">
+<img src="/_blob/d3ae6dff5f9d9fa27801b63c82b36c1a" alt="Logo MD Group" style="width: 90px; height: 64px; object-fit: contain; object-position: left center">
+<div style="font-weight: 700; font-size: 13px">CÔNG TY CỔ PHẦN ĐẦU TƯ MD GROUP</div>
+<div>Nhà máy: NM1 · [ĐỊA CHỈ NHÀ MÁY]</div>
+</div>
+<div style="flex-shrink: 0">
+<svg role="img" aria-label="Mã QR phiếu kiểm kho PK-NM1-2610-0008" width="104" height="104" viewBox="0 0 25 25" shape-rendering="crispEdges" style="display: block"><rect width="25" height="25" fill="#ffffff"></rect><path d="M2 2h7v1h-7zM10 2h2v1h-2zM14 2h1v1h-1zM16 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM13 3h1v1h-1zM16 3h1v1h-1zM22 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM16 4h1v1h-1zM18 4h3v1h-3zM22 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM16 5h1v1h-1zM18 5h3v1h-3zM22 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM16 6h1v1h-1zM18 6h3v1h-3zM22 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h1v1h-1zM16 7h1v1h-1zM22 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h7v1h-7zM10 9h3v1h-3zM3 10h1v1h-1zM5 10h1v1h-1zM7 10h4v1h-4zM13 10h5v1h-5zM19 10h2v1h-2zM22 10h1v1h-1zM2 11h1v1h-1zM4 11h2v1h-2zM10 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM20 11h2v1h-2zM4 12h7v1h-7zM13 12h1v1h-1zM16 12h1v1h-1zM2 13h2v1h-2zM5 13h2v1h-2zM9 13h1v1h-1zM11 13h1v1h-1zM14 13h4v1h-4zM19 13h1v1h-1zM3 14h1v1h-1zM5 14h1v1h-1zM8 14h3v1h-3zM12 14h1v1h-1zM16 14h1v1h-1zM18 14h1v1h-1zM21 14h2v1h-2zM10 15h3v1h-3zM17 15h2v1h-2zM20 15h1v1h-1zM2 16h7v1h-7zM10 16h1v1h-1zM12 16h2v1h-2zM18 16h2v1h-2zM21 16h1v1h-1zM2 17h1v1h-1zM8 17h1v1h-1zM10 17h3v1h-3zM15 17h1v1h-1zM17 17h1v1h-1zM21 17h2v1h-2zM2 18h1v1h-1zM4 18h3v1h-3zM8 18h1v1h-1zM11 18h2v1h-2zM14 18h3v1h-3zM18 18h1v1h-1zM20 18h1v1h-1zM22 18h1v1h-1zM2 19h1v1h-1zM4 19h3v1h-3zM8 19h1v1h-1zM10 19h1v1h-1zM12 19h2v1h-2zM17 19h1v1h-1zM21 19h2v1h-2zM2 20h1v1h-1zM4 20h3v1h-3zM8 20h1v1h-1zM12 20h1v1h-1zM14 20h1v1h-1zM17 20h3v1h-3zM22 20h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM15 21h2v1h-2zM18 21h1v1h-1zM20 21h1v1h-1zM22 21h1v1h-1zM2 22h7v1h-7zM12 22h3v1h-3zM18 22h3v1h-3z" fill="#000000"></path></svg>
+</div>
+</div>
+
+<div style="text-align: center; margin-top: 10px">
+<div style="font-size: 22px; font-weight: 700; color: #1a3d7c; letter-spacing: 1px">BIÊN BẢN KIỂM KÊ KHO</div>
+<div style="font-style: italic">Ngày 18 tháng 10 năm 2026</div>
+<div>Số: <b style="font-family: ui-monospace, Consolas, monospace; font-size: 15px">PK-NM1-2610-0008</b></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px; margin-top: 14px">
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Loại kiểm kê:</div><div style="flex: 1">Kiểm điểm (lô lệch) — chỉ khóa lô bị lệch, phần còn lại của kho vẫn nhập xuất</div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Kho kiểm:</div><div style="flex: 1"><b>NM1-DP · Kho điều phối NM1</b></div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Căn cứ:</div><div style="flex: 1">Phiếu xuất PX-NM1-2610-0048 thiếu hàng khi lấy lô L-LEC-02 (Lệnh LSX-2610-0011)</div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Phạm vi kiểm:</div><div style="flex: 1">Lô L-LEC-02 · Lecithin đậu nành (NVL-PGA-0004)</div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Thời gian khóa kiểm kê:</div><div style="flex: 1">{{lockText}}</div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Thời gian đếm:</div><div style="flex: 1">18/10/2026, 07:15 – 07:20 · quét đếm từng bao bằng đầu đọc</div></div>
+<div style="display: flex; gap: 6px"><div style="width: 168px; flex-shrink: 0">Người kiểm đếm:</div><div style="flex: 1">Hồ Văn Nam (Thủ kho kho điều phối)</div></div>
+</div>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px">
+<thead>
+<tr style="background: #eef2f8"><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 32px">STT</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 92px">Mã hàng</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: auto">Tên hàng · số lô</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 36px">ĐVT</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 62px">Tồn sổ sách</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 62px">Thực tế đếm</th><th colspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700">Chênh lệch</th><th rowspan="2" style="border: 1px solid #1a1a1a; padding: 5px 4px; font-weight: 700; width: 168px">Nguyên nhân · xử lý</th></tr>
+<tr style="background: #eef2f8"><th style="border: 1px solid #1a1a1a; padding: 3px 4px; font-weight: 700; width: 46px">Thừa</th><th style="border: 1px solid #1a1a1a; padding: 3px 4px; font-weight: 700; width: 46px">Thiếu</th></tr>
+<tr><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">A</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">B</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">C</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">D</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">1</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">2</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">3</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">4</td><td style="border: 1px solid #1a1a1a; text-align: center; padding: 1px; font-size: 11px">E</td></tr>
+</thead>
+<tbody>
+<tr><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: center">1</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left">NVL-PGA-0004</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left">Lecithin đậu nành<br><span style="font-size: 12px; color: #444444">Lô L-LEC-02</span></td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: center">kg</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">40</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">15</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right"></td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">25</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left; font-size: 12px">Thiếu 1 bao 25 kg khi đếm lô · {{x0}}</td></tr>
+<tr><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: center">2</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left">NVL-PGA-0004</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left">Lecithin đậu nành<br><span style="font-size: 12px; color: #444444">Lô L-LEC-02 · bao tìm lại</span></td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: center">kg</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">0</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">25</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right">25</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right"></td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left; font-size: 12px">Bao lẫn cạnh lô L-CAC-03 · {{x1}}</td></tr>
+<tr><td colspan="4" style="border: 1px solid #1a1a1a; padding: 5px 5px; font-weight: 700">Cộng</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right; font-weight: 700">40</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right; font-weight: 700">40</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right; font-weight: 700">25</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: right; font-weight: 700">25</td><td style="border: 1px solid #1a1a1a; padding: 5px 5px; text-align: left; font-size: 12px">Chênh lệch ròng: 0 kg</td></tr>
+</tbody>
+</table>
+
+<div style="margin-top: 10px; border: 1px solid #1a1a1a; padding: 8px 10px; font-size: 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="font-weight: 700">Kết quả và xử lý</div>
+<div>Kết quả đếm: thiếu 25 kg, thừa 25 kg (1 bao 25 kg của lô L-LEC-02 để nhầm vị trí). Tổng chênh lệch (viết bằng chữ): <i>thiếu hai mươi lăm kilôgam, thừa hai mươi lăm kilôgam.</i></div>
+<div>{{actText}}</div>
+<div>Ảnh hưởng: PX-NM1-2610-0048 đã tự hủy; lệnh LSX-2610-0011 chờ phát lại khi kho điều phối đủ Lecithin.</div>
+</div>
+
+<div style="margin-top: 8px; font-size: 12px">
+<div style="font-weight: 700">Ý kiến của các bên</div>
+<div style="border-bottom: 1px dotted #1a1a1a; height: 20px"></div>
+<div style="border-bottom: 1px dotted #1a1a1a; height: 20px"></div>
+</div>
+
+<div style="text-align: right; font-style: italic; margin-top: 14px">Ngày 18 tháng 10 năm 2026</div>
+<div style="display: flex; margin-top: 4px; text-align: center; font-size: 13px"><div style="flex: 1; display: flex; flex-direction: column; align-items: center"><div style="font-weight: 700">Người kiểm đếm</div><div style="font-style: italic; font-size: 12px">(Ký, họ tên)</div><div style="height: 64px"></div><div>Hồ Văn Nam</div></div><div style="flex: 1; display: flex; flex-direction: column; align-items: center"><div style="font-weight: 700">Kế toán kho</div><div style="font-style: italic; font-size: 12px">(Ký, họ tên)</div><div style="height: 64px"></div><div></div></div><div style="flex: 1; display: flex; flex-direction: column; align-items: center"><div style="font-weight: 700">QC</div><div style="font-style: italic; font-size: 12px">(nhận bao khóa chờ kiểm)</div><div style="height: 64px"></div><div></div></div><div style="flex: 1; display: flex; flex-direction: column; align-items: center"><div style="font-weight: 700">Thủ kho trưởng duyệt</div><div style="font-style: italic; font-size: 12px">(Ký, họ tên)</div><div style="height: 64px"></div><div>{{approver}}</div></div></div>
+
+<div style="margin-top: 10px; font-size: 12px"><b>Nơi nhận:</b> Kế hoạch (Đỗ Minh Khang) · Kế toán · QC · Lưu hồ sơ kho NM1-DP</div>
+
+<div style="flex: 1"></div>
+
+<sc-if value="{{isCopy}}" hint-placeholder-val="{{ false }}">
+<div style="font-size: 12px; color: #444444; margin-bottom: 6px">In lại ngày 02/11/2026 bởi Trần Thị Mai (Thủ kho trưởng) · từ hồ sơ phiếu kiểm kho trên MES</div>
+</sc-if>
+<div style="border-top: 1px solid #1a3d7c; padding-top: 6px; font-size: 12px; color: #444444; display: flex; justify-content: space-between; gap: 12px">
+<div>Quét mã QR để mở phiếu PK-NM1-2610-0008 trên MES Powder</div>
+<div>Trạng thái: {{statusText}} · Trang 1/1</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"trangthai": {"editor": "enum", "options": ["Chờ duyệt điều chỉnh", "Đã điều chỉnh", "Bản sao in lại"], "default": "Đã điều chỉnh", "section": "Trạng thái hiển thị"}, "$preview": {"width": 794, "height": 1123}}'>
+class Component extends DCLogic {
+renderVals() {
+const S = ["Chờ duyệt điều chỉnh", "Đã điều chỉnh", "Bản sao in lại"];
+const st = this.props.trangthai ?? S[1];
+const wait = st === S[0];
+const copy = st === S[2];
+const mark = (t, c) => 'transform: rotate(-30deg); font-size: 72px; font-weight: 700; letter-spacing: 6px; color: ' + c + '; white-space: nowrap';
+return {
+hasMark: wait || copy,
+markText: wait ? 'CHƯA DUYỆT' : 'BẢN SAO',
+markStyle: wait ? mark('', 'rgba(26, 61, 124, 0.08)') : mark('', 'rgba(160, 24, 24, 0.10)'),
+isCopy: copy,
+statusText: copy ? S[1] + ' (bản sao)' : st,
+approver: wait ? '' : 'Trần Thị Mai',
+lockText: wait ? 'Từ 18/10/2026 06:50 · lô đang khóa kiểm kê, chờ duyệt điều chỉnh' : '18/10/2026 06:50 – 07:35 · đã gỡ cờ sau khi duyệt',
+x0: wait ? 'đề xuất trừ 25 kg' : 'đã trừ 25 kg',
+x1: wait ? 'đề xuất nhập lại, Khóa chờ QC' : 'đã nhập lại, Khóa chờ QC',
+actText: wait ? 'Đề xuất điều chỉnh: trừ 25 kg lô L-LEC-02; nhập lại bao tìm thấy 25 kg ở trạng thái Khóa chờ QC. Chờ Thủ kho trưởng duyệt — người lập không tự duyệt.' : 'Đã điều chỉnh tồn theo duyệt của Thủ kho trưởng Trần Thị Mai lúc 07:35: trừ 25 kg lô L-LEC-02; bao tìm thấy 25 kg nhập lại ở trạng thái Khóa chờ QC kiểm; gỡ cờ kiểm kê.'
+};
+}
+}
+</script>
+</body>
+</html>
