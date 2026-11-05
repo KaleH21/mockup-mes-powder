@@ -311,8 +311,8 @@ Mở board này để kiểm: danh sách đơn, các tab trạng thái, bộ l�
 
 | # | Trường hợp | Làm gì (chỉnh ô / bấm) | Phải thấy |
 |---|---|---|---|
-| 1 | Số đơn theo tab | Mở board, đọc số trên từng tab | Chân bảng "45 / 45 đơn hàng". Số trên tab: Nháp 3, Kiểm công nợ 5, Chờ ký HĐ 3, Chờ thu tiền 2, Đã chốt · đang SX 7, Giao hàng 7, Đã giao 11, Yêu cầu hủy 3, Đã hủy · từ chối 4 (cộng lại đủ 45). Có thêm tab "Cần xử lý" theo vai trò đang xem. |
-| 2 | `Sales` thấy nút gì | Vai trò `Sales` | Nút "+ Tạo đơn hàng". Dòng đơn Nháp và Chờ ký HĐ có nút "Sửa". Chỉ dòng đơn Nháp (ĐH-2610-0037, ĐH-2610-0042, ĐH-2610-0057) có thêm nút "Xóa". Đơn đã chốt trở đi không có Sửa, Xóa. |
+| 1 | Số đơn theo tab | Mở board, đọc số trên từng tab | Chân bảng "45 / 45 đơn hàng". Số trên tab: Nháp 4, Kiểm công nợ 5, Chờ thu tiền 3, Đã chốt · đang SX 8, Nhập kho · duyệt · xuất kho 0, Giao hàng 7, Đã giao 11, Yêu cầu hủy 3, Đã hủy · từ chối 4 (cộng lại đủ 45). Có thêm tab "Cần xử lý" theo vai trò đang xem. |
+| 2 | `Sales` thấy nút gì | Vai trò `Sales` | Nút "+ Tạo đơn hàng". Dòng đơn Nháp có nút "Sửa". Chỉ dòng đơn Nháp (ĐH-2610-0037, ĐH-2610-0042, ĐH-2610-0057) có thêm nút "Xóa". Đơn đã chốt trở đi không có Sửa, Xóa. |
 | 3 | Xóa đơn nháp | Bấm "Xóa" ở ĐH-2610-0037 | Hộp xác nhận "Đơn nháp chưa có hợp đồng. Xóa xong không khôi phục được." Xác nhận xong có thông báo "Đã xóa ĐH-2610-0037." và chân bảng còn "44 / 44 đơn hàng". |
 | 4 | Vai trò chỉ xem | `Kế toán`, `Kế toán trưởng`, `Giám đốc`, `Kế hoạch` | Không còn nút Sửa, Xóa ở dòng nào. Nút tạo đơn thành "+ Tạo đơn hàng · việc của Sales · Sales nhận đơn" kèm "Xem như Sales". |
 | 5 | Vai trò bị chặn cả màn | `CSKH` | Thanh cảnh báo "Vai trò CSKH không có quyền vào màn này."; nút tạo đơn bị chặn như dòng 4. |
@@ -334,6 +334,7 @@ Mở board này để kiểm: biểu mẫu tạo đơn hàng, ô bắt buộc, g
 | 6 | Hình thức giao | Chọn "Giao tận nơi" | Hiện thêm ô "Địa chỉ giao", bắt buộc. Chọn "Khách tự lấy tại nhà máy" thì ô này ẩn. |
 | 7 | Lưu thành công | Điền đủ, bấm "Lưu đơn hàng" | Thông báo "Đã tạo ĐH-2610-0059." Đơn nằm đầu danh sách ở trạng thái Nháp, nhật ký ghi "Tạo đơn (nháp)". |
 | 8 | Quyền | Đổi "Xem như vai trò" sang `Kế toán` rồi lưu | Biểu mẫu vẫn lưu được (board mở thẳng biểu mẫu nên không chặn theo vai trò; xem mục chỗ lệch). Ở board 9, `Kế toán` không có nút tạo đơn. |
+| 9 | Hợp đồng khi tạo đơn | Đọc khối "Hợp đồng" ở cột phải; nhập số hợp đồng mà không chọn file; rồi nhập hiệu lực đến trước hiệu lực từ | Khối có 4 ô không bắt buộc: Số hợp đồng, Hiệu lực từ, Hiệu lực đến, File hợp đồng (gợi ý "Ảnh / PDF, tối đa 5MB mỗi tệp. Chưa có thì upload sau."). Có số / ngày mà chưa có file báo "Tải file hợp đồng."; có file mà trống số báo "Nhập số hợp đồng."; ngày đến trước ngày từ báo "Ngày hết hiệu lực không trước ngày bắt đầu." Bỏ trống cả khối vẫn lưu nháp được. (sửa 05/11: hợp đồng theo từng đơn, không lấy từ hồ sơ khách) |
 
 #### 11 · Đơn hàng — chi tiết
 Mở board này để kiểm: trang chi tiết một đơn đang chờ thu tiền, lịch thanh toán, và việc Sales hủy thẳng đơn chưa chốt.
@@ -344,10 +345,13 @@ Mở board này để kiểm: trang chi tiết một đơn đang chờ thu tiề
 | 1 | Mở mặc định | `start` = `xem` | ĐH-2610-0033, khách KH-0044 Nhà thuốc Minh Châu, trạng thái "Chờ thu tiền". Việc tiếp theo thuộc Kế toán: "Ghi nhận tiền cọc 15.000.000 đ ở Công nợ khách hàng". |
 | 2 | Số tiền | Đọc phần dòng hàng và tab "Thanh toán" | Hai dòng hàng của Nhãn B Số 3 (SP-0002): 40 thùng × 4.100.000 đ = 960 lon, 768 kg bột; 240 lon × 175.000 đ = 240 lon, 192 kg bột. Tạm tính 206.000.000 đ, VAT 8% 16.480.000 đ, tổng cộng 222.480.000 đ. Cọc 15.000.000 đ (6,7% giá trị đơn) "Chưa thu"; khoản trả nốt trước giao 207.480.000 đ; "Chưa thu lần nào". Phương thức "Tiền mặt". |
 | 3 | `Sales` thấy nút gì | Vai trò `Sales` | "Xem ở Công nợ KH →", "Mô phỏng · Kế toán ghi nhận tiền về", và "Hủy đơn" nằm trong menu ⋯. Không có nút Sửa (đơn Chờ thu tiền không sửa được). |
-| 4 | Sales hủy thẳng đơn chưa chốt | Bấm ⋯ rồi "Hủy đơn"; bỏ trống lý do rồi xác nhận; sau đó nhập lý do | Hộp "Hủy đơn · ĐH-2610-0033": "Đơn chưa chốt, chưa thu tiền: chuyển Đã hủy, giữ lại để tra cứu." Bỏ trống lý do báo "Bắt buộc." Có lý do thì thông báo "ĐH-2610-0033: Hủy đơn.", trạng thái "Đã hủy", khung đỏ "Đã hủy: <lý do>", không qua bước duyệt, không có tiền hoàn. (quy tắc: Chờ ký HĐ và Chờ thu tiền không đi quy trình hủy đơn đã chốt.) |
-| 5 | Cùng ca ở Chờ ký HĐ | Mở ĐH-2610-0032 từ board 9; bấm ⋯ rồi "Hủy đơn" | Cũng có "Hủy đơn" cạnh nút "Upload hợp đồng"; hủy xong cũng thành "Đã hủy" với lý do vừa nhập. Làm tương tự với ĐH-2610-0044 (Chờ thu tiền, trả đủ trước SX) và ĐH-2610-0043 (Chờ ký HĐ). |
+| 4 | Sales hủy thẳng đơn chưa chốt | Bấm ⋯ rồi "Hủy đơn"; bỏ trống lý do rồi xác nhận; sau đó nhập lý do | Hộp "Hủy đơn · ĐH-2610-0033": "Đơn chưa chốt, chưa thu tiền: chuyển Đã hủy, giữ lại để tra cứu." Bỏ trống lý do báo "Bắt buộc." Có lý do thì thông báo "ĐH-2610-0033: Hủy đơn.", trạng thái "Đã hủy", khung đỏ "Đã hủy: <lý do>", không qua bước duyệt, không có tiền hoàn. (quy tắc: đơn chưa chốt — Nháp, Chờ thu tiền — không đi quy trình hủy đơn đã chốt.) |
+| 5 | Cùng ca ở đơn khác | Mở ĐH-2610-0044 rồi ĐH-2610-0043 từ board 9 (cả hai Chờ thu tiền, trả đủ trước SX); bấm ⋯ rồi "Hủy đơn" | Hủy xong cũng thành "Đã hủy" với lý do vừa nhập. (Bỏ Chờ ký HĐ 05/11 — ĐH-2610-0032 nay là đơn Nháp chưa có hợp đồng.) |
 | 6 | Vai trò khác | `Kế toán`, `Kế toán trưởng`, `Giám đốc`, `Kế hoạch`; `CSKH` | Thấy "Hủy đơn · việc của Sales · Sales hủy đơn" trong menu ⋯ kèm "Xem như Sales". Nút mô phỏng thu tiền hiện cho mọi vai trò (nó mô phỏng việc Kế toán làm ở màn khác). `CSKH` thêm cảnh báo không có quyền vào màn. |
 | 7 | Chuyển trạng thái sau khi thu | Bấm "Mô phỏng · Kế toán ghi nhận tiền về" rồi xác nhận | Hộp ghi "[Mô phỏng] Kế toán ghi nhận 15.000.000 đ (cọc trước SX) ở Công nợ khách hàng → đơn Đã chốt." Sau đó đơn "Đã chốt", đã thu 15.000.000 đ (phiếu thu TC-2610-0025), nhật ký thêm "Đủ khoản trước SX → Đã chốt" và dòng báo Kế hoạch có sản phẩm SP-0002 1.200 lon cần lên lệnh. |
+| 8 | Đơn chưa có hợp đồng | Từ board 9 mở ĐH-2610-0042 (Nháp, KH-0065, trả đủ trước SX), vai trò `Sales` | Khung vàng "Đơn chưa có hợp đồng — chưa chốt được. Bấm "Upload hợp đồng" để tải bản khách đã ký." Việc tiếp theo: "Upload hợp đồng khách đã ký rồi chốt đơn"; nút chính "Upload hợp đồng", không có "Chốt đơn". Ô "Hợp đồng" ở Thông tin đơn: "Chưa có hợp đồng" · "upload trước khi chốt đơn". |
+| 9 | Upload hợp đồng | Bấm "Upload hợp đồng"; bỏ trống file rồi lưu; chọn hiệu lực đến trước hôm nay; sau đó điền đủ | Hộp có Số hợp đồng (điền sẵn HĐ-2610-0042), Hiệu lực từ (điền sẵn hôm nay), Hiệu lực đến, File hợp đồng — đều bắt buộc. Thiếu báo "Bắt buộc."; ngày đến đã qua báo "Hợp đồng đã hết hạn — chọn ngày từ hôm nay." Đủ thì thông báo "ĐH-2610-0042: đã lưu hợp đồng.", nhật ký "Tải hợp đồng HĐ-2610-0042 · hiệu lực <từ> – <đến>: <tên file>"; khung vàng mất, nút chính thành "Chốt đơn", "Thay hợp đồng" vào menu ⋯; ô Hợp đồng ghi số, "hiệu lực <từ> – <đến>" và tên file. |
+| 10 | Chốt sau khi có hợp đồng | Bấm "Chốt đơn" | Hộp "Chốt đơn theo hợp đồng đã tải. Có khoản trước SX 90.720.000 đ → Chờ thu tiền." kèm số + file hợp đồng; xong đơn "Chờ thu tiền", nhật ký "Chốt đơn theo hợp đồng HĐ-2610-0042 → Chờ thu tiền". Đơn đã chốt chỉ xem hợp đồng, không còn nút upload. |
 
 #### 12 · Đơn hàng — QT06 chờ kiểm công nợ (nợ quá hạn)
 Mở board này để kiểm: đơn Mua nợ (khách mua chịu, trả sau khi nhận hàng) bị dừng vì khách đang nợ quá hạn.
@@ -371,7 +375,7 @@ Mở board này để kiểm: đơn chờ khách trả nợ quá hạn, hoặc c
 | 1 | Mở mặc định | `vaitro` = `Kế toán` | ĐH-2610-0034, trạng thái "Chờ xử lý nợ" (nhãn đỏ), việc tiếp theo của Sales "Báo khách trả nợ quá hạn, hoặc chuyển sang trả trước". Thông báo "Đang chờ từ 18/10/2026 · nhắc Sales 21/10/2026 · tự Từ chối 25/10/2026." (quy tắc: quá 3 ngày nhắc, quá 7 ngày tự từ chối). |
 | 2 | `Kế toán` thấy nút gì | Vai trò `Kế toán` | "Xem ở Công nợ KH →" và "Mô phỏng · Kế toán ghi nhận trả nợ quá hạn". Hai nút "Khách chuyển trả trước" và "Khách từ chối" bị chặn: "việc của Sales" kèm "Xem như Sales". |
 | 3 | Khách trả nợ | Bấm nút mô phỏng trả nợ, xác nhận "Ghi nhận & kiểm lại" | Ghi nhận 337.840.000 đ cho ĐH-2609-0018 (còn nợ về 0, cờ tạm khóa của KH-0012 tắt). Hệ thống kiểm lại: 2.289.060.000 đ lớn hơn hạn mức 1.500.000.000 đ, phiên bản đơn chưa xin tăng, nên đơn về "Chờ kiểm công nợ" với thông báo "Hệ thống kiểm lại: vượt hạn mức — Sales xin tăng hạn mức." |
-| 4 | Khách chuyển trả trước | Đổi sang `Sales`, bấm "Khách chuyển trả trước" | Ô "Hình thức mới" (Trả đủ trước SX hoặc Cọc + trả nốt trước giao, mặc định cái sau). Xác nhận thì đơn thành "Chờ ký HĐ", hình thức mới, ngày nợ về 0. Đổi sang "Cọc + trả nốt" mà để cọc 0 vẫn qua (xem mục chỗ lệch). |
+| 4 | Khách chuyển trả trước | Đổi sang `Sales`, bấm "Khách chuyển trả trước" | Ô "Hình thức mới" (Trả đủ trước SX hoặc Cọc + trả nốt trước giao, mặc định cái sau). Xác nhận thì đơn chốt theo hợp đồng của đơn và thành "Chờ thu tiền", hình thức mới, ngày nợ về 0. Đổi sang "Cọc + trả nốt" mà để cọc 0 vẫn qua (xem mục chỗ lệch). |
 | 5 | Khách từ chối | `Sales`, bấm "Khách từ chối" | Bỏ trống lý do báo "Bắt buộc."; có lý do thì đơn thành "Từ chối", khung đỏ ghi lý do. |
 | 6 | Vai trò khác | `Sales` thấy cả hai nút; `Giám đốc`, `Kế toán trưởng`, `Kế hoạch` giống `Kế toán` (có nút mô phỏng và liên kết, hai nút của Sales bị chặn); `CSKH` có cảnh báo không có quyền vào màn | Nút mô phỏng không bị chặn theo vai trò vì nó đại diện cho việc Kế toán làm ở màn khác. |
 
@@ -382,7 +386,7 @@ Mở board này để kiểm: Giám đốc hoặc Kế toán trưởng quyết h
 | # | Trường hợp | Làm gì (chỉnh ô / bấm) | Phải thấy |
 |---|---|---|---|
 | 1 | Mở mặc định | `vaitro` = `Giám đốc` | Hộp "Quyết hạn mức mới · ĐH-2610-0034". Câu mở đầu: "Đề xuất 2.300.000.000 đ — Võ Thị Lan: …Hiện tại: hạn mức 1.500.000.000 đ, dư nợ 944.460.000 đ, đơn này 1.344.600.000 đ → cần 2.289.060.000 đ." Bảng dữ kiện: dư nợ hiện tại 944.460.000 đ (công nợ 272.160.000 đ + Mua nợ chưa giao 672.300.000 đ), "Đơn này − cọc" 1.344.600.000 đ, ý kiến Kế toán của Ngô Bảo Ngọc. Ô "Hạn mức mới" điền sẵn 2300000000. |
-| 2 | Quyết đúng mức đề xuất | Giữ 2.300.000.000, bấm "Lưu hạn mức & kiểm lại" | Hạn mức KH-0012 thành 2.300.000.000 đ (vĩnh viễn). Kiểm lại: 2.289.060.000 đ không vượt, đơn thành "Chờ ký HĐ" với thông báo "Hệ thống kiểm lại: đủ điều kiện — đơn chuyển Chờ ký HĐ, chờ upload hợp đồng." |
+| 2 | Quyết đúng mức đề xuất | Giữ 2.300.000.000, bấm "Lưu hạn mức & kiểm lại" | Hạn mức KH-0012 thành 2.300.000.000 đ (vĩnh viễn). Kiểm lại: 2.289.060.000 đ không vượt, đơn thành "Đã chốt" (Mua nợ, cọc 0) với thông báo "Hệ thống kiểm lại: đủ điều kiện — đơn chốt theo hợp đồng HĐ-2610-0034 → Đã chốt." |
 | 3 | Quyết thấp hơn đề xuất (cọc tối thiểu) | Nhập 2000000000, lưu | Đơn về "Chờ kiểm công nợ", thông báo "Hệ thống kiểm lại: cần cọc tối thiểu 289.060.000 đ." (cọc tối thiểu = dư nợ + đơn − hạn mức mới = 944.460.000 + 1.344.600.000 − 2.000.000.000). Khung kết quả ghi cọc tối thiểu 289.060.000 đ (không đủ giá trị đơn nên chưa phải trả đủ). |
 | 4 | Ô sai | Nhập 0; xóa trống ô | 0 báo "Hạn mức > 0."; trống báo "Bắt buộc." |
 | 5 | Vai trò được duyệt | `Giám đốc`, `Kế toán trưởng` | Thấy "Quyết hạn mức mới" bấm được (một người là đủ). `Kế toán` thấy thêm "Ghi ý kiến công nợ" (bắt buộc nhập ý kiến). |
@@ -397,10 +401,10 @@ Mở board này để kiểm: khách phải chọn giữa đặt cọc tối thi
 |---|---|---|---|
 | 1 | Mở mặc định | `vaitro` = `Sales` | ĐH-2610-0034 "Chờ khách". Thông báo: "Chờ khách chọn: cọc tối thiểu 289.060.000 đ / chuyển trả trước / từ chối. Hạn mức mới 2.000.000.000 đ do Lê Quang Minh (Giám đốc) quyết 18/10 14:00." Hạn mức KH-0012 hiện 2.000.000.000 đ. |
 | 2 | `Sales` thấy nút gì | Vai trò `Sales` | Ba nút: "Khách đồng ý cọc — ghi cọc mới", "Khách chuyển trả trước", "Khách từ chối". |
-| 3 | Ghi cọc đủ | Bấm nút ghi cọc; ô số tiền điền sẵn 289060000; xác nhận | Cọc ghi vào đơn, kiểm lại thấy đủ nên đơn thành "Chờ ký HĐ". |
+| 3 | Ghi cọc đủ | Bấm nút ghi cọc; ô số tiền điền sẵn 289060000; xác nhận | Cọc ghi vào đơn, kiểm lại thấy đủ nên đơn chốt theo hợp đồng của đơn và thành "Chờ thu tiền" (chờ thu cọc). |
 | 4 | Ghi cọc thiếu hoặc vượt | Nhập 100000000; rồi nhập 1500000000 (lớn hơn tổng đơn) | 100.000.000 đ lưu được nhưng kiểm lại vẫn thiếu: đơn về "Chờ kiểm công nợ" với cọc tối thiểu 289.060.000 đ. 1.500.000.000 đ báo "Cọc không lớn hơn tổng đơn." |
 | 5 | Vai trò chỉ xem | `Kế toán`, `Kế toán trưởng`, `Giám đốc`, `Kế hoạch` | Ba dòng chặn "… · việc của Sales", không có nút bấm được. `CSKH` cảnh báo không có quyền vào màn. |
-| 6 | Hai lối còn lại | `Sales` bấm "Khách chuyển trả trước" hoặc "Khách từ chối" | Giống board 13: chuyển trả trước thì đơn thành "Chờ ký HĐ"; từ chối (bắt buộc lý do) thì thành "Từ chối". |
+| 6 | Hai lối còn lại | `Sales` bấm "Khách chuyển trả trước" hoặc "Khách từ chối" | Giống board 13: chuyển trả trước thì đơn thành "Chờ thu tiền"; từ chối (bắt buộc lý do) thì thành "Từ chối". |
 
 #### 16 · Đơn hàng — QT07 yêu cầu hủy đơn đang SX
 Mở board này để kiểm: Sales gửi yêu cầu hủy một đơn đã chốt đang sản xuất, kèm bảng ảnh hưởng và tiền đề xuất hoàn.
@@ -524,6 +528,7 @@ Mở board này để kiểm: hồ sơ KH-0012 với công nợ, hạn mức, t�
 | 6 | Ngừng hoạt động | Bấm ⋯ rồi "Ngừng hoạt động"; bỏ trống lý do rồi nhập lý do | Hộp ghi "Khách không chọn được khi tạo đơn mới; hồ sơ, đơn cũ và công nợ được giữ. Còn 5 đơn đang mở vẫn xử lý bình thường." Trống báo "Bắt buộc." Xong thì trạng thái "Ngừng hoạt động" và menu ⋯ đổi thành "Kích hoạt lại". |
 | 7 | Vai trò chỉ xem | `CSKH`, `Giám đốc` | Xem được toàn bộ hồ sơ; ba nút trên đều thành dòng chặn "… · việc của Sales" kèm "Xem như Sales". `Kế toán`, `Kế toán trưởng`, `Kế hoạch`: cảnh báo không có quyền vào màn Khách hàng, nút cũng bị chặn. |
 | 8 | Khách ở trạng thái khác | Từ board 22 mở KH-0063 (Tạm dừng) và KH-0060 (Ngừng) | KH-0063 chỉ có "Ngừng hoạt động", không có "Tạo đơn cho khách". KH-0060 có "Kích hoạt lại" và cờ tạm khóa. |
+| 9 | Không còn hợp đồng ở khách | Đọc danh sách (board 22), biểu mẫu (board 23), chi tiết KH-0012 | Không có cột / khối / nút hợp đồng nào (sửa 05/11: hợp đồng chuyển sang từng đơn — xem board 10 ca 9, board 11 ca 8–10). |
 
 #### 25 · Đơn hàng — QT09 yêu cầu xuất (giao hàng chỉ ghi nhận)
 Mở board này để kiểm: Sales yêu cầu xuất một phần từ lô thành phẩm đã đạt; hệ thống kiểm tiền trước giao ngay lúc yêu cầu.
@@ -594,7 +599,8 @@ Mở board này để kiểm: bản in A4 của hóa đơn khớp phiếu xuất
 | ĐH-2610-0025 | Đơn Mua nợ đang giao của KH-0052 | 9, 26, 22 | 10 thùng = 240 lon; tổng 44.820.000 đ; YX-2610-0017, phiếu PX-NM1-2610-0045 "Đã xuất" lô A241205; ghi nhận 216 lon nhận, 24 lon không nhận. |
 | ĐH-2610-0022 | Đơn đã giao của KH-0044 | 9, 27, 28, 22 | 4 thùng = 96 lon; tổng 17.928.000 đ, đã thu đủ (TC-2610-0005); YX-2610-0012, phiếu PX-NM1-2610-0034, lô A260920; hóa đơn 0000902 ngày 18/10/2026. |
 | ĐH-2610-0033 | Đơn chờ thu tiền (mặc định của chi tiết đơn) | 9, 11, 22 | 2 dòng hàng Nhãn B Số 3; tổng 222.480.000 đ; cọc 15.000.000 đ chưa thu; "Chờ thu tiền". |
-| ĐH-2610-0032, ĐH-2610-0043, ĐH-2610-0044 | Đơn chưa chốt để thử Sales hủy thẳng | 9, 11 | ĐH-2610-0032 và ĐH-2610-0043 ở "Chờ ký HĐ"; ĐH-2610-0044 ở "Chờ thu tiền" (trả đủ 112.050.000 đ). |
+| ĐH-2610-0043, ĐH-2610-0044 | Đơn chưa chốt để thử Sales hủy thẳng | 9, 11 | Cả hai ở "Chờ thu tiền", trả đủ trước SX (ĐH-2610-0044: 112.050.000 đ). |
+| ĐH-2610-0042, ĐH-2610-0032 | Đơn nháp chưa có hợp đồng | 9, 11 | ĐH-2610-0042: KH-0065, trả đủ trước SX 90.720.000 đ — thử upload hợp đồng rồi chốt. ĐH-2610-0032: KH-0031, "chờ khách ký hợp đồng". Đơn đã có hợp đồng trong dữ liệu mẫu: số `HĐ-<mã đơn bỏ "ĐH-">`, hiệu lực từ ngày đặt đến cùng ngày năm sau (gồm cả các đơn đang ở luồng công nợ: ĐH-2610-0034, 0038, 0053, 0054, 0055). |
 | KH-0044 | Nhà thuốc Minh Châu | 11, 22 đến 24, 27, 28 | MST 0402334455; phương thức mặc định "Tiền mặt"; email hóa đơn minhchau.pharma@gmail.com. |
 
 ### 4.3. Mua hàng & Kế toán

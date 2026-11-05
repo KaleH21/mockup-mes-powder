@@ -1,6 +1,6 @@
--- MES Powder — DDL + ràng buộc + dữ liệu nạp. Sinh cùng nguồn với claude/mes-powder-du-lieu.md (04/11/2026: đồng bộ theo mockup — bỏ báo giá, PO kiểm COA & HSD + cọc / trả nốt, yêu cầu chuyển YCC- và phiếu chuyển "lập là chấp nhận", mô hình SP mới (quy cách nhiều tầng, mẫu nhãn, bản công bố), hồ sơ pháp lý chung, đơn vị có loại / quy đổi, nhiều kho điều phối, phạm vi quyền theo vai trò / theo quyền, vai trò Thủ kho điều phối, xóa bản ghi chưa dùng, bản lưu & nhật ký in; 140 bảng. 29/10/2026: bỏ mục tiêu thời gian truy xuất — trace_request bỏ target_hours, bỏ tham số trace.target_hours. 28/10/2026: bỏ vai trò Trưởng bộ phận và rà soát quyền hằng quý — bỏ access_review, access_review_line; ngừng mã danh mục do trưởng bên đề xuất duyệt, Kế hoạch tự ngừng — catalog_retire_request thêm NGUNG_TRUC_TIEP. 26/10/2026: mẫu lưu bỏ tủ / ngăn và điều kiện bảo quản — bỏ sample_storage_condition, retained_sample thêm note. 24/10/2026 đợt 12: lệnh Chờ NVL, nhu cầu mua do hệ thống tính, thời gian giao hàng NVL. Đợt 9: bỏ vị trí kệ — tồn theo lô × kho, trạng thái theo bao qua dòng tồn, hàng đang chuyển nằm trên phiếu chuyển; bỏ cảnh báo cận date, thêm ngưỡng hạn tối thiểu cho sản xuất; 24/10/2026: giao hàng chỉ ghi nhận — bỏ đợt giao, yêu cầu xuất bán từ đơn, ghi nhận theo phiếu xuất, một đơn nhiều hóa đơn; 20/10/2026 đợt 3: bản sao khách / đơn xuống nhà máy bỏ cột tiền, liên hệ, công nợ — sync_policy.masked_columns; đợt 2: chủ dữ liệu theo dòng cloud ↔ nhà máy — sync_policy, sync_outbox, site_command, command_inbox; trước đó 20/10: Admin không còn toàn quyền, menu suy ra từ quyền — bảng screen, screen_function; 19/10 đợt 4 — danh mục SP tách 4 danh mục phụ, đề nghị chuyển kho tự lập từ lệnh SX, xuất SX chỉ từ kho điều phối). Đã chạy trên PostgreSQL 16.
+-- MES Powder — DDL + ràng buộc + dữ liệu nạp. Sinh cùng nguồn với claude/mes-powder-du-lieu.md (05/11/2026: theo mockup sau họp khách — phân quyền từng người (user_permission), khu chiết rót & đóng gói gộp 1 loại, NVL có quy cách đóng gói (material_pack, material_pack_level), mục khác của SP có loại ô nhập, hình thức công bố là lựa chọn thêm được, hồ sơ pháp lý sắp hết hạn ≤ 30 ngày, công thức bỏ dung sai và thông số trộn chuẩn, lệnh SX thêm % hao hụt và bỏ giấy tờ xuất xứ NVL, hợp đồng tải theo từng đơn, có hiệu lực từ – đến (bỏ Chờ ký HĐ), đơn sau QC đạt qua Chờ nhập kho → Chờ kế toán duyệt → Chờ xuất kho, bỏ Danh mục › Nhà cung cấp; 143 bảng. 04/11/2026: đồng bộ theo mockup — bỏ báo giá, PO kiểm COA & HSD + cọc / trả nốt, yêu cầu chuyển YCC- và phiếu chuyển "lập là chấp nhận", mô hình SP mới (quy cách nhiều tầng, mẫu nhãn, bản công bố), hồ sơ pháp lý chung, đơn vị có loại / quy đổi, nhiều kho điều phối, phạm vi quyền theo vai trò / theo quyền, vai trò Thủ kho điều phối, xóa bản ghi chưa dùng, bản lưu & nhật ký in; 140 bảng. 29/10/2026: bỏ mục tiêu thời gian truy xuất — trace_request bỏ target_hours, bỏ tham số trace.target_hours. 28/10/2026: bỏ vai trò Trưởng bộ phận và rà soát quyền hằng quý — bỏ access_review, access_review_line; ngừng mã danh mục do trưởng bên đề xuất duyệt, Kế hoạch tự ngừng — catalog_retire_request thêm NGUNG_TRUC_TIEP. 26/10/2026: mẫu lưu bỏ tủ / ngăn và điều kiện bảo quản — bỏ sample_storage_condition, retained_sample thêm note. 24/10/2026 đợt 12: lệnh Chờ NVL, nhu cầu mua do hệ thống tính, thời gian giao hàng NVL. Đợt 9: bỏ vị trí kệ — tồn theo lô × kho, trạng thái theo bao qua dòng tồn, hàng đang chuyển nằm trên phiếu chuyển; bỏ cảnh báo cận date, thêm ngưỡng hạn tối thiểu cho sản xuất; 24/10/2026: giao hàng chỉ ghi nhận — bỏ đợt giao, yêu cầu xuất bán từ đơn, ghi nhận theo phiếu xuất, một đơn nhiều hóa đơn; 20/10/2026 đợt 3: bản sao khách / đơn xuống nhà máy bỏ cột tiền, liên hệ, công nợ — sync_policy.masked_columns; đợt 2: chủ dữ liệu theo dòng cloud ↔ nhà máy — sync_policy, sync_outbox, site_command, command_inbox; trước đó 20/10: Admin không còn toàn quyền, menu suy ra từ quyền — bảng screen, screen_function; 19/10 đợt 4 — danh mục SP tách 4 danh mục phụ, đề nghị chuyển kho tự lập từ lệnh SX, xuất SX chỉ từ kho điều phối). Đã chạy trên PostgreSQL 16.
 
--- Phần DDL sinh tự động bằng claude/mes-powder-gen-du-lieu.py từ mô hình bảng trong trang "Sơ đồ dữ liệu MES Powder" (cùng nguồn với mục 10 của file md). Lượt 04/11 sửa tay đồng thời mô hình JSON, mục 10 và DDL (script sinh không có trên máy).
+-- Phần DDL sinh tự động bằng claude/mes-powder-gen-du-lieu.py từ mô hình bảng trong trang "Sơ đồ dữ liệu MES Powder" (cùng nguồn với mục 10 của file md). Lượt 04/11 sửa tay đồng thời mô hình JSON, mục 10 và DDL (script sinh không có trên máy); lượt 05/11 sửa JSON rồi sinh lại khối create / comment của các bảng đổi.
 -- Dữ liệu nạp vai trò / thao tác / Vai trò × Thao tác sinh bằng claude/mes-powder-gen-quyen.py từ mục "Vai trò × Chức năng" của file quy trình; dữ liệu nạp sync_policy sinh bằng script này.
 create schema if not exists mes;
 set search_path = mes;
@@ -43,14 +43,14 @@ create table work_area (
   updated_at timestamptz,
   updated_by uuid,
   primary key (id),
-  check (area_type in ('HH', 'BTP', 'CHIET_ROT', 'DONG_GOI')),
+  check (area_type in ('HH', 'BTP', 'CHIET_ROT_DONG_GOI')),
   check (status in ('DANG_DUNG', 'NGUNG_DUNG')),
   unique (factory_id, code),
   check ((area_type in ('HH','BTP')) = (max_batch_kg is not null)),
   check (max_batch_kg is null or max_batch_kg > 0),
   check (area_type not in ('HH','BTP') or supply_warehouse_id is not null)
 );
-comment on table work_area is 'Khu vực làm việc, 4 loại: sản xuất nguyên liệu hỗn hợp (HH) / sản xuất bán thành phẩm (BTP) / chiết rót / đóng gói. Khu HH, BTP có khối lượng mẻ tối đa và dàn silo riêng (equipment loại SILO, Admin cấu hình ngay trong khu — sửa 19/10 đợt 2). Loại lệnh SX theo khu; KL mẻ của lệnh ≤ mức tối đa của khu. Không đổi loại khu khi còn lệnh chưa hoàn thành (trigger); không xóa, chỉ ngừng dùng. Công nhân gắn khu; PC C# chỉ hiện lệnh / mẻ của khu; mỗi khu một hàng đợi phát lệnh. Sửa 04/11: mỗi khu chọn 1 kho điều phối cấp NVL (`supply_warehouse_id`); một kho điều phối cấp được cho nhiều khu, một nhà máy có nhiều kho điều phối.';
+comment on table work_area is 'Khu vực làm việc, 3 loại: sản xuất nguyên liệu hỗn hợp (HH) / sản xuất bán thành phẩm (BTP) / chiết rót & đóng gói (gộp 1 khu — chốt 05/11). Khu HH, BTP có khối lượng mẻ tối đa và dàn silo riêng (equipment loại SILO, Admin cấu hình ngay trong khu — sửa 19/10 đợt 2). Loại lệnh SX theo khu; KL mẻ của lệnh ≤ mức tối đa của khu. Không đổi loại khu khi còn lệnh chưa hoàn thành (trigger); không xóa, chỉ ngừng dùng. Công nhân gắn khu; PC C# chỉ hiện lệnh / mẻ của khu; mỗi khu một hàng đợi phát lệnh. Sửa 04/11: mỗi khu chọn 1 kho điều phối cấp NVL (`supply_warehouse_id`); một kho điều phối cấp được cho nhiều khu, một nhà máy có nhiều kho điều phối.';
 comment on column work_area.area_type is 'loại lệnh SX theo loại khu (HH / BTP); không đổi khi khu còn lệnh chưa hoàn thành (trigger)';
 comment on column work_area.max_batch_kg is 'khối lượng mẻ tối đa (kg) — bắt buộc với khu HH / BTP; KL mẻ của lệnh không được vượt';
 comment on column work_area.supply_warehouse_id is 'kho điều phối cấp NVL cho khu (chốt 04/11) — bắt buộc với khu HH / BTP; kho loại DIEU_PHOI cùng nhà máy (trigger)';
@@ -96,7 +96,7 @@ comment on column app_user.job_title is 'chức danh';
 comment on column app_user.home_factory_id is 'nhà máy chính; phạm vi quyền nằm ở user_role';
 comment on column app_user.is_worker is 'công nhân SX / đóng gói';
 comment on column app_user.work_area_id is 'bắt buộc với công nhân';
-comment on column app_user.badge_code is 'mã thẻ NV: chỉ để đăng nhập PC xưởng; bắt buộc với công nhân, không bắt buộc với người khác';
+comment on column app_user.badge_code is 'mã thẻ NV: chỉ để đăng nhập PC xưởng; bắt buộc với công nhân, không bắt buộc với người khác; khi tạo tài khoản nhập tay mã in trên thẻ, không quét (05/11)';
 comment on column app_user.password_hash is 'quy tắc mật khẩu cố định trong code: ≥ 8 ký tự, có cả chữ và số (không phải tham số)';
 comment on column app_user.must_change_password is 'đăng nhập lần đầu / sau khi Admin cấp mật khẩu tạm: bắt đổi';
 comment on column app_user.status is 'KHOA_TAM: quên mật khẩu / không đăng nhập; DA_KHOA: nghỉ việc';
@@ -164,6 +164,24 @@ comment on table role_permission is 'Bảng Vai trò × Thao tác, nạp sẵn t
 comment on column role_permission.scope_mode is 'phạm vi của quyền (chốt 04/11)';
 comment on column role_permission.scope_factory_id is 'nhà máy cố định (chỉ khi CO_DINH)';
 
+create table user_permission (
+  id uuid not null default gen_random_uuid(),
+  user_id uuid not null,
+  permission_id uuid not null,
+  effect text not null,
+  revoked_at timestamptz,
+  revoked_by uuid,
+  created_at timestamptz not null default now(),
+  created_by uuid not null,
+  primary key (id),
+  check (effect in ('THEM', 'BO')),
+  check (user_id <> created_by),
+  check (revoked_by is null or revoked_by <> user_id)
+);
+create unique index ux_user_permission_0 on user_permission (user_id, permission_id) where revoked_at is null;
+comment on table user_permission is 'Phân quyền từng người (chốt 05/11): vai trò cho bộ quyền gốc (role_permission); HR / Admin tick bỏ hoặc thêm từng quyền riêng cho 1 tài khoản — dòng THEM cấp thêm quyền ngoài vai trò, dòng BO gỡ 1 quyền của vai trò. Quyền thực của người = quyền các vai trò còn hiệu lực − BO + THEM (v_user_screen). Phạm vi nhà máy của quyền thêm theo phạm vi vai trò của người đó. Không ai tự phân quyền cho mình (check). Thôi áp dụng = ghi revoked_at, không xóa dòng; xóa tài khoản chưa dùng thì xóa luôn.';
+comment on column user_permission.effect is 'THEM: thêm quyền ngoài bộ quyền gốc của vai trò; BO: bỏ 1 quyền của vai trò';
+
 create table screen (
   id uuid not null default gen_random_uuid(),
   code text not null,
@@ -223,7 +241,7 @@ create table user_role (
   check (valid_until is null or valid_until > valid_from)
 );
 create unique index ux_user_role_0 on user_role (user_id, role_id, scope_type, factory_id, warehouse_id, work_area_id) nulls not distinct where revoked_at is null;
-comment on table user_role is 'Gán vai trò cho tài khoản kèm phạm vi: toàn hệ thống / nhà máy / kho / khu vực làm việc → Quyền = vai trò × thao tác × phạm vi. Đổi vai trò = thu hồi dòng cũ + thêm dòng mới trong 1 giao dịch. Không ai tự gán / tự gỡ vai trò của chính mình (check); vai trò chỉ Admin gán thì trigger kiểm người gán là Admin. Ủy quyền tạm sinh dòng có valid_until, đến hạn tự gỡ.';
+comment on table user_role is 'Gán vai trò cho tài khoản kèm phạm vi (vai trò cho bộ quyền gốc; quyền riêng từng người ở user_permission — 05/11): toàn hệ thống / nhà máy / kho / khu vực làm việc → Quyền = vai trò × thao tác × phạm vi. Đổi vai trò = thu hồi dòng cũ + thêm dòng mới trong 1 giao dịch. Không ai tự gán / tự gỡ vai trò của chính mình (check); vai trò chỉ Admin gán thì trigger kiểm người gán là Admin. Ủy quyền tạm sinh dòng có valid_until, đến hạn tự gỡ.';
 comment on column user_role.valid_until is 'hết hạn — chỉ với vai trò ủy quyền tạm';
 comment on column user_role.delegation_id is 'dòng sinh từ ủy quyền tạm';
 
@@ -417,7 +435,7 @@ create table material (
   check (not (id = any(incompatible_material_ids))),
   check (min_stock_qty is null or min_stock_qty >= 0)
 );
-comment on table material is 'Danh mục NVL: bột, phụ gia, bao bì (lon, thùng, nắp…). Mã đã có giao dịch thì khóa ĐVT (QT02 f1). Lô bao bì là lô của NVL nhóm BAO_BI. Sửa 04/11: tối đa 5 ảnh, nguyên liệu kỵ nhau (chọn nhiều), tồn tối thiểu + cách bù, ghi chú; NVL (trừ HON_HOP) bắt buộc ít nhất 1 chỉ tiêu COA đang dùng (trigger kiểm lúc COMMIT).';
+comment on table material is 'Danh mục NVL: bột, phụ gia, bao bì (lon, thùng, nắp…). Mã đã có giao dịch thì khóa ĐVT (QT02 f1). Lô bao bì là lô của NVL nhóm BAO_BI. Sửa 04/11: tối đa 5 ảnh, nguyên liệu kỵ nhau (chọn nhiều), tồn tối thiểu + cách bù, ghi chú; sửa 05/11: quy cách đóng gói nhiều cấp (material_pack) như SP; NVL (trừ HON_HOP) bắt buộc ít nhất 1 chỉ tiêu COA đang dùng (trigger kiểm lúc COMMIT).';
 comment on column material.code is 'hệ thống tự sinh theo code_format, vd NVL-BOT-0001; không sửa';
 comment on column material.material_group is 'vào mã: BOT → BOT, PHU_GIA → PGA, BAO_BI → BBI, HON_HOP → HHP; HON_HOP = NVL hỗn hợp (bao HH) — tạm đặt ở đây, xem câu hỏi';
 comment on column material.shelf_life_days is 'HSD chuẩn';
@@ -455,6 +473,50 @@ create table material_spec_item (
 create unique index ux_material_spec_item_0 on material_spec_item (material_id, criterion_code) where status = 'DANG_DUNG';
 comment on table material_spec_item is 'Bộ chỉ tiêu COA và giới hạn của từng NVL (nhà máy tự nhập). Kiểm COA tự động khi nhập (QT14) và so kết quả QC NVL (QT22). Kết quả kiểm luôn chép lại giới hạn lúc kiểm, nên sửa giới hạn không làm sai kết quả cũ. Mỗi NVL mua (không phải HON_HOP) bắt buộc ít nhất 1 chỉ tiêu COA (chốt 04/11). Kiểm COA & HSD trước khi lập PO dùng bộ này (purchase_order_coa_result).';
 
+create table material_pack (
+  id uuid not null default gen_random_uuid(),
+  material_id uuid not null,
+  line_no integer not null,
+  pack_tool text not null,
+  status text not null default 'DANG_DUNG',
+  created_at timestamptz not null default now(),
+  created_by uuid not null,
+  updated_at timestamptz,
+  updated_by uuid,
+  primary key (id),
+  check (status in ('DANG_DUNG', 'NGUNG_DUNG')),
+  unique (material_id, line_no),
+  check (line_no > 0)
+);
+comment on table material_pack is 'Quy cách đóng gói của 1 NVL (chốt 05/11, cùng kiểu quy cách SP): 1 NVL có ít nhất 1 quy cách; mỗi quy cách chọn dụng cụ đóng gói (Bao / Thùng / Túi / Chai…) và các cấp (material_pack_level, vd Túi → Thùng). Dụng cụ và tên cấp chọn từ danh sách, thêm được qua "+ Khác". NVL đã có lô nhập thì khóa quy cách cũ; xóa được khi chưa dùng (khóa ngoại chặn).';
+comment on column material_pack.line_no is 'thứ tự quy cách trong NVL';
+comment on column material_pack.pack_tool is 'dụng cụ đóng gói cấp trong cùng, vd Bao / Thùng / Túi / Chai';
+
+create table material_pack_level (
+  id uuid not null default gen_random_uuid(),
+  pack_id uuid not null,
+  level_no integer not null,
+  unit_name text not null,
+  child_qty integer,
+  net_qty numeric(12,3),
+  net_uom_code text,
+  created_at timestamptz not null default now(),
+  created_by uuid not null,
+  primary key (id),
+  unique (pack_id, level_no),
+  check (level_no > 0),
+  check ((level_no = 1) = (child_qty is null)),
+  check (child_qty is null or child_qty > 0),
+  check (level_no <> 1 or (net_qty is not null and net_uom_code is not null)),
+  check (net_qty is null or net_qty > 0)
+);
+comment on table material_pack_level is 'Cấp của quy cách NVL (chốt 05/11): cấp 1 = đơn vị nhỏ nhất (bao / túi / chai) có khối lượng tịnh (bao bì: số cái); cấp trên ghi số đơn vị cấp dưới (vd 1 thùng = 10 túi). Không trộn khối lượng, thể tích và số cái trong một quy cách.';
+comment on column material_pack_level.level_no is '1 = trong cùng';
+comment on column material_pack_level.unit_name is 'tên đơn vị của cấp, vd Bao, Túi, Thùng';
+comment on column material_pack_level.child_qty is 'số đơn vị tầng dưới trong 1 đơn vị tầng này (tầng 1 để trống)';
+comment on column material_pack_level.net_qty is 'khối lượng / thể tích tịnh mỗi đơn vị — bắt buộc ở tầng 1';
+comment on column material_pack_level.net_uom_code is 'mg / g / kg / yến / tạ / tấn / ml / l / cái (bao bì)';
+
 create table product (
   id uuid not null default gen_random_uuid(),
   code text not null,
@@ -490,7 +552,7 @@ comment on column product.class_option_id is 'Phân loại, vd Cao cấp / Trung
 comment on column product.age_option_id is 'Độ tuổi, vd 1–3 tuổi';
 comment on column product.company_name is 'tên công ty chủ sản phẩm (in trên nhãn)';
 comment on column product.made_at_factory_id is 'nơi sản xuất';
-comment on column product.extra_attributes is 'mục khác [{t, v}] — vd Thương hiệu: Nhãn A (gõ tự do, thay bảng thương hiệu)';
+comment on column product.extra_attributes is 'mục khác [{t, ty, v, unit, opts}] — ty: text / num / date / bool / list / long / file (loại ô nhập, 05/11); num có đơn vị, list có các lựa chọn; vd Thương hiệu: Nhãn A';
 comment on column product.can_barcode is 'mã in sẵn trên bao bì lon để kiểm "đúng nhãn hiệu của mẻ"';
 
 create table product_option (
@@ -504,12 +566,12 @@ create table product_option (
   updated_at timestamptz,
   updated_by uuid,
   primary key (id),
-  check (option_kind in ('CAU_TRUC', 'NHOM', 'PHAN_LOAI', 'DO_TUOI')),
+  check (option_kind in ('CAU_TRUC', 'NHOM', 'PHAN_LOAI', 'DO_TUOI', 'HINH_THUC_CONG_BO')),
   check (status in ('DANG_DUNG', 'NGUNG_DUNG')),
   check (sort_order >= 0)
 );
 create unique index ux_product_option_0 on product_option (option_kind, lower(name));
-comment on table product_option is 'Lựa chọn của các ô chọn ở SP (chốt 04/11): Cấu trúc, Nhóm, Phân loại, Độ tuổi — thay các danh mục thương hiệu / dòng / hạng. Xóa được khi chưa SP nào dùng (khóa ngoại chặn); đã dùng thì ngừng dùng.';
+comment on table product_option is 'Lựa chọn của các ô chọn ở SP (chốt 04/11): Cấu trúc, Nhóm, Phân loại, Độ tuổi, Hình thức công bố (05/11 — mặc định Tự công bố, Đăng ký bản công bố; thêm được qua "+ Khác") — thay các danh mục thương hiệu / dòng / hạng. Xóa được khi chưa SP nào dùng (khóa ngoại chặn); đã dùng thì ngừng dùng.';
 
 create table product_pack (
   id uuid not null default gen_random_uuid(),
@@ -586,7 +648,7 @@ create table product_document (
   id uuid not null default gen_random_uuid(),
   product_id uuid not null,
   doc_kind text not null,
-  declaration_kind text,
+  declaration_option_id uuid,
   doc_type text,
   doc_no text not null,
   issued_date date,
@@ -599,16 +661,15 @@ create table product_document (
   updated_by uuid,
   primary key (id),
   check (doc_kind in ('CONG_BO', 'RIENG')),
-  check (declaration_kind in ('TU_CONG_BO', 'DANG_KY')),
   check (status in ('DANG_DUNG', 'NGUNG_DUNG')),
-  check (doc_kind <> 'CONG_BO' or (declaration_kind is not null and issued_date is not null and file_id is not null)),
-  check (doc_kind = 'CONG_BO' or declaration_kind is null),
+  check (doc_kind <> 'CONG_BO' or (declaration_option_id is not null and issued_date is not null and file_id is not null)),
+  check (doc_kind = 'CONG_BO' or declaration_option_id is null),
   check (exp_date is null or issued_date is null or exp_date > issued_date)
 );
 create unique index ux_product_document_0 on product_document (product_id) where doc_kind = 'CONG_BO' and status = 'DANG_DUNG';
 comment on table product_document is 'Hồ sơ pháp lý riêng của 1 SP (chốt 04/11): bản công bố sản phẩm (bắt buộc với SP dùng cho lệnh BTP — tự công bố hoặc đăng ký bản công bố, số, ngày, file) và các hồ sơ riêng khác (loại, số, hạn, file). Hồ sơ dùng chung nhiều SP ở legal_document.';
 comment on column product_document.doc_kind is 'CONG_BO: bản công bố sản phẩm; RIENG: hồ sơ riêng khác';
-comment on column product_document.declaration_kind is 'hình thức công bố (chỉ CONG_BO)';
+comment on column product_document.declaration_option_id is 'hình thức công bố (chỉ CONG_BO) — lựa chọn loại HINH_THUC_CONG_BO (05/11)';
 comment on column product_document.doc_type is 'loại hồ sơ (RIENG)';
 comment on column product_document.issued_date is 'ngày công bố / tiếp nhận / cấp';
 comment on column product_document.exp_date is 'hết hạn (trống = không thời hạn)';
@@ -637,12 +698,12 @@ create table legal_document (
   check (remind_days >= 0),
   check (exp_date is null or issued_date is null or exp_date > issued_date)
 );
-comment on table legal_document is 'Hồ sơ pháp lý chung (màn Danh mục › Hồ sơ pháp lý chung — chốt 04/11): giấy tờ doanh nghiệp, ATTP, chứng nhận thị trường, quảng cáo…; phạm vi áp dụng: mọi SP, SP của nhà máy, hoặc SP chọn (legal_document_scope). Hạn trống = không thời hạn; nhắc trước hạn N ngày. Trạng thái Hiệu lực / Sắp hết hạn / Hết hạn tính từ hạn, không lưu. Xóa được (chưa có bảng nào trỏ tới).';
+comment on table legal_document is 'Hồ sơ pháp lý chung (màn Danh mục › Hồ sơ pháp lý chung — chốt 04/11): giấy tờ doanh nghiệp, ATTP, chứng nhận thị trường, quảng cáo…; phạm vi áp dụng: mọi SP, SP của nhà máy, hoặc SP chọn (legal_document_scope). Hạn trống = không thời hạn; nhắc trước hạn N ngày. Trạng thái Hiệu lực / Sắp hết hạn (còn ≤ 30 ngày — chốt 05/11) / Hết hạn tính từ hạn, không lưu; màn có thanh cảnh báo số hồ sơ sắp hết hạn / đã hết hạn và lọc nhanh hồ sơ cần gia hạn. Xóa được (chưa có bảng nào trỏ tới).';
 comment on column legal_document.code is 'HS-0001 (code_format HO_SO_PHAP_LY)';
 comment on column legal_document.doc_type is 'vd Pháp lý doanh nghiệp, An toàn thực phẩm, Chứng nhận thị trường';
 comment on column legal_document.issuing_org is 'cơ quan cấp';
 comment on column legal_document.exp_date is 'trống = không thời hạn';
-comment on column legal_document.remind_days is 'nhắc trước hạn N ngày';
+comment on column legal_document.remind_days is 'nhắc trước hạn N ngày (thông báo); trạng thái Sắp hết hạn cố định ≤ 30 ngày (05/11)';
 comment on column legal_document.scope is 'NHA_MAY: SP sản xuất tại nhà máy chọn; CHON_SP: SP chọn';
 comment on column legal_document.file_ids is 'các file của hồ sơ';
 
@@ -732,7 +793,7 @@ create table formula (
   unique (code),
   check (code ~ ('^CT-' || formula_kind || '-[0-9]{4,}$'))
 );
-comment on table formula is 'Công thức (HH hoặc BTP), thuộc phân hệ Sản xuất. Mã do hệ thống tự sinh CT-{loại}-{4 số} (sửa 20/10 đợt 3: 2 → 4 số), không sửa. Nội dung nằm ở phiên bản.';
+comment on table formula is 'Công thức (HH hoặc BTP), thuộc phân hệ Sản xuất. Mã do hệ thống tự sinh CT-{loại}-{4 số} (sửa 20/10 đợt 3: 2 → 4 số), không sửa. Nội dung nằm ở phiên bản. Sao chép (05/11): tạo công thức mới từ phiên bản hiện hành (thành phần, KL mẻ, mặt hàng) — mã mới cấp như tạo mới, không chép phiên bản / lịch sử.';
 comment on column formula.code is 'hệ thống tự sinh CT-{loại}-{4 số} (loại HH / BTP, vd CT-HH-0001, CT-BTP-0002); không sửa';
 
 create table formula_version (
@@ -740,9 +801,6 @@ create table formula_version (
   formula_id uuid not null,
   version_no integer not null,
   batch_weight_kg numeric(12,3) not null,
-  mixing_time_min numeric(8,2),
-  mixing_speed_rpm numeric(8,2),
-  mixing_params jsonb,
   effective_from timestamptz not null default now(),
   superseded_at timestamptz,
   is_current boolean not null default true,
@@ -751,16 +809,11 @@ create table formula_version (
   created_by uuid not null,
   primary key (id),
   unique (formula_id, version_no),
-  check (batch_weight_kg > 0),
-  check (mixing_time_min is null or mixing_time_min > 0),
-  check (mixing_speed_rpm is null or mixing_speed_rpm > 0)
+  check (batch_weight_kg > 0)
 );
 create unique index ux_formula_version_0 on formula_version (formula_id) where is_current;
-comment on table formula_version is 'Phiên bản công thức. Chỉ ghi nhận, không duyệt: lưu là có hiệu lực, bản cũ hết hiệu lực nhưng giữ nguyên để truy xuất; lệnh đã phát giữ phiên bản cũ. Không sửa dòng đã lưu. Màn Công thức hiện lệnh nào đang chạy phiên bản cũ: production_order.formula_version_id trỏ tới phiên bản is_current = false, lệnh DANG_CHAY.';
+comment on table formula_version is 'Phiên bản công thức. Chỉ ghi nhận, không duyệt: lưu là có hiệu lực, bản cũ hết hiệu lực nhưng giữ nguyên để truy xuất; lệnh đã phát giữ phiên bản cũ. Không sửa dòng đã lưu. Bỏ thông số trộn chuẩn (thời gian, tốc độ) — chốt 05/11. Màn Công thức hiện lệnh nào đang chạy phiên bản cũ: production_order.formula_version_id trỏ tới phiên bản is_current = false, lệnh DANG_CHAY.';
 comment on column formula_version.batch_weight_kg is 'KL mẻ';
-comment on column formula_version.mixing_time_min is 'thời gian trộn chuẩn (phút)';
-comment on column formula_version.mixing_speed_rpm is 'tốc độ trộn chuẩn (vòng / phút)';
-comment on column formula_version.mixing_params is 'thông số trộn khác (QT03 t1); thứ tự nạp ở formula_item.load_order (04/11)';
 
 create table formula_item (
   id uuid not null default gen_random_uuid(),
@@ -768,20 +821,18 @@ create table formula_item (
   line_no integer not null,
   material_id uuid not null,
   qty_kg numeric(12,3) not null,
-  tolerance_kg numeric(12,3) not null,
   load_order integer,
   created_at timestamptz not null default now(),
   created_by uuid not null,
   primary key (id),
   unique (formula_version_id, line_no),
   unique (formula_version_id, material_id),
-  check (qty_kg > 0 and tolerance_kg >= 0),
+  check (qty_kg > 0),
   check (load_order is null or load_order > 0)
 );
 create unique index ux_formula_item_0 on formula_item (formula_version_id, load_order) where load_order is not null;
-comment on table formula_item is 'Thành phần của phiên bản: NVL (hoặc NVL hỗn hợp), KL / mẻ, dung sai. Tổng KL thành phần = KL mẻ (kiểm khi lưu, QT03 y1).';
-comment on column formula_item.tolerance_kg is 'dung sai từng thành phần';
-comment on column formula_item.load_order is 'thứ tự nạp của thành phần (thông số trộn chuẩn — 04/11)';
+comment on table formula_item is 'Thành phần của phiên bản: NVL (hoặc NVL hỗn hợp), KL / mẻ (bỏ dung sai — chốt 05/11). Tổng KL thành phần = KL mẻ (kiểm khi lưu, QT03 y1).';
+comment on column formula_item.load_order is 'thứ tự nạp = thứ tự dòng trong công thức (đổi bằng nút lên / xuống — 05/11)';
 
 create table label_incident (
   id uuid not null default gen_random_uuid(),
@@ -1821,7 +1872,7 @@ create table customer (
   check (default_credit_days is null or default_credit_days >= 0)
 );
 create unique index ux_customer_0 on customer (tax_code) where tax_code is not null;
-comment on table customer is 'Khách hàng. Hạn mức luôn vĩnh viễn (không có cột hạn mức tạm, không có ngày hết hạn). Cờ tạm khóa do nợ quá hạn chỉ chặn đơn Mua chịu. Bỏ trạng thái "mất" (24/10).';
+comment on table customer is 'Khách hàng. Hạn mức luôn vĩnh viễn (không có cột hạn mức tạm, không có ngày hết hạn). Cờ tạm khóa do nợ quá hạn chỉ chặn đơn Mua chịu. Bỏ trạng thái "mất" (24/10). Sửa 05/11: bỏ hợp đồng ở hồ sơ khách — hợp đồng tải theo từng đơn (sales_order_version).';
 comment on column customer.contact_title is 'chức vụ';
 comment on column customer.phone is 'bắt buộc ở cloud (trg_masked_required)';
 comment on column customer.bank_account is 'số tài khoản của khách';
@@ -1895,23 +1946,27 @@ create table sales_order (
   refund_amount numeric(18,2),
   retained_amount numeric(18,2),
   cancel_approved_by uuid,
+  delivery_approved_by uuid,
+  delivery_approved_at timestamptz,
   created_at timestamptz not null default now(),
   created_by uuid not null,
   updated_at timestamptz,
   updated_by uuid,
   primary key (id),
-  check (status in ('NHAP', 'CHO_KIEM_CONG_NO', 'CHO_XU_LY_NO', 'CHO_DUYET_HAN_MUC', 'CHO_KHACH', 'CHO_KY_HD', 'CHO_THU_TIEN', 'DA_CHOT', 'DANG_SAN_XUAT', 'SAN_SANG_GIAO', 'DANG_GIAO', 'GIAO_MOT_PHAN', 'DA_GIAO', 'CHO_DUYET_HUY', 'DANG_HUY', 'TU_CHOI', 'DA_HUY')),
+  check (status in ('NHAP', 'CHO_KIEM_CONG_NO', 'CHO_XU_LY_NO', 'CHO_DUYET_HAN_MUC', 'CHO_KHACH', 'CHO_THU_TIEN', 'DA_CHOT', 'DANG_SAN_XUAT', 'CHO_NHAP_KHO', 'CHO_KE_TOAN_DUYET', 'CHO_XUAT_KHO', 'SAN_SANG_GIAO', 'DANG_GIAO', 'GIAO_MOT_PHAN', 'DA_GIAO', 'CHO_DUYET_HUY', 'DANG_HUY', 'TU_CHOI', 'DA_HUY')),
   unique (code),
-  check (status <> 'DA_HUY' or cancel_reason is not null)
+  check (status <> 'DA_HUY' or cancel_reason is not null),
+  check ((delivery_approved_by is null) = (delivery_approved_at is null))
 );
-comment on table sales_order is 'Đầu đơn (phần không đổi theo phiên bản): khách, nhà máy SX / giao, Sales, trạng thái, số phiên bản hiện tại. Không xóa đơn: hủy = trạng thái DA_HUY. Sửa 04/11: Sales hủy thẳng đơn ở Chờ ký HĐ / Chờ thu tiền, không cần duyệt; từ Đã chốt trở đi hủy qua Chờ duyệt hủy → Đang hủy.';
+comment on table sales_order is 'Đầu đơn (phần không đổi theo phiên bản): khách, nhà máy SX / giao, Sales, trạng thái, số phiên bản hiện tại. Không xóa đơn: hủy = trạng thái DA_HUY. Sửa 04/11: Sales hủy thẳng đơn chưa chốt (Chờ thu tiền; Chờ ký HĐ bỏ 05/11), không cần duyệt; từ Đã chốt trở đi hủy qua Chờ duyệt hủy → Đang hủy.';
 comment on column sales_order.delivery_address is 'địa chỉ giao của đơn (mặc định từ khách)';
-comment on column sales_order.status is 'theo mockup (04/11): thêm Chờ kiểm công nợ, Đang sản xuất, Chờ duyệt hủy, Đang hủy';
+comment on column sales_order.status is 'theo mockup (04/11): thêm Chờ kiểm công nợ, Đang sản xuất, Chờ duyệt hủy, Đang hủy; 05/11: bỏ Chờ ký HĐ (hợp đồng tải theo từng đơn, chưa có / hết hạn thì chưa chốt được); lô SX cho đơn QC đạt: Chờ nhập kho → Chờ kế toán duyệt (Cọc + trả nốt / Mua nợ; Trả đủ bỏ qua) → Chờ xuất kho → Đang giao; Sẵn sàng giao còn cho đơn gắn lô tồn';
 comment on column sales_order.status_changed_at is 'mốc tính "chờ quá 3 / 7 ngày"';
-comment on column sales_order.cancelled_by is 'người hủy — Sales hủy thẳng ở Chờ ký HĐ / Chờ thu tiền (04/11)';
+comment on column sales_order.cancelled_by is 'người hủy — Sales hủy thẳng ở Chờ thu tiền (04/11)';
 comment on column sales_order.refund_amount is 'số hoàn khi hủy (QT07)';
 comment on column sales_order.retained_amount is 'phần giữ lại';
-comment on column sales_order.cancel_approved_by is 'GĐ hoặc KTT duyệt hủy (đơn từ Đã chốt trở đi, qua Chờ duyệt hủy); hủy thẳng ở Chờ ký HĐ / Chờ thu tiền không cần (04/11)';
+comment on column sales_order.cancel_approved_by is 'GĐ hoặc KTT duyệt hủy (đơn từ Đã chốt trở đi, qua Chờ duyệt hủy); hủy thẳng ở Chờ thu tiền không cần (04/11)';
+comment on column sales_order.delivery_approved_by is 'Kế toán duyệt xuất giao sau khi nhập kho (QT09 kd — 05/11): Mua nợ kiểm công nợ; Cọc + trả nốt ghi nhận phần còn lại; Trả đủ không cần';
 
 create table sales_order_version (
   id uuid not null default gen_random_uuid(),
@@ -1927,7 +1982,10 @@ create table sales_order_version (
   total_before_vat numeric(18,2),
   vat_amount numeric(18,2),
   total_amount numeric(18,2),
-  contract_file_id uuid,
+  contract_file_ids uuid[],
+  contract_no text,
+  contract_valid_from date,
+  contract_valid_to date,
   signed_at timestamptz,
   change_reason text,
   superseded_at timestamptz,
@@ -1941,10 +1999,12 @@ create table sales_order_version (
   check (payment_method <> 'MUA_CHIU' or credit_days is not null),
   check (version_no = 1 or change_reason is not null),
   check (deposit_amount is null or deposit_amount >= 0),
-  check (vat_pct is null or vat_pct between 0 and 100)
+  check (vat_pct is null or vat_pct between 0 and 100),
+  check ((contract_no is null) = (coalesce(cardinality(contract_file_ids), 0) = 0)),
+  check (contract_valid_to is null or contract_valid_from is null or contract_valid_to >= contract_valid_from)
 );
 create unique index ux_sales_order_version_0 on sales_order_version (sales_order_id) where superseded_at is null;
-comment on table sales_order_version is 'Phiên bản đơn: điều khoản thương mại + HĐ / phụ lục. Sửa đơn đã chốt → thêm phiên bản mới; dòng cũ không bao giờ sửa.';
+comment on table sales_order_version is 'Phiên bản đơn: điều khoản thương mại + HĐ / phụ lục. Sửa đơn đã chốt → thêm phiên bản mới; dòng cũ không bao giờ sửa. Sửa 05/11: hợp đồng tải theo từng đơn (số, hiệu lực từ – đến, file) — chưa có hoặc hết hạn thì chưa chốt được đơn.';
 comment on column sales_order_version.payment_method is 'bắt buộc ở cloud (trg_masked_required); KHONG_THU: đơn đổi lô thu hồi (04/11)';
 comment on column sales_order_version.deposit_pct is 'bắt buộc ở cloud (trg_masked_required)';
 comment on column sales_order_version.credit_days is 'số ngày nợ (Mua chịu)';
@@ -1955,7 +2015,10 @@ comment on column sales_order_version.delivery_date is 'ngày giao ở đầu đ
 comment on column sales_order_version.total_before_vat is 'bắt buộc ở cloud (trg_masked_required)';
 comment on column sales_order_version.vat_amount is 'bắt buộc ở cloud (trg_masked_required)';
 comment on column sales_order_version.total_amount is 'bắt buộc ở cloud (trg_masked_required)';
-comment on column sales_order_version.contract_file_id is 'HĐ (bản 1) / phụ lục (bản sau)';
+comment on column sales_order_version.contract_file_ids is 'bản 1: file hợp đồng khách đã ký cho đơn — nhập khi tạo đơn hoặc upload ở chi tiết đơn (05/11); bản sau: phụ lục';
+comment on column sales_order_version.contract_no is 'số hợp đồng của đơn (05/11)';
+comment on column sales_order_version.contract_valid_from is 'hợp đồng hiệu lực từ ngày (05/11)';
+comment on column sales_order_version.contract_valid_to is 'hợp đồng hiệu lực đến ngày; quá ngày thì chưa chốt được đơn (05/11)';
 
 create table sales_order_line (
   id uuid not null default gen_random_uuid(),
@@ -2645,10 +2708,10 @@ create table production_order (
   planned_batch_count integer not null,
   makeup_batch_count integer not null default 0,
   batch_weight_kg numeric(12,3) not null,
+  loss_pct numeric(5,2) not null default 0,
   order_received_at timestamptz,
   planned_finish_date date,
   marketing_user_id uuid,
-  origin_docs_file_id uuid not null,
   status text not null default 'MOI_TAO',
   material_reserved_at timestamptz,
   queue_priority integer,
@@ -2692,20 +2755,21 @@ create table production_order (
   check (ended_early_at is null or (status = 'HOAN_THANH' and early_end_reason is not null and actual_batch_count is not null)),
   check (demand_kind <> 'TON_KHO' or sales_order_id is null),
   check (nm_check_result is distinct from 'KHONG_DAT' or nm_check_fail_reason is not null),
-  check ((nm_check_result is null) = (nm_checked_at is null))
+  check ((nm_check_result is null) = (nm_checked_at is null)),
+  check (loss_pct between 0 and 50)
 );
 create index ix_production_order_0 on production_order (work_area_id, status);
-comment on table production_order is 'Lệnh SX. Không tạo được ở server nhà máy. Lệnh đã phát giữ phiên bản công thức lúc phát. Sửa 19/10 (đợt 2): lệnh thuộc 1 khu (loại lệnh theo khu, KL mẻ ≤ mức tối đa của khu); 9 điều kiện tạo theo thứ tự (khu · đơn & khách · công thức · thời gian · NV tiếp thị · số mẻ & KL mẻ · tệp giấy tờ xuất xứ NVL · tồn NVL · dàn silo); phương án silo ở production_order_silo, chốt khi tạo (kiểm lúc COMMIT), kiểm lại khi phát. Mỗi khu một hàng đợi = thứ tự chạy ở nhà máy (queue_priority, lệnh MOI_TAO / CHO_PHAT; phát lệnh đầu hàng, lệnh Chờ phát giữ vị trí). Trạng thái MOI_TAO → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY (từ MOI_TAO / CHO_PHAT / DA_NHAN, bắt buộc lý do, tự giải phóng giữ chỗ). Không nháp, không xóa (trigger). Sửa 19/10 (đợt 3): chỉ sửa lệnh MOI_TAO; lệnh đã phát chỉ hủy — Chờ phát / Đã nhận cần nhà máy xác nhận chưa chạy mẻ; lệnh đang chạy chỉ kết thúc sớm (lý do, số mẻ thực tế, không có mẻ đang chạy dở) hoặc thêm mẻ bù; HOÀN THÀNH chỉ khi mọi nút silo của lệnh đã xả sạch (trigger). Sửa 24/10 (đợt 12): tồn NVL không chặn tạo lệnh — thiếu thì lệnh MOI_TAO không giữ chỗ (material_reserved_at null = Chờ NVL), không phát được (trigger); Kiểm tra lại đủ thì giữ chỗ, ghi material_reserved_at. Sửa 04/11: có lệnh sản xuất tồn kho (demand_kind TON_KHO, nhu cầu đơn không bắt buộc); lệnh BTP thêm 2 điều kiện: SP có bản công bố còn hiệu lực và quy cách có mẫu nhãn đã duyệt (trigger trên production_order_brand).';
+comment on table production_order is 'Lệnh SX. Không tạo được ở server nhà máy. Lệnh đã phát giữ phiên bản công thức lúc phát. Sửa 19/10 (đợt 2): lệnh thuộc 1 khu (loại lệnh theo khu, KL mẻ ≤ mức tối đa của khu); 9 điều kiện tạo theo thứ tự (khu · đơn & khách · công thức · thời gian · NV tiếp thị · số mẻ & KL mẻ · tệp giấy tờ xuất xứ NVL · tồn NVL · dàn silo — sửa 05/11: bỏ giấy tờ xuất xứ NVL, thêm % hao hụt bù vào khối lượng phải sản xuất); phương án silo ở production_order_silo, chốt khi tạo (kiểm lúc COMMIT), kiểm lại khi phát. Mỗi khu một hàng đợi = thứ tự chạy ở nhà máy (queue_priority, lệnh MOI_TAO / CHO_PHAT; phát lệnh đầu hàng, lệnh Chờ phát giữ vị trí). Trạng thái MOI_TAO → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY (từ MOI_TAO / CHO_PHAT / DA_NHAN, bắt buộc lý do, tự giải phóng giữ chỗ). Không nháp, không xóa (trigger). Sửa 19/10 (đợt 3): chỉ sửa lệnh MOI_TAO; lệnh đã phát chỉ hủy — Chờ phát / Đã nhận cần nhà máy xác nhận chưa chạy mẻ; lệnh đang chạy chỉ kết thúc sớm (lý do, số mẻ thực tế, không có mẻ đang chạy dở) hoặc thêm mẻ bù; HOÀN THÀNH chỉ khi mọi nút silo của lệnh đã xả sạch (trigger). Sửa 24/10 (đợt 12): tồn NVL không chặn tạo lệnh — thiếu thì lệnh MOI_TAO không giữ chỗ (material_reserved_at null = Chờ NVL), không phát được (trigger); Kiểm tra lại đủ thì giữ chỗ, ghi material_reserved_at. Sửa 04/11: có lệnh sản xuất tồn kho (demand_kind TON_KHO, nhu cầu đơn không bắt buộc); lệnh BTP thêm 2 điều kiện: SP có bản công bố còn hiệu lực và quy cách có mẫu nhãn đã duyệt (trigger trên production_order_brand).';
 comment on column production_order.order_kind is 'theo loại khu của work_area (trigger)';
 comment on column production_order.work_area_id is 'khu sản xuất (điều kiện 1); khu HH / BTP đang dùng, cùng nhà máy';
 comment on column production_order.demand_kind is 'TON_KHO: lệnh sản xuất tồn kho, không theo đơn — không gắn đơn (chốt 04/11)';
 comment on column production_order.formula_version_id is 'phiên bản lúc phát; lệnh DANG_CHAY trỏ phiên bản không còn hiệu lực → hiện ở màn Công thức';
 comment on column production_order.makeup_batch_count is 'số mẻ bù vì mẻ hủy do sự cố (QT20 kb); tổng mẻ phải chạy = planned_batch_count + makeup_batch_count';
 comment on column production_order.batch_weight_kg is '≤ work_area.max_batch_kg (trigger)';
+comment on column production_order.loss_pct is '% hao hụt (05/11): khối lượng phải sản xuất = khối lượng cần × (1 + % hao hụt), số mẻ / KL mẻ tính theo số này; 0 = không tính hao hụt';
 comment on column production_order.order_received_at is 'thời gian nhận đơn';
 comment on column production_order.planned_finish_date is 'dự kiến xong';
 comment on column production_order.marketing_user_id is 'NV tiếp thị';
-comment on column production_order.origin_docs_file_id is 'giấy tờ xuất xứ NVL — 1 tệp đính kèm của lệnh, Kế hoạch tải lên khi tạo (bắt buộc); không kiểm chứng từ / COA theo từng lô';
 comment on column production_order.status is 'MOI_TAO (đã giữ chỗ KG, trong hàng đợi) → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY. Chuyển sai thứ tự bị chặn (trigger)';
 comment on column production_order.material_reserved_at is 'lúc giữ chỗ NVL; null = lệnh Chờ NVL (tồn khả dụng chưa đủ khi tạo) — không phát được (trigger), Kế hoạch bấm Kiểm tra lại khi hàng về (24/10 đợt 12)';
 comment on column production_order.queue_priority is 'thứ tự trong hàng đợi của khu = thứ tự chạy ở nhà máy (1 = đầu hàng) — bắt buộc khi MOI_TAO / CHO_PHAT (Chờ phát giữ vị trí); không trùng trong 1 khu (ràng buộc loại trừ, kiểm lúc COMMIT); chỉ phát lệnh không có lệnh Mới tạo / Chờ phát nào đứng trước (trigger)';
@@ -3009,7 +3073,7 @@ create table batch_weight_check (
   primary key (id),
   check (origin_site in ('CLOUD', 'NM'))
 );
-comment on table batch_weight_check is 'KL thực tế so với công thức (cân bao HH theo dung sai).';
+comment on table batch_weight_check is 'KL thực tế so với công thức (cân bao HH so với KL công thức — công thức không còn dung sai (05/11)).';
 
 create table filling_can_weight (
   id uuid not null default gen_random_uuid(),
@@ -3725,6 +3789,10 @@ alter table role_permission add constraint fk_role_permission_permission_id fore
 alter table role_permission add constraint fk_role_permission_scope_factory_id foreign key (scope_factory_id) references factory (id);
 alter table role_permission add constraint fk_role_permission_revoked_by foreign key (revoked_by) references app_user (id);
 alter table role_permission add constraint fk_role_permission_created_by foreign key (created_by) references app_user (id);
+alter table user_permission add constraint fk_user_permission_user_id foreign key (user_id) references app_user (id);
+alter table user_permission add constraint fk_user_permission_permission_id foreign key (permission_id) references permission (id);
+alter table user_permission add constraint fk_user_permission_revoked_by foreign key (revoked_by) references app_user (id);
+alter table user_permission add constraint fk_user_permission_created_by foreign key (created_by) references app_user (id);
 alter table screen add constraint fk_screen_created_by foreign key (created_by) references app_user (id);
 alter table screen add constraint fk_screen_updated_by foreign key (updated_by) references app_user (id);
 alter table screen_function add constraint fk_screen_function_screen_id foreign key (screen_id) references screen (id);
@@ -3776,6 +3844,12 @@ alter table product add constraint fk_product_created_by foreign key (created_by
 alter table product add constraint fk_product_updated_by foreign key (updated_by) references app_user (id);
 alter table product_option add constraint fk_product_option_created_by foreign key (created_by) references app_user (id);
 alter table product_option add constraint fk_product_option_updated_by foreign key (updated_by) references app_user (id);
+alter table material_pack add constraint fk_material_pack_material_id foreign key (material_id) references material (id);
+alter table material_pack add constraint fk_material_pack_created_by foreign key (created_by) references app_user (id);
+alter table material_pack add constraint fk_material_pack_updated_by foreign key (updated_by) references app_user (id);
+alter table material_pack_level add constraint fk_material_pack_level_pack_id foreign key (pack_id) references material_pack (id);
+alter table material_pack_level add constraint fk_material_pack_level_net_uom_code foreign key (net_uom_code) references uom (code);
+alter table material_pack_level add constraint fk_material_pack_level_created_by foreign key (created_by) references app_user (id);
 alter table product_pack add constraint fk_product_pack_product_id foreign key (product_id) references product (id);
 alter table product_pack add constraint fk_product_pack_created_by foreign key (created_by) references app_user (id);
 alter table product_pack add constraint fk_product_pack_updated_by foreign key (updated_by) references app_user (id);
@@ -3787,6 +3861,7 @@ alter table product_label add constraint fk_product_label_file_id foreign key (f
 alter table product_label add constraint fk_product_label_approved_by foreign key (approved_by) references app_user (id);
 alter table product_label add constraint fk_product_label_created_by foreign key (created_by) references app_user (id);
 alter table product_label add constraint fk_product_label_updated_by foreign key (updated_by) references app_user (id);
+alter table product_document add constraint fk_product_document_declaration_option_id foreign key (declaration_option_id) references product_option (id);
 alter table product_document add constraint fk_product_document_product_id foreign key (product_id) references product (id);
 alter table product_document add constraint fk_product_document_file_id foreign key (file_id) references file_attachment (id);
 alter table product_document add constraint fk_product_document_created_by foreign key (created_by) references app_user (id);
@@ -4058,10 +4133,10 @@ alter table sales_order add constraint fk_sales_order_customer_id foreign key (c
 alter table sales_order add constraint fk_sales_order_sales_user_id foreign key (sales_user_id) references app_user (id);
 alter table sales_order add constraint fk_sales_order_cancelled_by foreign key (cancelled_by) references app_user (id);
 alter table sales_order add constraint fk_sales_order_cancel_approved_by foreign key (cancel_approved_by) references app_user (id);
+alter table sales_order add constraint fk_sales_order_delivery_approved_by foreign key (delivery_approved_by) references app_user (id);
 alter table sales_order add constraint fk_sales_order_created_by foreign key (created_by) references app_user (id);
 alter table sales_order add constraint fk_sales_order_updated_by foreign key (updated_by) references app_user (id);
 alter table sales_order_version add constraint fk_sales_order_version_sales_order_id foreign key (sales_order_id) references sales_order (id);
-alter table sales_order_version add constraint fk_sales_order_version_contract_file_id foreign key (contract_file_id) references file_attachment (id);
 alter table sales_order_version add constraint fk_sales_order_version_created_by foreign key (created_by) references app_user (id);
 alter table sales_order_line add constraint fk_sales_order_line_version_id foreign key (version_id) references sales_order_version (id);
 alter table sales_order_line add constraint fk_sales_order_line_product_id foreign key (product_id) references product (id);
@@ -4197,7 +4272,6 @@ alter table production_order add constraint fk_production_order_work_area_id for
 alter table production_order add constraint fk_production_order_sales_order_id foreign key (sales_order_id) references sales_order (id);
 alter table production_order add constraint fk_production_order_formula_version_id foreign key (formula_version_id) references formula_version (id);
 alter table production_order add constraint fk_production_order_marketing_user_id foreign key (marketing_user_id) references app_user (id);
-alter table production_order add constraint fk_production_order_origin_docs_file_id foreign key (origin_docs_file_id) references file_attachment (id);
 alter table production_order add constraint fk_production_order_cancel_requested_by foreign key (cancel_requested_by) references app_user (id);
 alter table production_order add constraint fk_production_order_ended_early_by foreign key (ended_early_by) references app_user (id);
 alter table production_order add constraint fk_production_order_created_by foreign key (created_by) references app_user (id);
@@ -4415,9 +4489,9 @@ set search_path = mes;
 --    nên bản ghi đã dùng vẫn chỉ khóa / ngừng dùng. Tài khoản: thêm điều kiện chưa từng đăng nhập (mục 29a).
 create or replace function forbid_delete() returns trigger language plpgsql as $$
 begin
-  if tg_table_name in ('app_user', 'uom', 'product_option', 'product_pack', 'product_pack_level', 'permission',
+  if tg_table_name in ('app_user', 'uom', 'product_option', 'product_pack', 'product_pack_level', 'material_pack', 'material_pack_level', 'permission',
                        'legal_document', 'legal_document_scope')
-     or (tg_table_name = 'user_role' and current_setting('mes.deleting_user', true) = to_jsonb(old) ->> 'user_id') then
+     or (tg_table_name in ('user_role', 'user_permission') and current_setting('mes.deleting_user', true) = to_jsonb(old) ->> 'user_id') then
     return old;
   end if;
   raise exception 'Không xóa cứng bảng %: dùng trạng thái khóa / ngừng dùng / hủy', tg_table_name;
@@ -4652,10 +4726,10 @@ begin
   select * into w from work_area where id = new.work_area_id;
   if tg_op = 'UPDATE' and old.status <> 'MOI_TAO'
      and (new.work_area_id, new.order_kind, new.formula_version_id, new.planned_batch_count, new.batch_weight_kg, new.planned_finish_date,
-          new.sales_order_id, new.origin_docs_file_id, new.marketing_user_id, new.order_received_at)
+          new.sales_order_id, new.loss_pct, new.marketing_user_id, new.order_received_at)
          is distinct from
          (old.work_area_id, old.order_kind, old.formula_version_id, old.planned_batch_count, old.batch_weight_kg, old.planned_finish_date,
-          old.sales_order_id, old.origin_docs_file_id, old.marketing_user_id, old.order_received_at) then
+          old.sales_order_id, old.loss_pct, old.marketing_user_id, old.order_received_at) then
     raise exception 'Lệnh % đã phát — không sửa (hủy rồi tạo lại, hoặc kết thúc sớm khi đang chạy)', new.code;
   end if;
   if tg_op = 'INSERT' or new.work_area_id <> old.work_area_id or new.order_kind <> old.order_kind or new.batch_weight_kg <> old.batch_weight_kg then
@@ -4992,6 +5066,17 @@ create trigger trg_goods_issue before insert or update on goods_issue
 -- ===== Bổ sung 19/10 (đợt 4), sửa 04/11: danh mục SP, phiếu chuyển tự lập từ lệnh SX, xuất SX chỉ từ kho điều phối =====
 
 -- 16. Danh mục SP (mô hình mới chốt 04/11 — bỏ thương hiệu / dòng / hạng / quy cách dùng chung và các trigger 16a–16d cũ).
+-- 16a'. Bản công bố: hình thức công bố là lựa chọn loại HINH_THUC_CONG_BO đang dùng (05/11).
+create or replace function check_product_document_option() returns trigger language plpgsql as $$
+begin
+  if new.declaration_option_id is not null and (tg_op = 'INSERT' or new.declaration_option_id is distinct from old.declaration_option_id)
+     and not exists (select 1 from product_option where id = new.declaration_option_id and option_kind = 'HINH_THUC_CONG_BO' and status = 'DANG_DUNG') then
+    raise exception 'Hình thức công bố không đúng loại hoặc đã ngừng dùng';
+  end if;
+  return new;
+end $$;
+create trigger trg_product_document_option before insert or update on product_document
+  for each row execute function check_product_document_option();
 -- 16a. SP: ô Cấu trúc / Nhóm / Phân loại / Độ tuổi phải là lựa chọn đúng loại, đang dùng (khi tạo / đổi).
 create or replace function check_product_options() returns trigger language plpgsql as $$
 declare k text; v uuid;
@@ -5187,18 +5272,25 @@ with ur as (
     from user_role ur
     join role r on r.id = ur.role_id and r.status = 'DANG_DUNG'
    where ur.revoked_at is null and ur.valid_from <= now() and (ur.valid_until is null or ur.valid_until > now())
+), up as (
+  -- quyền thực = quyền vai trò − BO + THEM (phân quyền từng người, 05/11)
+  select ur.user_id, rp.permission_id
+    from ur join role_permission rp on rp.role_id = ur.role_id and rp.revoked_at is null
+   where not exists (select 1 from user_permission x where x.user_id = ur.user_id and x.permission_id = rp.permission_id
+                       and x.effect = 'BO' and x.revoked_at is null)
+  union
+  select user_id, permission_id from user_permission where effect = 'THEM' and revoked_at is null
 )
-select distinct ur.user_id, s.id as screen_id, s.code as screen_code, s.module, s.name, s.sort_order
-  from ur
-  join role_permission rp on rp.role_id = ur.role_id and rp.revoked_at is null
-  join permission p on p.id = rp.permission_id
+select distinct up.user_id, s.id as screen_id, s.code as screen_code, s.module, s.name, s.sort_order
+  from up
+  join permission p on p.id = up.permission_id
   join screen_function sf on sf.function_code = p.function_code
   join screen s on s.id = sf.screen_id and s.status = 'DANG_DUNG'
 union
 select u.id, s.id, s.code, s.module, s.name, s.sort_order
   from app_user u cross join screen s
  where s.always_visible and s.status = 'DANG_DUNG' and not u.is_system;
-comment on view v_user_screen is 'Màn mỗi người dùng thấy trên menu (thêm 20/10): theo vai trò còn hiệu lực × quyền × màn × chức năng; Việc cần làm cho mọi người dùng.';
+comment on view v_user_screen is 'Màn mỗi người dùng thấy trên menu (thêm 20/10): theo vai trò còn hiệu lực × quyền (trừ BO, cộng THEM của user_permission — 05/11) × màn × chức năng; Việc cần làm cho mọi người dùng.';
 
 -- ===== Bổ sung 20/10 (đợt 2): chủ dữ liệu theo dòng cloud ↔ máy chủ nhà máy, kênh lệnh từ trung tâm, hàng đợi gửi lên =====
 -- Một schema, một mã nguồn chạy ở cloud và ở từng máy chủ nhà máy. Mỗi kết nối của ứng dụng đặt:
@@ -5558,6 +5650,7 @@ begin
   end if;
   perform set_config('mes.deleting_user', old.id::text, true);
   delete from user_role where user_id = old.id;
+  delete from user_permission where user_id = old.id;
   perform set_config('mes.deleting_user', '', true);
   update account_change_log set user_id = null, detail = coalesce(detail, '{}'::jsonb) || jsonb_build_object('employee_code', old.employee_code)
    where user_id = old.id;
@@ -5634,15 +5727,15 @@ insert into role (code, name, description, admin_assign_only, delegable, created
  ('THU_KHO_TRUONG', 'Thủ kho trưởng', 'Thủ kho trưởng. Phạm vi mặc định: Kho được gán. Xác nhận chênh lệch khi nhập (phiếu nhập / xuất không duyệt — 24/10 đợt 6, 7), duyệt hủy hàng, ra lệnh kiểm kho và duyệt điều chỉnh (toàn kho và kiểm điểm); chọn gửi QC / hủy hàng hư khi nhận chuyển kho; xác nhận biên bản thất lạc; duyệt ngừng dùng mã NVL / SP do Kho đề nghị (QT02 d4 — 28/10)', false, true, :sys),
  ('THU_KHO_DIEU_PHOI', 'Thủ kho điều phối', 'Thủ kho kho điều phối (thêm 04/11). Phạm vi mặc định: Kho được gán. Chuẩn bị NVL theo lệnh, nhận hàng chuyển từ kho tổng, lập phiếu xuất SX; lập phiếu chuyển từ yêu cầu chuyển YCC- thay Kế hoạch nhà máy nguồn (nội bộ)', false, false, :sys),
  ('VAN_CHUYEN', 'Vận chuyển', 'Tài xế. Phạm vi mặc định: Chuyến được giao. Chuyến xe chuyển kho giữa 2 nhà máy (QT16). Không còn giao hàng cho khách — giao hàng chỉ ghi nhận, Sales ghi (24/10)', false, false, :sys),
- ('CONG_NHAN', 'Công nhân', 'Công nhân sản xuất và đóng gói; tài khoản riêng, đăng nhập PC xưởng bằng quét thẻ. Phạm vi mặc định: Khu vực làm việc: HH / BTP / chiết rót / đóng gói. Chỉ thao tác lệnh của khu mình trên PC xưởng (PC C#: quét bao nạp silo, xả bột dư cuối lệnh, lon đầu, dán QR thùng — QT20, QT21)', false, false, :sys),
+ ('CONG_NHAN', 'Công nhân', 'Công nhân sản xuất và đóng gói; tài khoản riêng, đăng nhập PC xưởng bằng quét thẻ. Phạm vi mặc định: Khu vực làm việc: HH / BTP / chiết rót & đóng gói. Chỉ thao tác lệnh của khu mình trên PC xưởng (PC C#: quét bao nạp silo, xả bột dư cuối lệnh, lon đầu, dán QR thùng — QT20, QT21)', false, false, :sys),
  ('QC', 'QC', 'Nhân viên QC. Phạm vi mặc định: Nhà máy. Lấy mẫu (TP sau khi thùng đã nhập kho BTP), gửi kiểm nghiệm, tải file đánh giá bên ngoài và đề xuất kết luận; tự quyết thời hạn lưu mẫu; quản lý và tự hủy mẫu lưu hết hạn; nguyên nhân gốc / CAPA', false, false, :sys),
  ('QC_TRUONG', 'QC trưởng', 'Trưởng QC. Phạm vi mặc định: Nhà máy. Duyệt / từ chối yêu cầu kiểm, duyệt kết luận (lô chỉ đổi ĐẠT / KHÔNG ĐẠT / KHÓA sau khi QC trưởng duyệt), ký phiếu chứng nhận, mở lại lô NVL KHÔNG ĐẠT; mở hồ sơ thu hồi (chỉ vai trò này), đánh giá rủi ro, báo cơ quan, duyệt CAPA; duyệt ngừng dùng mã NVL / SP do QC đề nghị (QT02 d4 — 28/10)', false, true, :sys),
  ('NGUOI_TRUY_XUAT', 'Người truy xuất', 'Do Admin gán. Phạm vi mặc định: Mọi nhà máy. Tạo phiếu và chạy truy xuất QT25 — chỉ vai trò này', true, false, :sys);
 
 -- 239 thao tác = QT + bước × hành động, lấy từ bảng quyền 7 mảng của file quy trình (bước không có mã: QT01.#6 = dòng thứ 6 của QT01); sinh lại 04/11
 insert into permission (function_code, action, qt_code, description, created_by) values
- ('QT01.d0,a1', 'TAO', 'QT01', 'Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin và Người truy xuất); đổi vai trò; không tự sửa vai trò của mình', :sys),
- ('QT01.d0,a1', 'SUA', 'QT01', 'Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin và Người truy xuất); đổi vai trò; không tự sửa vai trò của mình', :sys),
+ ('QT01.d0,a1', 'TAO', 'QT01', 'Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin và Người truy xuất) rồi tick bỏ / thêm quyền riêng từng người (05/11); đổi vai trò; không tự sửa vai trò, quyền của mình', :sys),
+ ('QT01.d0,a1', 'SUA', 'QT01', 'Tạo tài khoản, nhập thông tin, chọn vai trò (trừ Admin và Người truy xuất) rồi tick bỏ / thêm quyền riêng từng người (05/11); đổi vai trò; không tự sửa vai trò, quyền của mình', :sys),
  ('QT01.a1', 'SUA', 'QT01', 'Gán / gỡ vai trò Admin và Người truy xuất', :sys),
  ('QT01.n1', 'SUA', 'QT01', 'Nhập ngày nghỉ, đặt / sửa ngày khóa tài khoản', :sys),
  ('QT01.m1', 'SUA', 'QT01', 'Xác minh, mở khóa, cấp mật khẩu tạm (bắt đổi khi đăng nhập)', :sys),
@@ -5678,8 +5771,8 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT02.hs', 'HUY', 'QT02', 'Hồ sơ pháp lý chung: tạo / sửa / xóa (04/11)', :sys),
  ('QT02.xh', 'XEM', 'QT02', 'Xem hồ sơ pháp lý chung', :sys),
  ('QT02.xk', 'XEM', 'QT02', 'Xem nhà máy, kho (Danh mục › Nhà máy)', :sys),
- ('QT03.t1,t2', 'TAO', 'QT03', 'Nhập / sửa công thức, thông số trộn chuẩn gồm thứ tự nạp (lưu phiên bản mới, không duyệt)', :sys),
- ('QT03.t1,t2', 'SUA', 'QT03', 'Nhập / sửa công thức, thông số trộn chuẩn gồm thứ tự nạp (lưu phiên bản mới, không duyệt)', :sys),
+ ('QT03.t1,t2', 'TAO', 'QT03', 'Nhập / sửa / sao chép công thức; thứ tự dòng là thứ tự nạp (lưu phiên bản mới, không duyệt; bỏ dung sai, thông số trộn chuẩn — 05/11)', :sys),
+ ('QT03.t1,t2', 'SUA', 'QT03', 'Nhập / sửa / sao chép công thức; thứ tự dòng là thứ tự nạp (lưu phiên bản mới, không duyệt; bỏ dung sai, thông số trộn chuẩn — 05/11)', :sys),
  ('QT03.#2', 'XEM', 'QT03', 'Xem công thức (kèm lệnh đang chạy phiên bản cũ); công nhân xem trên PC xưởng, chỉ công thức của lệnh khu mình (không vào màn web)', :sys),
  ('QT04.t4,dh', 'HUY', 'QT04', 'Hủy tem (Kho · Tồn kho → dòng lô → bao): bao còn trong kho → cấp mã mới như tem mất; bao không còn → khóa mã, thu tem', :sys),
  ('QT04.t5a,t5', 'SUA', 'QT04', 'Tem hỏng (Kho · Tồn kho → dòng lô → bao): in lại cùng mã, dán, quét xác nhận', :sys),
@@ -5687,11 +5780,11 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT04.#4', 'TAO', 'QT04', 'Tem lỗi phát hiện ở khu SX: công nhân chỉ báo, Thủ kho điều phối xử lý như các dòng trên', :sys),
  ('QT04.#4', 'SUA', 'QT04', 'Tem lỗi phát hiện ở khu SX: công nhân chỉ báo, Thủ kho điều phối xử lý như các dòng trên', :sys),
  ('QT04.#4', 'HUY', 'QT04', 'Tem lỗi phát hiện ở khu SX: công nhân chỉ báo, Thủ kho điều phối xử lý như các dòng trên', :sys),
- ('QT05.t1–t3', 'TAO', 'QT05', 'Tạo / cập nhật hồ sơ khách, nhập đơn (Nháp)', :sys),
- ('QT05.t1–t3', 'SUA', 'QT05', 'Tạo / cập nhật hồ sơ khách, nhập đơn (Nháp)', :sys),
+ ('QT05.t1–t3', 'TAO', 'QT05', 'Tạo / cập nhật hồ sơ khách, nhập đơn (Nháp) — kèm hợp đồng nếu đã có: số, hiệu lực, file (05/11)', :sys),
+ ('QT05.t1–t3', 'SUA', 'QT05', 'Tạo / cập nhật hồ sơ khách, nhập đơn (Nháp) — kèm hợp đồng nếu đã có: số, hiệu lực, file (05/11)', :sys),
  ('QT05.d2', 'SUA', 'QT05', 'Chọn hình thức, phương thức thanh toán, tiền cọc, số ngày nợ (điền sẵn theo khách)', :sys),
- ('QT05.t6', 'SUA', 'QT05', 'Tải hợp đồng đã ký', :sys),
- ('QT05.hn', 'HUY', 'QT05', 'Hủy đơn chưa chốt (Chờ ký HĐ / Chờ thu tiền), bắt buộc lý do — không qua duyệt (chốt 04/11)', :sys),
+ ('QT05.t6', 'SUA', 'QT05', 'Chốt đơn theo hợp đồng còn hiệu lực của đơn (chưa có thì upload ở chi tiết đơn — 05/11)', :sys),
+ ('QT05.hn', 'HUY', 'QT05', 'Hủy đơn chưa chốt (Chờ thu tiền), bắt buộc lý do — không qua duyệt (chốt 04/11)', :sys),
  ('QT05.xk', 'XEM', 'QT05', 'Xem hồ sơ khách, lịch sử liên hệ (Bán hàng › Khách hàng)', :sys),
  ('QT06.t4', 'TAO', 'QT06', 'Đề xuất hạn mức ban đầu', :sys),
  ('QT06.t4d', 'DUYET', 'QT06', 'Duyệt hạn mức ban đầu (vĩnh viễn)', :sys),
@@ -5710,6 +5803,7 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT08.r2', 'SUA', 'QT08', 'Cập nhật lệnh SX theo đơn mới: lệnh Mới tạo sửa; đã phát chưa chạy hủy rồi tạo lại; đang chạy kết thúc sớm / tạo thêm lệnh', :sys),
  ('QT09.t1', 'XEM', 'QT09', 'Nhận thông báo đơn Sẵn sàng giao; xem tab Giao hàng của đơn', :sys),
  ('QT09.t2', 'TAO', 'QT09', 'Yêu cầu xuất từ đơn: chọn dòng, SL giao lần này; sửa ngày giao dự kiến', :sys),
+ ('QT09.kd', 'DUYET', 'QT09', 'Duyệt xuất giao sau khi nhập kho lô của đơn: Mua nợ kiểm công nợ; Cọc + trả nốt ghi nhận phần còn lại (05/11)', :sys),
  ('QT09.t9', 'SUA', 'QT09', 'Phiếu xuất bán Chờ bên yêu cầu: nhận phần đã lấy hoặc hủy yêu cầu', :sys),
  ('QT09.tr', 'HUY', 'QT09', 'Hủy yêu cầu xuất chưa xuất (bắt buộc lý do), kể cả yêu cầu bị nhà máy trả về', :sys),
  ('QT09.t5', 'TAO', 'QT09', 'Ghi nhận kết quả giao theo phiếu xuất: SL khách nhận từng lô, ngày nhận, ảnh biên bản, phần không nhận', :sys),
@@ -5727,7 +5821,6 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT11.d3', 'DUYET', 'QT11', 'Duyệt / từ chối NCC (chỉ vai trò này)', :sys),
  ('QT11.dr', 'SUA', 'QT11', 'Tìm NCC khác hay báo không có NCC', :sys),
  ('QT11.n1', 'HUY', 'QT11', 'Ngừng dùng NCC, ghi lý do (chỉ vai trò này)', :sys),
- ('QT11.xn', 'XEM', 'QT11', 'Xem danh sách NCC (Danh mục › Nhà cung cấp)', :sys),
  ('QT12.t1', 'TAO', 'QT12', 'Thêm tay nhu cầu mua NVL (mã NC-) ngoài nhu cầu hệ thống tính — nhu cầu theo lệnh SX / tồn tối thiểu hệ thống tự đưa vào Hàng đợi mua (bỏ phiếu yêu cầu mua và báo giá — 04/11)', :sys),
  ('QT12.th', 'HUY', 'QT12', 'Hủy nhu cầu lập tay khi chưa lên PO (bắt buộc lý do)', :sys),
  ('QT12.d1', 'XEM', 'QT12', 'Kiểm tồn khả dụng', :sys),
@@ -5802,7 +5895,7 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT18.t3', 'HUY', 'QT18', 'Hủy mẫu lưu liên quan', :sys),
  ('QT18.t4', 'HUY', 'QT18', 'Thực hiện hủy, lập biên bản (lô → HỦY)', :sys),
  ('QT18.t5', 'SUA', 'QT18', 'Ghi giá trị hàng hủy vào phiếu hủy (chỉ ghi nhận, không hạch toán)', :sys),
- ('QT19.t1,y1', 'TAO', 'QT19', 'Tạo lệnh SX trên cloud từ tab Chờ lên lệnh, hoặc lệnh sản xuất tồn kho không theo đơn (04/11), theo các điều kiện (khu, nhu cầu: 1 mã SP + dòng đơn & số lon hoặc kế hoạch tồn kho, công thức, thời gian, số mẻ & KL mẻ ≤ tối đa của khu, tệp giấy tờ xuất xứ NVL, dàn silo; tồn NVL thiếu vẫn tạo được — lệnh Chờ NVL, không giữ chỗ, không phát, 24/10 đợt 12), kế hoạch nhãn hiệu của lệnh BTP (SP có hồ sơ công bố hiệu lực, mẫu nhãn đã duyệt — 04/11) (không tạo lệnh ở server nhà máy — không vai trò nào có quyền này)', :sys),
+ ('QT19.t1,y1', 'TAO', 'QT19', 'Tạo lệnh SX trên cloud từ tab Chờ lên lệnh, hoặc lệnh sản xuất tồn kho không theo đơn (04/11), theo các điều kiện (khu, nhu cầu: 1 mã SP + dòng đơn & số lon hoặc kế hoạch tồn kho, công thức, thời gian, số mẻ & KL mẻ ≤ tối đa của khu, % hao hụt (05/11), dàn silo; tồn NVL thiếu vẫn tạo được — lệnh Chờ NVL, không giữ chỗ, không phát, 24/10 đợt 12), kế hoạch nhãn hiệu của lệnh BTP (SP có hồ sơ công bố hiệu lực, mẫu nhãn đã duyệt — 04/11) (không tạo lệnh ở server nhà máy — không vai trò nào có quyền này)', :sys),
  ('QT19.ys', 'TAO', 'QT19', 'Phương án dàn silo: nhận gợi ý xếp NVL → silo, kéo thả chỉnh, chốt khi tạo lệnh; xếp lại khi silo chuyển bảo trì / ngừng dùng', :sys),
  ('QT19.ys', 'SUA', 'QT19', 'Phương án dàn silo: nhận gợi ý xếp NVL → silo, kéo thả chỉnh, chốt khi tạo lệnh; xếp lại khi silo chuyển bảo trì / ngừng dùng', :sys),
  ('QT19.t2', 'SUA', 'QT19', 'Bổ sung / từ chối khi chưa đủ điều kiện tạo lệnh', :sys),
@@ -5881,7 +5974,7 @@ insert into permission (function_code, action, qt_code, description, created_by)
  ('QT26.qa', 'DUYET', 'QT26', 'Duyệt nguyên nhân gốc, hành động khắc phục (CAPA)', :sys),
  ('QT26.gd', 'DUYET', 'QT26', 'Duyệt đóng hồ sơ thu hồi', :sys);
 
--- Vai trò × Thao tác: 351 dòng đúng bảng quyền (Admin chỉ quản trị + QT01.xa xem mọi màn; 19 vai trò, thêm Thủ kho điều phối 04/11) — bộ quyền mặc định, Admin sửa trên màn Vai trò × quyền
+-- Vai trò × Thao tác: 346 dòng đúng bảng quyền (Admin chỉ quản trị + QT01.xa xem mọi màn; 19 vai trò, thêm Thủ kho điều phối 04/11) — bộ quyền mặc định, Admin sửa trên màn Vai trò × quyền
 insert into role_permission (role_id, permission_id, created_by)
 select r.id, p.id, :sys from (values
  ('HR', 'QT01.d0,a1', 'TAO'),
@@ -6012,6 +6105,7 @@ select r.id, p.id, :sys from (values
  ('SALES', 'QT09.tr', 'HUY'),
  ('SALES', 'QT09.t5', 'TAO'),
  ('SALES', 'QT09.dg', 'SUA'),
+ ('KE_TOAN', 'QT09.kd', 'DUYET'),
  ('KE_TOAN', 'QT10.t1', 'TAO'),
  ('KE_TOAN', 'QT10.k2', 'TAO'),
  ('KE_TOAN', 'QT10.h1', 'TAO'),
@@ -6025,12 +6119,6 @@ select r.id, p.id, :sys from (values
  ('TRUONG_BP_MUA_HANG', 'QT11.d3', 'DUYET'),
  ('MUA_HANG', 'QT11.dr', 'SUA'),
  ('TRUONG_BP_MUA_HANG', 'QT11.n1', 'HUY'),
- ('KE_HOACH', 'QT11.xn', 'XEM'),
- ('THU_KHO', 'QT11.xn', 'XEM'),
- ('THU_KHO_TRUONG', 'QT11.xn', 'XEM'),
- ('KE_TOAN', 'QT11.xn', 'XEM'),
- ('KE_TOAN_TRUONG', 'QT11.xn', 'XEM'),
- ('QC', 'QT11.xn', 'XEM'),
  ('KE_HOACH', 'QT12.t1', 'TAO'),
  ('KE_HOACH', 'QT12.th', 'HUY'),
  ('THU_KHO', 'QT12.d1', 'XEM'),
@@ -6275,7 +6363,6 @@ insert into screen (code, module, name, sort_order, always_visible, created_by) 
  ('DM_KHO', 'DANH_MUC', 'Nhà máy › Kho', 285, false, :sys),
  ('DM_KHU_VUC', 'DANH_MUC', 'Nhà máy › Khu vực làm việc & dàn silo', 290, false, :sys),
  ('DM_HO_SO_PHAP_LY', 'DANH_MUC', 'Hồ sơ pháp lý chung', 295, false, :sys),
- ('DM_NCC', 'DANH_MUC', 'Nhà cung cấp', 300, false, :sys),
  ('QT_NGUOI_DUNG', 'QUAN_TRI', 'Người dùng & vai trò', 310, false, :sys),
  ('QT_THAM_SO', 'QUAN_TRI', 'Tham số & định dạng mã', 330, false, :sys),
  ('QT_NHAT_KY', 'QUAN_TRI', 'Nhật ký hệ thống', 340, false, :sys);
@@ -6302,6 +6389,7 @@ select s.id, v.function_code, :sys from (values
  ('BAN_DON_HANG', 'QT08.r2'),
  ('BAN_DON_HANG', 'QT09.t1'),
  ('BAN_DON_HANG', 'QT09.t2'),
+ ('BAN_DON_HANG', 'QT09.kd'),
  ('BAN_DON_HANG', 'QT09.t9'),
  ('BAN_DON_HANG', 'QT09.tr'),
  ('BAN_DON_HANG', 'QT09.t5'),
@@ -6524,11 +6612,6 @@ select s.id, v.function_code, :sys from (values
  ('DM_HO_SO_PHAP_LY', 'QT02.hs'),
  ('DM_HO_SO_PHAP_LY', 'QT02.xh'),
  ('DM_HO_SO_PHAP_LY', 'QT01.xa'),
- ('DM_NCC', 'QT11.t1'),
- ('DM_NCC', 'QT11.d1'),
- ('DM_NCC', 'QT11.d3'),
- ('DM_NCC', 'QT11.xn'),
- ('DM_NCC', 'QT01.xa'),
  ('QT_NGUOI_DUNG', 'QT01.d0,a1'),
  ('QT_NGUOI_DUNG', 'QT01.a1'),
  ('QT_NGUOI_DUNG', 'QT01.n1'),
@@ -6553,6 +6636,7 @@ insert into sync_policy (table_name, owner_group, factory_column, derived_column
  ('role', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('permission', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('role_permission', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
+ ('user_permission', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('screen', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('screen_function', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('user_role', 'CLOUD', 'factory_id', '{}', '{}', 'cloud chủ → nhà máy', :sys),
@@ -6567,6 +6651,8 @@ insert into sync_policy (table_name, owner_group, factory_column, derived_column
  ('material_spec_item', 'CLOUD', null, '{}', '{}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc', :sys),
  ('product', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('product_option', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
+ ('material_pack', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
+ ('material_pack_level', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('product_pack', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('product_pack_level', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
  ('product_label', 'CLOUD', null, '{}', '{}', 'cloud chủ → nhà máy', :sys),
@@ -6618,7 +6704,7 @@ insert into sync_policy (table_name, owner_group, factory_column, derived_column
  ('customer_contact_log', 'CLOUD_ONLY', null, '{}', '{}', 'chỉ cloud', :sys),
  ('credit_limit_request', 'CLOUD_ONLY', null, '{}', '{}', 'chỉ cloud', :sys),
  ('sales_order', 'CLOUD', 'factory_id', '{}', '{refund_amount,retained_amount}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; cột status do cloud chiếu từ dữ liệu nhà máy; không sao xuống nhà máy: refund_amount, retained_amount (quyết định 38)', :sys),
- ('sales_order_version', 'CLOUD', null, '{}', '{payment_method,deposit_pct,credit_days,total_before_vat,vat_amount,total_amount,contract_file_id,payment_channel,deposit_amount}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: payment_method, deposit_pct, credit_days, total_before_vat, vat_amount, total_amount, contract_file_id, payment_channel, deposit_amount (quyết định 38)', :sys),
+ ('sales_order_version', 'CLOUD', null, '{}', '{payment_method,deposit_pct,credit_days,total_before_vat,vat_amount,total_amount,contract_file_ids,contract_no,contract_valid_from,contract_valid_to,payment_channel,deposit_amount}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: payment_method, deposit_pct, credit_days, total_before_vat, vat_amount, total_amount, contract_file_ids, contract_no, contract_valid_from, contract_valid_to, payment_channel, deposit_amount (quyết định 38)', :sys),
  ('sales_order_line', 'CLOUD', null, '{}', '{unit_price,vat_rate}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: unit_price, vat_rate (quyết định 38)', :sys),
  ('sales_order_lot', 'CLOUD', null, '{}', '{}', 'cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc', :sys),
  ('sales_order_status_log', 'CLOUD_ONLY', null, '{}', '{}', 'chỉ cloud', :sys),

@@ -30,22 +30,23 @@ Cập nhật: 04/11/2026 — đồng bộ theo mockup (mockup là bản đúng; 
 - Thay đổi 26/10 (mẫu lưu — file quy trình mục "Sửa 26/10"): 137 bảng. Bỏ bảng `sample_storage_condition` (điều kiện bảo quản phòng / tủ mẫu) và tham chiếu của nó; `retained_sample` bỏ `storage_position` (tủ + ngăn), `storage_condition_id`, thêm `note` (ghi chú khi ghi mẫu lưu). Mẫu nằm ở kho mẫu QC của nhà máy, không ghi vị trí trong kho. `material.storage_condition` (điều kiện bảo quản NVL ở danh mục) giữ nguyên. Nhóm NM còn 46 bảng.
 - Thay đổi 28/10 (bỏ vai trò Trưởng bộ phận, bỏ rà soát quyền — file quy trình mục "Sửa 28/10"): 135 bảng. Bỏ `access_review`, `access_review_line`, trigger `trg_access_review_confirm`, tham số `account.review_period_months`, `account.review_idle_hint_days`; `account_change_log.change_type` bỏ RA_SOAT. `catalog_retire_request`: `department` chỉ nhận MUA_HANG / KE_HOACH / KHO / QC (quyết người duyệt: Trưởng BP Mua hàng / Thủ kho trưởng / QC trưởng); thêm trạng thái NGUNG_TRUC_TIEP — Kế hoạch tự ngừng, không người duyệt (check: KE_HOACH ⇔ NGUNG_TRUC_TIEP). Quyền: 18 vai trò, 214 thao tác, 267 dòng gán; thêm `QT02.tk`; bỏ `QT01.r2`, `QT01.r5`, `QT01.hr`; dòng không mã của QT01 đánh số lại (Nhật ký `QT01.#6`, Vai trò × quyền `QT01.#7`, Tham số `QT01.#8`). Phép thử: `claude/mes-powder-phep-thu-28-10.sql` (mục 5.15).
 - Thay đổi 04/11 (đồng bộ theo mockup — danh sách quyết định 04/11): 140 bảng (bỏ 7, thêm 12). **Bỏ:** `quotation`, `quotation_line` (bỏ báo giá — Mua hàng nhập đơn giá ở Hàng đợi mua rồi lập PO), `brand`, `product_line`, `product_grade`, `product_line_grade`, `pack_spec` (mô hình SP mới). **Thêm:** `product_option` (lựa chọn Cấu trúc / Nhóm / Phân loại / Độ tuổi), `product_pack` + `product_pack_level` (1 SP nhiều quy cách, mỗi quy cách nhiều tầng), `product_label` (mẫu nhãn theo quy cách, QC trưởng duyệt), `product_document` (bản công bố, hồ sơ riêng của SP), `legal_document` + `legal_document_scope` (Hồ sơ pháp lý chung: phạm vi mọi SP / nhà máy / SP chọn, hạn, nhắc trước hạn), `document_snapshot` + `document_print_log` (Hồ sơ & biểu mẫu in: bản lưu lúc ký, mỗi lần in lại), `transfer_request` (yêu cầu chuyển YCC-, chốt 30/10), `purchase_order_coa_result` (kiểm COA & HSD của PO theo chỉ tiêu NVL, 30/10–31/10), `retained_sample_event` (mẫu lưu lấy ra / niêm phong lại / sửa hạn lưu). **PO:** trạng thái Chờ COA & HSD → Chờ chọn thanh toán → Chờ duyệt → Đã duyệt → Đã gửi NCC → Nhận một phần / Đã nhận đủ, Đã đóng, Từ chối, Đã hủy (bỏ Nháp); thêm kho nhận, yêu cầu / kết quả COA, cọc + trả nốt (`payment_terms` COC_TRA_NOT + `deposit_pct`, 31/10), phương thức thanh toán, từ chối, đóng phần còn lại; bỏ `purchase_request_id`, `quotation_id`, `selection_reason`, `only_one_supplier`; dòng PO có COA, NSX, HSD. NCC: cọc + trả nốt, phương thức, tài khoản ngân hàng; chứng nhận NCC bắt buộc hạn trừ giấy phép kinh doanh; lịch sử NCC ghi số ngày trễ / SL thiếu theo PO. Yêu cầu mua: dòng theo NVL × kho nhận, trạng thái dòng (Mở / Đã lập PO / Trả về Kế hoạch / Hủy), bỏ DANG_MUA. Trả NCC: trạng thái theo mockup (Chờ NCC xác nhận … Hoàn tất / Chuyển hủy), nguồn (đã nhập kho / bao hư khi nhận / từ chối ở cửa kho), nhiều ảnh, số lô NCC bắt buộc với dòng có lô, bỏ lý do "Thiếu chứng từ". **Kho:** phiếu chuyển "lập là chấp nhận" — trạng thái Chờ xuất / Đang chuyển / Chờ xử lý hàng hư / Nhận thiếu / Chờ xác nhận thất lạc / Đã nhận / Thất lạc / Đã hủy, bỏ người yêu cầu / người gửi / người xác nhận / từ chối, thêm giờ đến dự kiến; phiếu tự lập từ lệnh SX vào thẳng Chờ xuất; dòng chuyển gom yêu cầu chuyển. Nhiều kho điều phối mỗi nhà máy (NM1-DP, NM1-DP2), khu HH / BTP chọn kho điều phối cấp NVL (`work_area.supply_warehouse_id`). Kiểm kho: KHOP thay DONG. Phiếu nhập: Kế toán lưu hóa đơn / chứng từ (tệp, đã nhận bản cứng). **Nền tảng:** vai trò × quyền sửa được, phạm vi nhà máy theo vai trò (`role.factory_scope`) và theo quyền (`role_permission.scope_mode`); vai trò thứ 19 Thủ kho điều phối; xóa được bản ghi chưa từng dùng (tài khoản chưa đăng nhập, đơn vị, lựa chọn SP, quy cách, quyền, hồ sơ pháp lý) — nhật ký tài khoản thêm XOA; Đơn vị có loại, quy đổi, trạng thái (màn Danh mục › Đơn vị); NVL thêm ảnh (≤ 5), nguyên liệu kỵ nhau, tồn tối thiểu + cách bù, ghi chú, bắt buộc ≥ 1 chỉ tiêu COA; nhà máy thêm địa chỉ, điện thoại, email; công thức thêm thời gian / tốc độ trộn chuẩn và thứ tự nạp; `code_format` thêm mã KH, NCC, NV, lô, ĐH, PO, NC, YCC, HS, bỏ 4 mã danh mục SP. **Bán hàng:** trạng thái đơn theo mockup (thêm Chờ kiểm công nợ, Đang sản xuất, Chờ duyệt hủy, Đang hủy); Sales hủy thẳng ở Chờ ký HĐ / Chờ thu tiền (bỏ bắt buộc người duyệt khi hủy, thêm `cancelled_by`); đơn có địa chỉ giao, phiên bản có phương thức thanh toán, tiền cọc bằng số tiền, VAT và ngày giao ở đầu đơn; khách thêm ngân hàng, chủ tài khoản, phương thức / số ngày nợ / % cọc mặc định, email hóa đơn, trạng thái Tạm dừng giao dịch; hóa đơn bán hàng lập trên MES, in A4, gắn phiếu xuất bán; ghi nhận giao: khách nhận thiếu thì ghi khách còn lấy phần không nhận hay không. **Sản xuất:** lệnh sản xuất tồn kho (`demand_kind` TON_KHO); máy chủ nhà máy tự kiểm khi nhận lệnh (kết quả, lý do, lúc kiểm); lệnh BTP cần bản công bố còn hiệu lực + mẫu nhãn đã duyệt của quy cách (`production_order_brand.product_pack_id`). **Chất lượng, truy xuất:** phiếu chứng nhận Chờ ký → Đã ký (số phiếu, người ký, lúc ký khi ký); mẫu lưu có nơi lưu, đang lấy ra, cách hủy, người chứng kiến; phiếu kiểm có file đánh giá ngoài, ghi chú QC, lý do kết luận khác đề xuất; yêu cầu kiểm có nội dung bổ sung; CAPA có lý do trả lại; hoàn tiền thu hồi chờ duyệt; hồ sơ thu hồi có SL ngoài thị trường / còn trong kho; truy xuất nhận thêm mã đơn hàng, khách hàng, mã NVL và công văn cơ quan. Trigger đổi / mới ở phần viết tay của file sql: mục 1 (cho xóa bản ghi chưa dùng), 13 (thay báo giá bằng kiểm COA & HSD của PO), 14 (trạng thái trả NCC), 16a–16e (lựa chọn SP, duyệt mẫu nhãn, điều kiện lệnh BTP, chỉ tiêu COA bắt buộc, kho cấp NVL của khu), 17a–17d (phiếu chuyển lập là chấp nhận, yêu cầu chuyển), 28 (Hàng đợi mua theo NVL × kho), 29a–29c (xóa tài khoản, hóa đơn gắn phiếu xuất, mẫu lưu). Lượt này sửa tay đồng thời mô hình JSON, mục 10 và DDL (script sinh không có trên máy); đã chạy toàn bộ file sql trên PostgreSQL 18 trống 04/11. Dữ liệu nạp quyền sinh lại theo file quy trình 04/11 (script tạm thay `mes-powder-gen-quyen.py`): 19 vai trò, 239 thao tác (trước 214), 351 dòng gán (trước 267 — Thủ kho điều phối 40 dòng), 37 màn (trước 33; thêm Tổng quan, Hồ sơ & biểu mẫu in, Danh mục › Đơn vị, Hồ sơ pháp lý chung; Công thức, Khu vực làm việc chuyển vào Danh mục), 261 dòng màn × chức năng; mã mới QT01.vq / xq / xt / tq, QT02.xo / ml / dv / xv / hs / xh / xk, QT05.hn, QT12.tv / t3,t4 / ce / ck / tt / gp / hp / dl, QT15.xp, QT16.yl / yn / kx, QT19.cb, QT23.gk, QT24.lr,np / sh; bỏ QT01.#7, QT12.#9, QT12.tq, QT16.ya,kg / d1 / kq, QT23.g2; `screen_function` bỏ cột `warehouse_type` (cờ @DIEU_PHOI), view `v_user_screen` không còn xét loại kho. Các phép thử cũ ở mục 5 về báo giá, đề nghị chuyển kho, 4 danh mục SP không còn đúng với bảng / trạng thái mới — giữ làm lịch sử.
+- Thay đổi 05/11 (theo mockup sau họp khách hàng — file quy trình mục "Quyết định đã chốt 05/11"): 143 bảng (thêm 3). **Thêm:** `user_permission` (phân quyền từng người: vai trò cho bộ quyền gốc, tick THEM / BO từng quyền; view `v_user_screen` tính quyền thực = vai trò − BO + THEM; xóa tài khoản chưa dùng xóa luôn), `material_pack`, `material_pack_level` (quy cách đóng gói NVL nhiều cấp, cùng kiểu SP). **Sửa:** `work_area.area_type` gộp CHIET_ROT, DONG_GOI thành CHIET_ROT_DONG_GOI; `app_user.badge_code` nhập tay mã in trên thẻ; `product.extra_attributes` có loại ô nhập (văn bản / số kèm đơn vị / ngày / có-không / danh sách chọn / văn bản dài / tệp); `product_option` thêm loại HINH_THUC_CONG_BO, `product_document.declaration_kind` → `declaration_option_id` (trigger `trg_product_document_option` kiểm đúng loại); `legal_document` Sắp hết hạn khi còn ≤ 30 ngày; `formula_version` bỏ `mixing_time_min`, `mixing_speed_rpm`, `mixing_params`, `formula_item` bỏ `tolerance_kg` (thứ tự nạp = thứ tự dòng); `production_order` bỏ `origin_docs_file_id`, thêm `loss_pct` (0–50, khóa sau khi phát); hợp đồng tải theo từng đơn: `sales_order_version.contract_file_id` → `contract_file_ids` + `contract_no` + `contract_valid_from` / `contract_valid_to` (không sao xuống nhà máy; sửa chiều 05/11 — bỏ hợp đồng nguyên tắc ở `customer`); `sales_order.status` bỏ CHO_KY_HD, thêm CHO_NHAP_KHO, CHO_KE_TOAN_DUYET, CHO_XUAT_KHO, cột `delivery_approved_by` / `_at` (Kế toán duyệt xuất giao). **Dữ liệu nạp:** bỏ màn DM_NCC và quyền `QT11.xn` (Danh mục › Nhà cung cấp — 6 dòng gán), thêm `QT09.kd` (Kế toán, màn Đơn hàng); `QT01.d0,a1`, `QT03.t1,t2`, `QT05.t1–t3`, `QT05.t6`, `QT19.t1,y1` đổi mô tả. Còn 239 thao tác, 346 dòng gán, 36 màn.
 
 ## Số bảng theo mảng
 
 | Mảng | Số bảng | Trong đó chờ quyết |
 |---|---|---|
 | 0 · Lô & mã định danh (dùng chung) | 10 | — (silo → mẻ đã chốt 19/10 đợt 3) |
-| 1 · Nền tảng (QT01–04) | 39 | — |
+| 1 · Nền tảng (QT01–04) | 42 | — |
 | 2 · Bán hàng (QT05–10) | 17 | — |
 | 3 · Mua hàng (QT11–13) | 13 | — |
 | 4 · Kho (QT14–18) | 19 | — |
 | 5 · Sản xuất (QT19–21, gồm đồng bộ) | 24 | 5 bảng + cột ở 2 bảng |
 | 6 · Chất lượng (QT22–24) | 8 | — |
 | 7 · Truy xuất & thu hồi (QT25–26) | 10 | — |
-| **Tổng** | **140** | **5 bảng + 4 cột** |
+| **Tổng** | **143** | **5 bảng + 4 cột** |
 
-Nơi đặt (sửa 20/10 đợt 2 — nhóm của `sync_policy`; số bảng sửa 04/11): 47 bảng **nhà máy chủ** (NM — máy chủ nhà máy của dòng ghi, sao lên cloud; cloud chỉ đọc bản đồng bộ) · 57 bảng **cloud chủ, sao xuống** (CLOUD — phần nhà máy cần, lọc theo nhà máy, kéo theo dòng cha theo khóa ngoại) · 28 bảng **chỉ cloud** (CLOUD_ONLY — thu chi, công nợ, truy xuất, phần còn lại của thu hồi…) · 6 bảng **nơi phát sinh** (NOI_PHAT_SINH — phiên, tệp, nhật ký, bộ đếm mã, bản lưu & nhật ký in) · 2 bảng **chỉ máy chủ nhà máy** (NM_ONLY — hàng đợi gửi lên, phiên mất kết nối). Mục 3 có bảng tóm tắt; cột Nơi của từng bảng ở mục 10.
+Nơi đặt (sửa 20/10 đợt 2 — nhóm của `sync_policy`; số bảng sửa 05/11): 47 bảng **nhà máy chủ** (NM — máy chủ nhà máy của dòng ghi, sao lên cloud; cloud chỉ đọc bản đồng bộ) · 60 bảng **cloud chủ, sao xuống** (CLOUD — phần nhà máy cần, lọc theo nhà máy, kéo theo dòng cha theo khóa ngoại) · 28 bảng **chỉ cloud** (CLOUD_ONLY — thu chi, công nợ, truy xuất, phần còn lại của thu hồi…) · 6 bảng **nơi phát sinh** (NOI_PHAT_SINH — phiên, tệp, nhật ký, bộ đếm mã, bản lưu & nhật ký in) · 2 bảng **chỉ máy chủ nhà máy** (NM_ONLY — hàng đợi gửi lên, phiên mất kết nối). Mục 3 có bảng tóm tắt; cột Nơi của từng bảng ở mục 10.
 
 ## 1. Quy tắc chung (áp cho mọi bảng)
 
@@ -56,7 +57,7 @@ Nơi đặt (sửa 20/10 đợt 2 — nhóm của `sync_policy`; số bảng s�
 5. **Người tạo không tự duyệt:** check `approved_by <> created_by` (phiếu nhập, xuất, PO, hạn mức, điều chỉnh kho, phiếu hủy, CAPA, hoàn tiền thu hồi, đề nghị ngừng mã), `approved_by <> entered_by` (kết quả QC), `confirmed_by <> resolved_by` (biên bản thất lạc), `decided_by <> user_id` (dòng rà soát tài khoản — Trưởng BP không tự quyết dòng của mình). Bản ghi nhận thu / chi không có bước duyệt (bỏ 19/10).
 6. **Nhật ký thay đổi:** `audit_log` cho mọi bảng (trước / sau); nhật ký chuyên biệt cho trạng thái lô, đơn, NCC, tài khoản.
 7. **Giá trị liệt kê** dùng `text` + `check (… in …)` thay cho enum của PostgreSQL → thêm giá trị không cần đổi kiểu.
-8. **Quyền:** chỉ gán qua vai trò (`user_role`), không gán quyền lẻ. Không ai tự gán / tự gỡ vai trò của chính mình (check `user_id <> created_by`, `revoked_by <> user_id`); vai trò Admin và Người truy xuất chỉ người đang giữ vai trò Admin gán được (trigger). Vai trò ủy quyền tạm là dòng `user_role` có `valid_until`, sinh từ `user_delegation`, chỉ cho vai trò `role.delegable` — chốt 19/10, bỏ Trưởng bộ phận 28/10: Giám đốc, Kế toán trưởng, Thủ kho trưởng, Trưởng BP Mua hàng, QC trưởng, Kế hoạch. Sửa 04/11: màn Vai trò × quyền sửa được (Admin cấp / gỡ quyền, thêm / sửa / xóa quyền ở Danh mục quyền), phạm vi nhà máy đặt theo vai trò (`role.factory_scope`) và theo từng quyền (`role_permission.scope_mode`); bảng quyền nạp sẵn vẫn lấy từ file quy trình.
+8. **Quyền:** gán qua vai trò (`user_role`); sửa 05/11: vai trò là bộ quyền gốc, HR / Admin tick bỏ / thêm từng quyền riêng cho 1 người (`user_permission` THEM / BO — mục 47). Không ai tự gán / tự gỡ vai trò của chính mình (check `user_id <> created_by`, `revoked_by <> user_id`); vai trò Admin và Người truy xuất chỉ người đang giữ vai trò Admin gán được (trigger). Vai trò ủy quyền tạm là dòng `user_role` có `valid_until`, sinh từ `user_delegation`, chỉ cho vai trò `role.delegable` — chốt 19/10, bỏ Trưởng bộ phận 28/10: Giám đốc, Kế toán trưởng, Thủ kho trưởng, Trưởng BP Mua hàng, QC trưởng, Kế hoạch. Sửa 04/11: màn Vai trò × quyền sửa được (Admin cấp / gỡ quyền, thêm / sửa / xóa quyền ở Danh mục quyền), phạm vi nhà máy đặt theo vai trò (`role.factory_scope`) và theo từng quyền (`role_permission.scope_mode`); bảng quyền nạp sẵn vẫn lấy từ file quy trình.
 
 ## 2. Quyết định thiết kế quan trọng
 
@@ -82,7 +83,7 @@ Nơi đặt (sửa 20/10 đợt 2 — nhóm của `sync_policy`; số bảng s�
 20. **Sự cố tem (19/10; sửa đợt 2 — làm ở Kho · Tồn kho, không còn máy quét riêng):** `label_incident` ghi kho và lô lấy từ dòng tồn lô × kho đã chọn (tem mất bắt buộc cả hai — check; sửa 24/10 đợt 9, thay ô), mã cũ → mã mới (mã cũ trỏ `handling_unit.replaced_by_id`), cờ `from_cancel` khi hủy tem mà bao còn trong kho (ghi như tem mất; mã mới vào cùng dòng tồn với mã cũ nên giữ trạng thái), thời điểm quét xác nhận; `scan_log` có `replacement_code` để hiện mã thay thế khi quét trúng mã đã khóa.
 21. **Tài khoản (19/10; sửa đợt 2):** mã thẻ chỉ bắt buộc với công nhân (check cũ giữ nguyên), chỉ dùng đăng nhập PC xưởng — web đăng nhập bằng mã NV + mật khẩu; `user_session` bỏ MAY_QUET, check QUET_THE chỉ với PC_CSHARP; quy tắc mật khẩu (≥ 8 ký tự, có chữ và số) cố định trong code — không có cột / tham số; "Sắp bắt đầu" của ủy quyền suy ra từ `starts_at`, không thêm giá trị trạng thái. Màn Công thức tra "lệnh đang chạy phiên bản cũ" = `production_order` DANG_CHAY nối `formula_version` có `is_current = false` (đã thử, mục 5.6).
 22. **Khu vực làm việc & dàn silo (19/10 đợt 2) — silo gộp vào `equipment`, không tách bảng.** `work_area`: loại HH / BTP / CHIET_ROT / DONG_GOI (bỏ KHAC), `max_batch_kg` bắt buộc đúng với khu HH / BTP (check); trigger chặn đổi loại khu khi khu còn lệnh chưa HOAN_THANH / DA_HUY; không xóa (trigger chung). Silo = dòng `equipment` loại SILO, thêm `capacity_kg`, `hard_material_id`, trạng thái BAO_TRI (chỉ silo); check silo bắt buộc khu, sức chứa > 0, mã SCADA (`iot_source_ref`); trigger chỉ cho silo ở khu HH / BTP; tên silo không trùng trong 1 khu. **Lý do chọn gộp (ít bảng hơn):** silo vốn đã là dòng `equipment` — `silo_charge` (trước là `batch_material_scan`), `lot_link`, `batch_equipment_usage`, `batch_downtime` đều trỏ `equipment`, `iot_source_ref` chính là mã SCADA; tách bảng `silo` thì thêm 1 bảng, lặp mã / tên / SCADA và phải đổi 4 khóa ngoại, trong khi chỉ thêm 2 cột (để trống với thiết bị khác, check bảo đảm). Silo chuyển BAO_TRI / NGUNG_DUNG → trigger đánh dấu mọi lệnh MOI_TAO đang xếp NVL vào silo đó `silo_plan_status = CAN_XEP_LAI` (Việc cần làm của Kế hoạch; chặn phát).
-23. **Lệnh SX theo khu, hàng đợi, trạng thái (19/10 đợt 2):** `production_order.work_area_id` bắt buộc; trigger: loại lệnh = loại khu, cùng nhà máy, khu đang dùng, `batch_weight_kg ≤ max_batch_kg`; `origin_docs_file_id` (giấy tờ xuất xứ NVL — 1 tệp của lệnh) bắt buộc, không kiểm COA theo lô. Hàng đợi = thứ tự chạy ở nhà máy (đợt 3): `queue_priority` bắt buộc khi MOI_TAO / CHO_PHAT (Chờ phát giữ vị trí), ràng buộc loại trừ trễ (không trùng trong 1 khu, đổi thứ tự trong 1 giao dịch được); chỉ phát được lệnh không có lệnh Mới tạo / Chờ phát nào đứng trước; lúc phát kiểm lại KL mẻ ≤ mức tối đa hiện tại của khu. Trạng thái chỉ đi MOI_TAO → CHO_PHAT / DA_NHAN → DANG_CHAY → HOAN_THANH, hủy từ MOI_TAO / CHO_PHAT / DA_NHAN (lý do bắt buộc — check cũ; trigger tự giải phóng `material_reservation`); không nháp, không quay lại, không xóa. Đợt 3 (thay cách "sửa lệnh Đã nhận rồi gửi lại" của đợt 2, bỏ 2 cột bản sửa): chỉ sửa lệnh MOI_TAO (trigger khóa các cột kế hoạch khi đã phát, trừ cộng mẻ bù); hủy lệnh Chờ phát / Đã nhận ghi `cancel_requested_at` rồi chỉ thành DA_HUY khi có `nm_cancel_confirmed_at` (nhà máy xác nhận chưa chạy mẻ); lệnh đang chạy chỉ kết thúc sớm: HOAN_THANH + `ended_early_at`, lý do, `actual_batch_count` (check), không còn mẻ DANG_CHAY / DUNG_SU_CO (trigger). HOAN_THANH chỉ khi mọi nút silo của lệnh đã xả sạch.
+23. **Lệnh SX theo khu, hàng đợi, trạng thái (19/10 đợt 2):** `production_order.work_area_id` bắt buộc; trigger: loại lệnh = loại khu, cùng nhà máy, khu đang dùng, `batch_weight_kg ≤ max_batch_kg`; ~~`origin_docs_file_id` (giấy tờ xuất xứ NVL — 1 tệp của lệnh) bắt buộc~~ (bỏ 05/11), không kiểm COA theo lô. Hàng đợi = thứ tự chạy ở nhà máy (đợt 3): `queue_priority` bắt buộc khi MOI_TAO / CHO_PHAT (Chờ phát giữ vị trí), ràng buộc loại trừ trễ (không trùng trong 1 khu, đổi thứ tự trong 1 giao dịch được); chỉ phát được lệnh không có lệnh Mới tạo / Chờ phát nào đứng trước; lúc phát kiểm lại KL mẻ ≤ mức tối đa hiện tại của khu. Trạng thái chỉ đi MOI_TAO → CHO_PHAT / DA_NHAN → DANG_CHAY → HOAN_THANH, hủy từ MOI_TAO / CHO_PHAT / DA_NHAN (lý do bắt buộc — check cũ; trigger tự giải phóng `material_reservation`); không nháp, không quay lại, không xóa. Đợt 3 (thay cách "sửa lệnh Đã nhận rồi gửi lại" của đợt 2, bỏ 2 cột bản sửa): chỉ sửa lệnh MOI_TAO (trigger khóa các cột kế hoạch khi đã phát, trừ cộng mẻ bù); hủy lệnh Chờ phát / Đã nhận ghi `cancel_requested_at` rồi chỉ thành DA_HUY khi có `nm_cancel_confirmed_at` (nhà máy xác nhận chưa chạy mẻ); lệnh đang chạy chỉ kết thúc sớm: HOAN_THANH + `ended_early_at`, lý do, `actual_batch_count` (check), không còn mẻ DANG_CHAY / DUNG_SU_CO (trigger). HOAN_THANH chỉ khi mọi nút silo của lệnh đã xả sạch.
 24. **Phương án dàn silo = bảng mới `production_order_silo` (lệnh, NVL, silo, KL / mẻ, cờ kéo thả).** Unique (lệnh, NVL) và (lệnh, silo) ⇒ 1 NVL – 1 silo, số NVL ≤ số silo dùng được. Trigger từng dòng: silo của khu lệnh, đang hoạt động, đúng gán cứng, NVL có trong công thức của lệnh, KL / mẻ ≤ sức chứa, chỉ sửa khi lệnh Mới tạo (đợt 3). "Chốt khi tạo": lệnh tạo ở MOI_TAO phải có phương án đủ mọi NVL lúc COMMIT (ràng buộc trễ). "Kiểm lại khi phát": chuyển sang CHO_PHAT / DA_NHAN chạy lại hàm kiểm `silo_plan_problem` và đòi `silo_plan_status = DA_CHOT`. Gợi ý xếp (theo gán cứng, sức chứa) và kéo thả là việc của ứng dụng, CSDL chỉ giữ kết quả + cờ `is_adjusted`.
 25. **Kế hoạch nhãn hiệu lệnh BTP nhiều dòng:** `production_order_brand` thêm `printed_lot_no` (số lô in trên lon nếu đã biết), `sales_order_line_id` (dòng đơn nguồn); unique (lệnh, SP, số lô in — null coi như bằng nhau); trigger chỉ lệnh BTP, SP phải dùng công thức của lệnh (các dòng đơn cùng công thức).
 26. **Mua hàng, trả NCC, xuất kho (19/10 đợt 2):** điều khoản thanh toán NCC và báo giá tách `payment_terms` (TRA_TRUOC / TRA_SAU) + `payment_days` như PO, check số ngày chỉ đi với trả sau. `quotation` có trạng thái MO / DA_CHON / DA_HUY, hủy bắt buộc lý do + thời điểm; trigger: chỉ lấy báo giá từ yêu cầu mua MO / DANG_MUA, có báo giá → yêu cầu DANG_MUA, hủy hết báo giá → yêu cầu về MO; unique NCC × yêu cầu chỉ tính báo giá chưa hủy. `supplier_return`: thêm CHO_KHO_XUAT_TRA (bắt buộc người + lúc Mua hàng gửi yêu cầu xuất trả); phiếu xuất TRA_NCC chỉ lập được khi phiếu trả đang chờ kho; DA_XUAT_TRA chỉ khi phiếu xuất đã xuất; GIAM_CONG_NO bị chặn khi PO trả trước; tổng SL trả theo NVL của mọi phiếu trả cùng PO ≤ SL đã nhận (trigger trên dòng trả). `goods_issue`: thêm CHO_BEN_YEU_CAU (chỉ từ DA_DUYET), ra chỉ sang XUAT_MOT_PHAN / DA_HUY do đúng `requested_by` quyết (`requester_decision_by`). **Sửa 04/11:** bỏ báo giá (quyết định 39).
@@ -106,6 +107,9 @@ Nơi đặt (sửa 20/10 đợt 2 — nhóm của `sync_policy`; số bảng s�
 44. **Phạm vi quyền theo vai trò / theo quyền (chốt 04/11).** `role.factory_scope` (mọi nhà máy / nhà máy của tài khoản / cố định 1 nhà máy) áp cho các quyền để "Theo vai trò"; `role_permission.scope_mode` cho từng quyền (theo vai trò / mọi nhà máy / nhà máy của tài khoản / cố định). Phạm vi từng người vẫn ở `user_role` (đổi vai trò). Phạm vi thật của 1 thao tác = giao của phạm vi quyền và phạm vi gán vai trò.
 45. **Xóa bản ghi chưa dùng (chốt 04/11).** `forbid_delete` cho qua ở tài khoản, đơn vị, lựa chọn SP, quy cách SP (2 bảng), quyền, hồ sơ pháp lý chung (2 bảng); khóa ngoại không cascade chặn khi đã có dòng trỏ tới. Tài khoản thêm trigger: chỉ xóa khi chưa có phiên đăng nhập, gỡ luôn dòng gán vai trò, nhật ký tài khoản giữ lại (bỏ trỏ, ghi mã NV) và thêm dòng XOA.
 46. **Bản lưu & nhật ký in (chốt 04/11).** `document_snapshot` giữ PDF của phiếu / biên bản / hóa đơn tại lúc ký; in lại luôn từ bản lưu, đóng dấu BẢN SAO, mỗi lần in 1 dòng `document_print_log` (người, lúc, số bản, lý do) — số lần in đếm từ đây.
+47. **Phân quyền từng người (chốt 05/11).** Tạo tài khoản: chọn bộ phận → vai trò → bước 2 tick quyền (tick sẵn theo vai trò). Dòng `user_permission` BO gỡ 1 quyền của vai trò, THEM cấp quyền ngoài vai trò; quyền thực và menu (`v_user_screen`) = quyền vai trò − BO + THEM. Không tự phân quyền cho mình (check), không sửa dòng — thôi áp dụng ghi `revoked_at`.
+48. **Hợp đồng theo từng đơn, luồng đơn sau sản xuất (chốt 05/11).** Hợp đồng không lưu ở hồ sơ khách: Sales nhập số, hiệu lực từ – đến, file khi tạo đơn (không bắt buộc) hoặc upload ở chi tiết đơn, ghi vào `sales_order_version` bản 1 (`contract_no`, `contract_valid_from`, `contract_valid_to`, `contract_file_ids`). Chốt đơn / gửi kiểm công nợ / tự chốt khi đủ điều kiện công nợ đều cần đơn có file hợp đồng và chưa quá `contract_valid_to`. Lô SX cho đơn QC đạt → CHO_NHAP_KHO (Thủ kho nhập kho) → CHO_KE_TOAN_DUYET (Mua nợ: Kế toán kiểm công nợ; Cọc + trả nốt: ghi nhận phần còn lại; Trả đủ trước SX bỏ qua) → CHO_XUAT_KHO → DANG_GIAO; SAN_SANG_GIAO giữ cho đơn gắn lô tồn.
+49. **Công thức, lệnh SX (chốt 05/11).** Bỏ dung sai từng thành phần và thông số trộn chuẩn; thứ tự nạp = thứ tự dòng. Lệnh SX bỏ giấy tờ xuất xứ NVL, thêm `loss_pct`: khối lượng phải sản xuất = cần × (1 + %), số mẻ / KL mẻ tính theo số này. `batch_mixing_param` vẫn ghi thông số trộn thực tế của mẻ (không còn chuẩn để so).
 
 ## 3. Cloud ↔ server nhà máy
 
@@ -113,7 +117,7 @@ Sửa 20/10 (đợt 2) — chủ theo dòng; nhóm từng bảng nạp sẵn ở
 
 | Nhóm (`sync_policy`) | Chủ | Chiều | Bảng |
 |---|---|---|---|
-| CLOUD — cloud chủ, sao xuống chỉ đọc (lọc `factory_id` nếu có, kéo theo dòng cha theo khóa ngoại) — 57 bảng; khách / đơn / yêu cầu xuất bán bỏ cột tiền, liên hệ, công nợ (`masked_columns`, quyết định 38) | Cloud | Cloud → nhà máy (`downstream_change`) | danh mục (factory, work_area, uom, material, material_spec_item, product + product_option / product_pack / product_pack_level / product_label / product_document, legal_document + scope, product_spec_item, formula + version / item, warehouse, equipment, lock_reason, lot_status_transition, code_format, system_parameter, sync_policy); tài khoản & quyền (app_user gồm băm mật khẩu, role, permission, role_permission, user_role, user_delegation, screen, screen_function); lệnh (production_order + brand / silo, material_reservation — cột dẫn xuất `issued_kg`, batch_cancellation, site_command); chứng từ nhà máy cần (customer, sales_order + version / line, sales_order_lot, delivery + line, delivery_note + line, supplier, purchase_request, purchase_order + line, transfer_request (cột dẫn xuất trạng thái / phiếu chuyển), supplier_return + line, recall_case, recall_lot, trace_request) |
+| CLOUD — cloud chủ, sao xuống chỉ đọc (lọc `factory_id` nếu có, kéo theo dòng cha theo khóa ngoại) — 60 bảng; khách / đơn / yêu cầu xuất bán bỏ cột tiền, liên hệ, công nợ (`masked_columns`, quyết định 38) | Cloud | Cloud → nhà máy (`downstream_change`) | danh mục (factory, work_area, uom, material, material_spec_item, product + product_option / product_pack / product_pack_level / product_label / product_document, legal_document + scope, product_spec_item, formula + version / item, warehouse, equipment, lock_reason, lot_status_transition, code_format, system_parameter, sync_policy); tài khoản & quyền (app_user gồm băm mật khẩu, role, permission, role_permission, user_role, user_delegation, screen, screen_function); lệnh (production_order + brand / silo, material_reservation — cột dẫn xuất `issued_kg`, batch_cancellation, site_command); chứng từ nhà máy cần (customer, sales_order + version / line, sales_order_lot, delivery + line, delivery_note + line, supplier, purchase_request, purchase_order + line, transfer_request (cột dẫn xuất trạng thái / phiếu chuyển), supplier_return + line, recall_case, recall_lot, trace_request) |
 | NM — máy chủ nhà máy của dòng chủ, sao lên — 47 bảng | Nhà máy | Nhà máy → cloud (`sync_outbox`) | lô & mã: lot, handling_unit, stock_line, lot_link, inventory_txn, lot_status_log, lot_lock (dòng áp dụng), scan_log, label_incident; kho: 18 bảng (goods_receipt…, stock_transfer — cột dẫn xuất SL đã nhận do cloud chiếu khi chuyển 2 nhà máy, …, disposal_line); QC: qc_request, qc_request_part, qc_inspection, qc_result_item, quality_certificate, retained_sample, retained_sample_event; xưởng: production_batch, batch_operator, batch_equipment_usage, silo_charge, filling_run, carton_recount, 5 bảng ⏸ của mẻ, ncr; sync_conflict, command_inbox |
 | NOI_PHAT_SINH — nơi tạo dòng là chủ — 6 bảng | Nơi phát sinh | Nhà máy → cloud (gộp) | user_session, audit_log, file_attachment, document_snapshot, document_print_log; code_sequence (mỗi nơi giữ bộ đếm của mình, không gộp) |
 | NM_ONLY — 2 bảng | Nhà máy | — | sync_outbox, offline_session |
@@ -400,7 +404,7 @@ Chạy `claude/mes-powder-phep-thu.sql` sau `claude/mes-powder-du-lieu.sql` trê
 | Hai silo trùng tên trong 1 khu | chặn (unique) |
 | Đổi loại khu còn lệnh đang chạy / khu không còn lệnh; xóa khu | chặn (trigger) / cho qua; chặn (không xóa cứng) |
 | Lệnh HH ở khu BTP; KL mẻ 600 kg > tối đa 500 kg | chặn (trigger) |
-| Lệnh không có tệp giấy tờ xuất xứ NVL; lệnh Mới tạo không có thứ tự hàng đợi | chặn (bắt buộc / check) |
+| Lệnh không có tệp giấy tờ xuất xứ NVL (bỏ 05/11); lệnh Mới tạo không có thứ tự hàng đợi | chặn (bắt buộc / check) |
 | Tạo lệnh mà phương án silo thiếu NVL | chặn lúc COMMIT |
 | Xếp NVL vào silo gán cứng NVL khác; quá sức chứa; 2 NVL vào 1 silo | chặn (trigger / trigger / unique) |
 | Tạo 2 lệnh Mới tạo đủ phương án silo, giữ chỗ KG | cho qua |
@@ -574,6 +578,27 @@ File riêng `claude/mes-powder-phep-thu-28-10.sql` (chạy sau `mes-powder-du-li
 | Mua hàng gửi → tự duyệt / Trưởng BP Mua hàng duyệt | chặn / cho qua |
 | Kho đề nghị bị từ chối có lý do; QC gửi → đổi sang NGUNG_TRUC_TIEP / QC trưởng duyệt | cho qua; chặn / cho qua |
 
+### 5.16 Phân quyền từng người, hợp đồng khách, khu gộp (05/11) — đã thử, 12 / 12 đúng
+
+Chạy `mes-powder-du-lieu.sql` trên CSDL trống (PostgreSQL 18, 0 lỗi), rồi các phép dưới.
+
+| Thử | Kết quả |
+|---|---|
+| 143 bảng; 239 thao tác, 346 dòng gán, 36 màn (không còn DM_NCC, `QT11.xn`) | đúng |
+| Sales thấy màn Đơn hàng; BO mọi quyền của màn → mất màn; THEM 1 quyền Kiểm kho → thấy Kiểm kho | đúng |
+| HR tự thêm quyền cho mình (`user_id = created_by`) | chặn (check) |
+| 2 dòng `user_permission` còn hiệu lực cùng người × quyền | chặn (unique) |
+| Xóa tài khoản chưa đăng nhập có dòng `user_permission` | cho qua, xóa luôn dòng quyền |
+| Khu loại CHIET_ROT / DONG_GOI cũ | chặn (check); CHIET_ROT_DONG_GOI cho qua |
+| Đơn trạng thái CHO_KY_HD | chặn (check); CHO_KE_TOAN_DUYET có trong danh sách |
+| Không còn cột `tolerance_kg`, `mixing_*`, `origin_docs_file_id`, `declaration_kind`, `contract_file_id` | đúng |
+| Khách có số hợp đồng mà không có file | chặn (check) |
+| Khách có số hợp đồng + file | cho qua |
+
+Sửa chiều 05/11: hợp đồng chuyển sang `sales_order_version` (thêm `contract_valid_from`, `contract_valid_to`), `customer` bỏ 3 cột hợp đồng — 2 phép thử "Khách có số hợp đồng…" ở trên giữ làm lịch sử; check tương ứng nay ở `sales_order_version` (số ↔ file, hiệu lực đến ≥ hiệu lực từ), **chưa chạy lại**.
+| `loss_pct` ngoài 0–50 | chặn (check) |
+| Bản công bố chọn lựa chọn không phải HINH_THUC_CONG_BO | chặn (trg_product_document_option) |
+
 ## 6. Các ô chờ quyết ở sản xuất / chất lượng (⏸ — chỉ chừa chỗ, chưa thiết kế nghiệp vụ)
 
 Lưu ý: file quy trình (sửa 17/10) đã vẽ các ô ở Vận hành mẻ / Chiết rót thành bước thật; theo yêu cầu lần này, sơ đồ dữ liệu vẫn để chúng ở trạng thái chờ quyết (xem câu hỏi 1). Đã thôi chờ quyết (chốt 17/10): bộ chỉ tiêu BTP / TP (`product_spec_item`, QC nhập ở danh mục SP), điều kiện bảo quản mẫu (`sample_storage_condition`), hủy mẻ do sự cố (`batch_cancellation`). Đã chốt 19/10 (đợt 2–3): liên kết silo → mẻ (ô số 2, dưới).
@@ -583,7 +608,7 @@ Lưu ý: file quy trình (sửa 17/10) đã vẽ các ô ở Vận hành mẻ / 
 | 1 | Vận hành mẻ — chặn bao sai | cột ⏸ `silo_charge.block_reason` | `scan_result` OK / CHAN; kiểm lô ĐẠT, còn hạn theo vòng đời lô hàng; `scan_log` ghi lý do chặn |
 | 2 | ~~Vận hành mẻ — liên kết silo → mẻ~~ **Đã chốt 19/10 (đợt 2–3), thôi chờ quyết:** phương án silo của lệnh (`production_order_silo`) cho biết NVL nào vào silo nào; silo nạp nhiều mẻ nên mỗi silo của lệnh là 1 nút trong chuỗi lô (`lot_kind = SILO`): lô —NAP_SILO→ nút —XA_SILO→ lô mẻ, nối theo thời điểm (cách B), xả sạch thì đóng nút; quét bao nạp silo ở `silo_charge`. Bỏ 2 cột ⏸ `lot_link.silo_equipment_id`, `batch_material_scan.silo_equipment_id` (silo nằm ở nút) | — | liên kết bao → nút silo → mẻ (bắt buộc); xác nhận van mở từ SCADA vẫn thuộc phần IoT (mục 7) |
 | 3 | Vận hành mẻ — phiếu NCR (luồng duyệt, nội dung) | bảng ⏸ `ncr` (mã, nguồn, lô, mẻ, SL, jsonb, trạng thái tự do) | các bảng khác đã trỏ được tới `ncr`; người lập = Kế hoạch (chốt 17/10) |
-| 4 | Vận hành mẻ — thông số trộn | bảng ⏸ `batch_mixing_param` (1 dòng / mẻ, jsonb) | thông số trộn chuẩn ở `formula_version.mixing_params` |
+| 4 | Vận hành mẻ — thông số trộn | bảng ⏸ `batch_mixing_param` (1 dòng / mẻ, jsonb) | không còn thông số trộn chuẩn để so (bỏ 05/11) |
 | 5 | Vận hành mẻ — sự cố dừng máy (trường bắt buộc, nối dữ liệu máy) | bảng ⏸ `batch_downtime` (mẻ, thiết bị, từ – đến, jsonb) | mẻ có trạng thái DUNG_SU_CO; không khắc phục được thì hủy mẻ (`batch_cancellation`, đã chốt) |
 | 6 | Vận hành mẻ — KL thực tế vs công thức (bao HH ra mẻ) | bảng ⏸ `batch_weight_check` (mẻ, bao, mục tiêu, thực tế, jsonb) | KL từng bao ở `handling_unit.qty` |
 | 7 | Chiết rót — in NSX / HSD / lô lên lon | cột ⏸ `filling_run.printed_lot_no / printed_mfg_date / printed_exp_date` | `lot.lot_no`, `mfg_date`, `exp_date` của lô BTP; số lô in trên lon dự kiến ở kế hoạch nhãn hiệu `production_order_brand.printed_lot_no` (nếu đã biết — 19/10 đợt 2) |
@@ -987,7 +1012,7 @@ Nhà máy. Mỗi nhà máy một tiền tố mã định danh để mã bao HH /
 
 ### `work_area`
 
-Khu vực làm việc, 4 loại: sản xuất nguyên liệu hỗn hợp (HH) / sản xuất bán thành phẩm (BTP) / chiết rót / đóng gói. Khu HH, BTP có khối lượng mẻ tối đa và dàn silo riêng (equipment loại SILO, Admin cấu hình ngay trong khu — sửa 19/10 đợt 2). Loại lệnh SX theo khu; KL mẻ của lệnh ≤ mức tối đa của khu. Không đổi loại khu khi còn lệnh chưa hoàn thành (trigger); không xóa, chỉ ngừng dùng. Công nhân gắn khu; PC C# chỉ hiện lệnh / mẻ của khu; mỗi khu một hàng đợi phát lệnh. Sửa 04/11: mỗi khu chọn 1 kho điều phối cấp NVL (`supply_warehouse_id`); một kho điều phối cấp được cho nhiều khu, một nhà máy có nhiều kho điều phối.
+Khu vực làm việc, 3 loại: sản xuất nguyên liệu hỗn hợp (HH) / sản xuất bán thành phẩm (BTP) / chiết rót & đóng gói (gộp 1 khu — chốt 05/11). Khu HH, BTP có khối lượng mẻ tối đa và dàn silo riêng (equipment loại SILO, Admin cấu hình ngay trong khu — sửa 19/10 đợt 2). Loại lệnh SX theo khu; KL mẻ của lệnh ≤ mức tối đa của khu. Không đổi loại khu khi còn lệnh chưa hoàn thành (trigger); không xóa, chỉ ngừng dùng. Công nhân gắn khu; PC C# chỉ hiện lệnh / mẻ của khu; mỗi khu một hàng đợi phát lệnh. Sửa 04/11: mỗi khu chọn 1 kho điều phối cấp NVL (`supply_warehouse_id`); một kho điều phối cấp được cho nhiều khu, một nhà máy có nhiều kho điều phối.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → sao xuống nhà máy đó
 - **QT:** tạo / sửa / ngừng dùng QT02 ka (Admin); dàn silo QT02 ks; dùng QT01, QT19 (loại lệnh, KL mẻ tối đa, hàng đợi), QT20, QT21
@@ -1002,7 +1027,7 @@ Khu vực làm việc, 4 loại: sản xuất nguyên liệu hỗn hợp (HH) / 
 | `factory_id` | uuid | có | nhà máy (phân dữ liệu theo nhà máy) · → factory |
 | `code` | text | có |  |
 | `name` | text | có |  |
-| `area_type` | text | có | loại lệnh SX theo loại khu (HH / BTP); không đổi khi khu còn lệnh chưa hoàn thành (trigger) · giá trị: HH / BTP / CHIET_ROT / DONG_GOI |
+| `area_type` | text | có | loại lệnh SX theo loại khu (HH / BTP); không đổi khi khu còn lệnh chưa hoàn thành (trigger) · giá trị: HH / BTP / CHIET_ROT_DONG_GOI |
 | `max_batch_kg` | numeric(12,3) |  | khối lượng mẻ tối đa (kg) — bắt buộc với khu HH / BTP; KL mẻ của lệnh không được vượt |
 | `supply_warehouse_id` | uuid |  | kho điều phối cấp NVL cho khu (chốt 04/11) — bắt buộc với khu HH / BTP; kho loại DIEU_PHOI cùng nhà máy (trigger) · → warehouse |
 | `status` | text | có | giá trị: DANG_DUNG / NGUNG_DUNG · mặc định 'DANG_DUNG' |
@@ -1032,7 +1057,7 @@ Tài khoản, kể cả công nhân SX / đóng gói (tài khoản riêng, gắn
 | `home_factory_id` | uuid |  | nhà máy chính; phạm vi quyền nằm ở user_role · → factory |
 | `is_worker` | boolean | có | công nhân SX / đóng gói · mặc định false |
 | `work_area_id` | uuid |  | bắt buộc với công nhân · → work_area |
-| `badge_code` | text |  | mã thẻ NV: chỉ để đăng nhập PC xưởng; bắt buộc với công nhân, không bắt buộc với người khác |
+| `badge_code` | text |  | mã thẻ NV: chỉ để đăng nhập PC xưởng; bắt buộc với công nhân, không bắt buộc với người khác; khi tạo tài khoản nhập tay mã in trên thẻ, không quét (05/11) |
 | `password_hash` | text |  | quy tắc mật khẩu cố định trong code: ≥ 8 ký tự, có cả chữ và số (không phải tham số) |
 | `must_change_password` | boolean | có | đăng nhập lần đầu / sau khi Admin cấp mật khẩu tạm: bắt đổi · mặc định true |
 | `status` | text | có | KHOA_TAM: quên mật khẩu / không đăng nhập; DA_KHOA: nghỉ việc · giá trị: HOAT_DONG / KHOA_TAM / DA_KHOA · mặc định 'HOAT_DONG' |
@@ -1109,6 +1134,27 @@ Bảng Vai trò × Thao tác, nạp sẵn theo mục "Vai trò × Chức năng" 
 
 <sub>Cột chung: `created_at, created_by (dòng không sửa)`</sub>
 
+### `user_permission`
+
+Phân quyền từng người (chốt 05/11): vai trò cho bộ quyền gốc (role_permission); HR / Admin tick bỏ hoặc thêm từng quyền riêng cho 1 tài khoản — dòng THEM cấp thêm quyền ngoài vai trò, dòng BO gỡ 1 quyền của vai trò. Quyền thực của người = quyền các vai trò còn hiệu lực − BO + THEM (v_user_screen). Phạm vi nhà máy của quyền thêm theo phạm vi vai trò của người đó. Không ai tự phân quyền cho mình (check). Thôi áp dụng = ghi revoked_at, không xóa dòng; xóa tài khoản chưa dùng thì xóa luôn.
+
+- **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
+- **QT:** QT01 a1, y1 (tạo tài khoản: chọn vai trò → tick quyền; Phân quyền từng người)
+- **Khóa chính:** `id`
+- **Khóa ngoại:** `user_id` → `app_user.id` · `permission_id` → `permission.id` · `revoked_by` → `app_user.id`
+- **Unique:** `(user_id, permission_id where revoked_at is null)`
+- **Check:** `user_id <> created_by` · `revoked_by is null or revoked_by <> user_id`
+
+| Cột | Kiểu | Bắt buộc | Ghi chú |
+|---|---|---|---|
+| `user_id` | uuid | có | → app_user |
+| `permission_id` | uuid | có | → permission |
+| `effect` | text | có | THEM: thêm quyền ngoài bộ quyền gốc của vai trò; BO: bỏ 1 quyền của vai trò · giá trị: THEM / BO |
+| `revoked_at` | timestamptz |  |  |
+| `revoked_by` | uuid |  | → app_user |
+
+<sub>Cột chung: `created_at, created_by (dòng không sửa)`</sub>
+
 ### `screen`
 
 Màn hình của menu web (thêm 20/10): phân hệ, tên, thứ tự. Nạp sẵn từ mục "Màn × chức năng" (phần "Phân hệ & màn hình") của file quy trình. Menu hiện màn khi vai trò của người dùng có ít nhất 1 quyền ở các chức năng của màn (screen_function, view v_user_screen); phân hệ không còn màn nào thì ẩn. Không có màn quản lý: đổi = sửa file quy trình rồi sinh lại dữ liệu nạp.
@@ -1149,7 +1195,7 @@ Màn × chức năng (thêm 20/10): các bước quy trình (permission.function
 
 ### `user_role`
 
-Gán vai trò cho tài khoản kèm phạm vi: toàn hệ thống / nhà máy / kho / khu vực làm việc → Quyền = vai trò × thao tác × phạm vi. Đổi vai trò = thu hồi dòng cũ + thêm dòng mới trong 1 giao dịch. Không ai tự gán / tự gỡ vai trò của chính mình (check); vai trò chỉ Admin gán thì trigger kiểm người gán là Admin. Ủy quyền tạm sinh dòng có valid_until, đến hạn tự gỡ.
+Gán vai trò cho tài khoản kèm phạm vi (vai trò cho bộ quyền gốc; quyền riêng từng người ở user_permission — 05/11): toàn hệ thống / nhà máy / kho / khu vực làm việc → Quyền = vai trò × thao tác × phạm vi. Đổi vai trò = thu hồi dòng cũ + thêm dòng mới trong 1 giao dịch. Không ai tự gán / tự gỡ vai trò của chính mình (check); vai trò chỉ Admin gán thì trigger kiểm người gán là Admin. Ủy quyền tạm sinh dòng có valid_until, đến hạn tự gỡ.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** QT01 y1, y2, u2, u3
@@ -1338,7 +1384,7 @@ Tham số cấu hình — mọi số trong mục "Tham số mặc định". Giá
 
 ### `material`
 
-Danh mục NVL: bột, phụ gia, bao bì (lon, thùng, nắp…). Mã đã có giao dịch thì khóa ĐVT (QT02 f1). Lô bao bì là lô của NVL nhóm BAO_BI. Sửa 04/11: tối đa 5 ảnh, nguyên liệu kỵ nhau (chọn nhiều), tồn tối thiểu + cách bù, ghi chú; NVL (trừ HON_HOP) bắt buộc ít nhất 1 chỉ tiêu COA đang dùng (trigger kiểm lúc COMMIT).
+Danh mục NVL: bột, phụ gia, bao bì (lon, thùng, nắp…). Mã đã có giao dịch thì khóa ĐVT (QT02 f1). Lô bao bì là lô của NVL nhóm BAO_BI. Sửa 04/11: tối đa 5 ảnh, nguyên liệu kỵ nhau (chọn nhiều), tồn tối thiểu + cách bù, ghi chú; sửa 05/11: quy cách đóng gói nhiều cấp (material_pack) như SP; NVL (trừ HON_HOP) bắt buộc ít nhất 1 chỉ tiêu COA đang dùng (trigger kiểm lúc COMMIT).
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** tạo / sửa QT02 (mã tự sinh y2, không duyệt); ngừng dùng QT02 tg, d4
@@ -1397,6 +1443,48 @@ Bộ chỉ tiêu COA và giới hạn của từng NVL (nhà máy tự nhập). 
 
 <sub>Cột chung: `created_at, created_by, updated_at, updated_by`</sub>
 
+### `material_pack`
+
+Quy cách đóng gói của 1 NVL (chốt 05/11, cùng kiểu quy cách SP): 1 NVL có ít nhất 1 quy cách; mỗi quy cách chọn dụng cụ đóng gói (Bao / Thùng / Túi / Chai…) và các cấp (material_pack_level, vd Túi → Thùng). Dụng cụ và tên cấp chọn từ danh sách, thêm được qua "+ Khác". NVL đã có lô nhập thì khóa quy cách cũ; xóa được khi chưa dùng (khóa ngoại chặn).
+
+- **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
+- **QT:** QT02 t1, t2 (Danh mục › NVL, quy cách đóng gói)
+- **Khóa chính:** `id`
+- **Khóa ngoại:** `material_id` → `material.id`
+- **Unique:** `(material_id, line_no)`
+- **Check:** `line_no > 0`
+
+| Cột | Kiểu | Bắt buộc | Ghi chú |
+|---|---|---|---|
+| `material_id` | uuid | có | → material |
+| `line_no` | integer | có | thứ tự quy cách trong NVL |
+| `pack_tool` | text | có | dụng cụ đóng gói cấp trong cùng, vd Bao / Thùng / Túi / Chai |
+| `status` | text | có | giá trị: DANG_DUNG / NGUNG_DUNG · mặc định 'DANG_DUNG' |
+
+<sub>Cột chung: `created_at, created_by, updated_at, updated_by`</sub>
+
+### `material_pack_level`
+
+Cấp của quy cách NVL (chốt 05/11): cấp 1 = đơn vị nhỏ nhất (bao / túi / chai) có khối lượng tịnh (bao bì: số cái); cấp trên ghi số đơn vị cấp dưới (vd 1 thùng = 10 túi). Không trộn khối lượng, thể tích và số cái trong một quy cách.
+
+- **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
+- **QT:** QT02
+- **Khóa chính:** `id`
+- **Khóa ngoại:** `pack_id` → `material_pack.id` · `net_uom_code` → `uom.code`
+- **Unique:** `(pack_id, level_no)`
+- **Check:** `level_no > 0` · `(level_no = 1) = (child_qty is null)` · `child_qty is null or child_qty > 0` · `level_no <> 1 or (net_qty is not null and net_uom_code is not null)` · `net_qty is null or net_qty > 0`
+
+| Cột | Kiểu | Bắt buộc | Ghi chú |
+|---|---|---|---|
+| `pack_id` | uuid | có | → material_pack |
+| `level_no` | integer | có | 1 = trong cùng |
+| `unit_name` | text | có | tên đơn vị của cấp, vd Bao, Túi, Thùng |
+| `child_qty` | integer |  | số đơn vị tầng dưới trong 1 đơn vị tầng này (tầng 1 để trống) |
+| `net_qty` | numeric(12,3) |  | khối lượng / thể tích tịnh mỗi đơn vị — bắt buộc ở tầng 1 |
+| `net_uom_code` | text |  | mg / g / kg / yến / tạ / tấn / ml / l / cái (bao bì) · → uom |
+
+<sub>Cột chung: `created_at, created_by (dòng không sửa)`</sub>
+
 ### `product`
 
 Danh mục SP (mô hình mới chốt 04/11): 1 mã SP có nhiều quy cách đóng gói, mỗi quy cách nhiều tầng (product_pack, product_pack_level); ô Cấu trúc / Nhóm / Phân loại / Độ tuổi chọn từ product_option; thương hiệu và thông tin khác gõ tự do ở "mục khác" (extra_attributes). Mỗi quy cách một mẫu nhãn, QC trưởng duyệt (product_label); bản công bố và hồ sơ pháp lý riêng ở product_document, hồ sơ pháp lý chung ở legal_document. Sau khi lưu, thông tin SP, mục khác và quy cách khóa theo mã + barcode — muốn đổi thì sao chép thành mã mới; chỉ sửa mẫu nhãn và hồ sơ pháp lý. Nhiều SP dùng chung 1 công thức BTP. Lô BTP / TP gắn SP. Bộ chỉ tiêu thành phẩm ở product_spec_item.
@@ -1420,7 +1508,7 @@ Danh mục SP (mô hình mới chốt 04/11): 1 mã SP có nhiều quy cách đ�
 | `age_option_id` | uuid |  | Độ tuổi, vd 1–3 tuổi · → product_option |
 | `company_name` | text | có | tên công ty chủ sản phẩm (in trên nhãn) |
 | `made_at_factory_id` | uuid |  | nơi sản xuất · → factory |
-| `extra_attributes` | jsonb | có | mục khác [{t, v}] — vd Thương hiệu: Nhãn A (gõ tự do, thay bảng thương hiệu) · mặc định '[]' |
+| `extra_attributes` | jsonb | có | mục khác [{t, ty, v, unit, opts}] — ty: text / num / date / bool / list / long / file (loại ô nhập, 05/11); num có đơn vị, list có các lựa chọn; vd Thương hiệu: Nhãn A · mặc định '[]' |
 | `shelf_life_days` | integer | có |  |
 | `can_barcode` | text |  | mã in sẵn trên bao bì lon để kiểm "đúng nhãn hiệu của mẻ" |
 | `uom_locked` | boolean | có | mặc định false |
@@ -1430,7 +1518,7 @@ Danh mục SP (mô hình mới chốt 04/11): 1 mã SP có nhiều quy cách đ�
 
 ### `product_option`
 
-Lựa chọn của các ô chọn ở SP (chốt 04/11): Cấu trúc, Nhóm, Phân loại, Độ tuổi — thay các danh mục thương hiệu / dòng / hạng. Xóa được khi chưa SP nào dùng (khóa ngoại chặn); đã dùng thì ngừng dùng.
+Lựa chọn của các ô chọn ở SP (chốt 04/11): Cấu trúc, Nhóm, Phân loại, Độ tuổi, Hình thức công bố (05/11 — mặc định Tự công bố, Đăng ký bản công bố; thêm được qua "+ Khác") — thay các danh mục thương hiệu / dòng / hạng. Xóa được khi chưa SP nào dùng (khóa ngoại chặn); đã dùng thì ngừng dùng.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** QT02 (Danh mục › Sản phẩm)
@@ -1440,7 +1528,7 @@ Lựa chọn của các ô chọn ở SP (chốt 04/11): Cấu trúc, Nhóm, Ph�
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
-| `option_kind` | text | có | giá trị: CAU_TRUC / NHOM / PHAN_LOAI / DO_TUOI |
+| `option_kind` | text | có | giá trị: CAU_TRUC / NHOM / PHAN_LOAI / DO_TUOI / HINH_THUC_CONG_BO |
 | `name` | text | có |  |
 | `sort_order` | integer | có | mặc định 0 |
 | `status` | text | có | giá trị: DANG_DUNG / NGUNG_DUNG · mặc định 'DANG_DUNG' |
@@ -1520,15 +1608,15 @@ Hồ sơ pháp lý riêng của 1 SP (chốt 04/11): bản công bố sản ph�
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** QT02 (Danh mục › Sản phẩm); QT19 (điều kiện lệnh BTP)
 - **Khóa chính:** `id`
-- **Khóa ngoại:** `product_id` → `product.id` · `file_id` → `file_attachment.id`
+- **Khóa ngoại:** `product_id` → `product.id` · `declaration_option_id` → `product_option.id` · `file_id` → `file_attachment.id`
 - **Unique:** `(product_id where doc_kind = 'CONG_BO' and status = 'DANG_DUNG')`
-- **Check:** `doc_kind <> 'CONG_BO' or (declaration_kind is not null and issued_date is not null and file_id is not null)` · `doc_kind = 'CONG_BO' or declaration_kind is null` · `exp_date is null or issued_date is null or exp_date > issued_date`
+- **Check:** `doc_kind <> 'CONG_BO' or (declaration_option_id is not null and issued_date is not null and file_id is not null)` · `doc_kind = 'CONG_BO' or declaration_option_id is null` · `exp_date is null or issued_date is null or exp_date > issued_date`
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
 | `product_id` | uuid | có | → product |
 | `doc_kind` | text | có | CONG_BO: bản công bố sản phẩm; RIENG: hồ sơ riêng khác · giá trị: CONG_BO / RIENG |
-| `declaration_kind` | text |  | hình thức công bố (chỉ CONG_BO) · giá trị: TU_CONG_BO / DANG_KY |
+| `declaration_option_id` | uuid |  | hình thức công bố (chỉ CONG_BO) — lựa chọn loại HINH_THUC_CONG_BO (05/11) · → product_option |
 | `doc_type` | text |  | loại hồ sơ (RIENG) |
 | `doc_no` | text | có |  |
 | `issued_date` | date |  | ngày công bố / tiếp nhận / cấp |
@@ -1540,7 +1628,7 @@ Hồ sơ pháp lý riêng của 1 SP (chốt 04/11): bản công bố sản ph�
 
 ### `legal_document`
 
-Hồ sơ pháp lý chung (màn Danh mục › Hồ sơ pháp lý chung — chốt 04/11): giấy tờ doanh nghiệp, ATTP, chứng nhận thị trường, quảng cáo…; phạm vi áp dụng: mọi SP, SP của nhà máy, hoặc SP chọn (legal_document_scope). Hạn trống = không thời hạn; nhắc trước hạn N ngày. Trạng thái Hiệu lực / Sắp hết hạn / Hết hạn tính từ hạn, không lưu. Xóa được (chưa có bảng nào trỏ tới).
+Hồ sơ pháp lý chung (màn Danh mục › Hồ sơ pháp lý chung — chốt 04/11): giấy tờ doanh nghiệp, ATTP, chứng nhận thị trường, quảng cáo…; phạm vi áp dụng: mọi SP, SP của nhà máy, hoặc SP chọn (legal_document_scope). Hạn trống = không thời hạn; nhắc trước hạn N ngày. Trạng thái Hiệu lực / Sắp hết hạn (còn ≤ 30 ngày — chốt 05/11) / Hết hạn tính từ hạn, không lưu; màn có thanh cảnh báo số hồ sơ sắp hết hạn / đã hết hạn và lọc nhanh hồ sơ cần gia hạn. Xóa được (chưa có bảng nào trỏ tới).
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** Danh mục › Hồ sơ pháp lý chung (thêm / sửa / xóa); đọc ở SP, lệnh SX
@@ -1557,7 +1645,7 @@ Hồ sơ pháp lý chung (màn Danh mục › Hồ sơ pháp lý chung — chố
 | `issuing_org` | text |  | cơ quan cấp |
 | `issued_date` | date |  |  |
 | `exp_date` | date |  | trống = không thời hạn |
-| `remind_days` | integer | có | nhắc trước hạn N ngày · mặc định 60 |
+| `remind_days` | integer | có | nhắc trước hạn N ngày (thông báo); trạng thái Sắp hết hạn cố định ≤ 30 ngày (05/11) · mặc định 60 |
 | `scope` | text | có | NHA_MAY: SP sản xuất tại nhà máy chọn; CHON_SP: SP chọn · giá trị: TAT_CA / NHA_MAY / CHON_SP · mặc định 'TAT_CA' |
 | `file_ids` | uuid[] | có | các file của hồ sơ · mặc định '{}' |
 | `note` | text |  |  |
@@ -1632,7 +1720,7 @@ Thiết bị sản xuất (silo, bồn trộn, máy chiết, robot, thang nâng,
 
 ### `formula`
 
-Công thức (HH hoặc BTP), thuộc phân hệ Sản xuất. Mã do hệ thống tự sinh CT-{loại}-{4 số} (sửa 20/10 đợt 3: 2 → 4 số), không sửa. Nội dung nằm ở phiên bản.
+Công thức (HH hoặc BTP), thuộc phân hệ Sản xuất. Mã do hệ thống tự sinh CT-{loại}-{4 số} (sửa 20/10 đợt 3: 2 → 4 số), không sửa. Nội dung nằm ở phiên bản. Sao chép (05/11): tạo công thức mới từ phiên bản hiện hành (thành phần, KL mẻ, mặt hàng) — mã mới cấp như tạo mới, không chép phiên bản / lịch sử.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** QT03 (mã tự sinh y2)
@@ -1651,23 +1739,20 @@ Công thức (HH hoặc BTP), thuộc phân hệ Sản xuất. Mã do hệ thố
 
 ### `formula_version`
 
-Phiên bản công thức. Chỉ ghi nhận, không duyệt: lưu là có hiệu lực, bản cũ hết hiệu lực nhưng giữ nguyên để truy xuất; lệnh đã phát giữ phiên bản cũ. Không sửa dòng đã lưu. Màn Công thức hiện lệnh nào đang chạy phiên bản cũ: production_order.formula_version_id trỏ tới phiên bản is_current = false, lệnh DANG_CHAY.
+Phiên bản công thức. Chỉ ghi nhận, không duyệt: lưu là có hiệu lực, bản cũ hết hiệu lực nhưng giữ nguyên để truy xuất; lệnh đã phát giữ phiên bản cũ. Không sửa dòng đã lưu. Bỏ thông số trộn chuẩn (thời gian, tốc độ) — chốt 05/11. Màn Công thức hiện lệnh nào đang chạy phiên bản cũ: production_order.formula_version_id trỏ tới phiên bản is_current = false, lệnh DANG_CHAY.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy (gửi kèm lệnh)
 - **QT:** QT03 y2
 - **Khóa chính:** `id`
 - **Khóa ngoại:** `formula_id` → `formula.id`
 - **Unique:** `(formula_id, version_no)` · `(formula_id where is_current)`
-- **Check:** `batch_weight_kg > 0` · `mixing_time_min is null or mixing_time_min > 0` · `mixing_speed_rpm is null or mixing_speed_rpm > 0`
+- **Check:** `batch_weight_kg > 0`
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
 | `formula_id` | uuid | có | → formula |
 | `version_no` | integer | có |  |
 | `batch_weight_kg` | numeric(12,3) | có | KL mẻ |
-| `mixing_time_min` | numeric(8,2) |  | thời gian trộn chuẩn (phút) |
-| `mixing_speed_rpm` | numeric(8,2) |  | tốc độ trộn chuẩn (vòng / phút) |
-| `mixing_params` | jsonb |  | thông số trộn khác (QT03 t1); thứ tự nạp ở formula_item.load_order (04/11) |
 | `effective_from` | timestamptz | có | mặc định now() |
 | `superseded_at` | timestamptz |  |  |
 | `is_current` | boolean | có | mặc định true |
@@ -1677,14 +1762,14 @@ Phiên bản công thức. Chỉ ghi nhận, không duyệt: lưu là có hiệu
 
 ### `formula_item`
 
-Thành phần của phiên bản: NVL (hoặc NVL hỗn hợp), KL / mẻ, dung sai. Tổng KL thành phần = KL mẻ (kiểm khi lưu, QT03 y1).
+Thành phần của phiên bản: NVL (hoặc NVL hỗn hợp), KL / mẻ (bỏ dung sai — chốt 05/11). Tổng KL thành phần = KL mẻ (kiểm khi lưu, QT03 y1).
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud chủ → nhà máy
 - **QT:** QT03
 - **Khóa chính:** `id`
 - **Khóa ngoại:** `formula_version_id` → `formula_version.id` · `material_id` → `material.id`
 - **Unique:** `(formula_version_id, line_no)` · `(formula_version_id, material_id)` · `(formula_version_id, load_order where load_order is not null)`
-- **Check:** `qty_kg > 0 and tolerance_kg >= 0` · `load_order is null or load_order > 0`
+- **Check:** `qty_kg > 0` · `load_order is null or load_order > 0`
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
@@ -1692,8 +1777,7 @@ Thành phần của phiên bản: NVL (hoặc NVL hỗn hợp), KL / mẻ, dung 
 | `line_no` | integer | có |  |
 | `material_id` | uuid | có | → material |
 | `qty_kg` | numeric(12,3) | có |  |
-| `tolerance_kg` | numeric(12,3) | có | dung sai từng thành phần |
-| `load_order` | integer |  | thứ tự nạp của thành phần (thông số trộn chuẩn — 04/11) |
+| `load_order` | integer |  | thứ tự nạp = thứ tự dòng trong công thức (đổi bằng nút lên / xuống — 05/11) |
 
 <sub>Cột chung: `created_at, created_by (dòng không sửa)`</sub>
 
@@ -1877,7 +1961,7 @@ Nhóm đồng bộ từng bảng (thêm 20/10 đợt 2 — quyết định 34): 
 
 ### `customer`
 
-Khách hàng. Hạn mức luôn vĩnh viễn (không có cột hạn mức tạm, không có ngày hết hạn). Cờ tạm khóa do nợ quá hạn chỉ chặn đơn Mua chịu. Bỏ trạng thái "mất" (24/10).
+Khách hàng. Hạn mức luôn vĩnh viễn (không có cột hạn mức tạm, không có ngày hết hạn). Cờ tạm khóa do nợ quá hạn chỉ chặn đơn Mua chịu. Bỏ trạng thái "mất" (24/10). Sửa 05/11: bỏ hợp đồng ở hồ sơ khách — hợp đồng tải theo từng đơn (sales_order_version).
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: company_code, tax_code, contact_name, contact_title, phone, email, contact_address, bank_account, default_payment_method, credit_limit, is_credit_blocked, credit_blocked_at, bank_name, bank_account_name, default_payment_channel, default_credit_days, default_deposit_pct, invoice_email (quyết định 38)
 - **QT:** tạo / sửa QT05 t2; hạn mức QT06 y0, v3; cờ tạm khóa QT10 ya, y3 (tự động)
@@ -1962,14 +2046,14 @@ Các lần Sales liên hệ khách nhắc nợ (QT10 k3). Bỏ liên hệ khi gi
 
 ### `sales_order`
 
-Đầu đơn (phần không đổi theo phiên bản): khách, nhà máy SX / giao, Sales, trạng thái, số phiên bản hiện tại. Không xóa đơn: hủy = trạng thái DA_HUY. Sửa 04/11: Sales hủy thẳng đơn ở Chờ ký HĐ / Chờ thu tiền, không cần duyệt; từ Đã chốt trở đi hủy qua Chờ duyệt hủy → Đang hủy.
+Đầu đơn (phần không đổi theo phiên bản): khách, nhà máy SX / giao, Sales, trạng thái, số phiên bản hiện tại. Không xóa đơn: hủy = trạng thái DA_HUY. Sửa 04/11: Sales hủy thẳng đơn chưa chốt (Chờ thu tiền; Chờ ký HĐ bỏ 05/11), không cần duyệt; từ Đã chốt trở đi hủy qua Chờ duyệt hủy → Đang hủy.
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; cột status do cloud chiếu từ dữ liệu nhà máy; không sao xuống nhà máy: refund_amount, retained_amount (quyết định 38)
 - **QT:** tạo QT05; đổi trạng thái QT06, QT07, QT08, QT09, QT10
 - **Khóa chính:** `id`
-- **Khóa ngoại:** `customer_id` → `customer.id` · `sales_user_id` → `app_user.id` · `cancelled_by` → `app_user.id` · `cancel_approved_by` → `app_user.id`
+- **Khóa ngoại:** `customer_id` → `customer.id` · `sales_user_id` → `app_user.id` · `cancelled_by` → `app_user.id` · `cancel_approved_by` → `app_user.id` · `delivery_approved_by` → `app_user.id`
 - **Unique:** `(code)`
-- **Check:** `status <> 'DA_HUY' or cancel_reason is not null`
+- **Check:** `status <> 'DA_HUY' or cancel_reason is not null` · `(delivery_approved_by is null) = (delivery_approved_at is null)`
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
@@ -1980,27 +2064,29 @@ Các lần Sales liên hệ khách nhắc nợ (QT10 k3). Bỏ liên hệ khi gi
 | `order_date` | date | có |  |
 | `delivery_address` | text |  | địa chỉ giao của đơn (mặc định từ khách) |
 | `current_version_no` | integer | có | mặc định 1 |
-| `status` | text | có | theo mockup (04/11): thêm Chờ kiểm công nợ, Đang sản xuất, Chờ duyệt hủy, Đang hủy · giá trị: NHAP / CHO_KIEM_CONG_NO / CHO_XU_LY_NO / CHO_DUYET_HAN_MUC / CHO_KHACH / CHO_KY_HD / CHO_THU_TIEN / DA_CHOT / DANG_SAN_XUAT / SAN_SANG_GIAO / DANG_GIAO / GIAO_MOT_PHAN / DA_GIAO / CHO_DUYET_HUY / DANG_HUY / TU_CHOI / DA_HUY · mặc định 'NHAP' |
+| `status` | text | có | theo mockup (04/11): thêm Chờ kiểm công nợ, Đang sản xuất, Chờ duyệt hủy, Đang hủy; 05/11: bỏ Chờ ký HĐ (hợp đồng tải theo từng đơn, chưa có / hết hạn thì chưa chốt được); lô SX cho đơn QC đạt: Chờ nhập kho → Chờ kế toán duyệt (Cọc + trả nốt / Mua nợ; Trả đủ bỏ qua) → Chờ xuất kho → Đang giao; Sẵn sàng giao còn cho đơn gắn lô tồn · giá trị: NHAP / CHO_KIEM_CONG_NO / CHO_XU_LY_NO / CHO_DUYET_HAN_MUC / CHO_KHACH / CHO_THU_TIEN / DA_CHOT / DANG_SAN_XUAT / CHO_NHAP_KHO / CHO_KE_TOAN_DUYET / CHO_XUAT_KHO / SAN_SANG_GIAO / DANG_GIAO / GIAO_MOT_PHAN / DA_GIAO / CHO_DUYET_HUY / DANG_HUY / TU_CHOI / DA_HUY · mặc định 'NHAP' |
 | `status_changed_at` | timestamptz | có | mốc tính "chờ quá 3 / 7 ngày" · mặc định now() |
 | `cancel_reason` | text |  |  |
 | `cancelled_at` | timestamptz |  |  |
-| `cancelled_by` | uuid |  | người hủy — Sales hủy thẳng ở Chờ ký HĐ / Chờ thu tiền (04/11) · → app_user |
+| `cancelled_by` | uuid |  | người hủy — Sales hủy thẳng ở Chờ thu tiền (04/11) · → app_user |
 | `refund_amount` | numeric(18,2) |  | số hoàn khi hủy (QT07) · không sao xuống nhà máy |
 | `retained_amount` | numeric(18,2) |  | phần giữ lại · không sao xuống nhà máy |
-| `cancel_approved_by` | uuid |  | GĐ hoặc KTT duyệt hủy (đơn từ Đã chốt trở đi, qua Chờ duyệt hủy); hủy thẳng ở Chờ ký HĐ / Chờ thu tiền không cần (04/11) · → app_user |
+| `cancel_approved_by` | uuid |  | GĐ hoặc KTT duyệt hủy (đơn từ Đã chốt trở đi, qua Chờ duyệt hủy); hủy thẳng ở Chờ thu tiền không cần (04/11) · → app_user |
+| `delivery_approved_by` | uuid |  | Kế toán duyệt xuất giao sau khi nhập kho (QT09 kd — 05/11): Mua nợ kiểm công nợ; Cọc + trả nốt ghi nhận phần còn lại; Trả đủ không cần · → app_user |
+| `delivery_approved_at` | timestamptz |  |  |
 
 <sub>Cột chung: `created_at, created_by, updated_at, updated_by`</sub>
 
 ### `sales_order_version`
 
-Phiên bản đơn: điều khoản thương mại + HĐ / phụ lục. Sửa đơn đã chốt → thêm phiên bản mới; dòng cũ không bao giờ sửa.
+Phiên bản đơn: điều khoản thương mại + HĐ / phụ lục. Sửa đơn đã chốt → thêm phiên bản mới; dòng cũ không bao giờ sửa. Sửa 05/11: hợp đồng tải theo từng đơn (số, hiệu lực từ – đến, file) — chưa có hoặc hết hạn thì chưa chốt được đơn.
 
-- **Nơi:** Cloud chủ, sao xuống nhà máy — cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: payment_method, deposit_pct, credit_days, total_before_vat, vat_amount, total_amount, contract_file_id, payment_channel, deposit_amount (quyết định 38)
+- **Nơi:** Cloud chủ, sao xuống nhà máy — cloud ghi; sao xuống máy chủ nhà máy phần nhà máy cần (lọc theo factory_id, kéo theo dòng cha theo khóa ngoại), chỉ đọc; không sao xuống nhà máy: payment_method, deposit_pct, credit_days, total_before_vat, vat_amount, total_amount, contract_file_ids, contract_no, contract_valid_from, contract_valid_to, payment_channel, deposit_amount (quyết định 38)
 - **QT:** QT05 (phiên bản 1), QT08 m4 (phiên bản sau)
 - **Khóa chính:** `id`
-- **Khóa ngoại:** `sales_order_id` → `sales_order.id` · `contract_file_id` → `file_attachment.id`
+- **Khóa ngoại:** `sales_order_id` → `sales_order.id`
 - **Unique:** `(sales_order_id, version_no)` · `(sales_order_id where superseded_at is null)`
-- **Check:** `deposit_pct between 0 and 100` · `payment_method <> 'MUA_CHIU' or credit_days is not null` · `version_no = 1 or change_reason is not null` · `deposit_amount is null or deposit_amount >= 0` · `vat_pct is null or vat_pct between 0 and 100`
+- **Check:** `deposit_pct between 0 and 100` · `payment_method <> 'MUA_CHIU' or credit_days is not null` · `version_no = 1 or change_reason is not null` · `deposit_amount is null or deposit_amount >= 0` · `vat_pct is null or vat_pct between 0 and 100` · `(contract_no is null) = (coalesce(cardinality(contract_file_ids), 0) = 0)` · `contract_valid_to is null or contract_valid_from is null or contract_valid_to >= contract_valid_from`
 - **Bắt buộc ở cloud:** cột `payment_method`, `deposit_pct`, `total_before_vat`, `vat_amount`, `total_amount` bắt buộc khi ghi ở cloud / công cụ nạp; bản sao ở máy chủ nhà máy để trống (trg_masked_required — quyết định 38)
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
@@ -2017,7 +2103,10 @@ Phiên bản đơn: điều khoản thương mại + HĐ / phụ lục. Sửa đ
 | `total_before_vat` | numeric(18,2) |  | bắt buộc ở cloud (trg_masked_required) · không sao xuống nhà máy |
 | `vat_amount` | numeric(18,2) |  | bắt buộc ở cloud (trg_masked_required) · không sao xuống nhà máy |
 | `total_amount` | numeric(18,2) |  | bắt buộc ở cloud (trg_masked_required) · không sao xuống nhà máy |
-| `contract_file_id` | uuid |  | HĐ (bản 1) / phụ lục (bản sau) · → file_attachment · không sao xuống nhà máy |
+| `contract_file_ids` | uuid[] |  | bản 1: file hợp đồng khách đã ký cho đơn — nhập khi tạo đơn hoặc upload ở chi tiết đơn (05/11); bản sau: phụ lục · không sao xuống nhà máy |
+| `contract_no` | text |  | số hợp đồng của đơn (05/11) · không sao xuống nhà máy |
+| `contract_valid_from` | date |  | hợp đồng hiệu lực từ ngày (05/11) · không sao xuống nhà máy |
+| `contract_valid_to` | date |  | hợp đồng hiệu lực đến ngày; quá ngày thì chưa chốt được đơn (05/11) · không sao xuống nhà máy |
 | `signed_at` | timestamptz |  |  |
 | `change_reason` | text |  |  |
 | `superseded_at` | timestamptz |  |  |
@@ -3199,14 +3288,14 @@ Dòng hủy: phần lô bị hủy, trạng thái trước để trả về khi 
 
 ### `production_order`
 
-Lệnh SX. Không tạo được ở server nhà máy. Lệnh đã phát giữ phiên bản công thức lúc phát. Sửa 19/10 (đợt 2): lệnh thuộc 1 khu (loại lệnh theo khu, KL mẻ ≤ mức tối đa của khu); 9 điều kiện tạo theo thứ tự (khu · đơn & khách · công thức · thời gian · NV tiếp thị · số mẻ & KL mẻ · tệp giấy tờ xuất xứ NVL · tồn NVL · dàn silo); phương án silo ở production_order_silo, chốt khi tạo (kiểm lúc COMMIT), kiểm lại khi phát. Mỗi khu một hàng đợi = thứ tự chạy ở nhà máy (queue_priority, lệnh MOI_TAO / CHO_PHAT; phát lệnh đầu hàng, lệnh Chờ phát giữ vị trí). Trạng thái MOI_TAO → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY (từ MOI_TAO / CHO_PHAT / DA_NHAN, bắt buộc lý do, tự giải phóng giữ chỗ). Không nháp, không xóa (trigger). Sửa 19/10 (đợt 3): chỉ sửa lệnh MOI_TAO; lệnh đã phát chỉ hủy — Chờ phát / Đã nhận cần nhà máy xác nhận chưa chạy mẻ; lệnh đang chạy chỉ kết thúc sớm (lý do, số mẻ thực tế, không có mẻ đang chạy dở) hoặc thêm mẻ bù; HOÀN THÀNH chỉ khi mọi nút silo của lệnh đã xả sạch (trigger). Sửa 24/10 (đợt 12): tồn NVL không chặn tạo lệnh — thiếu thì lệnh MOI_TAO không giữ chỗ (material_reserved_at null = Chờ NVL), không phát được (trigger); Kiểm tra lại đủ thì giữ chỗ, ghi material_reserved_at. Sửa 04/11: có lệnh sản xuất tồn kho (demand_kind TON_KHO, nhu cầu đơn không bắt buộc); lệnh BTP thêm 2 điều kiện: SP có bản công bố còn hiệu lực và quy cách có mẫu nhãn đã duyệt (trigger trên production_order_brand).
+Lệnh SX. Không tạo được ở server nhà máy. Lệnh đã phát giữ phiên bản công thức lúc phát. Sửa 19/10 (đợt 2): lệnh thuộc 1 khu (loại lệnh theo khu, KL mẻ ≤ mức tối đa của khu); 9 điều kiện tạo theo thứ tự (khu · đơn & khách · công thức · thời gian · NV tiếp thị · số mẻ & KL mẻ · tệp giấy tờ xuất xứ NVL · tồn NVL · dàn silo — sửa 05/11: bỏ giấy tờ xuất xứ NVL, thêm % hao hụt bù vào khối lượng phải sản xuất); phương án silo ở production_order_silo, chốt khi tạo (kiểm lúc COMMIT), kiểm lại khi phát. Mỗi khu một hàng đợi = thứ tự chạy ở nhà máy (queue_priority, lệnh MOI_TAO / CHO_PHAT; phát lệnh đầu hàng, lệnh Chờ phát giữ vị trí). Trạng thái MOI_TAO → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY (từ MOI_TAO / CHO_PHAT / DA_NHAN, bắt buộc lý do, tự giải phóng giữ chỗ). Không nháp, không xóa (trigger). Sửa 19/10 (đợt 3): chỉ sửa lệnh MOI_TAO; lệnh đã phát chỉ hủy — Chờ phát / Đã nhận cần nhà máy xác nhận chưa chạy mẻ; lệnh đang chạy chỉ kết thúc sớm (lý do, số mẻ thực tế, không có mẻ đang chạy dở) hoặc thêm mẻ bù; HOÀN THÀNH chỉ khi mọi nút silo của lệnh đã xả sạch (trigger). Sửa 24/10 (đợt 12): tồn NVL không chặn tạo lệnh — thiếu thì lệnh MOI_TAO không giữ chỗ (material_reserved_at null = Chờ NVL), không phát được (trigger); Kiểm tra lại đủ thì giữ chỗ, ghi material_reserved_at. Sửa 04/11: có lệnh sản xuất tồn kho (demand_kind TON_KHO, nhu cầu đơn không bắt buộc); lệnh BTP thêm 2 điều kiện: SP có bản công bố còn hiệu lực và quy cách có mẫu nhãn đã duyệt (trigger trên production_order_brand).
 
 - **Nơi:** Cloud chủ, sao xuống nhà máy — cloud là chủ, CHỈ tạo trên cloud → sao xuống server nhà máy khi phát lệnh; trạng thái chạy / xong do sự kiện từ nhà máy cập nhật; cột status, nm_ack_at, started_at, finished_at, nm_cancel_confirmed_at, ended_early_at, actual_batch_count do cloud chiếu từ dữ liệu nhà máy
 - **QT:** tạo QT19 t1, tb, ys, y1; sửa su (chỉ Mới tạo); hàng đợi q1; phát y2 (kiểm lại yx), CHỜ PHÁT kp, ĐÃ NHẬN y3; chạy y4; hủy hl / yh (QT07 h4, QT08 r2); kết thúc sớm kt; mẻ bù QT20 kb
 - **Khóa chính:** `id`
-- **Khóa ngoại:** `work_area_id` → `work_area.id` · `sales_order_id` → `sales_order.id` · `formula_version_id` → `formula_version.id` · `marketing_user_id` → `app_user.id` · `origin_docs_file_id` → `file_attachment.id` · `cancel_requested_by` → `app_user.id` · `ended_early_by` → `app_user.id`
+- **Khóa ngoại:** `work_area_id` → `work_area.id` · `sales_order_id` → `sales_order.id` · `formula_version_id` → `formula_version.id` · `marketing_user_id` → `app_user.id` · `cancel_requested_by` → `app_user.id` · `ended_early_by` → `app_user.id`
 - **Unique:** `(code)`
-- **Check:** `planned_batch_count > 0 and batch_weight_kg > 0` · `status <> 'DA_HUY' or cancel_reason is not null` · `makeup_batch_count >= 0` · `queue_priority is null or queue_priority > 0` · `status not in ('MOI_TAO','CHO_PHAT') or queue_priority is not null` · `cancel_requested_at is null or cancel_reason is not null` · `nm_cancel_confirmed_at is null or cancel_requested_at is not null` · `ended_early_at is null or (status = 'HOAN_THANH' and early_end_reason is not null and actual_batch_count is not null)` · `demand_kind <> 'TON_KHO' or sales_order_id is null` · `nm_check_result is distinct from 'KHONG_DAT' or nm_check_fail_reason is not null` · `(nm_check_result is null) = (nm_checked_at is null)`
+- **Check:** `planned_batch_count > 0 and batch_weight_kg > 0` · `status <> 'DA_HUY' or cancel_reason is not null` · `makeup_batch_count >= 0` · `queue_priority is null or queue_priority > 0` · `status not in ('MOI_TAO','CHO_PHAT') or queue_priority is not null` · `cancel_requested_at is null or cancel_reason is not null` · `nm_cancel_confirmed_at is null or cancel_requested_at is not null` · `ended_early_at is null or (status = 'HOAN_THANH' and early_end_reason is not null and actual_batch_count is not null)` · `demand_kind <> 'TON_KHO' or sales_order_id is null` · `nm_check_result is distinct from 'KHONG_DAT' or nm_check_fail_reason is not null` · `(nm_check_result is null) = (nm_checked_at is null)` · `loss_pct between 0 and 50`
 
 | Cột | Kiểu | Bắt buộc | Ghi chú |
 |---|---|---|---|
@@ -3221,10 +3310,10 @@ Lệnh SX. Không tạo được ở server nhà máy. Lệnh đã phát giữ p
 | `planned_batch_count` | integer | có |  |
 | `makeup_batch_count` | integer | có | số mẻ bù vì mẻ hủy do sự cố (QT20 kb); tổng mẻ phải chạy = planned_batch_count + makeup_batch_count · mặc định 0 |
 | `batch_weight_kg` | numeric(12,3) | có | ≤ work_area.max_batch_kg (trigger) |
+| `loss_pct` | numeric(5,2) | có | % hao hụt (05/11): khối lượng phải sản xuất = khối lượng cần × (1 + % hao hụt), số mẻ / KL mẻ tính theo số này; 0 = không tính hao hụt · mặc định 0 |
 | `order_received_at` | timestamptz |  | thời gian nhận đơn |
 | `planned_finish_date` | date |  | dự kiến xong |
 | `marketing_user_id` | uuid |  | NV tiếp thị · → app_user |
-| `origin_docs_file_id` | uuid | có | giấy tờ xuất xứ NVL — 1 tệp đính kèm của lệnh, Kế hoạch tải lên khi tạo (bắt buộc); không kiểm chứng từ / COA theo từng lô · → file_attachment |
 | `status` | text | có | MOI_TAO (đã giữ chỗ KG, trong hàng đợi) → CHO_PHAT (chỉ khi phát mà nhà máy không nhận) → DA_NHAN → DANG_CHAY → HOAN_THANH; DA_HUY. Chuyển sai thứ tự bị chặn (trigger) · giá trị: MOI_TAO / CHO_PHAT / DA_NHAN / DANG_CHAY / HOAN_THANH / DA_HUY · mặc định 'MOI_TAO' |
 | `material_reserved_at` | timestamptz |  | lúc giữ chỗ NVL; null = lệnh Chờ NVL (tồn khả dụng chưa đủ khi tạo) — không phát được (trigger), Kế hoạch bấm Kiểm tra lại khi hàng về (24/10 đợt 12) |
 | `queue_priority` | integer |  | thứ tự trong hàng đợi của khu = thứ tự chạy ở nhà máy (1 = đầu hàng) — bắt buộc khi MOI_TAO / CHO_PHAT (Chờ phát giữ vị trí); không trùng trong 1 khu (ràng buộc loại trừ, kiểm lúc COMMIT); chỉ phát lệnh không có lệnh Mới tạo / Chờ phát nào đứng trước (trigger) |
@@ -3542,7 +3631,7 @@ Sự cố / dừng máy trong mẻ.
 
 ### `batch_weight_check` · ⏸ CHỜ QUYẾT
 
-KL thực tế so với công thức (cân bao HH theo dung sai).
+KL thực tế so với công thức (cân bao HH so với KL công thức — công thức không còn dung sai (05/11)).
 
 - **Nơi:** Nhà máy chủ dòng của mình, sao lên cloud — máy chủ nhà máy của dòng cha ghi, luôn qua sync_outbox lên cloud; cloud giữ bản đồng bộ chỉ xem (ghi "tính đến" khi nhà máy mất kết nối); cloud muốn đổi thì gửi lệnh site_command
 - **QT:** QT20 h8, g3, yk (chờ quyết)
